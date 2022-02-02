@@ -50,10 +50,11 @@ public class PlayerMovement : MonoBehaviour {
 
 			//set and normalise movement vector
 			Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
-			if(movement.magnitude != 1){
+			if(movement.magnitude != 1 && movement.magnitude != 0){
 				movement /= movement.magnitude;
 			}
 			//transform according to movement vector
+			Debug.Log(movement);
 			characterBody.Move(movement * speed * Time.deltaTime);
 
 			//reset vertical velocity value when grounded
