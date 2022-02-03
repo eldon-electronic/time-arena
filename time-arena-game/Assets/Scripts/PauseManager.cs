@@ -33,7 +33,7 @@ public class PauseManager : MonoBehaviour {
 	}
 
 	public void Quit(){
-		PhotonNetwork.LeaveRoom();
 		SceneManager.LoadScene("MenuScene");
+		PhotonNetwork.Disconnect();
 	}
 }
