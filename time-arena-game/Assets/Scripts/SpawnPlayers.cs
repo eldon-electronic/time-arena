@@ -9,19 +9,18 @@ public class SpawnPlayers : MonoBehaviour{
 	public GameObject playerPrefab;
 
 	//spawn point array
-	public Vector3[] spawnPoint = {
-		new Vector3(0, 0, 0),
-		new Vector3(0, 0, 0),
-		new Vector3(0, 0, 0),
-		new Vector3(0, 0, 0),
-		new Vector3(0, 0, 0),
+	public Vector3[] spawningPoint = {
+		new Vector3(7f, 5f, 0f),
+		new Vector3(0f, 5f, 0f),
+		new Vector3(15f, 5f, 0f),
+		new Vector3(23f, 5f, 0f),
+		new Vector3(30f, 5f, 0f)
 	};
 
 	// Start is called before the first frame update
 	void Start(){
 		//spawn a new player into the scene
-		//int n = (int) ((spawnPoint.Length-1) * Random.value);
-
-		PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0, 0, 0), Quaternion.identity);
+		int n = (int) ((spawningPoint.Length) * Random.value);
+		PhotonNetwork.Instantiate(playerPrefab.name, spawningPoint[n], Quaternion.identity);
 	}
 }

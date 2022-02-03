@@ -54,7 +54,6 @@ public class PlayerMovement : MonoBehaviour {
 				movement /= movement.magnitude;
 			}
 			//transform according to movement vector
-			Debug.Log(movement);
 			characterBody.Move(movement * speed * Time.deltaTime);
 
 			//reset vertical velocity value when grounded
