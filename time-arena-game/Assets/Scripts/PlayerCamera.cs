@@ -8,6 +8,7 @@ public class PlayerCamera : MonoBehaviour {
 	public float mouseSensitivity = 100f;
 	public Transform characterBody;
 	public float xRot = 0f;
+	public PauseManager pauseUI;
 
 	//photonView component of player (parent to camera)
 	public PhotonView view;
@@ -24,8 +25,8 @@ public class PlayerCamera : MonoBehaviour {
 		//only move camera for client
 		if(view.IsMine){
 			//get axis values from input
-			float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
-			float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+			float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
+			float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
 			//invert vertical rotation and restrict up/down
 			xRot -= mouseY;
