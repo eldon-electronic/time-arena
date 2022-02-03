@@ -159,8 +159,8 @@ MonoBehaviour:
   recorderInUse: {fileID: -5128134048635641037}
   speakerInUse: {fileID: -1464516183647300258}
   AutoCreateRecorderIfNotFound: 0
-  UsePrimaryRecorder: 1
-  SetupDebugSpeaker: 0
+  UsePrimaryRecorder: 0
+  SetupDebugSpeaker: 1
 --- !u!82 &-8310345682751845685
 AudioSource:
   m_ObjectHideFlags: 0
@@ -297,7 +297,7 @@ MonoBehaviour:
   unityMicrophoneDevice: 
   photonMicrophoneDeviceId: -1
   interestGroup: 0
-  debugEchoMode: 1
+  debugEchoMode: 0
   reliableMode: 0
   encrypt: 0
   transmitEnabled: 1
@@ -341,8 +341,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logLevel: 3
   ignoreGlobalLogLevel: 0
-  boostValue: 0
-  amplificationFactor: 1
+  boostValue: 1
+  amplificationFactor: 2
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
