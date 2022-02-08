@@ -5,30 +5,59 @@ using System.Runtime.InteropServices;
 
 public class TimeLord : MonoBehaviour
 {
+
+    private class TimeTick
+    {
+        public Vector3 p;
+        public Quaternion r;
+        public BitArray flags;
+
+        /*-----------------------------------------
+        flags:
+             0 - has tick been recorded?
+             1 - jump key pressed?
+             2 - forward key pressed?
+             3 - backward key pressed?
+             4 - left key pressed?
+             5 - right key pressed?
+             6 - lmb pressed?
+             7 - rmb pressed?
+             8 - mmb pressed?
+             9 - crouch key pressed?
+            10 - available
+            11 - available
+            12 - available
+            13 - available
+            14 - available
+            15 - available
+        -----------------------------------------*/
+
+        public TimeTick()
+        {
+            flags = new BitArray(16, false);
+        }
+    }
+
     private class TimeStream
     {
         GameObject timeObject;
         int firstTick;
-        bool[] recordedTicks;
-        Vector3[] positions;
-        Quaternion[] rotations;
+        TimeTick[] ticks;
 
         public void Init(GameObject t, int start, int length)
         {
+            ticks = new TimeTick[length];
             timeObject = t;
             firstTick = start;
-            recordedTicks = new bool[length];
-            positions = new Vector3[length];
-            rotations = new Quaternion[length];
         }
 
         public bool Record(int t, Vector3 v, Quaternion r)
         {
             try
             {
-                positions[t] = v;
-                rotations[t] = r;
-                recordedTicks[t] = true;
+                ticks[t].p = v;
+                ticks[t].r = r;
+                ticks[t].flags[0] = true;
                 return true;
             }
             catch
@@ -41,9 +70,9 @@ public class TimeLord : MonoBehaviour
         {
             try
             {
-                positions[t] = timeObject.transform.position;
-                rotations[t] = timeObject.transform.rotation;
-                recordedTicks[t] = true;
+                ticks[t].p = timeObject.transform.position;
+                ticks[t].r = timeObject.transform.rotation;
+                ticks[t].flags[0] = true;
                 return true;
             }
             catch
@@ -54,23 +83,30 @@ public class TimeLord : MonoBehaviour
 
         public (Vector3, Quaternion) Recall(int t)
         {
+            Debug.Log(ticks[t].flags[0].ToString());
             try
             {
-                if (!recordedTicks[t])
+                if (ticks[t].flags[0] == false)
                 {
                     int a = predec(t);
                     int b = postdec(t);
                     float p = 0;
-                    if(a == -1 || b == -1) { throw new System.Exception("no valid recorded ticks found"); }
+                    if (a == -1 || b == -1) { Debug.Log("no valid recorded ticks found"); throw new System.Exception(); }
                     if (a != b){ p = (float)(t - a) / (float)(b - a); }
-                    return (Vector3.Lerp(positions[a], positions[b], p), Quaternion.Lerp(rotations[a], rotations[b], p));
+                    Debug.Log("t: " + t.ToString() + " a: " + a.ToString() + " b: " + b.ToString() + " p: " + p.ToString());
+                    return (Vector3.Lerp(ticks[a].p, ticks[b].p, p), Quaternion.Lerp(ticks[a].r, ticks[b].r, p));
                 }
-                return (positions[t], rotations[t]);
+                return (ticks[t].p, ticks[t].r);
             }
             catch
             {
                 return (Vector3.zero, Quaternion.identity);
             }
+        }
+
+        public bool checkObjectReference(GameObject t)
+        {
+            return GameObject.ReferenceEquals(timeObject, t);
         }
 
         // find last save tick
@@ -79,9 +115,9 @@ public class TimeLord : MonoBehaviour
             int i = t;
             do
             {
-                if (recordedTicks[i]) return i;
+                if (ticks[i].flags[0]) return i;
                 i--;
-            } while (i >= 0);
+            } while (i >= firstTick);
             return -1;
         }
         
@@ -89,10 +125,10 @@ public class TimeLord : MonoBehaviour
         private int postdec(int t)
         {
             int i = t;
-            int k = recordedTicks.Length;
+            int k = ticks.Length;
             do
             {
-                if (recordedTicks[i]) return i;
+                if (ticks[i].flags[0]) return i;
                 i++;
             } while (i < k);
             return -1;
@@ -101,6 +137,7 @@ public class TimeLord : MonoBehaviour
 
     public GameObject player1;
     public int maxgameTicks;
+    public bool active = false;
     private bool recording = true;
     private bool replaying;
     private TimeStream stream1;
@@ -114,7 +151,10 @@ public class TimeLord : MonoBehaviour
         Debug.Log(Marshal.SizeOf(typeof(Vector3)));
         Debug.Log(Marshal.SizeOf(typeof(Quaternion)));
         Debug.Log(Marshal.SizeOf(typeof(bool)));
-        StartCoroutine(TimeClock());
+        if (active)
+        {
+            StartCoroutine(TimeClock());
+        }
     }
 
     private void Update()
@@ -131,6 +171,20 @@ public class TimeLord : MonoBehaviour
         TimeStream newStream = new TimeStream();
         newStream.Init(t, currentTick, maxgameTicks - currentTick);
         streams.Add(newStream);
+    }
+
+    public bool forceRecord(GameObject t)
+    {
+        foreach(TimeStream stream in streams)
+        {
+            if (stream.checkObjectReference(t))
+            {
+                stream.Record(currentTick);
+                Debug.Log("found");
+                return true;
+            }
+        }
+        return false;
     }
 
     IEnumerator TimeClock()
