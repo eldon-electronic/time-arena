@@ -30,6 +30,7 @@ jobs:
       - name: Run tests
         uses: game-ci/unity-test-runner@v2       
         with:
+          projectpath: time-arena-game
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Build
