@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public bool isGrounded = true;
 	Vector3 velocity;
+	public PauseManager pauseUI;
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
@@ -43,8 +44,8 @@ public class PlayerMovement : MonoBehaviour {
 			}
 
 			//get movement axis values
-			float xMove = Input.GetAxis("Horizontal");
-			float zMove = Input.GetAxis("Vertical");
+			float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
+			float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
 			//check if player's GroundCheck intersects with any environment object
 			isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
 
@@ -54,7 +55,6 @@ public class PlayerMovement : MonoBehaviour {
 				movement /= movement.magnitude;
 			}
 			//transform according to movement vector
-			Debug.Log(movement);
 			characterBody.Move(movement * speed * Time.deltaTime);
 
 			//reset vertical velocity value when grounded
@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour {
 				velocity.y = 0.2f;
 			}
 			//jump control
-			if(Input.GetButtonDown("Jump") && isGrounded){
+			if(Input.GetButtonDown("Jump") && isGrounded && !pauseUI.isPaused){
 				velocity.y += Mathf.Sqrt(jumpPower * 2f * gravity);
 			}
 			//gravity effect
