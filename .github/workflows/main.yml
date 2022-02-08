@@ -1,11 +1,11 @@
-name: Actions 😎
+name: Deploy 😎
 
 on: [push, pull_request]
   
 env:
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+  UNITY_LICENSE: ${{ secrets.UNITY_SERIAL }}
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       - name: Run tests
         uses: game-ci/unity-test-runner@v2       
         with:
-          projectpath: time-arena-game
+          projectpath: time-arena-game/
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Build
