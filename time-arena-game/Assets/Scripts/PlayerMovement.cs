@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_sprint;
 	public Text debugMenu_hit;
 	public Text debugMenu_ground;
+	public Text debugMenu_health;
 
 	//variables corresponding to player Animations
 	public Animator playerAnim_hit;
@@ -54,6 +55,8 @@ public class PlayerMovement : MonoBehaviour {
 			Destroy(cam);
 			Destroy(UI);
 			gameObject.layer = 7;
+		} else {
+			gameObject.tag = "Client";
 		}
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
@@ -125,22 +128,32 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
-			//attack handler
-
-
-
 			//start hit animation on click
 			if(Input.GetMouseButtonDown(0)){
 				playerAnim_hit.SetBool("isSpinning", true);
 			}
+
+
+
+
+		} else {
+			//attack handler
 			//if hitting, check for intersection with player
 			if(damageWindow){
-				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
-				foreach (var hitCollider in playersHit){
-					hitCollider.GetComponent<PlayerMovement>().getHit();
+				bool didHitMe = Physics.CheckSphere(hitCheck.position, hitCheckRadius, hitMask);
+				//Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
+				//foreach (var hitCollider in playersHit){
+				if(didHitMe){
+					GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
+					foreach (GameObject client in clients){
+						client.GetComponent<PlayerMovement>().getHit();
+					}
 				}
 			}
+
+
 		}
+
 	}
 
 	// LateUpdate is called once per frame after all rendering
@@ -159,6 +172,7 @@ public class PlayerMovement : MonoBehaviour {
 		debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
 		debugMenu_hit.text = "Hit: " + damageWindow;
 		debugMenu_ground.text = "Ground: " + isGrounded;
+		debugMenu_health.text = "Health: " + health;
 
 		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
 
@@ -172,6 +186,7 @@ public class PlayerMovement : MonoBehaviour {
 			PhotonNetwork.LeaveRoom();
 			SceneManager.LoadScene("LobbyScene");
 		}
+		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
 		Debug.Log("A");
 	}
 
