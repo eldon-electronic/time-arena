@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Image healthbar;
 
 	//variables corresponding to the player's UI/HUD
+	public Canvas UI;
 	public PauseManager pauseUI;
 	public Text debugMenu_speed;
 	public Text debugMenu_room;
@@ -51,6 +52,7 @@ public class PlayerMovement : MonoBehaviour {
 		//destroy other player cameras in local environment
 		if(!view.IsMine){
 			Destroy(cam);
+			Destroy(UI);
 			gameObject.layer = 7;
 		}
 		//lock players cursor to center screen
@@ -138,34 +140,39 @@ public class PlayerMovement : MonoBehaviour {
 					hitCollider.GetComponent<PlayerMovement>().getHit();
 				}
 			}
-
-
-
-			//update player HUD
-
-
-
-			Vector3 movementVector = transform.position - lastPos;
-			float distTravelled = movementVector.magnitude / Time.deltaTime;
-			debugMenu_speed.text = "Speed: " + distTravelled;
-			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
-			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
-			debugMenu_hit.text = "Hit: " + damageWindow;
-			debugMenu_ground.text = "Ground: " + isGrounded;
-
-			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
-
-
 		}
+	}
+
+	// LateUpdate is called once per frame after all rendering
+	void LateUpdate() {
+
+
+
+		//update player HUD
+
+
+
+		Vector3 movementVector = transform.position - lastPos;
+		float distTravelled = movementVector.magnitude / Time.deltaTime;
+		debugMenu_speed.text = "Speed: " + distTravelled;
+		debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+		debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
+		debugMenu_hit.text = "Hit: " + damageWindow;
+		debugMenu_ground.text = "Ground: " + isGrounded;
+
+		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+
+
 	}
 
 	//function to take damage
 	public void getHit(){
-		health -= 10f;
+		health -= 1f;
 		if(health <= 0){
 			PhotonNetwork.LeaveRoom();
 			SceneManager.LoadScene("LobbyScene");
 		}
+		Debug.Log("A");
 	}
 
 	//function to enable player to damage others
