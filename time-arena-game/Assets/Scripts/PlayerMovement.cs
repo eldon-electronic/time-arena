@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class PlayerMovement : MonoBehaviour {
@@ -15,8 +16,18 @@ public class PlayerMovement : MonoBehaviour {
 	public float groundCheckRadius = 0.2f;
 	public LayerMask groundMask;
 	public bool isGrounded = true;
-	Vector3 velocity;
+	public Vector3 velocity;
+	public float mouseSensitivity = 100f;
+	public float xRot = 0f;
+	public Vector3 lastPos;
+
+	//variables corresponding to the player's UI/HUD
 	public PauseManager pauseUI;
+	public Text debugMenu_speed;
+	public Text debugMenu_room;
+	public Text debugMenu_sprint;
+	public Text debugMenu_hit;
+	public Text debugMenu_ground;
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
@@ -30,12 +41,23 @@ public class PlayerMovement : MonoBehaviour {
 		if(!view.IsMine){
 			Destroy(cam);
 		}
+		//lock players cursor to center screen
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	// Update is called once per frame
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
+			//update lastPos from prev frame
+			lastPos = transform.position;
+
+
+
+			//move player
+
+
+
 			//sprint speed
 			if(Input.GetKey("left shift")){
 				speed = 10f;
@@ -69,6 +91,39 @@ public class PlayerMovement : MonoBehaviour {
 			velocity.y -= gravity * Time.deltaTime;
 			//move player according to gravity
 			characterBody.Move(velocity * Time.deltaTime);
+
+
+
+			// rotate player about y and playercam about x
+
+
+
+			//get axis values from input
+			float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
+			float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+			//invert vertical rotation and restrict up/down
+			xRot -= mouseY;
+			xRot = Mathf.Clamp(xRot, -90f, 90f);
+			//apply rotation
+			cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+			transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
+
+
+
+			//update player HUD
+
+
+
+			Vector3 movementVector = transform.position - lastPos;
+			float distTravelled = movementVector.magnitude / Time.deltaTime;
+			debugMenu_speed.text = "Speed: " + distTravelled;
+			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
+			debugMenu_hit.text = "Hit: False";
+			debugMenu_ground.text = "Ground: " + isGrounded;
+
+
 		}
 	}
 }
