@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 
@@ -20,6 +21,8 @@ public class PlayerMovement : MonoBehaviour {
 	public float mouseSensitivity = 100f;
 	public float xRot = 0f;
 	public Vector3 lastPos;
+	public float health = 100f;
+	public Image healthbar;
 
 	//variables corresponding to the player's UI/HUD
 	public PauseManager pauseUI;
@@ -129,10 +132,11 @@ public class PlayerMovement : MonoBehaviour {
 				playerAnim_hit.SetBool("isSpinning", true);
 			}
 			//if hitting, check for intersection with player
-			Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
-			foreach (var hitCollider in playersHit){
-				hitCollider.GetComponent<PlayerMovement>().getRekt();
-				Debug.Log("AAA");
+			if(damageWindow){
+				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
+				foreach (var hitCollider in playersHit){
+					hitCollider.GetComponent<PlayerMovement>().getHit();
+				}
 			}
 
 
@@ -149,13 +153,19 @@ public class PlayerMovement : MonoBehaviour {
 			debugMenu_hit.text = "Hit: " + damageWindow;
 			debugMenu_ground.text = "Ground: " + isGrounded;
 
+			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+
 
 		}
 	}
 
 	//function to take damage
-	public void getRekt(){
-		Debug.Log("ouchie");
+	public void getHit(){
+		health -= 10f;
+		if(health <= 0){
+			PhotonNetwork.LeaveRoom();
+			SceneManager.LoadScene("LobbyScene");
+		}
 	}
 
 	//function to enable player to damage others
