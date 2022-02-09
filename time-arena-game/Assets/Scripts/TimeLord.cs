@@ -43,6 +43,7 @@ public class TimeLord : MonoBehaviour
         GameObject timeObject;
         int firstTick;
         TimeTick[] ticks;
+        int compressionFactor = 3;
 
         public void Init(GameObject t, int start, int length)
         {
@@ -133,21 +134,27 @@ public class TimeLord : MonoBehaviour
             } while (i < k);
             return -1;
         }
+
+        public int compression(){
+            return compressionFactor;
+        }
     }
 
-    public GameObject player1;
+    public GameObject[] trackables;
     public int maxgameTicks;
     public bool active = false;
     private bool recording = true;
     private bool replaying;
-    private TimeStream stream1;
     private List<TimeStream> streams;
     private int currentTick = 0;
     // Start is called before the first frame update
     void Start()
     {
-        stream1 = new TimeStream();
-        stream1.Init(player1, 0, maxgameTicks);
+        foreach(GameObject o in trackables){
+            TimeStream t = new TimeStream();
+            t.Init(o, 0, maxgameTicks);
+            streams.Add(t);
+        }
         Debug.Log(Marshal.SizeOf(typeof(Vector3)));
         Debug.Log(Marshal.SizeOf(typeof(Quaternion)));
         Debug.Log(Marshal.SizeOf(typeof(bool)));
@@ -192,7 +199,11 @@ public class TimeLord : MonoBehaviour
         recording = true;
         for(int i = 0; i < maxgameTicks; i++)
         {
-            if(i % 3 == 0) stream1.Record(i);
+            foreach(TimeStream s in streams){
+                if(i % s.compression() == 0){
+                    s.Record(i);
+                }
+            }
             currentTick = i + 1;
             yield return new WaitForSecondsRealtime(0.03125f);
         }
@@ -204,7 +215,7 @@ public class TimeLord : MonoBehaviour
         replaying = true;
         for (int i = 0; i < maxgameTicks; i++)
         {
-            (Vector3, Quaternion) data = stream1.Recall(i);
+            (Vector3, Quaternion) data = streams[0].Recall(i);
             replayer.transform.position = data.Item1;
             replayer.transform.rotation = data.Item2;
             yield return new WaitForSecondsRealtime(0.03125f);
