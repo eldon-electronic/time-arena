@@ -32,6 +32,10 @@ public class PlayerMovement : MonoBehaviour {
 	//variables corresponding to player Animations
 	public Animator playerAnim_hit;
 	public bool damageWindow = false;
+	public Transform hitCheck;
+	public float hitCheckRadius = 1f;
+	public LayerMask hitMask;
+
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
@@ -44,6 +48,7 @@ public class PlayerMovement : MonoBehaviour {
 		//destroy other player cameras in local environment
 		if(!view.IsMine){
 			Destroy(cam);
+			gameObject.layer = 7;
 		}
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
@@ -115,9 +120,19 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
-			//update player Animations
+			//attack handler
+
+
+
+			//start hit animation on click
 			if(Input.GetMouseButtonDown(0)){
 				playerAnim_hit.SetBool("isSpinning", true);
+			}
+			//if hitting, check for intersection with player
+			Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
+			foreach (var hitCollider in playersHit){
+				hitCollider.GetComponent<PlayerMovement>().getRekt();
+				Debug.Log("AAA");
 			}
 
 
@@ -136,6 +151,11 @@ public class PlayerMovement : MonoBehaviour {
 
 
 		}
+	}
+
+	//function to take damage
+	public void getRekt(){
+		Debug.Log("ouchie");
 	}
 
 	//function to enable player to damage others

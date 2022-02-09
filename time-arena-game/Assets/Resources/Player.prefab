@@ -79,6 +79,36 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Exit Lobby
+--- !u!1 &2919675709863359685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2024824527328461482}
+  m_Layer: 3
+  m_Name: HitCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2024824527328461482
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2919675709863359685}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 277360485640831774}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3224867964171595958
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,6 +1024,12 @@ MonoBehaviour:
   debugMenu_hit: {fileID: 4645063649322440456}
   debugMenu_ground: {fileID: 7243462422459889249}
   playerAnim_hit: {fileID: 9070032884028841073}
+  damageWindow: 0
+  hitCheck: {fileID: 2024824527328461482}
+  hitCheckRadius: 1
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 128
   view: {fileID: 0}
 --- !u!114 &5690578699466181193
 MonoBehaviour:
@@ -1873,7 +1909,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.3, y: -0.3, z: 2}
   m_LocalScale: {x: 1, y: 0.019999998, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2024824527328461482}
   m_Father: {fileID: 6458975046434770678}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
