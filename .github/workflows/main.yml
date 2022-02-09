@@ -19,7 +19,7 @@ jobs:
       # Cache
       - uses: actions/cache@v2
         with:
-          path: Library
+          path: time-arena-game/Library
           key: Time-Arena-Library
 
       # Test
@@ -30,7 +30,7 @@ jobs:
       - name: Build project 🔨
         uses: game-ci/unity-builder@v2.0-alpha-6
         with:
-          projectpath: Test-Workflow
+          projectpath: time-arena-game
           targetPlatform: WebGL
 
       # Output
