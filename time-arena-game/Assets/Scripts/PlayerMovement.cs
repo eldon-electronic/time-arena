@@ -29,6 +29,10 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_hit;
 	public Text debugMenu_ground;
 
+	//variables corresponding to player Animations
+	public Animator playerAnim_hit;
+	public bool damageWindow = false;
+
 	//the photonView component that syncs with the network
 	public PhotonView view;
 
@@ -111,6 +115,13 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
+			//update player Animations
+			if(Input.GetMouseButtonDown(0)){
+				playerAnim_hit.SetBool("isSpinning", true);
+			}
+
+
+
 			//update player HUD
 
 
@@ -120,10 +131,21 @@ public class PlayerMovement : MonoBehaviour {
 			debugMenu_speed.text = "Speed: " + distTravelled;
 			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
 			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
-			debugMenu_hit.text = "Hit: False";
+			debugMenu_hit.text = "Hit: " + damageWindow;
 			debugMenu_ground.text = "Ground: " + isGrounded;
 
 
 		}
+	}
+
+	//function to enable player to damage others
+	public void startHitting(){
+		damageWindow = true;
+	}
+
+	//function to disable player to damage others
+	public void stopHitting(){
+		damageWindow = false;
+		playerAnim_hit.SetBool("isSpinning", false);
 	}
 }
