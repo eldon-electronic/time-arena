@@ -27,7 +27,7 @@ jobs:
         uses: game-ci/unity-test-runner@v2
         with:
           projectPath: time-arena-game
-          artifactsPath: testArtifacts
+          artifactsPath: /testArtifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
 
@@ -37,6 +37,7 @@ jobs:
         with:
           projectpath: time-arena-game
           targetPlatform: WebGL
+          # allowDirtyBuild: true
 
       # Output
       - uses: actions/upload-artifact@v1
