@@ -1,6 +1,7 @@
 name: Deploy 😎
 
 on: 
+  pull_request:
   push: 
     branches:
       - actions
@@ -23,11 +24,13 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: time-arena-game/Library
-          key: -Library
+          key: Time-Arena-Library
 
       # Test
-      # - name: Run tests
-      # uses: webbertakken/unity-test-runner@v1.3
+      - name: Run tests
+        uses: game-ci/unity-test-runner@v2
+        with:
+          projectPath: time-arena-game
 
       # Build
       - name: Build project 🔨
