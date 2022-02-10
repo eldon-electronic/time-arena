@@ -36,7 +36,7 @@ jobs:
         with:
           projectpath: time-arena-game
           targetPlatform: WebGL
-          # allowDirtyBuild: true
+          allowDirtyBuild: true
 
       # Output
       - uses: actions/upload-artifact@v1
