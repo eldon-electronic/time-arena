@@ -1,6 +1,6 @@
 name: Deploy 😎
 
-on: workflow_dispatch
+on: push
 
 env:  
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
