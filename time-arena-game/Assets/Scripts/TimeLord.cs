@@ -43,7 +43,7 @@ public class TimeLord : MonoBehaviour
         GameObject timeObject;
         int firstTick;
         TimeTick[] ticks;
-        int compressionFactor = 3;
+        int compressionFactor = 1;
 
         public void Init(GameObject t, int start, int length)
         {
@@ -56,6 +56,7 @@ public class TimeLord : MonoBehaviour
         {
             try
             {
+                ticks[t] = new TimeTick();
                 ticks[t].p = v;
                 ticks[t].r = r;
                 ticks[t].flags[0] = true;
@@ -71,6 +72,7 @@ public class TimeLord : MonoBehaviour
         {
             try
             {
+                ticks[t] = new TimeTick();
                 ticks[t].p = timeObject.transform.position;
                 ticks[t].r = timeObject.transform.rotation;
                 ticks[t].flags[0] = true;
@@ -84,10 +86,9 @@ public class TimeLord : MonoBehaviour
 
         public (Vector3, Quaternion) Recall(int t)
         {
-            Debug.Log(ticks[t].flags[0].ToString());
             try
             {
-                if (ticks[t].flags[0] == false)
+                if (ticks[t] == null)
                 {
                     int a = predec(t);
                     int b = postdec(t);
@@ -116,7 +117,7 @@ public class TimeLord : MonoBehaviour
             int i = t;
             do
             {
-                if (ticks[i].flags[0]) return i;
+                if (ticks[i] != null) return i;
                 i--;
             } while (i >= firstTick);
             return -1;
@@ -129,7 +130,7 @@ public class TimeLord : MonoBehaviour
             int k = ticks.Length;
             do
             {
-                if (ticks[i].flags[0]) return i;
+                if (ticks[i] != null) return i;
                 i++;
             } while (i < k);
             return -1;
@@ -145,8 +146,9 @@ public class TimeLord : MonoBehaviour
     public bool active = false;
     private bool recording = true;
     private bool replaying;
-    private List<TimeStream> streams;
+    private List<TimeStream> streams = new List<TimeStream>();
     private int currentTick = 0;
+    private GameObject replay;
     // Start is called before the first frame update
     void Start()
     {
@@ -155,29 +157,42 @@ public class TimeLord : MonoBehaviour
             t.Init(o, 0, maxgameTicks);
             streams.Add(t);
         }
-        Debug.Log(Marshal.SizeOf(typeof(Vector3)));
-        Debug.Log(Marshal.SizeOf(typeof(Quaternion)));
-        Debug.Log(Marshal.SizeOf(typeof(bool)));
-        if (active)
-        {
-            StartCoroutine(TimeClock());
-        }
     }
 
     private void Update()
     {
-        if (!recording && !replaying)
+        if(currentTick >= maxgameTicks){ recording = false; replaying = false; currentTick = 0;}
+        if (currentTick > 30 && !replaying)
         {
-            GameObject replay = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            StartCoroutine(TimeReplay(replay));
+            replay = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            replaying = true;
         }
+        if(recording){ Record(); }
+        if(replaying){ Replay(replay); }
+        currentTick++;
     }
 
+    private TimeStream findStream(GameObject o){
+        foreach(TimeStream stream in streams){
+            if(stream.checkObjectReference(o)) return stream;
+        }
+        return null;
+    }
+
+    public int getCurrentTick(){
+        return currentTick;
+    }
     public void AddNewTimeObject(GameObject t)
     {
         TimeStream newStream = new TimeStream();
         newStream.Init(t, currentTick, maxgameTicks - currentTick);
         streams.Add(newStream);
+    }
+
+    public void timeJump(GameObject t, int distance){
+        (Vector3, Quaternion) newTimePoint = getTimeTick(t, currentTick - 30);
+        t.transform.position = newTimePoint.Item1;
+        t.transform.rotation = newTimePoint.Item2;
     }
 
     public bool forceRecord(GameObject t)
@@ -194,31 +209,23 @@ public class TimeLord : MonoBehaviour
         return false;
     }
 
-    IEnumerator TimeClock()
-    {
-        recording = true;
-        for(int i = 0; i < maxgameTicks; i++)
-        {
-            foreach(TimeStream s in streams){
-                if(i % s.compression() == 0){
-                    s.Record(i);
-                }
-            }
-            currentTick = i + 1;
-            yield return new WaitForSecondsRealtime(0.03125f);
-        }
-        recording = false;
+    public (Vector3, Quaternion) getTimeTick(GameObject o, int tick){
+        return findStream(o).Recall(tick);
     }
 
-    IEnumerator TimeReplay(GameObject replayer)
-    {
-        replaying = true;
-        for (int i = 0; i < maxgameTicks; i++)
-        {
-            (Vector3, Quaternion) data = streams[0].Recall(i);
-            replayer.transform.position = data.Item1;
-            replayer.transform.rotation = data.Item2;
-            yield return new WaitForSecondsRealtime(0.03125f);
+    private bool Record(){
+        foreach(TimeStream s in streams){
+            if(currentTick % s.compression() == 0){
+                s.Record(currentTick);
+            }
         }
+        return true;
+    }
+
+    private bool Replay(GameObject replayer){
+        (Vector3, Quaternion) data = streams[0].Recall(currentTick - 30);
+        replayer.transform.position = data.Item1 + new Vector3(-10, 0, 0);
+        replayer.transform.rotation = data.Item2;
+        return true;
     }
 }
