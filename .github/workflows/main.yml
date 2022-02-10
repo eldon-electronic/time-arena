@@ -23,7 +23,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: time-arena-game/Library
-          key: Time-Arena-Library
+          key: -Library
 
       # Test
       # - name: Run tests
