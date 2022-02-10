@@ -27,7 +27,6 @@ jobs:
         uses: game-ci/unity-test-runner@v2
         with:
           projectPath: time-arena-game
-          artifactsPath: /testArtifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
 
