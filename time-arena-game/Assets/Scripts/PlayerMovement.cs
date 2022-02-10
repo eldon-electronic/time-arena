@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_ground;
 	public Text debugMenu_health;
 	public Text masterClientOpts;
+	private float secondsTillGame;
+	private bool isCountingTillGameStart;
 
 	//variables corresponding to player Animations
 	public Animator playerAnim_hit;
@@ -42,10 +44,8 @@ public class PlayerMovement : MonoBehaviour {
 	public float hitCheckRadius = 1f;
 	public LayerMask hitMask;
 
-
 	//the photonView component that syncs with the network
 	public PhotonView view;
-
 
 	// Start is called before the first frame update
 	void Start() {
@@ -67,7 +67,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
 		//local keys only affect client's player
 		if(view.IsMine){
 			//update lastPos from prev frame
@@ -142,10 +141,25 @@ public class PlayerMovement : MonoBehaviour {
 			}
 
 			//start game onpress 'e'
-			if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E)){
-				PhotonNetwork.LoadLevel("GameScene");
+			if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart){
+				isCountingTillGameStart = true;
+				secondsTillGame = 5.0f;
 			}
 
+			//if counting and user presses esc - stop
+			if(Input.GetKeyDown(KeyCode.Escape)){
+				isCountingTillGameStart = false;
+				secondsTillGame = 0;
+			}
+
+			//if counting, reduce timer
+			if(PhotonNetwork.IsMasterClient && isCountingTillGameStart){
+				secondsTillGame -= Time.deltaTime;
+				if(secondsTillGame <= 0){
+					PhotonNetwork.LoadLevel("GameScene");
+					isCountingTillGameStart = false;
+				}
+			}
 
 
 		} else {
@@ -176,7 +190,11 @@ public class PlayerMovement : MonoBehaviour {
 		//update player HUD
 
 
-
+		//if master client, show 'press e o start' text
+		masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
+		if(isCountingTillGameStart){
+			masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
+		}
 		Vector3 movementVector = transform.position - lastPos;
 		float distTravelled = movementVector.magnitude / Time.deltaTime;
 		debugMenu_speed.text = "Speed: " + distTravelled;
