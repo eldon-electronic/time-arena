@@ -23,11 +23,11 @@ jobs:
           key: Time-Arena-Library
 
       # Test
-      - name: Run tests
-        uses: game-ci/unity-test-runner@v2
-        with:
-          projectPath: time-arena-game
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Run tests
+      #   uses: game-ci/unity-test-runner@v2
+      #   with:
+      #     projectPath: time-arena-game
+      #     githubToken: ${{ secrets.GITHUB_TOKEN }}
 
 
       # Build
