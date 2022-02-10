@@ -22,7 +22,7 @@ public class PauseManager : MonoBehaviour {
 	}
 
 	public void Resume(){
-		isPaused = !isPaused;
+		isPaused = false;
 		pauseMenuUI.SetActive(isPaused);
 		Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
 	}

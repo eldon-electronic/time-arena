@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class PlayerMovement : MonoBehaviour {
@@ -15,8 +17,30 @@ public class PlayerMovement : MonoBehaviour {
 	public float groundCheckRadius = 0.2f;
 	public LayerMask groundMask;
 	public bool isGrounded = true;
-	Vector3 velocity;
+	public Vector3 velocity;
+	public float mouseSensitivity = 100f;
+	public float xRot = 0f;
+	public Vector3 lastPos;
+	public float health = 100f;
+	public Image healthbar;
+
+	//variables corresponding to the player's UI/HUD
+	public Canvas UI;
 	public PauseManager pauseUI;
+	public Text debugMenu_speed;
+	public Text debugMenu_room;
+	public Text debugMenu_sprint;
+	public Text debugMenu_hit;
+	public Text debugMenu_ground;
+	public Text debugMenu_health;
+
+	//variables corresponding to player Animations
+	public Animator playerAnim_hit;
+	public bool damageWindow = false;
+	public Transform hitCheck;
+	public float hitCheckRadius = 1f;
+	public LayerMask hitMask;
+
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
@@ -29,13 +53,28 @@ public class PlayerMovement : MonoBehaviour {
 		//destroy other player cameras in local environment
 		if(!view.IsMine){
 			Destroy(cam);
+			Destroy(UI);
+			gameObject.layer = 7;
+		} else {
+			gameObject.tag = "Client";
 		}
+		//lock players cursor to center screen
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	// Update is called once per frame
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
+			//update lastPos from prev frame
+			lastPos = transform.position;
+
+
+
+			//move player
+
+
+
 			//sprint speed
 			if(Input.GetKey("left shift")){
 				speed = 10f;
@@ -69,6 +108,96 @@ public class PlayerMovement : MonoBehaviour {
 			velocity.y -= gravity * Time.deltaTime;
 			//move player according to gravity
 			characterBody.Move(velocity * Time.deltaTime);
+
+
+
+			// rotate player about y and playercam about x
+
+
+
+			//get axis values from input
+			float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
+			float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+			//invert vertical rotation and restrict up/down
+			xRot -= mouseY;
+			xRot = Mathf.Clamp(xRot, -90f, 90f);
+			//apply rotation
+			cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+			transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
+
+
+
+			//start hit animation on click
+			if(Input.GetMouseButtonDown(0)){
+				playerAnim_hit.SetBool("isSpinning", true);
+			}
+
+
+
+
+		} else {
+			//attack handler
+			//if hitting, check for intersection with player
+			if(damageWindow){
+				bool didHitMe = Physics.CheckSphere(hitCheck.position, hitCheckRadius, hitMask);
+				//Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
+				//foreach (var hitCollider in playersHit){
+				if(didHitMe){
+					GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
+					foreach (GameObject client in clients){
+						client.GetComponent<PlayerMovement>().getHit();
+					}
+				}
+			}
+
+
 		}
+
+	}
+
+	// LateUpdate is called once per frame after all rendering
+	void LateUpdate() {
+
+
+
+		//update player HUD
+
+
+
+		Vector3 movementVector = transform.position - lastPos;
+		float distTravelled = movementVector.magnitude / Time.deltaTime;
+		debugMenu_speed.text = "Speed: " + distTravelled;
+		debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+		debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
+		debugMenu_hit.text = "Hit: " + damageWindow;
+		debugMenu_ground.text = "Ground: " + isGrounded;
+		debugMenu_health.text = "Health: " + health;
+
+		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+
+
+	}
+
+	//function to take damage
+	public void getHit(){
+		health -= 1f;
+		if(health <= 0){
+			PhotonNetwork.LeaveRoom();
+			SceneManager.LoadScene("LobbyScene");
+		}
+		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+		Debug.Log("A");
+	}
+
+	//function to enable player to damage others
+	public void startHitting(){
+		damageWindow = true;
+	}
+
+	//function to disable player to damage others
+	public void stopHitting(){
+		damageWindow = false;
+		playerAnim_hit.SetBool("isSpinning", false);
 	}
 }
