@@ -59,12 +59,15 @@ public class PlayerMovement : MonoBehaviour {
 		} else {
 			gameObject.tag = "Client";
 		}
+		//allow master client to move players from one scene to another
+		PhotonNetwork.AutomaticallySyncScene = true;
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	// Update is called once per frame
 	void Update() {
+		masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
 		//local keys only affect client's player
 		if(view.IsMine){
 			//update lastPos from prev frame
@@ -129,11 +132,19 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
+			//handle other user inputs
+
+
+
 			//start hit animation on click
 			if(Input.GetMouseButtonDown(0)){
 				playerAnim_hit.SetBool("isSpinning", true);
 			}
 
+			//start game onpress 'e'
+			if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E)){
+				PhotonNetwork.LoadLevel("GameScene");
+			}
 
 
 
