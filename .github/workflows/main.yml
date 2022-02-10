@@ -1,0 +1,43 @@
+name: Deploy 😎
+
+on: 
+  push: 
+    branches:
+      - actions
+
+env:  
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  build:
+    name: Build my project ✨
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout repository 👀
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: time-arena-game/Library
+          key: Time-Arena-Library
+
+      # Test
+      # - name: Run tests
+      # uses: webbertakken/unity-test-runner@v1.3
+
+      # Build
+      - name: Build project 🔨
+        uses: game-ci/unity-builder@v2.0-alpha-6
+        with:
+          projectpath: time-arena-game
+          targetPlatform: WebGL
+
+      # Output
+      - uses: actions/upload-artifact@v1
+        with:
+          name: Build
+          path: build
