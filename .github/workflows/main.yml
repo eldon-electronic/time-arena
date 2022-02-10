@@ -1,6 +1,12 @@
 name: Deploy 😎
 
-on: push
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 env:  
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
