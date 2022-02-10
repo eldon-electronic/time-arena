@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_hit;
 	public Text debugMenu_ground;
 	public Text debugMenu_health;
+	public Text masterClientOpts;
 
 	//variables corresponding to player Animations
 	public Animator playerAnim_hit;
