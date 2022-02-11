@@ -58,8 +58,8 @@ jobs:
           projectpath: time-arena-game
           targetPlatform: WebGL
 
-      # Output
-      - uses: actions/upload-artifact@v1
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.3
         with:
-          name: Build
-          path: build
+          branch: deploy # The branch the action should deploy to.
+          folder: build # The folder the action should deploy.
