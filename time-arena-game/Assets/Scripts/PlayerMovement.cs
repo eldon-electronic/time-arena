@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Image healthbar;
 	public Image enemyHealthbar;
 	public Canvas enemyHealthbarContainer;
+	public Text enemyScoreDispl;
 	private int score = 0;
 	private float speed = 5f;
 	private float gravity = 10f;
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float xRot = 0f;
 	private Vector3 lastPos;
 	private float health = 100f;
+
 
 
 
@@ -187,37 +189,43 @@ public class PlayerMovement : MonoBehaviour {
 	// LateUpdate is called once per frame after all rendering
 	void LateUpdate() {
 
+		if(view.IsMine){
 
-		//update player HUD
+
+			//update player HUD
 
 
-		//if master client, show 'press e o start' text or 'starting in' text
-		masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
-		scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-		if(isCountingTillGameStart){
-			masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
-			if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
-				//PhotonNetwork.Room.open = false;
-				masterClientOpts.text = "Loading...";
+			//if master client, show 'press e o start' text or 'starting in' text
+			masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
+			scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			if(isCountingTillGameStart){
+				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
+				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
+					//PhotonNetwork.Room.open = false;
+					masterClientOpts.text = "Loading...";
+				}
 			}
+			//update debug menu settings
+			Vector3 movementVector = transform.position - lastPos;
+			float distTravelled = movementVector.magnitude / Time.deltaTime;
+			debugMenu_speed.text = "Speed: " + distTravelled;
+			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
+			debugMenu_hit.text = "Hit: " + damageWindow;
+			debugMenu_ground.text = "Ground: " + isGrounded;
+			debugMenu_health.text = "Health: " + health;
+			//update player score
+			scoreDispl.text = "" + score;
+
+			//update health bar local and enemy, transform enemy tetures to billboard locally
+			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+		} else {
+			//update ui elements of enemies on clients machine
+			enemyHealthbar.rectTransform.sizeDelta = new Vector2(health*10, 200);
+			enemyHealthbarContainer.transform.LookAt(Camera.main.transform.position);
+			enemyScoreDispl.text = "" + score;
+			//enemyHealthbarContainer.transform.rotation = Quaternion.Inverse(enemyHealthbarContainer.transform.rotation);
 		}
-		//update debug menu settings
-		Vector3 movementVector = transform.position - lastPos;
-		float distTravelled = movementVector.magnitude / Time.deltaTime;
-		debugMenu_speed.text = "Speed: " + distTravelled;
-		debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
-		debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
-		debugMenu_hit.text = "Hit: " + damageWindow;
-		debugMenu_ground.text = "Ground: " + isGrounded;
-		debugMenu_health.text = "Health: " + health;
-		//update player score
-		scoreDispl.text = "" + score;
-
-		//update health bar local and enemy, transform enemy tetures to billboard locally
-		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
-		enemyHealthbar.rectTransform.sizeDelta = new Vector2(health*13, 1400);
-		enemyHealthbarContainer?.transform.LookAt(Camera.main.transform.position);
-
 	}
 
 	[PunRPC]
