@@ -649,7 +649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -659,7 +659,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 60
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 70
@@ -1392,20 +1392,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterBody: {fileID: 6458975045518551229}
   cam: {fileID: 6458975046434770673}
-  speed: 10
-  gravity: 10
-  jumpPower: 5
   groundCheck: {fileID: 6458975045590433014}
-  groundCheckRadius: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 64
-  isGrounded: 1
-  velocity: {x: 0, y: 0, z: 0}
   mouseSensitivity: 100
-  xRot: 0
-  lastPos: {x: 0, y: 0, z: 0}
-  health: 80
   healthbar: {fileID: 3886357557929101580}
   UI: {fileID: 1130251741066097712}
   pauseUI: {fileID: 5276288210589276353}
@@ -1416,13 +1407,14 @@ MonoBehaviour:
   debugMenu_ground: {fileID: 7243462422459889249}
   debugMenu_health: {fileID: 7449018462847471778}
   masterClientOpts: {fileID: 659775664179981306}
+  scoreDispl: {fileID: 4530603324204463469}
   playerAnim_hit: {fileID: 9070032884028841073}
   damageWindow: 0
   hitCheck: {fileID: 2024824527328461482}
   hitCheckRadius: 1
   hitMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 128
   view: {fileID: 0}
 --- !u!114 &5690578699466181193
 MonoBehaviour:

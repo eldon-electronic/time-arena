@@ -10,19 +10,21 @@ public class PlayerMovement : MonoBehaviour {
 	// variables defining player values
 	public CharacterController characterBody;
 	public Camera cam;
-	public float speed = 5f;
-	public float gravity = 10f;
-	public float jumpPower = 10f;
 	public Transform groundCheck;
-	public float groundCheckRadius = 0.2f;
 	public LayerMask groundMask;
-	public bool isGrounded = true;
-	public Vector3 velocity;
 	public float mouseSensitivity = 100f;
-	public float xRot = 0f;
-	public Vector3 lastPos;
-	public float health = 100f;
 	public Image healthbar;
+	private int score = 0;
+	private float speed = 5f;
+	private float gravity = 10f;
+	private float jumpPower = 10f;
+	private float groundCheckRadius = 0.2f;
+	private bool isGrounded = true;
+	private Vector3 velocity;
+	private float xRot = 0f;
+	private Vector3 lastPos;
+	private float health = 100f;
+
 
 	//variables corresponding to the player's UI/HUD
 	public Canvas UI;
@@ -34,6 +36,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_ground;
 	public Text debugMenu_health;
 	public Text masterClientOpts;
+	public Text scoreDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
@@ -53,7 +56,7 @@ public class PlayerMovement : MonoBehaviour {
 		view = GetComponent<PhotonView>();
 		//destroy other player cameras in local environment
 		if(!view.IsMine){
-			Destroy(cam);
+			Destroy(cam.gameObject);
 			Destroy(UI);
 			gameObject.layer = 7;
 		} else {
@@ -162,29 +165,20 @@ public class PlayerMovement : MonoBehaviour {
 			}
 
 
-		} else {
 			//attack handler
+			
 			//if hitting, check for intersection with player
 			if(damageWindow){
-				bool didHitMe = Physics.CheckSphere(hitCheck.position, hitCheckRadius, hitMask);
-				//Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
-				//foreach (var hitCollider in playersHit){
-				if(didHitMe){
-					GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
-					foreach (GameObject client in clients){
-						client.GetComponent<PlayerMovement>().getHit();
-					}
+				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
+				foreach (var playerGotHit in playersHit){
+					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f);
 				}
 			}
-
-
 		}
-
 	}
 
 	// LateUpdate is called once per frame after all rendering
 	void LateUpdate() {
-
 
 
 		//update player HUD
@@ -192,8 +186,12 @@ public class PlayerMovement : MonoBehaviour {
 
 		//if master client, show 'press e o start' text
 		masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
+		scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 		if(isCountingTillGameStart){
 			masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
+			if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
+				masterClientOpts.text = "Loading...";
+			}
 		}
 		Vector3 movementVector = transform.position - lastPos;
 		float distTravelled = movementVector.magnitude / Time.deltaTime;
@@ -203,21 +201,26 @@ public class PlayerMovement : MonoBehaviour {
 		debugMenu_hit.text = "Hit: " + damageWindow;
 		debugMenu_ground.text = "Ground: " + isGrounded;
 		debugMenu_health.text = "Health: " + health;
+		scoreDispl.text = "" + score;
 
 		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+	}
 
-
+	[PunRPC]
+	void RPC_getHit(float damage){
+		if(view.IsMine){
+			health -= damage;
+			if(health <= 0){
+				PhotonNetwork.LeaveRoom();
+				SceneManager.LoadScene("LobbyScene");
+			}
+			Debug.Log("gettin hit lad");
+		}
 	}
 
 	//function to take damage
-	public void getHit(){
-		health -= 1f;
-		if(health <= 0){
-			PhotonNetwork.LeaveRoom();
-			SceneManager.LoadScene("LobbyScene");
-		}
-		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
-		Debug.Log("A");
+	public void hitPlayer(float damage){
+		view.RPC("RPC_getHit", RpcTarget.All, damage);
 	}
 
 	//function to enable player to damage others
@@ -230,4 +233,5 @@ public class PlayerMovement : MonoBehaviour {
 		damageWindow = false;
 		playerAnim_hit.SetBool("isSpinning", false);
 	}
+
 }
