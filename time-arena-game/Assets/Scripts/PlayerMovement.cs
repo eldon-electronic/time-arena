@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
 	public Image healthbar;
+	public Image enemyHealthbar;
+	public Canvas enemyHealthbarContainer;
 	private int score = 0;
 	private float speed = 5f;
 	private float gravity = 10f;
@@ -24,6 +26,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float xRot = 0f;
 	private Vector3 lastPos;
 	private float health = 100f;
+
 
 
 	//variables corresponding to the player's UI/HUD
@@ -40,6 +43,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
+
 	//variables corresponding to player Animations
 	public Animator playerAnim_hit;
 	public bool damageWindow = false;
@@ -54,12 +58,14 @@ public class PlayerMovement : MonoBehaviour {
 	void Start() {
 		//define the photonView component
 		view = GetComponent<PhotonView>();
-		//destroy other player cameras in local environment
 		if(!view.IsMine){
+			//destroy other player cameras and ui in local environment
 			Destroy(cam.gameObject);
 			Destroy(UI);
 			gameObject.layer = 7;
 		} else {
+			//destroy playerhealthbar for enemies
+			Destroy(enemyHealthbarContainer);
 			gameObject.tag = "Client";
 		}
 		//allow master client to move players from one scene to another
@@ -166,11 +172,12 @@ public class PlayerMovement : MonoBehaviour {
 
 
 			//attack handler
-			
+
 			//if hitting, check for intersection with player
 			if(damageWindow){
 				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
 				foreach (var playerGotHit in playersHit){
+					//call hitplayer function on that player
 					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f);
 				}
 			}
@@ -184,15 +191,17 @@ public class PlayerMovement : MonoBehaviour {
 		//update player HUD
 
 
-		//if master client, show 'press e o start' text
+		//if master client, show 'press e o start' text or 'starting in' text
 		masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
 		scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 		if(isCountingTillGameStart){
 			masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
 			if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
+				//PhotonNetwork.Room.open = false;
 				masterClientOpts.text = "Loading...";
 			}
 		}
+		//update debug menu settings
 		Vector3 movementVector = transform.position - lastPos;
 		float distTravelled = movementVector.magnitude / Time.deltaTime;
 		debugMenu_speed.text = "Speed: " + distTravelled;
@@ -201,24 +210,29 @@ public class PlayerMovement : MonoBehaviour {
 		debugMenu_hit.text = "Hit: " + damageWindow;
 		debugMenu_ground.text = "Ground: " + isGrounded;
 		debugMenu_health.text = "Health: " + health;
+		//update player score
 		scoreDispl.text = "" + score;
 
+		//update health bar local and enemy, transform enemy tetures to billboard locally
 		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+		enemyHealthbar.rectTransform.sizeDelta = new Vector2(health*13, 1400);
+		enemyHealthbarContainer?.transform.LookAt(Camera.main.transform.position);
+
 	}
 
+	//RPC function to be called when another player hits this one
 	[PunRPC]
 	void RPC_getHit(float damage){
-		if(view.IsMine){
+		//if(view.IsMine){
 			health -= damage;
 			if(health <= 0){
-				PhotonNetwork.LeaveRoom();
-				SceneManager.LoadScene("LobbyScene");
+				health = 100f;
+				transform.position = new Vector3(0, 10, 0);
 			}
-			Debug.Log("gettin hit lad");
-		}
+		//}
 	}
 
-	//function to take damage
+	//function to take damage by calling RPC on all machines
 	public void hitPlayer(float damage){
 		view.RPC("RPC_getHit", RpcTarget.All, damage);
 	}
