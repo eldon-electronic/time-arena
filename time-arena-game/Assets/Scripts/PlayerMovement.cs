@@ -178,7 +178,7 @@ public class PlayerMovement : MonoBehaviour {
 				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
 				foreach (var playerGotHit in playersHit){
 					//call hitplayer function on that player
-					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f);
+					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f, view.ViewID);
 				}
 			}
 		}
@@ -220,21 +220,28 @@ public class PlayerMovement : MonoBehaviour {
 
 	}
 
+	[PunRPC]
+	void RPC_incrScore(int scoreIncr){
+		score += scoreIncr;
+	}
+
 	//RPC function to be called when another player hits this one
 	[PunRPC]
-	void RPC_getHit(float damage){
+	void RPC_getHit(float damage, int attackerID){
 		//if(view.IsMine){
 			health -= damage;
 			if(health <= 0){
 				health = 100f;
 				transform.position = new Vector3(0, 10, 0);
+				//increment score of player who damaged
+				PhotonView.Find(attackerID).RPC("RPC_incrScore", RpcTarget.All, 1);
 			}
 		//}
 	}
 
 	//function to take damage by calling RPC on all machines
-	public void hitPlayer(float damage){
-		view.RPC("RPC_getHit", RpcTarget.All, damage);
+	public void hitPlayer(float damage, int attackerID){
+		view.RPC("RPC_getHit", RpcTarget.All, damage, attackerID);
 	}
 
 	//function to enable player to damage others
