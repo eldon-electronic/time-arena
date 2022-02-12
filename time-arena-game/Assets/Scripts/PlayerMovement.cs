@@ -53,6 +53,9 @@ public class PlayerMovement : MonoBehaviour {
 	public float hitCheckRadius = 1f;
 	public LayerMask hitMask;
 
+	public TimeLord TomBaker;
+	private bool reverse = false;
+
 	//the photonView component that syncs with the network
 	public PhotonView view;
 
@@ -94,6 +97,10 @@ public class PlayerMovement : MonoBehaviour {
 				speed = 10f;
 			} else {
 				speed = 5f;
+			}
+
+			if(Input.GetKey("left ctrl")){
+				reverse = true;
 			}
 
 			//get movement axis values
@@ -225,6 +232,12 @@ public class PlayerMovement : MonoBehaviour {
 			enemyHealthbarContainer.transform.LookAt(Camera.main.transform.position);
 			enemyScoreDispl.text = "" + score;
 			//enemyHealthbarContainer.transform.rotation = Quaternion.Inverse(enemyHealthbarContainer.transform.rotation);
+		}
+
+		if(reverse){
+			Debug.Log(characterBody.gameObject.ToString());
+			TomBaker.timeJump(characterBody.gameObject, 30);
+			reverse = false;
 		}
 	}
 
