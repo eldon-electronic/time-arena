@@ -122,7 +122,7 @@ public class TimeLord : MonoBehaviour
             } while (i >= firstTick);
             return -1;
         }
-        
+
         // find next saved tick
         private int postdec(int t)
         {
@@ -190,7 +190,8 @@ public class TimeLord : MonoBehaviour
     }
 
     public void timeJump(GameObject t, int distance){
-        (Vector3, Quaternion) newTimePoint = getTimeTick(t, currentTick - 30);
+        Debug.Log(t.ToString());
+        (Vector3, Quaternion) newTimePoint = getTimeTick(t, currentTick - distance);
         t.transform.position = newTimePoint.Item1;
         t.transform.rotation = newTimePoint.Item2;
     }

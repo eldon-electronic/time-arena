@@ -28,9 +28,6 @@ public class PlayerMovement : MonoBehaviour {
 	private Vector3 lastPos;
 	private float health = 100f;
 
-
-
-
 	//variables corresponding to the player's UI/HUD
 	public Canvas UI;
 	public PauseManager pauseUI;
