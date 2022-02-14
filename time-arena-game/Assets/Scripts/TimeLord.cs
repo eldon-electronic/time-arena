@@ -211,7 +211,8 @@ public class TimeLord : MonoBehaviour
     }
 
     public (Vector3, Quaternion) getTimeTick(GameObject o, int tick){
-        return findStream(o).Recall(tick);
+      Debug.Log(o.ToString());
+      return findStream(o).Recall(tick);
     }
 
     private bool Record(){

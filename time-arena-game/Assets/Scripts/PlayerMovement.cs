@@ -27,6 +27,9 @@ public class PlayerMovement : MonoBehaviour {
 	private float xRot = 0f;
 	private Vector3 lastPos;
 	private float health = 100f;
+	private float ab1Cooldown = 0f;
+	private float ab2Cooldown = 0f;
+	private float ab3Cooldown = 0f;
 
 	//variables corresponding to the player's UI/HUD
 	public Canvas UI;
@@ -39,6 +42,9 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_health;
 	public Text masterClientOpts;
 	public Text scoreDispl;
+	public Text ab1Cooldown_displ;
+	public Text ab2Cooldown_displ;
+	public Text ab3Cooldown_displ;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
@@ -51,7 +57,6 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask hitMask;
 
 	public TimeLord TomBaker;
-	private bool reverse = false;
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
@@ -80,6 +85,9 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
+			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
 			//update lastPos from prev frame
 			lastPos = transform.position;
 
@@ -96,8 +104,20 @@ public class PlayerMovement : MonoBehaviour {
 				speed = 5f;
 			}
 
-			if(Input.GetKey("left ctrl")){
-				reverse = true;
+			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				TomBaker.timeJump(characterBody.gameObject, 30);
+				ab1Cooldown = 9;
+			}
+			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				ab2Cooldown = 5;
+			}
+			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				ab3Cooldown = 10;
 			}
 
 			//get movement axis values
@@ -221,7 +241,13 @@ public class PlayerMovement : MonoBehaviour {
 			//update player score
 			scoreDispl.text = "" + score;
 
-			//update health bar local and enemy, transform enemy tetures to billboard locally
+			//update player ability displays
+			ab1Cooldown_displ.text = "" + (int)ab1Cooldown;
+			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
+			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
+
+
+			//update health bar local and enemy
 			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
 		} else {
 			//update ui elements of enemies on clients machine
@@ -229,12 +255,6 @@ public class PlayerMovement : MonoBehaviour {
 			enemyHealthbarContainer.transform.LookAt(Camera.main.transform.position);
 			enemyScoreDispl.text = "" + score;
 			//enemyHealthbarContainer.transform.rotation = Quaternion.Inverse(enemyHealthbarContainer.transform.rotation);
-		}
-
-		if(reverse){
-			Debug.Log(characterBody.gameObject.ToString());
-			TomBaker.timeJump(characterBody.gameObject, 30);
-			reverse = false;
 		}
 	}
 
