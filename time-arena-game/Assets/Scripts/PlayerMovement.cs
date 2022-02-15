@@ -10,19 +10,26 @@ public class PlayerMovement : MonoBehaviour {
 	// variables defining player values
 	public CharacterController characterBody;
 	public Camera cam;
-	public float speed = 5f;
-	public float gravity = 10f;
-	public float jumpPower = 10f;
 	public Transform groundCheck;
-	public float groundCheckRadius = 0.2f;
 	public LayerMask groundMask;
-	public bool isGrounded = true;
-	public Vector3 velocity;
 	public float mouseSensitivity = 100f;
-	public float xRot = 0f;
-	public Vector3 lastPos;
-	public float health = 100f;
 	public Image healthbar;
+	public Image enemyHealthbar;
+	public Canvas enemyHealthbarContainer;
+	public Text enemyScoreDispl;
+	private int score = 0;
+	private float speed = 5f;
+	private float gravity = 10f;
+	private float jumpPower = 10f;
+	private float groundCheckRadius = 0.2f;
+	private bool isGrounded = true;
+	private Vector3 velocity;
+	private float xRot = 0f;
+	private Vector3 lastPos;
+	private float health = 100f;
+	private float ab1Cooldown = 0f;
+	private float ab2Cooldown = 0f;
+	private float ab3Cooldown = 0f;
 
 	//variables corresponding to the player's UI/HUD
 	public Canvas UI;
@@ -33,6 +40,14 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_hit;
 	public Text debugMenu_ground;
 	public Text debugMenu_health;
+	public Text masterClientOpts;
+	public Text scoreDispl;
+	public Text ab1Cooldown_displ;
+	public Text ab2Cooldown_displ;
+	public Text ab3Cooldown_displ;
+	private float secondsTillGame;
+	private bool isCountingTillGameStart;
+
 
 	//variables corresponding to player Animations
 	public Animator playerAnim_hit;
@@ -41,23 +56,27 @@ public class PlayerMovement : MonoBehaviour {
 	public float hitCheckRadius = 1f;
 	public LayerMask hitMask;
 
+	public TimeLord TomBaker;
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
-
 
 	// Start is called before the first frame update
 	void Start() {
 		//define the photonView component
 		view = GetComponent<PhotonView>();
-		//destroy other player cameras in local environment
 		if(!view.IsMine){
-			Destroy(cam);
+			//destroy other player cameras and ui in local environment
+			Destroy(cam.gameObject);
 			Destroy(UI);
 			gameObject.layer = 7;
 		} else {
+			//destroy playerhealthbar for enemies
+			Destroy(enemyHealthbarContainer);
 			gameObject.tag = "Client";
 		}
+		//allow master client to move players from one scene to another
+		PhotonNetwork.AutomaticallySyncScene = true;
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
 	}
@@ -66,6 +85,9 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
+			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
 			//update lastPos from prev frame
 			lastPos = transform.position;
 
@@ -80,6 +102,22 @@ public class PlayerMovement : MonoBehaviour {
 				speed = 10f;
 			} else {
 				speed = 5f;
+			}
+
+			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				TomBaker.timeJump(characterBody.gameObject, 30);
+				ab1Cooldown = 9;
+			}
+			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				ab2Cooldown = 5;
+			}
+			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				ab3Cooldown = 10;
 			}
 
 			//get movement axis values
@@ -128,66 +166,120 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
+			//handle other user inputs
+
+
+
 			//start hit animation on click
 			if(Input.GetMouseButtonDown(0)){
 				playerAnim_hit.SetBool("isSpinning", true);
 			}
 
+			//start game onpress 'e'
+			if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart){
+				isCountingTillGameStart = true;
+				secondsTillGame = 5.0f;
+			}
 
+			//if counting and user presses esc - stop
+			if(Input.GetKeyDown(KeyCode.Escape)){
+				isCountingTillGameStart = false;
+				secondsTillGame = 0;
+			}
 
-
-		} else {
-			//attack handler
-			//if hitting, check for intersection with player
-			if(damageWindow){
-				bool didHitMe = Physics.CheckSphere(hitCheck.position, hitCheckRadius, hitMask);
-				//Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
-				//foreach (var hitCollider in playersHit){
-				if(didHitMe){
-					GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
-					foreach (GameObject client in clients){
-						client.GetComponent<PlayerMovement>().getHit();
-					}
+			//if counting, reduce timer
+			if(PhotonNetwork.IsMasterClient && isCountingTillGameStart){
+				secondsTillGame -= Time.deltaTime;
+				if(secondsTillGame <= 0){
+					PhotonNetwork.LoadLevel("GameScene");
+					isCountingTillGameStart = false;
 				}
 			}
 
 
-		}
+			//attack handler
 
+			//if hitting, check for intersection with player
+			if(damageWindow){
+				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
+				foreach (var playerGotHit in playersHit){
+					//call hitplayer function on that player
+					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f, view.ViewID);
+				}
+			}
+		}
 	}
 
 	// LateUpdate is called once per frame after all rendering
 	void LateUpdate() {
 
+		if(view.IsMine){
 
 
-		//update player HUD
+			//update player HUD
 
 
+			//if master client, show 'press e o start' text or 'starting in' text
+			masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
+			scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			if(isCountingTillGameStart){
+				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
+				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
+					//PhotonNetwork.Room.open = false;
+					masterClientOpts.text = "Loading...";
+				}
+			}
+			//update debug menu settings
+			Vector3 movementVector = transform.position - lastPos;
+			float distTravelled = movementVector.magnitude / Time.deltaTime;
+			debugMenu_speed.text = "Speed: " + distTravelled;
+			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
+			debugMenu_hit.text = "Hit: " + damageWindow;
+			debugMenu_ground.text = "Ground: " + isGrounded;
+			debugMenu_health.text = "Health: " + health;
+			//update player score
+			scoreDispl.text = "" + score;
 
-		Vector3 movementVector = transform.position - lastPos;
-		float distTravelled = movementVector.magnitude / Time.deltaTime;
-		debugMenu_speed.text = "Speed: " + distTravelled;
-		debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
-		debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
-		debugMenu_hit.text = "Hit: " + damageWindow;
-		debugMenu_ground.text = "Ground: " + isGrounded;
-		debugMenu_health.text = "Health: " + health;
-
-		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+			//update player ability displays
+			ab1Cooldown_displ.text = "" + (int)ab1Cooldown;
+			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
+			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
 
 
+			//update health bar local and enemy
+			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
+		} else {
+			//update ui elements of enemies on clients machine
+			enemyHealthbar.rectTransform.sizeDelta = new Vector2(health*10, 200);
+			enemyHealthbarContainer.transform.LookAt(Camera.main.transform.position);
+			enemyScoreDispl.text = "" + score;
+			//enemyHealthbarContainer.transform.rotation = Quaternion.Inverse(enemyHealthbarContainer.transform.rotation);
+		}
 	}
 
-	//function to take damage
-	public void getHit(){
-		health -= 1f;
-		if(health <= 0){
-			PhotonNetwork.LeaveRoom();
-			SceneManager.LoadScene("LobbyScene");
-		}
-		healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
-		Debug.Log("A");
+	[PunRPC]
+	void RPC_incrScore(int scoreIncr){
+		score += scoreIncr;
+	}
+
+	//RPC function to be called when another player hits this one
+	[PunRPC]
+	void RPC_getHit(float damage, int attackerID){
+		//if(view.IsMine){
+			health -= damage;
+			if(health <= 0){
+				health = 100f;
+				transform.position = new Vector3(0, 10, 0);
+				//increment score of player who damaged
+				PhotonView.Find(attackerID).RPC("RPC_incrScore", RpcTarget.All, 1);
+			}
+		//}
+	}
+
+	//function to take damage by calling RPC on all machines
+	public void hitPlayer(float damage, int attackerID){
+		view.RPC("RPC_getHit", RpcTarget.All, damage, attackerID);
 	}
 
 	//function to enable player to damage others
@@ -200,4 +292,5 @@ public class PlayerMovement : MonoBehaviour {
 		damageWindow = false;
 		playerAnim_hit.SetBool("isSpinning", false);
 	}
+
 }
