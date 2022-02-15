@@ -13,23 +13,23 @@ public class PlayerMovement : MonoBehaviour {
 	public Transform groundCheck;
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
-	public Image healthbar;
-	public Image enemyHealthbar;
-	public Canvas enemyHealthbarContainer;
-	public Text enemyScoreDispl;
-	private int score = 0;
+	public GameObject playerBody;
+	private int team = 0;//0 seeker 1 hider
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
-	private float groundCheckRadius = 0.2f;
+	private float groundCheckRadius = 0.3f;
 	private bool isGrounded = true;
 	private Vector3 velocity;
 	private float xRot = 0f;
 	private Vector3 lastPos;
-	private float health = 100f;
 	private float ab1Cooldown = 0f;
 	private float ab2Cooldown = 0f;
 	private float ab3Cooldown = 0f;
+
+	//references to materials for user team id
+	public Material seekerMat;
+	public Material hiderMat;
 
 	//variables corresponding to the player's UI/HUD
 	public Canvas UI;
@@ -37,24 +37,23 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_speed;
 	public Text debugMenu_room;
 	public Text debugMenu_sprint;
-	public Text debugMenu_hit;
+	public Text debugMenu_grab;
 	public Text debugMenu_ground;
-	public Text debugMenu_health;
 	public Text masterClientOpts;
-	public Text scoreDispl;
 	public Text ab1Cooldown_displ;
 	public Text ab2Cooldown_displ;
 	public Text ab3Cooldown_displ;
+	public Text teamDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
 
 	//variables corresponding to player Animations
-	public Animator playerAnim_hit;
-	public bool damageWindow = false;
-	public Transform hitCheck;
-	public float hitCheckRadius = 1f;
-	public LayerMask hitMask;
+	public Animator playerAnim_grab;
+	public Transform grabCheck;
+	public LayerMask grabMask;
+	private float grabCheckRadius = 1f;
+	private bool damageWindow = false;
 
 
 	//the photonView component that syncs with the network
@@ -62,16 +61,17 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Start is called before the first frame update
 	void Start() {
+		//set the player's colour depending on their team
+		playerBody.GetComponent<Renderer>().material = (team == 0) ? seekerMat : hiderMat;
 		//define the photonView component
 		view = GetComponent<PhotonView>();
 		if(!view.IsMine){
 			//destroy other player cameras and ui in local environment
-			Destroy(cam.gameObject);
+			Destroy(cam);
+			Destroy(cam.gameObject.GetComponent<AudioListener>());
 			Destroy(UI);
 			gameObject.layer = 7;
 		} else {
-			//destroy playerhealthbar for enemies
-			Destroy(enemyHealthbarContainer);
 			gameObject.tag = "Client";
 		}
 		//allow master client to move players from one scene to another
@@ -84,132 +84,13 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
-			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
-			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
-			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
-			//update lastPos from prev frame
-			lastPos = transform.position;
-
-
-
-			//move player
-
-
-
-			//sprint speed
-			if(Input.GetKey("left shift")){
-				speed = 10f;
-			} else {
-				speed = 5f;
-			}
-
-			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
-				ab1Cooldown = 9;
-			}
-			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
-				ab2Cooldown = 5;
-			}
-			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
-				ab3Cooldown = 10;
-			}
-
-			//get movement axis values
-			float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
-			float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
-			//check if player's GroundCheck intersects with any environment object
-			isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
-
-			//set and normalise movement vector
-			Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
-			if(movement.magnitude != 1 && movement.magnitude != 0){
-				movement /= movement.magnitude;
-			}
-			//transform according to movement vector
-			characterBody.Move(movement * speed * Time.deltaTime);
-
-			//reset vertical velocity value when grounded
-			if(isGrounded && velocity.y < 0){
-				velocity.y = 0.2f;
-			}
-			//jump control
-			if(Input.GetButtonDown("Jump") && isGrounded && !pauseUI.isPaused){
-				velocity.y += Mathf.Sqrt(jumpPower * 2f * gravity);
-			}
-			//gravity effect
-			velocity.y -= gravity * Time.deltaTime;
-			//move player according to gravity
-			characterBody.Move(velocity * Time.deltaTime);
-
-
-
-			// rotate player about y and playercam about x
-
-
-
-			//get axis values from input
-			float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
-			float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
-			//invert vertical rotation and restrict up/down
-			xRot -= mouseY;
-			xRot = Mathf.Clamp(xRot, -90f, 90f);
-			//apply rotation
-			cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
-			transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
-
-
-
-			//handle other user inputs
-
-
-
-			//start hit animation on click
-			if(Input.GetMouseButtonDown(0)){
-				playerAnim_hit.SetBool("isSpinning", true);
-			}
-
-			//start game onpress 'e'
-			if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart){
-				isCountingTillGameStart = true;
-				secondsTillGame = 5.0f;
-			}
-
-			//if counting and user presses esc - stop
-			if(Input.GetKeyDown(KeyCode.Escape)){
-				isCountingTillGameStart = false;
-				secondsTillGame = 0;
-			}
-
-			//if counting, reduce timer
-			if(PhotonNetwork.IsMasterClient && isCountingTillGameStart){
-				secondsTillGame -= Time.deltaTime;
-				if(secondsTillGame <= 0){
-					PhotonNetwork.LoadLevel("GameScene");
-					isCountingTillGameStart = false;
-				}
-			}
-
-
-			//attack handler
-
-			//if hitting, check for intersection with player
-			if(damageWindow){
-				Collider[] playersHit = Physics.OverlapSphere(hitCheck.position, hitCheckRadius, hitMask);
-				foreach (var playerGotHit in playersHit){
-					//call hitplayer function on that player
-					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f, view.ViewID);
-				}
-			}
+			movementControl();
+			cameraControl();
+			keyControl();
 		}
 	}
 
-	// LateUpdate is called once per frame after all rendering
+	// LateUpdate is called once per frame after all rendering (for UI mainly)
 	void LateUpdate() {
 
 		if(view.IsMine){
@@ -220,7 +101,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			//if master client, show 'press e o start' text or 'starting in' text
 			masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
-			scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			teamDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 			if(isCountingTillGameStart){
 				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
 				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
@@ -234,62 +115,157 @@ public class PlayerMovement : MonoBehaviour {
 			debugMenu_speed.text = "Speed: " + distTravelled;
 			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
 			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
-			debugMenu_hit.text = "Hit: " + damageWindow;
+			debugMenu_grab.text = "Grab: " + damageWindow;
 			debugMenu_ground.text = "Ground: " + isGrounded;
-			debugMenu_health.text = "Health: " + health;
-			//update player score
-			scoreDispl.text = "" + score;
 
 			//update player ability displays
 			ab1Cooldown_displ.text = "" + (int)ab1Cooldown;
 			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
 			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
-
-
-			//update health bar local and enemy
-			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
-		} else {
-			//update ui elements of enemies on clients machine
-			enemyHealthbar.rectTransform.sizeDelta = new Vector2(health*10, 200);
-			enemyHealthbarContainer.transform.LookAt(Camera.main.transform.position);
-			enemyScoreDispl.text = "" + score;
-			//enemyHealthbarContainer.transform.rotation = Quaternion.Inverse(enemyHealthbarContainer.transform.rotation);
 		}
 	}
 
-	[PunRPC]
-	void RPC_incrScore(int scoreIncr){
-		score += scoreIncr;
+	//handle movement axis inputs (wasd, arrowkeys, joystick)
+	void movementControl(){
+		//update lastPos from prev frame
+		lastPos = transform.position;
+		//sprint speed
+		if(Input.GetKey("left shift")){
+			speed = 10f;
+		} else {
+			speed = 5f;
+		}
+		//get movement axis values
+		float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
+		float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
+		//check if player's GroundCheck intersects with any environment object
+		isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
+
+		//set and normalise movement vector
+		Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
+		if(movement.magnitude != 1 && movement.magnitude != 0){
+			movement /= movement.magnitude;
+		}
+		//transform according to movement vector
+		characterBody.Move(movement * speed * Time.deltaTime);
+
+		//reset vertical velocity value when grounded
+		if(isGrounded && velocity.y < 0){
+			velocity.y = 0.2f;
+		}
+		//jump control
+		if(Input.GetButtonDown("Jump") && isGrounded && !pauseUI.isPaused){
+			velocity.y += Mathf.Sqrt(jumpPower * 2f * gravity);
+		}
+		//gravity effect
+		velocity.y -= gravity * Time.deltaTime;
+		//move player according to gravity
+		characterBody.Move(velocity * Time.deltaTime);
 	}
 
-	//RPC function to be called when another player hits this one
-	[PunRPC]
-	void RPC_getHit(float damage, int attackerID){
-		//if(view.IsMine){
-			health -= damage;
-			if(health <= 0){
-				health = 100f;
-				transform.position = new Vector3(0, 10, 0);
-				//increment score of player who damaged
-				PhotonView.Find(attackerID).RPC("RPC_incrScore", RpcTarget.All, 1);
+	//handle mouse movement to rotate camera
+	void cameraControl(){
+		// rotate player about y and playercam about x
+		//get axis values from input
+		float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
+		float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+		//invert vertical rotation and restrict up/down
+		xRot -= mouseY;
+		xRot = Mathf.Clamp(xRot, -90f, 90f);
+		//apply rotation
+		cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
+	}
+
+	//handle all other button presses for abilities and UI
+	void keyControl(){
+		//set cooldown values
+		ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+		ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+		ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
+		//handle ability buttonpresses
+		if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
+			//Debug.Log(characterBody.gameObject.ToString());
+			//TomBaker.timeJump(characterBody.gameObject, 30);
+			changeTeam();
+			ab1Cooldown = 9;
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
+			//Debug.Log(characterBody.gameObject.ToString());
+			//TomBaker.timeJump(characterBody.gameObject, 30);
+			ab2Cooldown = 5;
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
+			//Debug.Log(characterBody.gameObject.ToString());
+			//TomBaker.timeJump(characterBody.gameObject, 30);
+			ab3Cooldown = 3;
+		}
+		//start grab animation on click
+		if(Input.GetMouseButtonDown(0)){
+			//if grabbing, check for intersection with player
+			if(!damageWindow){
+				Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
+				foreach (var playerGotGrab in playersGrab){
+					//call grabplayer function on that player
+					playerGotGrab.GetComponent<PlayerMovement>().getFound();
+				}
+				playerAnim_grab.SetBool("isGrabbing", true);
 			}
-		//}
+		}
+		//start game onpress 'e'
+		if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart){
+			isCountingTillGameStart = true;
+			secondsTillGame = 5.0f;
+		}
+		//if counting for game launch and user presses esc - stop
+		if(Input.GetKeyDown(KeyCode.Escape)){
+			isCountingTillGameStart = false;
+			secondsTillGame = 0;
+		}
+		//if counting, reduce timer
+		if(PhotonNetwork.IsMasterClient && isCountingTillGameStart){
+			secondsTillGame -= Time.deltaTime;
+			if(secondsTillGame <= 0){
+				PhotonNetwork.LoadLevel("GameScene");
+				isCountingTillGameStart = false;
+			}
+		}
 	}
 
-	//function to take damage by calling RPC on all machines
-	public void hitPlayer(float damage, int attackerID){
-		view.RPC("RPC_getHit", RpcTarget.All, damage, attackerID);
+	//change player teams
+	void changeTeam(){
+		//if team is odd, set to 0, else set to 1
+		if(team == 0){
+			team = 1;
+			playerBody.GetComponent<Renderer>().material = seekerMat;
+			teamDispl.text = "SEEKER";
+		} else {
+			team = 0;
+			playerBody.GetComponent<Renderer>().material = hiderMat;
+			teamDispl.text = "HIDER";
+		}
+	}
+
+	//RPC function to be called when another player finds this one
+	[PunRPC]
+	void RPC_getFound(){
+		changeTeam();
+	}
+
+	//function to get found by calling RPC on all machines
+	public void getFound(){
+		view.RPC("RPC_getFound", RpcTarget.All);
 	}
 
 	//function to enable player to damage others
-	public void startHitting(){
+	public void startGrabbing(){
 		damageWindow = true;
 	}
 
 	//function to disable player to damage others
-	public void stopHitting(){
+	public void stopGrabbing(){
 		damageWindow = false;
-		playerAnim_hit.SetBool("isSpinning", false);
+		playerAnim_grab.SetBool("isGrabbing", false);
 	}
-
 }
