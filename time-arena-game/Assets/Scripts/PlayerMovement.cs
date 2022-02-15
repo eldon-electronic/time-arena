@@ -56,7 +56,6 @@ public class PlayerMovement : MonoBehaviour {
 	public float hitCheckRadius = 1f;
 	public LayerMask hitMask;
 
-	public TimeLord TomBaker;
 
 	//the photonView component that syncs with the network
 	public PhotonView view;
@@ -106,7 +105,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
-				TomBaker.timeJump(characterBody.gameObject, 30);
+				//TomBaker.timeJump(characterBody.gameObject, 30);
 				ab1Cooldown = 9;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
