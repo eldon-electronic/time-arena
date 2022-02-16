@@ -11,7 +11,7 @@ public class SpawnPlayers : MonoBehaviour{
 	//spawn point array
 	public Vector3[] spawningPoint = {
 		new Vector3(7f, 5f, 0f),
-		new Vector3(-1f, 5f, 0f),
+		new Vector3(2f, 5f, 0f),
 		new Vector3(15f, 5f, 0f),
 		new Vector3(23f, 5f, 0f),
 		new Vector3(30f, 5f, 0f)
