@@ -61,20 +61,20 @@ jobs:
           projectpath: time-arena-game
           targetPlatform: WebGL
 
-      # - name: Deploy 🚀
-      #   uses: JamesIves/github-pages-deploy-action@v4.2.3
-      #   with:
-      #     branch: deploy # The branch the action should deploy to.
-      #     folder: build/WebGL/WebGL # The folder the action should deploy.
-
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v0'
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.3
         with:
-          credentials_json: '${{ secrets.gcp_credentials }}'
+          branch: deploy # The branch the action should deploy to.
+          folder: build/WebGL/WebGL # The folder the action should deploy.
 
-      - id: 'upload-files'
-        uses: 'google-github-actions/upload-cloud-storage@v0'
-        with:
-          path: 'build'
-          destination: 'eldonelectronic.co.uk'
-          #parent: false
+#       - id: 'auth'
+#         uses: 'google-github-actions/auth@v0'
+#         with:
+#           credentials_json: '${{ secrets.gcp_credentials }}'
+
+#       - id: 'upload-files'
+#         uses: 'google-github-actions/upload-cloud-storage@v0'
+#         with:
+#           path: 'build'
+#           destination: 'eldonelectronic.co.uk'
+#           #parent: false
