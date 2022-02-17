@@ -15,7 +15,7 @@ public class PlayerParticleEffects : MonoBehaviour
     Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     bool dissolve = false;
-    float height = 1.5f;
+    float height = -2.2f;
 
     // TODO: this is for testing purposes only - remove later
     void Update()
@@ -30,11 +30,11 @@ public class PlayerParticleEffects : MonoBehaviour
         }
 
         if ( dissolve ) {
-            height -= 0.01f;
+            height += 0.01f;
             material.SetFloat("_CutoffHeight", height);
-            if ( height < -2.2f) {
+            if ( height > 1.5f) {
                 dissolve = false;
-                height = 1.5f;
+                height = -2.2f;
             } 
         }
     }
