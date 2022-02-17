@@ -161,6 +161,9 @@ public class PlayerMovement : MonoBehaviour {
 					winningDispl.transform.parent.gameObject.SetActive(true);
 					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
 					timeDispl.text = "5:00:00";
+					pauseUI.isPaused = true;
+					pauseUI.pauseMenuUI.SetActive(true);
+					Cursor.lockState = CursorLockMode.None;
 				} else {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
