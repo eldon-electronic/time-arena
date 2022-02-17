@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
-	private float groundCheckRadius = 0.3f;
+	private float groundCheckRadius = 0.5f;
 	private bool isGrounded = true;
 	private Vector3 velocity;
 	private float xRot = 0f;
@@ -62,7 +62,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	//variables corresponding to the gamestate
 	public GameController game;
-
 
 	// Start is called before the first frame update
 	void Start() {
@@ -185,16 +184,19 @@ public class PlayerMovement : MonoBehaviour {
 			//transform according to movement vector
 			characterBody.Move(movement * speed * Time.deltaTime);
 		}
-		//reset vertical velocity value when grounded
-		if(isGrounded && velocity.y < 0){
-			velocity.y = 0.2f;
-		}
 		//jump control
 		if(Input.GetButtonDown("Jump") && isGrounded && !pauseUI.isPaused){
 			velocity.y += Mathf.Sqrt(jumpPower * 2f * gravity);
 		}
 		//gravity effect
 		velocity.y -= gravity * Time.deltaTime;
+		if(velocity.y <= -100f){
+			velocity.y = -100f;
+		}
+		//reset vertical velocity value when grounded
+		if(isGrounded && velocity.y < 0){
+			velocity.y = 0f;
+		}
 		//move player according to gravity
 		characterBody.Move(velocity * Time.deltaTime);
 	}
@@ -302,6 +304,7 @@ public class PlayerMovement : MonoBehaviour {
 	void RPC_movePlayer(Vector3 pos, Vector3 rot){
 		transform.position = pos;
 		transform.rotation = Quaternion.Euler(rot);
+		cam.transform.rotation = Quaternion.Euler(rot);
 	}
 
 	//function to move this player by calling RPC for all others
@@ -319,4 +322,12 @@ public class PlayerMovement : MonoBehaviour {
 		damageWindow = false;
 		playerAnim_grab.SetBool("isGrabbing", false);
 	}
+
+	//function called on game gameEnded
+	public void onGameEnded(){
+		if(PhotonNetwork.IsMasterClient){
+			PhotonNetwork.LoadLevel("PreGameScene");
+		}
+	}
+
 }

@@ -9,17 +9,19 @@ public class GameController : MonoBehaviour{
 	public float gameLength = 5f * 60f; //5 minute rounds * sixty seconds
 	public float timeElapsedInGame = 0f;
 
+	public PlayerMovement player;
+
 	public bool gameStarted = false;
 	public bool gameEnded = false;
 
-	public Vector3[] spawnPosTeam1 = {new Vector3(0, 0, 0), new Vector3(0, 0, 2), new Vector3(0, 0, 4), new Vector3(0, 0, 6), new Vector3(0, 0, 8)};
-	public Vector3[] spawnPosTeam2 = {new Vector3(0, 0, 0), new Vector3(0, 0, 2), new Vector3(0, 0, 4), new Vector3(0, 0, 6), new Vector3(0, 0, 8)};
+	public Vector3[] spawnPosTeam1 = {new Vector3(4f, -0.5f, 0.3f), new Vector3(7f, -0.5f, 3f), new Vector3(7f, -0.5f, -3f), new Vector3(9f, -0.5f, 0.3f), new Vector3(13f, 1.2f, 0.3f)};
+	public Vector3[] spawnPosTeam2 = {new Vector3(28f, -0.5f, 0.3f), new Vector3(26f, -0.5f, 3f), new Vector3(26f, -0.5f, -3f), new Vector3(23f, -0.5f, 0.3f), new Vector3(29f, 1.2f, 0.3f)};
 
 	// Start is called before the first frame update
 	void Start() {
 		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
 		if(clients.Length == 1){
-			PlayerMovement player = clients[0].GetComponent<PlayerMovement>();
+			player = clients[0].GetComponent<PlayerMovement>();
 			player.game = this;
 			if(PhotonNetwork.IsMasterClient){
 				setupNewGame(player);
@@ -52,15 +54,20 @@ public class GameController : MonoBehaviour{
 		for(int i = 0; i < players.Count; i++){
 			if( (i & 1) == 1){
 				players[i].changeTeam();
+				players[i].movePlayer(spawnPosTeam1[(int)(i/2)], new Vector3(0f, 90f, 0f));
+			} else {
+				players[i].movePlayer(spawnPosTeam2[(int)(i/2)], new Vector3(0f, -90f, 0f));
+
 			}
-			players[i].movePlayer(new Vector3(4f, -0.5f, 0.3f), new Vector3(0f, 90f, 0f));
 		}
 	}
 
 	// Update is called once per frame
 	void Update() {
 		//increment timer
-		timeElapsedInGame += Time.deltaTime;
+		if(!gameEnded){
+			timeElapsedInGame += Time.deltaTime;
+		}
 		//if pregame timer is counting // else game is in play
 		if(!gameStarted){
 			if(timeElapsedInGame >= 5f){
@@ -68,8 +75,9 @@ public class GameController : MonoBehaviour{
 				timeElapsedInGame = 0f;
 			}
 		} else {
-			if(timeElapsedInGame >= gameLength){
+			if(timeElapsedInGame >= gameLength && !gameEnded){
 				gameEnded = true;
+				player.onGameEnded();
 			}
 		}
 	}
