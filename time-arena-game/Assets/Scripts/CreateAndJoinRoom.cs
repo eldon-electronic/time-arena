@@ -22,7 +22,7 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 
 	//when user connects to room - load scene as level
 	public override void OnJoinedRoom(){
-		PhotonNetwork.LoadLevel("GameScene");
+		PhotonNetwork.LoadLevel("PreGameScene");
 	}
 
 }
