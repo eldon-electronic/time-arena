@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
 	public GameObject playerBody;
-	private int team = 0;//0 seeker 1 hider
+	private int team = 1;//0 seeker 1 hider
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
@@ -102,7 +102,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
-			if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)){
+			if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)){
 				movementControl();
 				cameraControl();
 				keyControl();
@@ -163,26 +163,28 @@ public class PlayerMovement : MonoBehaviour {
 	void movementControl(){
 		//update lastPos from prev frame
 		lastPos = transform.position;
-		//sprint speed
-		if(Input.GetKey("left shift")){
-			speed = 10f;
-		} else {
-			speed = 5f;
-		}
-		//get movement axis values
-		float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
-		float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
-		//check if player's GroundCheck intersects with any environment object
-		isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
+		//only allow movement after game has started
+		if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)){
+			//sprint speed
+			if(Input.GetKey("left shift")){
+				speed = 10f;
+			} else {
+				speed = 5f;
+			}
+			//get movement axis values
+			float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
+			float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
+			//check if player's GroundCheck intersects with any environment object
+			isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
 
-		//set and normalise movement vector
-		Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
-		if(movement.magnitude != 1 && movement.magnitude != 0){
-			movement /= movement.magnitude;
+			//set and normalise movement vector
+			Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
+			if(movement.magnitude != 1 && movement.magnitude != 0){
+				movement /= movement.magnitude;
+			}
+			//transform according to movement vector
+			characterBody.Move(movement * speed * Time.deltaTime);
 		}
-		//transform according to movement vector
-		characterBody.Move(movement * speed * Time.deltaTime);
-
 		//reset vertical velocity value when grounded
 		if(isGrounded && velocity.y < 0){
 			velocity.y = 0.2f;
@@ -214,61 +216,64 @@ public class PlayerMovement : MonoBehaviour {
 
 	//handle all other button presses for abilities and UI
 	void keyControl(){
-		//set cooldown values
-		ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
-		ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
-		ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
-		//handle ability buttonpresses
-		if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-			//Debug.Log(characterBody.gameObject.ToString());
-			//TomBaker.timeJump(characterBody.gameObject, 30);
-			changeTeam();
-			ab1Cooldown = 9;
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
-			//Debug.Log(characterBody.gameObject.ToString());
-			//TomBaker.timeJump(characterBody.gameObject, 30);
-			ab2Cooldown = 5;
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
-			//Debug.Log(characterBody.gameObject.ToString());
-			//TomBaker.timeJump(characterBody.gameObject, 30);
-			ab3Cooldown = 3;
-		}
-		//start grab animation on click
-		if(Input.GetMouseButtonDown(0)){
-			//if grabbing, check for intersection with player
-			if(!damageWindow){
-				Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
-				foreach (var playerGotGrab in playersGrab){
-					//call grabplayer function on that player
-					playerGotGrab.GetComponent<PlayerMovement>().getFound();
-				}
-				playerAnim_grab.SetBool("isGrabbing", true);
+		//only allow movement after game has started
+		if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)){
+			//set cooldown values
+			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
+			//handle ability buttonpresses
+			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				changeTeam();
+				ab1Cooldown = 9;
 			}
-		}
-		//start game onpress 'e'
-		if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart){
-			isCountingTillGameStart = true;
-			secondsTillGame = 5.0f;
-		}
-		//if counting for game launch and user presses esc - stop
-		if(Input.GetKeyDown(KeyCode.Escape)){
-			isCountingTillGameStart = false;
-			secondsTillGame = 0;
-		}
-		//if counting, reduce timer
-		if(PhotonNetwork.IsMasterClient && isCountingTillGameStart){
-			secondsTillGame -= Time.deltaTime;
-			if(secondsTillGame <= 0){
-				PhotonNetwork.LoadLevel("GameScene");
+			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				ab2Cooldown = 5;
+			}
+			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
+				//Debug.Log(characterBody.gameObject.ToString());
+				//TomBaker.timeJump(characterBody.gameObject, 30);
+				ab3Cooldown = 3;
+			}
+			//start grab animation on click
+			if(Input.GetMouseButtonDown(0)){
+				//if grabbing, check for intersection with player
+				if(!damageWindow){
+					Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
+					foreach (var playerGotGrab in playersGrab){
+						//call grabplayer function on that player
+						playerGotGrab.GetComponent<PlayerMovement>().getFound();
+					}
+					playerAnim_grab.SetBool("isGrabbing", true);
+				}
+			}
+			//start game onpress 'e'
+			if(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart){
+				isCountingTillGameStart = true;
+				secondsTillGame = 5.0f;
+			}
+			//if counting for game launch and user presses esc - stop
+			if(Input.GetKeyDown(KeyCode.Escape)){
 				isCountingTillGameStart = false;
+				secondsTillGame = 0;
+			}
+			//if counting, reduce timer
+			if(PhotonNetwork.IsMasterClient && isCountingTillGameStart){
+				secondsTillGame -= Time.deltaTime;
+				if(secondsTillGame <= 0){
+					PhotonNetwork.LoadLevel("GameScene");
+					isCountingTillGameStart = false;
+				}
 			}
 		}
 	}
 
 	//change player teams
-	void changeTeam(){
+	public void changeTeam(){
 		//if team is odd, set to 0, else set to 1
 		if(team == 0){
 			team = 1;
@@ -294,14 +299,14 @@ public class PlayerMovement : MonoBehaviour {
 
 	//RPC function to be called by other machines to set this players transform
 	[PunRPC]
-	void RPC_movePlayer(Transform trans){
-		transform.position = trans.position;
-		transform.rotation = trans.rotation;
+	void RPC_movePlayer(Vector3 pos, Vector3 rot){
+		transform.position = pos;
+		transform.rotation = Quaternion.Euler(rot);
 	}
 
 	//function to move this player by calling RPC for all others
-	public void movePlayer(){
-		view.RPC("RPC_movePlayer", RpcTarget.All);
+	public void movePlayer(Vector3 pos, Vector3 rot){
+		view.RPC("RPC_movePlayer", RpcTarget.All, pos, rot);
 	}
 
 	//function to enable player to damage others

@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour{
 		}
 	}
 
+	//initialise teams and spawn locations for the new game;
 	void setupNewGame(PlayerMovement client){
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		List<PlayerMovement> players = new List<PlayerMovement>();
@@ -37,6 +38,23 @@ public class GameController : MonoBehaviour{
 			players.Add(objs[i].GetComponent<PlayerMovement>());
 		}
 		//set players position to spawn point
+		//shuffle List
+		int n = players.Count;
+		while (n > 1) {
+			n--;
+			int k = Random.Range(0, n + 1);
+			PlayerMovement value = players[k];
+			players[k] = players[n];
+			players[n] = value;
+		}
+
+		//iterate over list and set every other one to opposite teams (weighted towards hiders)
+		for(int i = 0; i < players.Count; i++){
+			if( (i & 1) == 1){
+				players[i].changeTeam();
+			}
+			players[i].movePlayer(new Vector3(4f, -0.5f, 0.3f), new Vector3(0f, 90f, 0f));
+		}
 	}
 
 	// Update is called once per frame
