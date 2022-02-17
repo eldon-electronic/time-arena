@@ -44,6 +44,8 @@ public class PlayerMovement : MonoBehaviour {
 	public Text ab2Cooldown_displ;
 	public Text ab3Cooldown_displ;
 	public Text teamDispl;
+	public Text timeDispl;
+	public Text startTimeDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
@@ -55,12 +57,16 @@ public class PlayerMovement : MonoBehaviour {
 	private float grabCheckRadius = 1f;
 	private bool damageWindow = false;
 
-
 	//the photonView component that syncs with the network
 	public PhotonView view;
 
+	//variables corresponding to the gamestate
+	public GameController game;
+
+
 	// Start is called before the first frame update
 	void Start() {
+		DontDestroyOnLoad(this.gameObject);
 		//set the player's colour depending on their team
 		playerBody.GetComponent<Renderer>().material = (team == 0) ? seekerMat : hiderMat;
 		//define the photonView component
@@ -78,15 +84,29 @@ public class PlayerMovement : MonoBehaviour {
 		PhotonNetwork.AutomaticallySyncScene = true;
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
+		//link scenechange event to onscenechange
+		SceneManager.activeSceneChanged += onSceneChange;
+	}
+
+	// onSceneChange is called by the SceneManager.activeSceneChanged event;
+	void onSceneChange(Scene current, Scene next){
+		if(next.name == "GameScene"){
+			game = FindObjectOfType<GameController>();
+			if(game == null){
+				Debug.Log("FUCK");
+			}
+		}
 	}
 
 	// Update is called once per frame
 	void Update() {
 		//local keys only affect client's player
 		if(view.IsMine){
-			movementControl();
-			cameraControl();
-			keyControl();
+			if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)){
+				movementControl();
+				cameraControl();
+				keyControl();
+			}
 		}
 	}
 
@@ -102,6 +122,8 @@ public class PlayerMovement : MonoBehaviour {
 			//if master client, show 'press e o start' text or 'starting in' text
 			masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
 			teamDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			timeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 			if(isCountingTillGameStart){
 				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
 				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
@@ -122,6 +144,18 @@ public class PlayerMovement : MonoBehaviour {
 			ab1Cooldown_displ.text = "" + (int)ab1Cooldown;
 			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
 			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
+
+			//update gametimer
+			if(SceneManager.GetActiveScene().name == "GameScene"){
+				float t = game.timeElapsedInGame;
+				startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
+				if(game.gameStarted){
+					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
+				} else {
+					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
+					timeDispl.text = "0:00:00";
+				}
+			}
 		}
 	}
 
@@ -256,6 +290,18 @@ public class PlayerMovement : MonoBehaviour {
 	//function to get found by calling RPC on all machines
 	public void getFound(){
 		view.RPC("RPC_getFound", RpcTarget.All);
+	}
+
+	//RPC function to be called by other machines to set this players transform
+	[PunRPC]
+	void RPC_movePlayer(Transform trans){
+		transform.position = trans.position;
+		transform.rotation = trans.rotation;
+	}
+
+	//function to move this player by calling RPC for all others
+	public void movePlayer(){
+		view.RPC("RPC_movePlayer", RpcTarget.All);
 	}
 
 	//function to enable player to damage others
