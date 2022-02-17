@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using System;
+
 public class PlayerParticleEffects : MonoBehaviour
 {
 
@@ -14,8 +16,15 @@ public class PlayerParticleEffects : MonoBehaviour
     Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
     Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-    bool dissolve = false;
-    float height = -2.2f;
+    bool dissolve;
+    float height;
+
+    void start()
+    {
+        dissolve = false;
+        height = 4.0f;
+        material.SetFloat("_CutoffHeight", height);
+    }
 
     // TODO: this is for testing purposes only - remove later
     void Update()
@@ -30,13 +39,16 @@ public class PlayerParticleEffects : MonoBehaviour
         }
 
         if ( dissolve ) {
-            height += 0.01f;
-            material.SetFloat("_CutoffHeight", height);
-            if ( height > 1.5f) {
+            height -= 0.01f;
+            if ( height < -3.0f) {
+                height = 4.0f;
                 dissolve = false;
-                height = -2.2f;
             } 
+        } else {
+            height = 4.0f;
         }
+
+        material.SetFloat("_CutoffHeight", height);
     }
 
     void JumpForward()

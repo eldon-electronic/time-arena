@@ -16,8 +16,8 @@ public class PlayerMovement : MonoBehaviour {
 	public Image healthbar;
 	public Image enemyHealthbar;
 	public Canvas enemyHealthbarContainer;
-	public Text enemyScoreDispl;
-	private int score = 0;
+	// public Text enemyScoreDispl;
+	// private int score = 0;
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Text debugMenu_ground;
 	public Text debugMenu_health;
 	public Text masterClientOpts;
-	public Text scoreDispl;
+	// public Text scoreDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
@@ -197,7 +197,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			//if master client, show 'press e o start' text or 'starting in' text
 			masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
-			scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			// scoreDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 			if(isCountingTillGameStart){
 				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
 				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
@@ -215,7 +215,7 @@ public class PlayerMovement : MonoBehaviour {
 			debugMenu_ground.text = "Ground: " + isGrounded;
 			debugMenu_health.text = "Health: " + health;
 			//update player score
-			scoreDispl.text = "" + score;
+			// scoreDispl.text = "" + score;
 
 			//update health bar local and enemy, transform enemy tetures to billboard locally
 			healthbar.rectTransform.sizeDelta = new Vector2(health*2, 30);
@@ -223,15 +223,15 @@ public class PlayerMovement : MonoBehaviour {
 			//update ui elements of enemies on clients machine
 			enemyHealthbar.rectTransform.sizeDelta = new Vector2(health*10, 200);
 			enemyHealthbarContainer.transform.LookAt(Camera.main.transform.position);
-			enemyScoreDispl.text = "" + score;
+			// enemyScoreDispl.text = "" + score;
 			//enemyHealthbarContainer.transform.rotation = Quaternion.Inverse(enemyHealthbarContainer.transform.rotation);
 		}
 	}
 
-	[PunRPC]
-	void RPC_incrScore(int scoreIncr){
-		score += scoreIncr;
-	}
+	// [PunRPC]
+	// void RPC_incrScore(int scoreIncr){
+	// 	score += scoreIncr;
+	// }
 
 	//RPC function to be called when another player hits this one
 	[PunRPC]
@@ -242,7 +242,7 @@ public class PlayerMovement : MonoBehaviour {
 				health = 100f;
 				transform.position = new Vector3(0, 10, 0);
 				//increment score of player who damaged
-				PhotonView.Find(attackerID).RPC("RPC_incrScore", RpcTarget.All, 1);
+				// PhotonView.Find(attackerID).RPC("RPC_incrScore", RpcTarget.All, 1);
 			}
 		//}
 	}
