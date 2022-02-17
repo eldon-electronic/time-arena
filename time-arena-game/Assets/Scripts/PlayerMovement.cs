@@ -7,6 +7,10 @@ using Photon.Pun;
 
 public class PlayerMovement : MonoBehaviour {
 
+	//constants
+	const int SEEKER = 0;
+	const int HIDER = 0;
+
 	// variables defining player values
 	public CharacterController characterBody;
 	public Camera cam;
@@ -14,7 +18,7 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
 	public GameObject playerBody;
-	private int team = 1;//0 seeker 1 hider
+	public int team = 1;//0 seeker 1 hider
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
@@ -46,6 +50,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Text teamDispl;
 	public Text timeDispl;
 	public Text startTimeDispl;
+	public Text winningDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
 
@@ -144,12 +149,18 @@ public class PlayerMovement : MonoBehaviour {
 			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
 			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
 
+			//update winningTeam Text
+
 			//update gametimer
 			if(SceneManager.GetActiveScene().name == "GameScene"){
 				float t = game.timeElapsedInGame;
 				startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
-				if(game.gameStarted){
+				if(game.gameStarted && !game.gameEnded){
 					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
+				} else if(game.gameEnded){
+					winningDispl.transform.parent.gameObject.SetActive(true);
+					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
+					timeDispl.text = "5:00:00";
 				} else {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
@@ -248,7 +259,10 @@ public class PlayerMovement : MonoBehaviour {
 					Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
 					foreach (var playerGotGrab in playersGrab){
 						//call grabplayer function on that player
-						playerGotGrab.GetComponent<PlayerMovement>().getFound();
+						PlayerMovement targetPlayer = playerGotGrab.GetComponent<PlayerMovement>();
+						if(team == SEEKER && targetPlayer.team == HIDER){
+							targetPlayer.getFound();
+						}
 					}
 					playerAnim_grab.SetBool("isGrabbing", true);
 				}
@@ -325,9 +339,9 @@ public class PlayerMovement : MonoBehaviour {
 
 	//function called on game gameEnded
 	public void onGameEnded(){
-		if(PhotonNetwork.IsMasterClient){
+		/*if(PhotonNetwork.IsMasterClient){
 			PhotonNetwork.LoadLevel("PreGameScene");
-		}
+		}*/
 	}
 
 }
