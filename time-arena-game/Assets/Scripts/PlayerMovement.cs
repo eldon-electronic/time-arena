@@ -56,6 +56,18 @@ public class PlayerMovement : MonoBehaviour {
 	//the photonView component that syncs with the network
 	public PhotonView view;
 
+	public ParticleSystem fireCircle;
+    public ParticleSystem splash;
+
+    public Material material;
+
+    Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
+    Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
+    Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+    bool dissolve;
+    float height;
+
 	// Start is called before the first frame update
 	void Start() {
 		//define the photonView component
@@ -74,6 +86,10 @@ public class PlayerMovement : MonoBehaviour {
 		PhotonNetwork.AutomaticallySyncScene = true;
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
+
+		dissolve = false;
+        height = 4.0f;
+        material.SetFloat("_CutoffHeight", height);
 	}
 
 	// Update is called once per frame
@@ -184,6 +200,30 @@ public class PlayerMovement : MonoBehaviour {
 				}
 			}
 		}
+
+		if ( Input.GetKeyDown( KeyCode.J ) )
+        {
+            // JumpForward();
+            startJumping();
+        }
+        else if ( Input.GetKeyDown( KeyCode.K ) )
+        {
+            JumpBackward();
+        }
+
+        if ( dissolve ) {
+            height -= 0.01f;
+            if ( height < -3.0f) {
+                height = 4.0f;
+                dissolve = false;
+                stopJumping();
+            } 
+        } else {
+            height = 4.0f;
+        }
+
+        material.SetFloat("_CutoffHeight", height);
+
 	}
 
 	// LateUpdate is called once per frame after all rendering
@@ -263,4 +303,51 @@ public class PlayerMovement : MonoBehaviour {
 		playerAnim_hit.SetBool("isSpinning", false);
 	}
 
+	public void startJumping() {
+		playerAnim_hit.SetBool("isJumpingForward", true);
+	}
+
+	public void stopJumping() {
+		playerAnim_hit.SetBool("isJumpingForward", false);
+	}
+
+	void JumpForward()
+    {
+        var fcm = fireCircle.main;
+        fcm.startColor = BLUE;
+
+        var fct = fireCircle.trails;
+        fct.colorOverTrail = BLUE;
+
+        var sm = splash.main;
+        sm.startColor = WHITE;
+
+        var st = splash.trails;
+        st.colorOverTrail = BLUE;
+
+        fireCircle.Play();
+        splash.Play();
+
+        dissolve = true;
+    }
+
+    void JumpBackward()
+    {
+        var fcm = fireCircle.main;
+        fcm.startColor = ORANGE;
+
+        var fct = fireCircle.trails;
+        fct.colorOverTrail = ORANGE;
+
+        var sm = splash.main;
+        sm.startColor = WHITE;
+
+        var st = splash.trails;
+        st.colorOverTrail = ORANGE;
+
+        fireCircle.Play();
+        splash.Play();
+
+        dissolve = true;
+    }
 }

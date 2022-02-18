@@ -11268,6 +11268,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   view: {fileID: 0}
+  fireCircle: {fileID: 7874122407446319635}
+  splash: {fileID: 5510439114074697989}
+  material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
 --- !u!114 &5690578699466181193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11327,6 +11330,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: isSpinning
+  - Type: 4
+    SynchronizeType: 0
+    Name: isJumpingForward
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -11546,9 +11552,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143e2e99094654025b3753680be079f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireCircle: {fileID: 7874122407446319635}
-  splash: {fileID: 5510439114074697989}
-  material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
