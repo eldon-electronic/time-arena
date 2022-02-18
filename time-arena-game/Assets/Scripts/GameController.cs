@@ -16,8 +16,8 @@ public class GameController : MonoBehaviour{
 
 	public int winningTeam = 1;
 
-	public Vector3[] spawnPosTeam1 = {new Vector3(4f, -0.5f, 0.3f), new Vector3(7f, -0.5f, 3f), new Vector3(7f, -0.5f, -3f), new Vector3(9f, -0.5f, 0.3f), new Vector3(13f, 1.2f, 0.3f)};
-	public Vector3[] spawnPosTeam2 = {new Vector3(28f, -0.5f, 0.3f), new Vector3(26f, -0.5f, 3f), new Vector3(26f, -0.5f, -3f), new Vector3(23f, -0.5f, 0.3f), new Vector3(29f, 1.2f, 0.3f)};
+	public Vector3[] hiderSpawnPoints = {new Vector3(4f, -0.5f, 0.3f), new Vector3(7f, -0.5f, 3f), new Vector3(7f, -0.5f, -3f), new Vector3(9f, -0.5f, 0.3f), new Vector3(13f, 1.2f, 0.3f)};
+	public Vector3 seekerSpawnPoint = new Vector3(28f, -0.5f, 0.3f);
 
 	// Start is called before the first frame update
 	void Start() {
@@ -45,23 +45,16 @@ public class GameController : MonoBehaviour{
 			players.Add(objs[i].GetComponent<PlayerMovement>());
 		}
 		//set players position to spawn point
-		//shuffle List
-		int n = players.Count;
-		while (n > 1) {
-			n--;
-			int k = Random.Range(0, n + 1);
-			PlayerMovement value = players[k];
-			players[k] = players[n];
-			players[n] = value;
+		Debug.Log(players.Count);
+		if(players.Count > 1){	//if testing with one player, they are hider, otherwise one player will randomly be seeker
+			players[Random.Range(0, players.Count-1)].changeTeam();
 		}
-
-		//iterate over list and set every other one to opposite teams (weighted towards hiders)
+		int n = 0;
 		for(int i = 0; i < players.Count; i++){
-			if( (i & 1) == 0){
-				players[i].changeTeam();
-				players[i].movePlayer(spawnPosTeam1[(int)(i/2)], new Vector3(0f, 90f, 0f));
+			if( players[i].team == 1 ){
+				players[i].movePlayer(hiderSpawnPoints[n++], new Vector3(0f, -90f, 0f));
 			} else {
-				players[i].movePlayer(spawnPosTeam2[(int)(i/2)], new Vector3(0f, -90f, 0f));
+				players[i].movePlayer(seekerSpawnPoint, new Vector3(0f, 90f, 0f));
 			}
 		}
 	}
@@ -69,7 +62,9 @@ public class GameController : MonoBehaviour{
 	// Update is called once per frame
 	void Update() {
 		//increment timer
-		timeElapsedInGame += Time.deltaTime;
+		if(!gameEnded){
+			timeElapsedInGame += Time.deltaTime;
+		}
 		//if pregame timer is counting // else game is in play
 		if(!gameStarted){
 			if(timeElapsedInGame >= 5f){
