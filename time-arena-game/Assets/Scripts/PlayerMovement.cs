@@ -65,9 +65,6 @@ public class PlayerMovement : MonoBehaviour {
     Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
     Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-    bool dissolve;
-    float height;
-
 	// Start is called before the first frame update
 	void Start() {
 		//define the photonView component
@@ -87,9 +84,7 @@ public class PlayerMovement : MonoBehaviour {
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
 
-		dissolve = false;
-        height = 4.0f;
-        material.SetFloat("_CutoffHeight", height);
+        material.SetFloat("_CutoffHeight", 4.0f);
 	}
 
 	// Update is called once per frame
@@ -203,27 +198,12 @@ public class PlayerMovement : MonoBehaviour {
 
 		if ( Input.GetKeyDown( KeyCode.J ) )
         {
-            // JumpForward();
-            startJumping();
+            StartJumpingForward();
         }
         else if ( Input.GetKeyDown( KeyCode.K ) )
         {
-            JumpBackward();
+            StartJumpingBackward();
         }
-
-        if ( dissolve ) {
-            height -= 0.01f;
-            if ( height < -3.0f) {
-                height = 4.0f;
-                dissolve = false;
-                stopJumping();
-            } 
-        } else {
-            height = 4.0f;
-        }
-
-        material.SetFloat("_CutoffHeight", height);
-
 	}
 
 	// LateUpdate is called once per frame after all rendering
@@ -303,15 +283,23 @@ public class PlayerMovement : MonoBehaviour {
 		playerAnim_hit.SetBool("isSpinning", false);
 	}
 
-	public void startJumping() {
+	public void StartJumpingForward() {
 		playerAnim_hit.SetBool("isJumpingForward", true);
 	}
 
-	public void stopJumping() {
+	public void StopJumpingForward() {
 		playerAnim_hit.SetBool("isJumpingForward", false);
 	}
 
-	void JumpForward()
+	public void StartJumpingBackward() {
+		playerAnim_hit.SetBool("isJumpingBackward", true);
+	}
+
+	public void StopJumpingBackward() {
+		playerAnim_hit.SetBool("isJumpingBackward", false);
+	}
+
+	void BlueBeam()
     {
         var fcm = fireCircle.main;
         fcm.startColor = BLUE;
@@ -327,11 +315,9 @@ public class PlayerMovement : MonoBehaviour {
 
         fireCircle.Play();
         splash.Play();
-
-        dissolve = true;
     }
 
-    void JumpBackward()
+    void OrangeBeam()
     {
         var fcm = fireCircle.main;
         fcm.startColor = ORANGE;
@@ -347,7 +333,5 @@ public class PlayerMovement : MonoBehaviour {
 
         fireCircle.Play();
         splash.Play();
-
-        dissolve = true;
     }
 }
