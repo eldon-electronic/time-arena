@@ -84,7 +84,7 @@ public class PlayerMovement : MonoBehaviour {
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
 
-        material.SetFloat("_CutoffHeight", 4.0f);
+        material.SetFloat("_CutoffHeight", 50.0f);
 	}
 
 	// Update is called once per frame
