@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Text startTimeDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
+    public Slider elapsedTime;
 
 
 	//variables corresponding to player Animations
@@ -124,7 +125,8 @@ public class PlayerMovement : MonoBehaviour {
 			teamDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 			timeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 			startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-			if(isCountingTillGameStart){
+            elapsedTime.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+            if(isCountingTillGameStart){
 				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
 				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
 					//PhotonNetwork.Room.open = false;
@@ -151,9 +153,11 @@ public class PlayerMovement : MonoBehaviour {
 				startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
 				if(game.gameStarted){
 					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
-				} else {
+                    elapsedTime.value = game.timeElapsedInGame / game.gameLength;
+                } else {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
+                    elapsedTime.value = 0;
 				}
 			}
 		}
