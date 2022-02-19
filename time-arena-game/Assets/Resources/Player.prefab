@@ -4962,7 +4962,7 @@ GameObject:
   - component: {fileID: 2446953491645003743}
   - component: {fileID: 4491490334868280683}
   - component: {fileID: 3065648261451193432}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: HealthBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5267,7 +5267,7 @@ GameObject:
   - component: {fileID: 6855183283170140252}
   - component: {fileID: 8078449242969905630}
   - component: {fileID: 4382040205093972511}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Enemy UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11242,6 +11242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterBody: {fileID: 6458975045518551229}
+  playerBody: {fileID: 6458975046544177892}
   cam: {fileID: 6458975046434770673}
   groundCheck: {fileID: 6458975045590433014}
   groundMask:
@@ -11331,8 +11332,11 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: isSpinning
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: isJumpingForward
+  - Type: 4
+    SynchronizeType: 1
+    Name: isJumpingBackward
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -11642,7 +11646,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 1
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -11730,7 +11734,7 @@ GameObject:
   - component: {fileID: 6458975046544177893}
   - component: {fileID: 6458975046544177896}
   - component: {fileID: 6458975046544177899}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11768,7 +11772,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6458975046544177892}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -11812,7 +11816,7 @@ GameObject:
   - component: {fileID: 4185918136361525696}
   - component: {fileID: 3295621164694954619}
   - component: {fileID: 253241635365306365}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11887,7 +11891,7 @@ GameObject:
   - component: {fileID: 5656222245839769789}
   - component: {fileID: 4491722066595960045}
   - component: {fileID: 6411462585125928986}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12043,7 +12047,7 @@ GameObject:
   - component: {fileID: 758427748956509091}
   - component: {fileID: 7300878120171793863}
   - component: {fileID: 5489324110658808348}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: enemyUIBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}

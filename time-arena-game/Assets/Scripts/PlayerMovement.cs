@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	// variables defining player values
 	public CharacterController characterBody;
+	public GameObject playerBody;
 	public Camera cam;
 	public Transform groundCheck;
 	public LayerMask groundMask;
@@ -74,10 +75,12 @@ public class PlayerMovement : MonoBehaviour {
 			Destroy(cam.gameObject);
 			Destroy(UI);
 			gameObject.layer = 7;
+			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		} else {
 			//destroy playerhealthbar for enemies
 			Destroy(enemyHealthbarContainer);
 			gameObject.tag = "Client";
+			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		}
 		//allow master client to move players from one scene to another
 		PhotonNetwork.AutomaticallySyncScene = true;
@@ -85,6 +88,7 @@ public class PlayerMovement : MonoBehaviour {
 		Cursor.lockState = CursorLockMode.Locked;
 
         material.SetFloat("_CutoffHeight", 50.0f);
+
 	}
 
 	// Update is called once per frame
@@ -194,16 +198,16 @@ public class PlayerMovement : MonoBehaviour {
 					playerGotHit.GetComponent<PlayerMovement>().hitPlayer(1.0f, view.ViewID);
 				}
 			}
+			if ( Input.GetKeyDown( KeyCode.J ) )
+	        {
+	            StartJumpingForward();
+	        }
+	        else if ( Input.GetKeyDown( KeyCode.K ) )
+	        {
+	            StartJumpingBackward();
+	        }
 		}
 
-		if ( Input.GetKeyDown( KeyCode.J ) )
-        {
-            StartJumpingForward();
-        }
-        else if ( Input.GetKeyDown( KeyCode.K ) )
-        {
-            StartJumpingBackward();
-        }
 	}
 
 	// LateUpdate is called once per frame after all rendering
