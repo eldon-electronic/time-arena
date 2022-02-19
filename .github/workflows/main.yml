@@ -52,7 +52,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: time-arena-game/Library
-          key: Time-Arena-Library
+          key: Library-time-arena
+          restore-keys: Library-
 
       # Build
       - name: Build project 🔨
@@ -61,11 +62,18 @@ jobs:
           projectpath: time-arena-game
           targetPlatform: WebGL
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.2.3
+
+    # Output
+      - uses: actions/upload-artifact@v2
         with:
-          branch: deploy # The branch the action should deploy to.
-          folder: build/WebGL/WebGL # The folder the action should deploy.
+          name: Build
+          path: build
+
+      # - name: Deploy 🚀
+      #   uses: JamesIves/github-pages-deploy-action@v4.2.3
+      #   with:
+      #     branch: deploy # The branch the action should deploy to.
+      #     folder: build/WebGL/WebGL # The folder the action should deploy.
 
 #       - id: 'auth'
 #         uses: 'google-github-actions/auth@v0'
