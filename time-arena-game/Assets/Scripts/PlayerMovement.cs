@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
     public Slider elapsedTime;
-
+    public Slider playerIcon;
 
 	//variables corresponding to player Animations
 	public Animator playerAnim_grab;
@@ -116,9 +116,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if(view.IsMine){
 
-
 			//update player HUD
-
 
 			//if master client, show 'press e o start' text or 'starting in' text
 			masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
@@ -126,6 +124,7 @@ public class PlayerMovement : MonoBehaviour {
 			timeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
 			startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             elapsedTime.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+            playerIcon.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             if(isCountingTillGameStart){
 				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
 				if(System.Math.Round (secondsTillGame, 0) <= 0.0f){
@@ -147,17 +146,19 @@ public class PlayerMovement : MonoBehaviour {
 			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
 			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
 
-			//update gametimer
+			//update gametimer and elapsedTime (time bar)
 			if(SceneManager.GetActiveScene().name == "GameScene"){
 				float t = game.timeElapsedInGame;
 				startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
 				if(game.gameStarted){
 					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
-                    elapsedTime.value = game.timeElapsedInGame / game.gameLength;
+                    elapsedTime.value = game.timeElapsedInGame / game.gameLength; // update time bar
+                    playerIcon.value = elapsedTime.value;
                 } else {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
                     elapsedTime.value = 0;
+                    playerIcon.value = 0;
 				}
 			}
 		}
