@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     public Slider otherPlayerIcon2;
     public Slider otherPlayerIcon3;
     public Slider otherPlayerIcon4;
-	private Slider[] playerIcons = new Slider[4];
+	private Slider[] playerIcons = new Slider[5];
 
     // variables corresponding to player Animations
     public Animator playerAnim_grab;
@@ -73,10 +73,11 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		playerIcons[0] = otherPlayerIcon1;
-		playerIcons[1] = otherPlayerIcon2;
-		playerIcons[2] = otherPlayerIcon3;
-		playerIcons[3] = otherPlayerIcon4;
+		playerIcons[0] = playerIcon;
+		playerIcons[1] = otherPlayerIcon1;
+		playerIcons[2] = otherPlayerIcon2;
+		playerIcons[3] = otherPlayerIcon3;
+		playerIcons[4] = otherPlayerIcon4;
 		DontDestroyOnLoad(this.gameObject);
         playerBody.GetComponent<Renderer>().material = (team == 0) ? seekerMat : hiderMat; //set the player's colour depending on their team
         view = GetComponent<PhotonView>(); // define the photonView component
@@ -144,10 +145,10 @@ public class PlayerMovement : MonoBehaviour
             startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             elapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             playerIcon.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-			otherPlayerIcon1.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 1);
-			otherPlayerIcon2.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 2);
-			otherPlayerIcon3.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 3);
-			otherPlayerIcon4.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 4);
+			otherPlayerIcon1.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 2);
+			otherPlayerIcon2.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 3);
+			otherPlayerIcon3.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 4);
+			otherPlayerIcon4.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 5);
 
             if (isCountingTillGameStart)
             {
@@ -183,9 +184,8 @@ public class PlayerMovement : MonoBehaviour
                     timeDispl.text = (int)(t / 60) + ":" + ((int)(t % 60)).ToString().PadLeft(2, '0') + ":" +
                     (((int)(((t % 60) - (int)(t % 60)) * 100)) * 60 / 100).ToString().PadLeft(2, '0');
                     elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength; // update time bar
-                    playerIcon.value = elapsedTimeSlider.value;
 					for (int i = 0; i < game.otherPlayersElapsedTime.Count; i++) {
-						playerIcons[i].value = elapsedTimeSlider.value;
+						playerIcons[i].value = game.otherPlayersElapsedTime[i] / game.gameLength;
 					}
 
 					// Update elapsed time for each player and their corresponding sliders 

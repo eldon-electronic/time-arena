@@ -46,6 +46,7 @@ public class GameController : MonoBehaviour
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
         List<PlayerMovement> players = new List<PlayerMovement>();
         players.Add(client);
+		otherPlayersElapsedTime.Add(0f); // adds your own timer before adding remaining players in the for loop
         for (int i = 0; i < objs.Length; i++)
         {
             players.Add(objs[i].GetComponent<PlayerMovement>());
@@ -77,8 +78,11 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // increment timer
-        timeElapsedInGame += Time.deltaTime;
+        timeElapsedInGame += Time.deltaTime; 					  // increment timer
+		for (int i = 0; i < otherPlayersElapsedTime.Count; i++) { // increment elapsed time for each player
+			otherPlayersElapsedTime[i] += Time.deltaTime;
+		}
+
         // if pregame timer is counting // else game is in play
         if (!gameStarted)
         {
@@ -86,6 +90,9 @@ public class GameController : MonoBehaviour
             {
                 gameStarted = true;
                 timeElapsedInGame = 0f;
+				for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
+					otherPlayersElapsedTime[i] = 0f;
+				}
             }
         } else {
             if (timeElapsedInGame >= gameLength)
