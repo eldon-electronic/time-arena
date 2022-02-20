@@ -254,23 +254,19 @@ public class PlayerMovement : MonoBehaviour {
 			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
 			//handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
 				if(SceneManager.GetActiveScene().name == "GameScene"){
-					timeTravel.TimeJump(-100);
+					timeTravel.TimeJump(100);
 				}
 				StartJumpingForward();
 				//changeTeam();
 				ab1Cooldown = 9;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
+				timeTravel.TimeJump(-100);
 				StartJumpingBackward();
 				ab2Cooldown = 5;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
 				ab3Cooldown = 3;
 			}
 			//start grab animation on click

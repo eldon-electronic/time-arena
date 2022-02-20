@@ -13,10 +13,7 @@ public class TimeConn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*tl = GameObject.FindGameObjectWithTag("TimeLord").GetComponent<TimeLord>();
-        tl.AddTimeObject(this.gameObject);
-        timeID = tl.AllocateReality(this.gameObject);
-        SetCameraLayers();*/
+
     }
 
     public void connectToTimeLord(){
@@ -30,6 +27,7 @@ public class TimeConn : MonoBehaviour
     void Update()
     {
       if(SceneManager.GetActiveScene().name == "GameScene"){
+        if(tl == null){ connectToTimeLord(); }
         Tick(tl.GetCurrentTick());
       }
     }
