@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
     public float mouseSensitivity = 100f;
     public GameObject playerBody;
-    private int team = 1;//0 seeker 1 hider
+    private int team = 1; // 0 seeker 1 hider
     private float speed = 5f;
     private float gravity = 10f;
     private float jumpPower = 10f;
@@ -28,11 +28,11 @@ public class PlayerMovement : MonoBehaviour
     private float ab2Cooldown = 0f;
     private float ab3Cooldown = 0f;
 
-    //references to materials for user team id
+    // references to materials for user team id
     public Material seekerMat;
     public Material hiderMat;
 
-    //variables corresponding to the player's UI/HUD
+    // variables corresponding to the player's UI/HUD
     public Canvas UI;
     public PauseManager pauseUI;
     public Text debugMenu_speed;
@@ -49,26 +49,35 @@ public class PlayerMovement : MonoBehaviour
     public Text startTimeDispl;
     private float secondsTillGame;
     private bool isCountingTillGameStart;
-    public Slider elapsedTime;
+    public Slider elapsedTimeSlider;
     public Slider playerIcon;
+	public Slider otherPlayerIcon1;
+    public Slider otherPlayerIcon2;
+    public Slider otherPlayerIcon3;
+    public Slider otherPlayerIcon4;
+	private Slider[] playerIcons = new Slider[4];
 
-    //variables corresponding to player Animations
+    // variables corresponding to player Animations
     public Animator playerAnim_grab;
     public Transform grabCheck;
     public LayerMask grabMask;
     private float grabCheckRadius = 1f;
     private bool damageWindow = false;
 
-    //the photonView component that syncs with the network
+    // the photonView component that syncs with the network
     public PhotonView view;
 
-    //variables corresponding to the gamestate
+    // variables corresponding to the gamestate
     public GameController game;
 
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+		playerIcons[0] = otherPlayerIcon1;
+		playerIcons[1] = otherPlayerIcon2;
+		playerIcons[2] = otherPlayerIcon3;
+		playerIcons[3] = otherPlayerIcon4;
+		DontDestroyOnLoad(this.gameObject);
         playerBody.GetComponent<Renderer>().material = (team == 0) ? seekerMat : hiderMat; //set the player's colour depending on their team
         view = GetComponent<PhotonView>(); // define the photonView component
         if (!view.IsMine)
@@ -86,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
         PhotonNetwork.AutomaticallySyncScene = true;      // allow master client to move players from one scene to another
         Cursor.lockState = CursorLockMode.Locked;         // lock players cursor to center screen
         SceneManager.activeSceneChanged += onSceneChange; // link scenechange event to onscenechange
+
     }
 
     // onSceneChange is called by the SceneManager.activeSceneChanged event;
@@ -120,21 +130,25 @@ public class PlayerMovement : MonoBehaviour
     // LateUpdate is called once per frame after all rendering (for UI mainly)
     void LateUpdate()
     {
-
         if (view.IsMine)
         {
 
-            /*
-			* Update player HUD
-			*/
+            /********************
+			* Update player HUD *
+			*********************/
 
             // if master client, show 'press e o start' text or 'starting in' text
             masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
             teamDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             timeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-            elapsedTime.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+            elapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
             playerIcon.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+			otherPlayerIcon1.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 1);
+			otherPlayerIcon2.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 2);
+			otherPlayerIcon3.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 3);
+			otherPlayerIcon4.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 4);
+
             if (isCountingTillGameStart)
             {
                 masterClientOpts.text = "Starting in " + System.Math.Round(secondsTillGame, 0) + "s";
@@ -144,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
                     masterClientOpts.text = "Loading...";
                 }
             }
+
             // update debug menu settings
             Vector3 movementVector = transform.position - lastPos;
             float distTravelled = movementVector.magnitude / Time.deltaTime;
@@ -158,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
             ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
             ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
 
-            // update gametimer and elapsedTime (time bar)
+            // update gametimer and elapsedTimeSlider (time bar)
             if (SceneManager.GetActiveScene().name == "GameScene")
             {
                 float t = game.timeElapsedInGame;
@@ -167,14 +182,22 @@ public class PlayerMovement : MonoBehaviour
                 {
                     timeDispl.text = (int)(t / 60) + ":" + ((int)(t % 60)).ToString().PadLeft(2, '0') + ":" +
                     (((int)(((t % 60) - (int)(t % 60)) * 100)) * 60 / 100).ToString().PadLeft(2, '0');
-                    elapsedTime.value = game.timeElapsedInGame / game.gameLength; // update time bar
-                    playerIcon.value = elapsedTime.value;
+                    elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength; // update time bar
+                    playerIcon.value = elapsedTimeSlider.value;
+					for (int i = 0; i < game.otherPlayersElapsedTime.Count; i++) {
+						playerIcons[i].value = elapsedTimeSlider.value;
+					}
+
+					// Update elapsed time for each player and their corresponding sliders 
+					//for (int i = 0; i < game.otherPlayersElapsedTime.Capacity; i++) {
+					//	game.otherPlayersElapsedTime[i] += game.timeElapsedInGame;
+					//}
                 }
                 else
                 {
                     startTimeDispl.text = "" + (5 - (int)(game.timeElapsedInGame + 0.9f));
                     timeDispl.text = "0:00:00";
-                    elapsedTime.value = 0;
+                    elapsedTimeSlider.value = 0;
                     playerIcon.value = 0;
                 }
             }
@@ -184,8 +207,8 @@ public class PlayerMovement : MonoBehaviour
     // handle movement axis inputs (wasd, arrowkeys, joystick)
     void movementControl()
     {
-        // update lastPos from prev frame
-        lastPos = transform.position;
+        lastPos = transform.position; // update lastPos from prev frame
+
         // only allow movement after game has started
         if (SceneManager.GetActiveScene().name == "PreGameScene" ||
         (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted))
@@ -199,9 +222,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 speed = 5f;
             }
+
             // get movement axis values
             float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
             float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
+
             // check if player's GroundCheck intersects with any environment object
             isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
 
@@ -211,8 +236,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 movement /= movement.magnitude;
             }
-            // transform according to movement vector
-            characterBody.Move(movement * speed * Time.deltaTime);
+            characterBody.Move(movement * speed * Time.deltaTime); // transform according to movement vector
         }
         // reset vertical velocity value when grounded
         if (isGrounded && velocity.y < 0)
@@ -244,18 +268,18 @@ public class PlayerMovement : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
     }
 
-    //handle all other button presses for abilities and UI
+    // handle all other button presses for abilities and UI
     void keyControl()
     {
-        //only allow movement after game has started
+        // only allow movement after game has started
         if (SceneManager.GetActiveScene().name == "PreGameScene" ||
         (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted))
         {
-            //set cooldown values
+            // set cooldown values
             ab1Cooldown = (ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
             ab2Cooldown = (ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
             ab3Cooldown = (ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
-            //handle ability buttonpresses
+            // handle ability buttonpresses
             if (Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0)
             {
                 //Debug.Log(characterBody.gameObject.ToString());
@@ -275,35 +299,35 @@ public class PlayerMovement : MonoBehaviour
                 //TomBaker.timeJump(characterBody.gameObject, 30);
                 ab3Cooldown = 3;
             }
-            //start grab animation on click
+            // start grab animation on click
             if (Input.GetMouseButtonDown(0))
             {
-                //if grabbing, check for intersection with player
+                // if grabbing, check for intersection with player
                 if (!damageWindow)
                 {
                     Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
                     foreach (var playerGotGrab in playersGrab)
                     {
-                        //call grabplayer function on that player
+                        // call grabplayer function on that player
                         playerGotGrab.GetComponent<PlayerMovement>().getFound();
                     }
                     playerAnim_grab.SetBool("isGrabbing", true);
                 }
             }
-            //start game onpress 'e'
+            // start game onpress 'e'
             if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient
             && Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart)
             {
                 isCountingTillGameStart = true;
                 secondsTillGame = 5.0f;
             }
-            //if counting for game launch and user presses esc - stop
+            // if counting for game launch and user presses esc - stop
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 isCountingTillGameStart = false;
                 secondsTillGame = 0;
             }
-            //if counting, reduce timer
+            // if counting, reduce timer
             if (PhotonNetwork.IsMasterClient && isCountingTillGameStart)
             {
                 secondsTillGame -= Time.deltaTime;
@@ -316,10 +340,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //change player teams
+    // change player teams
     public void changeTeam()
     {
-        //if team is odd, set to 0, else set to 1
+        // if team is odd, set to 0, else set to 1
         if (team == 0)
         {
             team = 1;
@@ -334,20 +358,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //RPC function to be called when another player finds this one
+    // RPC function to be called when another player finds this one
     [PunRPC]
     void RPC_getFound()
     {
         changeTeam();
     }
 
-    //function to get found by calling RPC on all machines
+    // function to get found by calling RPC on all machines
     public void getFound()
     {
         view.RPC("RPC_getFound", RpcTarget.All);
     }
 
-    //RPC function to be called by other machines to set this players transform
+    // RPC function to be called by other machines to set this players transform
     [PunRPC]
     void RPC_movePlayer(Vector3 pos, Vector3 rot)
     {
@@ -355,19 +379,19 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(rot);
     }
 
-    //function to move this player by calling RPC for all others
+    // function to move this player by calling RPC for all others
     public void movePlayer(Vector3 pos, Vector3 rot)
     {
         view.RPC("RPC_movePlayer", RpcTarget.All, pos, rot);
     }
 
-    //function to enable player to damage others
+    // function to enable player to damage others
     public void startGrabbing()
     {
         damageWindow = true;
     }
 
-    //function to disable player to damage others
+    // function to disable player to damage others
     public void stopGrabbing()
     {
         damageWindow = false;
