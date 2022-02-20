@@ -56,8 +56,6 @@ public class PlayerMovement : MonoBehaviour {
 	public float hitCheckRadius = 1f;
 	public LayerMask hitMask;
 
-	public TimeLord TomBaker;
-
 	//the photonView component that syncs with the network
 	public PhotonView view;
 
@@ -105,18 +103,15 @@ public class PlayerMovement : MonoBehaviour {
 			}
 
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-				//Debug.Log(characterBody.gameObject.ToString());
-				TomBaker.timeJump(characterBody.gameObject, 30);
+				GetComponent<TimeConn>().TimeJump(-100);
 				ab1Cooldown = 9;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
 				ab2Cooldown = 5;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
 				ab3Cooldown = 10;
 			}
 
@@ -233,7 +228,7 @@ public class PlayerMovement : MonoBehaviour {
 			Vector3 movementVector = transform.position - lastPos;
 			float distTravelled = movementVector.magnitude / Time.deltaTime;
 			debugMenu_speed.text = "Speed: " + distTravelled;
-			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+			//debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
 			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
 			debugMenu_hit.text = "Hit: " + damageWindow;
 			debugMenu_ground.text = "Ground: " + isGrounded;
