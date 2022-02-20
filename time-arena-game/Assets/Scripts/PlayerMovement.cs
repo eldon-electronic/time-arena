@@ -258,14 +258,14 @@ public class PlayerMovement : MonoBehaviour {
 			//handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				if(SceneManager.GetActiveScene().name == "GameScene"){
-					timeTravel.TimeJump(20);
+					timeTravel.TimeJump(100);
 				}
 				StartJumpingForward();
 				ab1Cooldown = 15;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
 				if(SceneManager.GetActiveScene().name == "GameScene"){
-					timeTravel.TimeJump(-20);
+					timeTravel.TimeJump(-100);
 				}
 				StartJumpingBackward();
 				ab2Cooldown = 15;

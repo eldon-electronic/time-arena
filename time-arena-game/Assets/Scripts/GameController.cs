@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour{
 	public float timeElapsedInGame = 0f;
 
 	public PlayerMovement player;
+	public List<PlayerMovement> players;
 
 	public bool gameStarted = false;
 	public bool gameEnded = false;
@@ -34,18 +35,18 @@ public class GameController : MonoBehaviour{
 		} else {
 			Debug.Log("wtf");
 		}
+
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+		players.Add(player);
+		for(int i = 0; i < objs.Length; i++){
+			players.Add(objs[i].GetComponent<PlayerMovement>());
+		}
+
 	}
 
 	//initialise teams and spawn locations for the new game;
 	void setupNewGame(PlayerMovement client){
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-		List<PlayerMovement> players = new List<PlayerMovement>();
-		players.Add(client);
-		for(int i = 0; i < objs.Length; i++){
-			players.Add(objs[i].GetComponent<PlayerMovement>());
-		}
 		//set players position to spawn point
-		Debug.Log(players.Count);
 		if(players.Count > 1){	//if testing with one player, they are hider, otherwise one player will randomly be seeker
 			players[Random.Range(0, players.Count-1)].changeTeam();
 		}
@@ -83,12 +84,6 @@ public class GameController : MonoBehaviour{
 
 	// checks to see if there are no hiders left
 	public void checkGameOver(){
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-		List<PlayerMovement> players = new List<PlayerMovement>();
-		players.Add(player);
-		for(int i = 0; i < objs.Length; i++){
-			players.Add(objs[i].GetComponent<PlayerMovement>());
-		}
 		bool isHidersRemaining = true;
 		for(int i = 0; i < players.Count; i++){
 			isHidersRemaining &= (players[i].team == 0);
