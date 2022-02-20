@@ -114,6 +114,9 @@ public class PlayerMovement : MonoBehaviour {
 			if(game == null){
 				Debug.Log("FUCK");
 			}
+			ab1Cooldown = 15;
+			ab2Cooldown = 15;
+			ab3Cooldown = 3;
 		}
 	}
 
@@ -255,16 +258,17 @@ public class PlayerMovement : MonoBehaviour {
 			//handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				if(SceneManager.GetActiveScene().name == "GameScene"){
-					timeTravel.TimeJump(100);
+					timeTravel.TimeJump(20);
 				}
 				StartJumpingForward();
-				//changeTeam();
-				ab1Cooldown = 9;
+				ab1Cooldown = 15;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
-				timeTravel.TimeJump(-100);
+				if(SceneManager.GetActiveScene().name == "GameScene"){
+					timeTravel.TimeJump(-20);
+				}
 				StartJumpingBackward();
-				ab2Cooldown = 5;
+				ab2Cooldown = 15;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
 				ab3Cooldown = 3;
