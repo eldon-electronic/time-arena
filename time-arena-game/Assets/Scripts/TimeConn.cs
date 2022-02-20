@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class TimeConn : MonoBehaviour
 {
@@ -11,16 +13,25 @@ public class TimeConn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tl = GameObject.FindGameObjectWithTag("TimeLord").GetComponent<TimeLord>();
+        /*tl = GameObject.FindGameObjectWithTag("TimeLord").GetComponent<TimeLord>();
         tl.AddTimeObject(this.gameObject);
         timeID = tl.AllocateReality(this.gameObject);
-        SetCameraLayers();
+        SetCameraLayers();*/
+    }
+
+    public void connectToTimeLord(){
+      tl = GameObject.FindGameObjectWithTag("TimeLord").GetComponent<TimeLord>();
+      tl.AddTimeObject(this.gameObject);
+      timeID = tl.AllocateReality(this.gameObject);
+      SetCameraLayers();
     }
 
     // Update is called once per frame
     void Update()
     {
+      if(SceneManager.GetActiveScene().name == "GameScene"){
         Tick(tl.GetCurrentTick());
+      }
     }
 
     public void Tick(int t)
@@ -49,10 +60,10 @@ public class TimeConn : MonoBehaviour
     private void SetCameraLayers()
     {
         /*
-         * 
+         *
          * CODE HERE TO SET CAMERA TO ONLY SEE LAYERS > 20
          * IF THEY ARE 30 - timeID
-         * 
+         *
          */
     }
 }

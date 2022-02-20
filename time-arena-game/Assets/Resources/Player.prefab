@@ -7125,6 +7125,7 @@ GameObject:
   - component: {fileID: -8072145346359041933}
   - component: {fileID: 7955099349307058717}
   - component: {fileID: 9070032884028841073}
+  - component: {fileID: 3078873912917717710}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -7214,6 +7215,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   view: {fileID: 0}
+  timeTravel: {fileID: 3078873912917717710}
   game: {fileID: 0}
   fireCircle: {fileID: 7652556736494237299}
   splash: {fileID: 7341217877377959895}
@@ -7497,6 +7499,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3078873912917717710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 397c08b8676d2114bb1bd31e3d69f481, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0

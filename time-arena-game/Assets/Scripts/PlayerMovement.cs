@@ -61,6 +61,9 @@ public class PlayerMovement : MonoBehaviour {
 	//the photonView component that syncs with the network
 	public PhotonView view;
 
+	//Time control variables
+	public TimeConn timeTravel;
+
 	//variables corresponding to the gamestate
 	public GameController game;
 	public ParticleSystem fireCircle;
@@ -107,6 +110,7 @@ public class PlayerMovement : MonoBehaviour {
 	void onSceneChange(Scene current, Scene next){
 		if(next.name == "GameScene"){
 			game = FindObjectOfType<GameController>();
+			timeTravel.connectToTimeLord();
 			if(game == null){
 				Debug.Log("FUCK");
 			}
@@ -251,7 +255,9 @@ public class PlayerMovement : MonoBehaviour {
 			//handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
-				//TomBaker.timeJump(characterBody.gameObject, 30);
+				if(SceneManager.GetActiveScene().name == "GameScene"){
+					timeTravel.TimeJump(-100);
+				}
 				StartJumpingForward();
 				//changeTeam();
 				ab1Cooldown = 9;
