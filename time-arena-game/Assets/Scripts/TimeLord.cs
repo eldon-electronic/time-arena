@@ -56,14 +56,6 @@ public class TimeLord : MonoBehaviour
             //return false;
         }
 
-        public void PrintPositions()
-        {
-            for(int i = 0; i < ticks.GetHead(); i++)
-            {
-                Debug.Log(ticks.DataRecall(i).p.ToString());
-            }
-        }
-
         public TimeTick[] Recall(int t)
         {
             Debug.Log("Current written ticks: " + ticks.GetHead());
@@ -209,7 +201,6 @@ public class TimeLord : MonoBehaviour
         if (active)
         {
             if (currentTick >= maxTicks) { active = false; }
-            if (currentTick % 100 == 0) { streams[0].PrintPositions(); }
             currentTick++;
         }
     }
