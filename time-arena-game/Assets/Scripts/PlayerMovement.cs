@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	// variables defining player values
 	public CharacterController characterBody;
-	public GameObject playerBody;
 	public Camera cam;
 	public Transform groundCheck;
 	public LayerMask groundMask;
@@ -53,7 +52,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 	//variables corresponding to player Animations
-	public Animator playerAnim_grab;
+	public Animator playerAnim;
 	public Transform grabCheck;
 	public LayerMask grabMask;
 	private float grabCheckRadius = 1f;
@@ -65,13 +64,13 @@ public class PlayerMovement : MonoBehaviour {
 	//variables corresponding to the gamestate
 	public GameController game;
 	public ParticleSystem fireCircle;
-    public ParticleSystem splash;
+  public ParticleSystem splash;
 
-    public Material material;
+  public Material material;
 
-    Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
-    Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
-    Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+  Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
+  Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
+  Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// Start is called before the first frame update
 	void Start() {
@@ -96,7 +95,7 @@ public class PlayerMovement : MonoBehaviour {
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
 
-        material.SetFloat("_CutoffHeight", 50.0f);
+    material.SetFloat("_CutoffHeight", 50.0f);
 
 		//link scenechange event to onscenechange
 		SceneManager.activeSceneChanged += onSceneChange;
@@ -251,12 +250,14 @@ public class PlayerMovement : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
 				//TomBaker.timeJump(characterBody.gameObject, 30);
-				changeTeam();
+				StartJumpingForward();
+				//changeTeam();
 				ab1Cooldown = 9;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
 				//TomBaker.timeJump(characterBody.gameObject, 30);
+				StartJumpingBackward();
 				ab2Cooldown = 5;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
@@ -276,7 +277,7 @@ public class PlayerMovement : MonoBehaviour {
 							targetPlayer.getFound();
 						}
 					}
-					playerAnim_grab.SetBool("isGrabbing", true);
+					playerAnim.SetBool("isGrabbing", true);
 				}
 			}
 			//start game onpress 'e'
@@ -348,7 +349,7 @@ public class PlayerMovement : MonoBehaviour {
 	//function to disable player to damage others
 	public void stopGrabbing(){
 		damageWindow = false;
-		playerAnim_grab.SetBool("isGrabbing", false);
+		playerAnim.SetBool("isGrabbing", false);
 	}
 
 	//function called on game gameEnded
@@ -359,19 +360,19 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	public void StartJumpingForward() {
-		playerAnim_hit.SetBool("isJumpingForward", true);
+		playerAnim.SetBool("isJumpingForward", true);
 	}
 
 	public void StopJumpingForward() {
-		playerAnim_hit.SetBool("isJumpingForward", false);
+		playerAnim.SetBool("isJumpingForward", false);
 	}
 
 	public void StartJumpingBackward() {
-		playerAnim_hit.SetBool("isJumpingBackward", true);
+		playerAnim.SetBool("isJumpingBackward", true);
 	}
 
 	public void StopJumpingBackward() {
-		playerAnim_hit.SetBool("isJumpingBackward", false);
+		playerAnim.SetBool("isJumpingBackward", false);
 	}
 
 	void BlueBeam()
