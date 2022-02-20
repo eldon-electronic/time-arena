@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		//set the player's colour depending on their team
-		//changeTeam();
+		changeTeam();
 		//define the photonView component
 		view = GetComponent<PhotonView>();
 		if(!view.IsMine){
@@ -95,7 +95,9 @@ public class PlayerMovement : MonoBehaviour {
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
 
-    material.SetFloat("_CutoffHeight", 50.0f);
+		material.SetFloat("_CutoffHeight", 50.0f);
+		hiderMat.SetFloat("_CutoffHeight", 50.0f);
+		seekerMat.SetFloat("_CutoffHeight", 50.0f);
 
 		//link scenechange event to onscenechange
 		SceneManager.activeSceneChanged += onSceneChange;
