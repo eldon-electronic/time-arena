@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
 	public GameObject playerBody;
-	public int team = 0;//0 seeker 1 hider //iniitialised to 0 but changeTeam is called on start to sync values
+	public int team = 1;//0 seeker 1 hider //iniitialised to 0 but changeTeam is called on start to sync values
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		//set the player's colour depending on their team
-		changeTeam();
+		//changeTeam();
 		//define the photonView component
 		view = GetComponent<PhotonView>();
 		if(!view.IsMine){
