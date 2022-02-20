@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
 	public GameObject playerBody;
-	public int team = 0;//0 seeker 1 hider //iniitialised to 0 but changeTeam is called on start to sync values
+	public int team = 1;//0 seeker 1 hider //iniitialised to 0 but changeTeam is called on start to sync values
 	private float speed = 5f;
 	private float gravity = 10f;
 	private float jumpPower = 10f;
@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 	//variables corresponding to player Animations
-	public Animator playerAnim_grab;
+	public Animator playerAnim;
 	public Transform grabCheck;
 	public LayerMask grabMask;
 	private float grabCheckRadius = 1f;
@@ -63,12 +63,20 @@ public class PlayerMovement : MonoBehaviour {
 
 	//variables corresponding to the gamestate
 	public GameController game;
+	public ParticleSystem fireCircle;
+  public ParticleSystem splash;
+
+  public Material material;
+
+  Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
+  Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
+  Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// Start is called before the first frame update
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		//set the player's colour depending on their team
-		changeTeam();
+		//changeTeam();
 		//define the photonView component
 		view = GetComponent<PhotonView>();
 		if(!view.IsMine){
@@ -77,13 +85,18 @@ public class PlayerMovement : MonoBehaviour {
 			Destroy(cam.gameObject.GetComponent<AudioListener>());
 			Destroy(UI);
 			gameObject.layer = 7;
+			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		} else {
 			gameObject.tag = "Client";
+			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		}
 		//allow master client to move players from one scene to another
 		PhotonNetwork.AutomaticallySyncScene = true;
 		//lock players cursor to center screen
 		Cursor.lockState = CursorLockMode.Locked;
+
+    material.SetFloat("_CutoffHeight", 50.0f);
+
 		//link scenechange event to onscenechange
 		SceneManager.activeSceneChanged += onSceneChange;
 	}
@@ -237,12 +250,14 @@ public class PlayerMovement : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
 				//TomBaker.timeJump(characterBody.gameObject, 30);
-				changeTeam();
+				StartJumpingForward();
+				//changeTeam();
 				ab1Cooldown = 9;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0){
 				//Debug.Log(characterBody.gameObject.ToString());
 				//TomBaker.timeJump(characterBody.gameObject, 30);
+				StartJumpingBackward();
 				ab2Cooldown = 5;
 			}
 			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
@@ -262,7 +277,7 @@ public class PlayerMovement : MonoBehaviour {
 							targetPlayer.getFound();
 						}
 					}
-					playerAnim_grab.SetBool("isGrabbing", true);
+					playerAnim.SetBool("isGrabbing", true);
 				}
 			}
 			//start game onpress 'e'
@@ -284,6 +299,7 @@ public class PlayerMovement : MonoBehaviour {
 				}
 			}
 		}
+
 	}
 
 	//change player teams
@@ -306,6 +322,7 @@ public class PlayerMovement : MonoBehaviour {
 		changeTeam();
 	}
 
+	//RPC function to be called when another player hits this one
 	//function to get found by calling RPC on all machines
 	public void getFound(){
 		view.RPC("RPC_getFound", RpcTarget.All);
@@ -332,7 +349,7 @@ public class PlayerMovement : MonoBehaviour {
 	//function to disable player to damage others
 	public void stopGrabbing(){
 		damageWindow = false;
-		playerAnim_grab.SetBool("isGrabbing", false);
+		playerAnim.SetBool("isGrabbing", false);
 	}
 
 	//function called on game gameEnded
@@ -342,4 +359,55 @@ public class PlayerMovement : MonoBehaviour {
 		}*/
 	}
 
+	public void StartJumpingForward() {
+		playerAnim.SetBool("isJumpingForward", true);
+	}
+
+	public void StopJumpingForward() {
+		playerAnim.SetBool("isJumpingForward", false);
+	}
+
+	public void StartJumpingBackward() {
+		playerAnim.SetBool("isJumpingBackward", true);
+	}
+
+	public void StopJumpingBackward() {
+		playerAnim.SetBool("isJumpingBackward", false);
+	}
+
+	void BlueBeam()
+    {
+        var fcm = fireCircle.main;
+        fcm.startColor = BLUE;
+
+        var fct = fireCircle.trails;
+        fct.colorOverTrail = BLUE;
+
+        var sm = splash.main;
+        sm.startColor = WHITE;
+
+        var st = splash.trails;
+        st.colorOverTrail = BLUE;
+
+        fireCircle.Play();
+        splash.Play();
+    }
+
+    void OrangeBeam()
+    {
+        var fcm = fireCircle.main;
+        fcm.startColor = ORANGE;
+
+        var fct = fireCircle.trails;
+        fct.colorOverTrail = ORANGE;
+
+        var sm = splash.main;
+        sm.startColor = WHITE;
+
+        var st = splash.trails;
+        st.colorOverTrail = ORANGE;
+
+        fireCircle.Play();
+        splash.Play();
+    }
 }
