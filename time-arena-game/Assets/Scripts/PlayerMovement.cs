@@ -233,8 +233,7 @@ public class PlayerMovement : MonoBehaviour {
         lastPos = transform.position; // update lastPos from prev frame
 
         // only allow movement after game has started
-		if(SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)) {
+		if(SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted) {
             // sprint speed
 			if(Input.GetKey("left shift")){
 				speed = 10f;
