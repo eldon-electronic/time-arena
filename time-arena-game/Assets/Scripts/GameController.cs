@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
 	public List<PlayerMovement> players;
 
 	// list to keep track of elapsed time for all players
-	public List<float> otherPlayersElapsedTime;
+  public Dictionary<int, float> otherPlayersElapsedTime = new Dictionary<int, float>();
 
 	public bool gameStarted = false;
 	public bool gameEnded = false;
@@ -41,11 +41,11 @@ public class GameController : MonoBehaviour
 		}
 
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-		players.Add(player);
-		otherPlayersElapsedTime.Add(0); // adds yourself before adding remaining players
+		players.Add(player); //player.timeTravel.GetTimePosition()
+		otherPlayersElapsedTime.Add(player.view.ViewID, 0); // adds yourself before adding remaining players
 		for(int i = 0; i < objs.Length; i++){
 			players.Add(objs[i].GetComponent<PlayerMovement>());
-			otherPlayersElapsedTime.Add(0);
+			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0);
 		}
 	}
 
@@ -70,16 +70,18 @@ public class GameController : MonoBehaviour
 		// increment global timer and individual player timers
 		if (!gameEnded) {
 			timeElapsedInGame += Time.deltaTime;
-			for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
-				otherPlayersElapsedTime[i] += Time.deltaTime / gameLength;	
+			List<int> keys = new List<int>(otherPlayersElapsedTime.Keys);
+			foreach(int key in keys){
+				otherPlayersElapsedTime[key] += Time.deltaTime / gameLength;
 			}
 		}
 		if (!gameStarted) { // if pregame timer is counting
 			if (timeElapsedInGame >= 5f) {
 				gameStarted = true;
 				timeElapsedInGame = 0f;
-				for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
-					otherPlayersElapsedTime[i] = 0f;	
+				List<int> keys = new List<int>(otherPlayersElapsedTime.Keys);
+				foreach(int key in keys){
+					otherPlayersElapsedTime[key] = 0f;
 				}
 			}
 		} else { // else game is in play

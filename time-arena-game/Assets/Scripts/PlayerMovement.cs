@@ -191,10 +191,13 @@ public class PlayerMovement : MonoBehaviour {
 				startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
 				if (game.gameStarted && !game.gameEnded) {
 					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
-                    elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength; // update time bar
-					for (int i = 0; i < game.otherPlayersElapsedTime.Count; i++) {
-						playerIcons[i].value = game.otherPlayersElapsedTime[i];
+					elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength; // update time bar
+					int n = 0;
+					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
+					foreach(int key in keys){
+						playerIcons[n++].value = game.otherPlayersElapsedTime[key];
 					}
+
 				} else if(game.gameEnded) {
 					winningDispl.transform.parent.gameObject.SetActive(true);
 					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
@@ -205,8 +208,10 @@ public class PlayerMovement : MonoBehaviour {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
                     playerIcon.value = 0;
-					for (int i = 0; i < game.otherPlayersElapsedTime.Count; i++) {
-						playerIcons[i].value = 0;
+					int n = 0;
+					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
+					foreach(int key in keys){
+						playerIcons[n++].value = 0;
 					}
 				}
 			}
@@ -359,7 +364,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(-100);
 		StartJumpingBackward();
 		ab2Cooldown = 15;
-		game.otherPlayersElapsedTime[view.ViewID-1001] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
 	}
 
 	public void jumpBackwards() {
@@ -371,7 +376,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(100);
 		StartJumpingForward();
 		ab1Cooldown = 15;
-		game.otherPlayersElapsedTime[view.ViewID-1001] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
 	}
 
 	public void jumpForward() {
