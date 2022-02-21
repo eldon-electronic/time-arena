@@ -14,6 +14,14 @@ public class PlayerMovement : MonoBehaviour {
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
 	public GameObject playerBody;
+	public GameObject playerArm;
+	public GameObject handThumb;
+	public GameObject handThumbTip;
+	public GameObject handIndex;
+	public GameObject handIndexTip;
+	public GameObject handMiddle;
+	public GameObject handMiddleTip;
+
 	public int team = 1;//0 seeker 1 hider //iniitialised to 0 but changeTeam is called on start to sync values
 	private float speed = 5f;
 	private float gravity = 10f;
@@ -86,9 +94,11 @@ public class PlayerMovement : MonoBehaviour {
 			Destroy(UI);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+			
 		} else {
 			gameObject.tag = "Client";
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+		
 		}
 		//allow master client to move players from one scene to another
 		PhotonNetwork.AutomaticallySyncScene = true;
@@ -310,10 +320,29 @@ public class PlayerMovement : MonoBehaviour {
 		if(team == 0){
 			team = 1;
 			playerBody.GetComponent<Renderer>().material = seekerMat;
+			playerArm.GetComponent<Renderer>().material = seekerMat;
+			
+			handIndex.GetComponent<Renderer>().material = seekerMat;
+			handIndexTip.GetComponent<Renderer>().material = seekerMat;
+			handMiddle.GetComponent<Renderer>().material = seekerMat;
+			handMiddleTip.GetComponent<Renderer>().material = seekerMat;
+			handThumb.GetComponent<Renderer>().material = seekerMat;
+			handThumbTip.GetComponent<Renderer>().material = seekerMat;
+
+			
 			teamDispl.text = "SEEKER";
 		} else {
 			team = 0;
 			playerBody.GetComponent<Renderer>().material = hiderMat;
+			playerArm.GetComponent<Renderer>().material = hiderMat;
+			
+			handIndex.GetComponent<Renderer>().material = hiderMat;
+			handIndexTip.GetComponent<Renderer>().material = hiderMat;
+			handMiddle.GetComponent<Renderer>().material = hiderMat;
+			handMiddleTip.GetComponent<Renderer>().material = hiderMat;
+			handThumb.GetComponent<Renderer>().material = hiderMat;
+			handThumbTip.GetComponent<Renderer>().material = hiderMat;
+
 			teamDispl.text = "HIDER";
 		}
 	}
