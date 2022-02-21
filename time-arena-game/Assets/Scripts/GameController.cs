@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
 	void setupNewGame(PlayerMovement client){
 		// set players position to spawn point
 		if (players.Count > 1) { // if testing with one player, they are hider, otherwise one player will randomly be seeker
-			players[Random.Range(0, players.Count-1)].changeTeam();
+			players[Random.Range(0, players.Count-1)].getFound();
 		}
 		int n = 0;
 		for (int i = 0; i < players.Count; i++) {
