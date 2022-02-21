@@ -130,9 +130,10 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
+		Debug.Log(view.ViewID);
 		// local keys only affect client's player
 		if(view.IsMine) {
-			if(SceneManager.GetActiveScene().name == "PreGameScene" || 
+			if(SceneManager.GetActiveScene().name == "PreGameScene" ||
 			(SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)) {
 				movementControl();
 				cameraControl();
@@ -199,7 +200,7 @@ public class PlayerMovement : MonoBehaviour {
 					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
 					pauseUI.isPaused = true;
 					pauseUI.pauseMenuUI.SetActive(true);
-					Cursor.lockState = CursorLockMode.None; 
+					Cursor.lockState = CursorLockMode.None;
 				} else {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
@@ -217,7 +218,7 @@ public class PlayerMovement : MonoBehaviour {
         lastPos = transform.position; // update lastPos from prev frame
 
         // only allow movement after game has started
-		if(SceneManager.GetActiveScene().name == "PreGameScene" || 
+		if(SceneManager.GetActiveScene().name == "PreGameScene" ||
 		(SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)) {
             // sprint speed
 			if(Input.GetKey("left shift")){
@@ -240,7 +241,7 @@ public class PlayerMovement : MonoBehaviour {
 			}
             characterBody.Move(movement * speed * Time.deltaTime); // transform according to movement vector
 		}
-		
+
 		// jump control
 		if (Input.GetButtonDown("Jump") && isGrounded && !pauseUI.isPaused) {
 			velocity.y += Mathf.Sqrt(jumpPower * 2f * gravity);
@@ -284,7 +285,7 @@ public class PlayerMovement : MonoBehaviour {
 			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
 			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
 			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
-			
+
 			// handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				if(SceneManager.GetActiveScene().name == "GameScene"){
@@ -358,7 +359,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(-100);
 		StartJumpingBackward();
 		ab2Cooldown = 15;
-		game.otherPlayersElapsedTime[0] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID-1001] = timeTravel.GetTimePosition();
 	}
 
 	public void jumpBackwards() {
@@ -370,7 +371,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(100);
 		StartJumpingForward();
 		ab1Cooldown = 15;
-		game.otherPlayersElapsedTime[0] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID-1001] = timeTravel.GetTimePosition();
 	}
 
 	public void jumpForward() {

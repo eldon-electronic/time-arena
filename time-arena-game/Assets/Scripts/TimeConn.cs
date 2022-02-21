@@ -52,7 +52,7 @@ public class TimeConn : MonoBehaviour
 
     public float GetTimePosition()
     {
-        return (float)tl.GetCurrentTick() / (float)tl.maxTicks;
+        return (float)tl.GetRealityTick(timeID) / (float)tl.maxTicks;
     }
 
     private void SetCameraLayers()
