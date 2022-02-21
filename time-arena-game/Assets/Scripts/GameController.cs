@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
 	public List<PlayerMovement> players;
 
 	// list to keep track of elapsed time for all players
-	public List<int> otherPlayersElapsedTime;
+	public List<float> otherPlayersElapsedTime;
 
 	public bool gameStarted = false;
 	public bool gameEnded = false;
@@ -70,17 +70,17 @@ public class GameController : MonoBehaviour
 		// increment global timer and individual player timers
 		if (!gameEnded) {
 			timeElapsedInGame += Time.deltaTime;
-			//for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
-			//	otherPlayersElapsedTime[i] += Time.deltaTime;	
-			//}
+			for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
+				otherPlayersElapsedTime[i] += Time.deltaTime / gameLength;	
+			}
 		}
 		if (!gameStarted) { // if pregame timer is counting
 			if (timeElapsedInGame >= 5f) {
 				gameStarted = true;
 				timeElapsedInGame = 0f;
-				//for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
-				//	otherPlayersElapsedTime[i] = 0f;	
-				//}
+				for (int i = 0; i < otherPlayersElapsedTime.Count; i++) {
+					otherPlayersElapsedTime[i] = 0f;	
+				}
 			}
 		} else { // else game is in play
 			if(timeElapsedInGame >= gameLength && !gameEnded){

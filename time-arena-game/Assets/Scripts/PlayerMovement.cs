@@ -192,7 +192,7 @@ public class PlayerMovement : MonoBehaviour {
 					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
                     elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength; // update time bar
 					for (int i = 0; i < game.otherPlayersElapsedTime.Count; i++) {
-						playerIcons[i].value = (game.timeElapsedInGame / game.gameLength) + game.otherPlayersElapsedTime[i]/1000;
+						playerIcons[i].value = game.otherPlayersElapsedTime[i];
 					}
 				} else if(game.gameEnded) {
 					winningDispl.transform.parent.gameObject.SetActive(true);
@@ -288,19 +288,14 @@ public class PlayerMovement : MonoBehaviour {
 			// handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				if(SceneManager.GetActiveScene().name == "GameScene"){
-					timeTravel.TimeJump(100);
 					jumpForward();
 				}
-				StartJumpingForward();
-				ab1Cooldown = 15;
 			}
 
 			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
 				if(SceneManager.GetActiveScene().name == "GameScene") {
-					timeTravel.TimeJump(-100);
+					jumpBackwards();
 				}
-				StartJumpingBackward();
-				ab2Cooldown = 15;
 			}
 
 			if (Input.GetKeyDown(KeyCode.Alpha3) && ab3Cooldown <= 0) {
@@ -359,11 +354,23 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	[PunRPC]
+	void RPC_jumpBackwards() {
+		timeTravel.TimeJump(-100);
+		StartJumpingBackward();
+		ab2Cooldown = 15;
+		game.otherPlayersElapsedTime[0] = timeTravel.GetTimePosition();
+	}
+
+	public void jumpBackwards() {
+		view.RPC("RPC_jumpBackwards", RpcTarget.All);
+	}
+
+	[PunRPC]
 	void RPC_jumpForward() {
 		timeTravel.TimeJump(100);
 		StartJumpingForward();
 		ab1Cooldown = 15;
-		game.otherPlayersElapsedTime[0] += 100;
+		game.otherPlayersElapsedTime[0] = timeTravel.GetTimePosition();
 	}
 
 	public void jumpForward() {
