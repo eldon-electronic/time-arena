@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
 	public List<PlayerMovement> players;
 
 	// list to keep track of elapsed time for all players
-  public Dictionary<int, float> otherPlayersElapsedTime = new Dictionary<int, float>();
+  	public Dictionary<int, float> otherPlayersElapsedTime = new Dictionary<int, float>();
 
 	public bool gameStarted = false;
 	public bool gameEnded = false;
