@@ -284,6 +284,7 @@ public class PlayerMovement : MonoBehaviour {
 			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
 			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
 			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
+			
 			// handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
 				if(SceneManager.GetActiveScene().name == "GameScene"){
@@ -292,6 +293,7 @@ public class PlayerMovement : MonoBehaviour {
 				StartJumpingForward();
 				ab1Cooldown = 15;
 			}
+
 			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
 				if(SceneManager.GetActiveScene().name == "GameScene") {
 					timeTravel.TimeJump(-100);
@@ -299,6 +301,7 @@ public class PlayerMovement : MonoBehaviour {
 				StartJumpingBackward();
 				ab2Cooldown = 15;
 			}
+			
 			if (Input.GetKeyDown(KeyCode.Alpha3) && ab3Cooldown <= 0) {
 				ab3Cooldown = 3;
 			}
