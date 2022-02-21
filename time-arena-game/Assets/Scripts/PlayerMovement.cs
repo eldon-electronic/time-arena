@@ -270,7 +270,7 @@ public class PlayerMovement : MonoBehaviour {
 				StartJumpingBackward();
 				ab2Cooldown = 15;
 			}
-			if(Input.GetKeyDown(KeyCode.Alpha3) && ab2Cooldown <= 0){
+			if(Input.GetKeyDown(KeyCode.Alpha3) && ab3Cooldown <= 0){
 				ab3Cooldown = 3;
 			}
 			//start grab animation on click
