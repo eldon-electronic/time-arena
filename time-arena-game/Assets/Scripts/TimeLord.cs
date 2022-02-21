@@ -107,7 +107,7 @@ public class TimeLord : MonoBehaviour
 
         List<(TimeStream, List<Proxy>)> observations = new List<(TimeStream, List<Proxy>)>();
         int id = 0;
-        int timeOffset = 0;
+        public int timeOffset = 0;
         TimeStream owner;
         GameObject copier;
         TimeLord tl;
@@ -217,6 +217,10 @@ public class TimeLord : MonoBehaviour
     public int GetCurrentTick()
     {
         return currentTick;
+    }
+
+    public int GetRealityTick(int id){
+        return currentTick + realities[id].timeOffset;
     }
 
     public void AddTimeObject(GameObject t)
