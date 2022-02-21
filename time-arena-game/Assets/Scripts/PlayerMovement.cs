@@ -204,7 +204,7 @@ public class PlayerMovement : MonoBehaviour {
 					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
 					timeDispl.text = "0:00:00";
                     playerIcon.value = 0;
-					for (int i = 0; i < game.otherPlayersElapsedTime[i].Count; i++) {
+					for (int i = 0; i < game.otherPlayersElapsedTime.Count; i++) {
 						playerIcons[i].value = 0;
 					}
 				}
