@@ -38,6 +38,9 @@ jobs:
   build:
     name: Build my project ✨
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       # Checkout
       - name: Checkout repository 👀
@@ -49,7 +52,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: time-arena-game/Library
-          key: Time-Arena-Library
+          key: Library-time-arena
+          restore-keys: Library-
 
       # Build
       - name: Build project 🔨
@@ -58,8 +62,27 @@ jobs:
           projectpath: time-arena-game
           targetPlatform: WebGL
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.2.3
+
+    # Output
+      - uses: actions/upload-artifact@v2
         with:
-          branch: deploy # The branch the action should deploy to.
-          folder: build/WebGL/WebGL # The folder the action should deploy.
+          name: Build
+          path: build
+
+      # - name: Deploy 🚀
+      #   uses: JamesIves/github-pages-deploy-action@v4.2.3
+      #   with:
+      #     branch: deploy # The branch the action should deploy to.
+      #     folder: build/WebGL/WebGL # The folder the action should deploy.
+
+#       - id: 'auth'
+#         uses: 'google-github-actions/auth@v0'
+#         with:
+#           credentials_json: '${{ secrets.gcp_credentials }}'
+
+#       - id: 'upload-files'
+#         uses: 'google-github-actions/upload-cloud-storage@v0'
+#         with:
+#           path: 'build'
+#           destination: 'eldonelectronic.co.uk'
+#           #parent: false

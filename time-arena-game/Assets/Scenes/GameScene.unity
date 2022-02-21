@@ -386,9 +386,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1944367506}
   - component: {fileID: 1944367505}
+  - component: {fileID: 1944367507}
   m_Layer: 0
   m_Name: GameController
-  m_TagString: Untagged
+  m_TagString: TimeLord
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -407,8 +408,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameLength: 300
   timeElapsedInGame: 0
+  player: {fileID: 0}
   gameStarted: 0
   gameEnded: 0
+  winningTeam: 1
+  hiderSpawnPoints:
+  - {x: 4, y: -0.5, z: 0.3}
+  - {x: 7, y: -0.5, z: 3}
+  - {x: 7, y: -0.5, z: -3}
+  - {x: 9, y: -0.5, z: 0.3}
+  - {x: 13, y: 1.2, z: 0.3}
+  seekerSpawnPoint: {x: 28, y: -0.5, z: 0.3}
 --- !u!4 &1944367506
 Transform:
   m_ObjectHideFlags: 0
@@ -423,6 +433,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1944367507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944367504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a4e35cd46c564640ab93072e5b5a387, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTicks: 9600
+  tps: 32
+  replayer: {fileID: 6458975045518551231, guid: 800f7842813db4d4a86bf87f22b79b31, type: 3}
+  active: 1
 --- !u!1 &2113604171
 GameObject:
   m_ObjectHideFlags: 0
