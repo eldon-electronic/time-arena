@@ -11,7 +11,7 @@ public class SpawnPlayers : MonoBehaviour
 
 	//spawn point array
 	public Vector3[] spawningPoint = {
-		new Vector3(-62f, 0f, 22f),
+		new Vector3(-62f, -2f, 20f),
 		new Vector3(2f, 5f, 0f),
 		new Vector3(15f, 5f, 0f),
 		new Vector3(23f, 5f, 0f),
@@ -23,6 +23,6 @@ public class SpawnPlayers : MonoBehaviour
     {
         // spawn a new player into the scene
         int n = (int)((spawningPoint.Length) * Random.value);
-        PhotonNetwork.Instantiate(playerPrefab.name, spawningPoint[n], Quaternion.identity);
+        PhotonNetwork.Instantiate(playerPrefab.name, spawningPoint[0], Quaternion.identity);
     }
 }
