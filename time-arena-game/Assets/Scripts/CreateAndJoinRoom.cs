@@ -9,17 +9,26 @@ using Photon.Realtime;
 public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 
 	//values for input text fields set by user
-	public InputField createInput;
-	public InputField joinInput;
+	public InputField nameInput;
+	public InputField roomInput;
+
+	// username
+	public System.String username;
 
 	//user presses create room button
 	public void CreateRoom(){
-		PhotonNetwork.CreateRoom(createInput.text);
+		if (roomInput.text != "" && nameInput.text != "") {
+			username = nameInput.text;
+			PhotonNetwork.CreateRoom(roomInput.text);
+		}
 	}
 
 	//user presses join room button
 	public void JoinRoom(){
-		PhotonNetwork.JoinRoom(joinInput.text);
+		if (roomInput.text != "" && nameInput.text != "") {
+			username = nameInput.text;
+			PhotonNetwork.JoinRoom(roomInput.text);
+		}
 	}
 
 	//when user connects to room - load scene as level
