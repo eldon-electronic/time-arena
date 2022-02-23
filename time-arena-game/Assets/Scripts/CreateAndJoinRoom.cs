@@ -12,13 +12,10 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 	public InputField nameInput;
 	public InputField roomInput;
 
-	// username
-	public System.String username;
-
 	//user presses create room button
 	public void CreateRoom(){
 		if (roomInput.text != "" && nameInput.text != "") {
-			username = nameInput.text;
+			PhotonNetwork.NickName = nameInput.text;
 			PhotonNetwork.CreateRoom(roomInput.text);
 		}
 	}
@@ -26,7 +23,7 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 	//user presses join room button
 	public void JoinRoom(){
 		if (roomInput.text != "" && nameInput.text != "") {
-			username = nameInput.text;
+			PhotonNetwork.NickName = nameInput.text;
 			PhotonNetwork.JoinRoom(roomInput.text);
 		}
 	}
