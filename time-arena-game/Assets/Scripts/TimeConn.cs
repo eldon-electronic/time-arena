@@ -65,6 +65,11 @@ public class TimeConn : MonoBehaviour
       return (float) tl.GetCurrentTick();
     }
 
+    public float MaxTick() 
+    {
+      return (float) tl.maxTicks;
+    }
+
     private void SetCameraLayers()
     {
         /*

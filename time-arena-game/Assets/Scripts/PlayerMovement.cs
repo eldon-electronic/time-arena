@@ -7,8 +7,6 @@ using Photon.Pun;
 
 /*
 * TODO: 
-* 1. disable time travel past end of the game
-* 2. disable time travel past the beginning of the game
 * 3. fix length of time travel on the time bar
 * 4. fix player icons on time travel bar
 * 5. (in edit mode test) add tests for testing time travel past the total elapsed time/beginning
@@ -214,9 +212,9 @@ public class PlayerMovement : MonoBehaviour {
 					int n = 0;
 					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
 					foreach(int key in keys){
-						playerIcons[n++].value = game.otherPlayersElapsedTime[key];
+						playerIcons[n].value = game.otherPlayersElapsedTime[key];
+						n++;
 					}
-
 				} else if(game.gameEnded) {
 					winningDispl.transform.parent.gameObject.SetActive(true);
 					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
@@ -230,7 +228,8 @@ public class PlayerMovement : MonoBehaviour {
 					int n = 0;
 					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
 					foreach(int key in keys){
-						playerIcons[n++].value = 0;
+						playerIcons[n].value = 0;
+						n++;
 					}
 				}
 			}
@@ -406,7 +405,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(-timeJumpAmount);
 		StartJumpingBackward();
 		ab2Cooldown = 15;
-		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID] -= timeJumpAmount / timeTravel.MaxTick();
 	}
 
 	public void jumpBackwards() {
@@ -418,7 +417,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(timeJumpAmount);
 		StartJumpingForward();
 		ab1Cooldown = 15;
-		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID] += timeJumpAmount / timeTravel.MaxTick();
 	}
 
 	public void jumpForward() {
