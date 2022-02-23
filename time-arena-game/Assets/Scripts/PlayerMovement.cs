@@ -72,6 +72,9 @@ public class PlayerMovement : MonoBehaviour {
     public Slider otherPlayerIcon3;
     public Slider otherPlayerIcon4;
 	private Slider[] playerIcons = new Slider[5];
+	public Image Forward;
+	public Image ForwardPressed;
+	public Image ForwardUnable;
 
     // variables corresponding to player Animations
 	public Animator playerAnim;
@@ -178,6 +181,9 @@ public class PlayerMovement : MonoBehaviour {
 			otherPlayerIcon2.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 3);
 			otherPlayerIcon3.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 4);
 			otherPlayerIcon4.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 5);
+			ForwardUnable.gameObject.SetActive(false);
+			ForwardPressed.gameObject.SetActive(false);
+			ab1Cooldown_displ.setActive(false);
 
 			if(isCountingTillGameStart) {
 				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
@@ -314,7 +320,11 @@ public class PlayerMovement : MonoBehaviour {
 				// only allow time travel forwards if it doesn't go past the end.
 				if(SceneManager.GetActiveScene().name == "GameScene" && 
 				   timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick()) {
+					ForwardPressed.SetActive(true);
+					ab1Cooldown_displ.SetActive(true);
 					jumpForward(); 
+				} else {
+					ForwardUnable.SetActive(true);
 				}
 			}
 
