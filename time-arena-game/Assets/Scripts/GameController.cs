@@ -21,8 +21,8 @@ public class GameController : MonoBehaviour
 
 	public int winningTeam = 1;
 
-	public Vector3[] hiderSpawnPoints = {new Vector3(4f, -0.5f, 0.3f), new Vector3(7f, -0.5f, 3f), new Vector3(7f, -0.5f, -3f), new Vector3(9f, -0.5f, 0.3f), new Vector3(13f, 1.2f, 0.3f)};
-	public Vector3 seekerSpawnPoint = new Vector3(28f, -0.5f, 0.3f);
+	public Vector3[] hiderSpawnPoints = {new Vector3(-42f, 0f, 22f), new Vector3(-15f, -0.5f, -4f), new Vector3(-12f, -0.5f, -40f), new Vector3(-47f, -0.5f, -8f), new Vector3(-36f, -2.5f, 2.2f)};
+	public Vector3 seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
 
 	// Start is called before the first frame update
 	void Start() {
