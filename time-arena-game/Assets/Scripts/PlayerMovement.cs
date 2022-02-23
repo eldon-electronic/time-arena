@@ -5,6 +5,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 
+/*
+* TODO: 
+* 1. disable time travel past end of the game
+* 2. disable time travel past the beginning of the game
+* 3. fix length of time travel on the time bar
+* 4. fix player icons on time travel bar
+*/
+
 public class PlayerMovement : MonoBehaviour {
 
 	// variables defining player values
@@ -64,7 +72,6 @@ public class PlayerMovement : MonoBehaviour {
     public Slider otherPlayerIcon3;
     public Slider otherPlayerIcon4;
 	private Slider[] playerIcons = new Slider[5];
-
 
     // variables corresponding to player Animations
 	public Animator playerAnim;
@@ -294,21 +301,22 @@ public class PlayerMovement : MonoBehaviour {
 	// handle all other button presses for abilities and UI
 	void keyControl(){
 		// only allow movement after game has started
-		if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)){
+		if(SceneManager.GetActiveScene().name == "PreGameScene" || 
+		  (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)) {
 			// set cooldown values
-			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
-			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
-			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
+			ab1Cooldown = (ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+			ab2Cooldown = (ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+			ab3Cooldown = (ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
 
 			// handle ability buttonpresses
 			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-				if(SceneManager.GetActiveScene().name == "GameScene"){
-					jumpForward();
+				if(SceneManager.GetActiveScene().name == "GameScene") {
+					jumpForward(); 
 				}
 			}
 
 			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
-				if(SceneManager.GetActiveScene().name == "GameScene") {
+				if(SceneManager.GetActiveScene().name == "GameScene") { 
 					jumpBackwards();
 				}
 			}

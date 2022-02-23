@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour
 				otherPlayersElapsedTime[key] += Time.deltaTime / gameLength;
 			}
 		}
+
 		if (!gameStarted) { // if pregame timer is counting
 			if (timeElapsedInGame >= 5f) {
 				gameStarted = true;
@@ -91,6 +92,7 @@ public class GameController : MonoBehaviour
 				player.onGameEnded();
 			}
 		}
+		
 		checkGameOver();
 	}
 
