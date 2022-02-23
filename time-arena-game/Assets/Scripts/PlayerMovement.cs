@@ -11,6 +11,7 @@ using Photon.Pun;
 * 2. disable time travel past the beginning of the game
 * 3. fix length of time travel on the time bar
 * 4. fix player icons on time travel bar
+* 5. (in edit mode test) add tests for testing time travel past the total elapsed time/beginning
 */
 
 public class PlayerMovement : MonoBehaviour {
@@ -42,6 +43,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float ab1Cooldown = 0f;
 	private float ab2Cooldown = 0f;
 	private float ab3Cooldown = 0f;
+	private int timeJumpAmount = 100;
 
 	// references to materials for user team id
 	public Material seekerMat;
@@ -309,14 +311,18 @@ public class PlayerMovement : MonoBehaviour {
 			ab3Cooldown = (ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
 
 			// handle ability buttonpresses
-			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-				if(SceneManager.GetActiveScene().name == "GameScene") {
+			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0) {
+				// only allow time travel forwards if it doesn't go past the end.
+				if(SceneManager.GetActiveScene().name == "GameScene" && 
+				   timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick()) {
 					jumpForward(); 
 				}
 			}
 
 			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
-				if(SceneManager.GetActiveScene().name == "GameScene") { 
+				// only allow time travel backwards if it doesn't go past the beginning.
+				if(SceneManager.GetActiveScene().name == "GameScene" && 
+				   timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0) { 
 					jumpBackwards();
 				}
 			}
@@ -397,7 +403,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	[PunRPC]
 	void RPC_jumpBackwards() {
-		timeTravel.TimeJump(-100);
+		timeTravel.TimeJump(-timeJumpAmount);
 		StartJumpingBackward();
 		ab2Cooldown = 15;
 		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
@@ -409,7 +415,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	[PunRPC]
 	void RPC_jumpForward() {
-		timeTravel.TimeJump(100);
+		timeTravel.TimeJump(timeJumpAmount);
 		StartJumpingForward();
 		ab1Cooldown = 15;
 		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
