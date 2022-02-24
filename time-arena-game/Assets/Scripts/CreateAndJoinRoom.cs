@@ -12,19 +12,16 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 	public InputField nameInput;
 	public InputField roomInput;
 
-	//user presses create room button
-	public void CreateRoom(){
-		if (roomInput.text != "" && nameInput.text != "") {
-			PhotonNetwork.NickName = nameInput.text;
-			PhotonNetwork.CreateRoom(roomInput.text);
-		}
-	}
+	private Color transRed = new Color(1.0f, 0.0f, 0.0f, 0.5f);
 
-	//user presses join room button
-	public void JoinRoom(){
+	//user presses join or create room button
+	public void JoinOrCreateRoom() {
 		if (roomInput.text != "" && nameInput.text != "") {
 			PhotonNetwork.NickName = nameInput.text;
-			PhotonNetwork.JoinRoom(roomInput.text);
+			PhotonNetwork.JoinOrCreateRoom(roomInput.text, null, null);
+		} else {
+			if (nameInput.text == "") nameInput.placeholder.color = transRed;
+			if (roomInput.text == "") roomInput.placeholder.color = transRed;
 		}
 	}
 
