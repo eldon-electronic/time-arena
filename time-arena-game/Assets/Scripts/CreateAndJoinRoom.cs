@@ -9,17 +9,20 @@ using Photon.Realtime;
 public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 
 	//values for input text fields set by user
-	public InputField createInput;
-	public InputField joinInput;
+	public InputField nameInput;
+	public InputField roomInput;
 
-	//user presses create room button
-	public void CreateRoom(){
-		PhotonNetwork.CreateRoom(createInput.text);
-	}
+	private Color transRed = new Color(1.0f, 0.0f, 0.0f, 0.5f);
 
-	//user presses join room button
-	public void JoinRoom(){
-		PhotonNetwork.JoinRoom(joinInput.text);
+	//user presses join or create room button
+	public void JoinOrCreateRoom() {
+		if (roomInput.text != "" && nameInput.text != "") {
+			PhotonNetwork.NickName = nameInput.text;
+			PhotonNetwork.JoinOrCreateRoom(roomInput.text, null, null);
+		} else {
+			if (nameInput.text == "") nameInput.placeholder.color = transRed;
+			if (roomInput.text == "") roomInput.placeholder.color = transRed;
+		}
 	}
 
 	//when user connects to room - load scene as level
