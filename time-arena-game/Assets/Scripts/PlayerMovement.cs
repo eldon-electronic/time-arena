@@ -7,9 +7,8 @@ using Photon.Pun;
 
 /*
 * TODO: 
-* 3. fix length of time travel on the time bar
-* 4. fix player icons on time travel bar
-* 5. (in edit mode test) add tests for testing time travel past the total elapsed time/beginning
+* 1. (in edit mode test) add tests for testing time travel past the total elapsed time/beginning
+* 2. fix assignment of player icons on time bar
 */
 
 public class PlayerMovement : MonoBehaviour {
@@ -239,6 +238,10 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+	/*******************
+	* Movement Control *
+	********************/
+
     // handle movement axis inputs (wasd, arrowkeys, joystick)
 	void movementControl() {
         lastPos = transform.position; // update lastPos from prev frame
@@ -302,7 +305,10 @@ public class PlayerMovement : MonoBehaviour {
 		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
 	}
 
-	// handle all other button presses for abilities and UI
+	/*****************
+	* Button Presses *
+	******************/
+
 	void keyControl(){
 		// only allow movement after game has started
 		if(SceneManager.GetActiveScene().name == "PreGameScene" || 
@@ -403,6 +409,10 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+	/************
+	* RPC Calls *
+	*************/
+
 	[PunRPC]
 	void RPC_jumpBackwards() {
 		timeTravel.TimeJump(-timeJumpAmount);
@@ -485,6 +495,10 @@ public class PlayerMovement : MonoBehaviour {
 	public void StopJumpingBackward() {
 		playerAnim.SetBool("isJumpingBackward", false);
 	}
+
+	/*******************
+	* Travel Animation *
+	********************/
 
 	void BlueBeam()
     {
