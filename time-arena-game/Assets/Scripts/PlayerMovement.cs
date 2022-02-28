@@ -90,14 +90,8 @@ public class PlayerMovement : MonoBehaviour {
 
     // variables corresponding to the gamestate
     public GameController game;
-	public ParticleSystem fireCircle;
-	public ParticleSystem splash;
-
-  public Material material;
-
-  Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
-  Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
-  Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	public ParticleController particles;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -128,7 +122,6 @@ public class PlayerMovement : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;         // lock players cursor to center screen
         SceneManager.activeSceneChanged += onSceneChange; // link scenechange event to onscenechange
 
-		material.SetFloat("_CutoffHeight", 50.0f);
 		hiderMat.SetFloat("_CutoffHeight", 50.0f);
 		seekerMat.SetFloat("_CutoffHeight", 50.0f);
 	}
@@ -416,7 +409,7 @@ public class PlayerMovement : MonoBehaviour {
 	[PunRPC]
 	void RPC_jumpBackwards() {
 		timeTravel.TimeJump(-timeJumpAmount);
-		StartJumpingBackward();
+		particles.StartJumpingBackward();
 		ab2Cooldown = 15;
 		game.otherPlayersElapsedTime[view.ViewID] -= timeJumpAmount / timeTravel.MaxTick();
 	}
@@ -428,7 +421,7 @@ public class PlayerMovement : MonoBehaviour {
 	[PunRPC]
 	void RPC_jumpForward() {
 		timeTravel.TimeJump(timeJumpAmount);
-		StartJumpingForward();
+		particles.StartJumpingForward();
 		ab1Cooldown = 15;
 		game.otherPlayersElapsedTime[view.ViewID] += timeJumpAmount / timeTravel.MaxTick();
 	}
@@ -478,61 +471,5 @@ public class PlayerMovement : MonoBehaviour {
 		/*if(PhotonNetwork.IsMasterClient){
 			PhotonNetwork.LoadLevel("PreGameScene");
 		}*/
-	}
-
-	public void StartJumpingForward() {
-		playerAnim.SetBool("isJumpingForward", true);
-	}
-
-	public void StopJumpingForward() {
-		playerAnim.SetBool("isJumpingForward", false);
-	}
-
-	public void StartJumpingBackward() {
-		playerAnim.SetBool("isJumpingBackward", true);
-	}
-
-	public void StopJumpingBackward() {
-		playerAnim.SetBool("isJumpingBackward", false);
-	}
-
-	/*******************
-	* Travel Animation *
-	********************/
-
-	void BlueBeam()
-    {
-        var fcm = fireCircle.main;
-        fcm.startColor = BLUE;
-
-        var fct = fireCircle.trails;
-        fct.colorOverTrail = BLUE;
-
-        var sm = splash.main;
-        sm.startColor = WHITE;
-
-        var st = splash.trails;
-        st.colorOverTrail = BLUE;
-
-        fireCircle.Play();
-        splash.Play();
-    }
-
-    void OrangeBeam()
-    {
-        var fcm = fireCircle.main;
-        fcm.startColor = ORANGE;
-
-        var fct = fireCircle.trails;
-        fct.colorOverTrail = ORANGE;
-
-        var sm = splash.main;
-        sm.startColor = WHITE;
-
-        var st = splash.trails;
-        st.colorOverTrail = ORANGE;
-
-        fireCircle.Play();
-        splash.Play();
 	}
 }

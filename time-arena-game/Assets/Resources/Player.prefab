@@ -8281,7 +8281,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6458975045518551234}
   - component: {fileID: 6458975045518551229}
-  - component: {fileID: 6458975045518551228}
   - component: {fileID: 5690578699466181193}
   - component: {fileID: 2136822693732079899}
   - component: {fileID: -6067572978315274679}
@@ -8290,8 +8289,11 @@ GameObject:
   - component: {fileID: -8072145346359041933}
   - component: {fileID: 7955099349307058717}
   - component: {fileID: 9070032884028841073}
+  - component: {fileID: 6458975045518551228}
   - component: {fileID: 3078873912917717710}
   - component: {fileID: 2206506049548669404}
+  - component: {fileID: 3138509024607561696}
+  - component: {fileID: 228805100952192999}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -8338,71 +8340,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6458975045518551228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6458975045518551231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 256a66293b5a844abbbf145fa8e9274d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterBody: {fileID: 6458975045518551229}
-  cam: {fileID: 6458975046434770673}
-  groundCheck: {fileID: 6458975045590433014}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  mouseSensitivity: 100
-  playerBody: {fileID: 6458975046544177892}
-  playerArm: {fileID: 3493748242805195335}
-  handThumb: {fileID: 7821992714558930419}
-  handThumbTip: {fileID: 3951103480495365361}
-  handIndex: {fileID: 1797320078370533272}
-  handIndexTip: {fileID: 5766457012169621098}
-  handMiddle: {fileID: 2799039165242071877}
-  handMiddleTip: {fileID: 512938505191447430}
-  team: 1
-  seekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
-  hiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
-  UI: {fileID: 1130251741066097712}
-  pauseUI: {fileID: 5276288210589276353}
-  debugMenu_speed: {fileID: 4281627418019176230}
-  debugMenu_room: {fileID: 5450051373689545269}
-  debugMenu_sprint: {fileID: 5038207825606196769}
-  debugMenu_grab: {fileID: 4645063649322440456}
-  debugMenu_ground: {fileID: 7243462422459889249}
-  masterClientOpts: {fileID: 659775664179981306}
-  ab1Cooldown_displ: {fileID: 6992802418734578492}
-  ab2Cooldown_displ: {fileID: 4463212571510875713}
-  ab3Cooldown_displ: {fileID: 1867833674179487578}
-  teamDispl: {fileID: 8151362755639177340}
-  timeDispl: {fileID: 5106751792342918263}
-  startTimeDispl: {fileID: 1753261365491032404}
-  winningDispl: {fileID: 40610782557170930}
-  elapsedTimeSlider: {fileID: 6535443690733998534}
-  playerIcon: {fileID: 8199051833866257435}
-  otherPlayerIcon1: {fileID: 2542373288866361406}
-  otherPlayerIcon2: {fileID: 3197158859134598745}
-  otherPlayerIcon3: {fileID: 5000310441839666072}
-  otherPlayerIcon4: {fileID: 754585825459951039}
-  Forward: {fileID: 0}
-  ForwardPressed: {fileID: 0}
-  ForwardUnable: {fileID: 0}
-  playerAnim: {fileID: 9070032884028841073}
-  grabCheck: {fileID: 5427792942196514227}
-  grabMask:
-    serializedVersion: 2
-    m_Bits: 128
-  view: {fileID: 0}
-  timeTravel: {fileID: 3078873912917717710}
-  game: {fileID: 0}
-  fireCircle: {fileID: 7652556736494237299}
-  splash: {fileID: 7341217877377959895}
-  material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
 --- !u!114 &5690578699466181193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8682,6 +8619,69 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6458975045518551228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256a66293b5a844abbbf145fa8e9274d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterBody: {fileID: 6458975045518551229}
+  cam: {fileID: 6458975046434770673}
+  groundCheck: {fileID: 6458975045590433014}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  mouseSensitivity: 100
+  playerBody: {fileID: 6458975046544177892}
+  playerArm: {fileID: 3493748242805195335}
+  handThumb: {fileID: 7821992714558930419}
+  handThumbTip: {fileID: 3951103480495365361}
+  handIndex: {fileID: 1797320078370533272}
+  handIndexTip: {fileID: 5766457012169621098}
+  handMiddle: {fileID: 2799039165242071877}
+  handMiddleTip: {fileID: 512938505191447430}
+  team: 1
+  seekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
+  hiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
+  UI: {fileID: 1130251741066097712}
+  pauseUI: {fileID: 5276288210589276353}
+  debugMenu_speed: {fileID: 4281627418019176230}
+  debugMenu_room: {fileID: 5450051373689545269}
+  debugMenu_sprint: {fileID: 5038207825606196769}
+  debugMenu_grab: {fileID: 4645063649322440456}
+  debugMenu_ground: {fileID: 7243462422459889249}
+  masterClientOpts: {fileID: 659775664179981306}
+  ab1Cooldown_displ: {fileID: 6992802418734578492}
+  ab2Cooldown_displ: {fileID: 4463212571510875713}
+  ab3Cooldown_displ: {fileID: 1867833674179487578}
+  teamDispl: {fileID: 8151362755639177340}
+  timeDispl: {fileID: 5106751792342918263}
+  startTimeDispl: {fileID: 1753261365491032404}
+  winningDispl: {fileID: 40610782557170930}
+  elapsedTimeSlider: {fileID: 6535443690733998534}
+  playerIcon: {fileID: 8199051833866257435}
+  otherPlayerIcon1: {fileID: 2542373288866361406}
+  otherPlayerIcon2: {fileID: 3197158859134598745}
+  otherPlayerIcon3: {fileID: 5000310441839666072}
+  otherPlayerIcon4: {fileID: 754585825459951039}
+  Forward: {fileID: 0}
+  ForwardPressed: {fileID: 0}
+  ForwardUnable: {fileID: 0}
+  playerAnim: {fileID: 9070032884028841073}
+  grabCheck: {fileID: 5427792942196514227}
+  grabMask:
+    serializedVersion: 2
+    m_Bits: 128
+  view: {fileID: 0}
+  timeTravel: {fileID: 3078873912917717710}
+  game: {fileID: 0}
+  particles: {fileID: 228805100952192999}
 --- !u!114 &3078873912917717710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8707,6 +8707,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 549207610321092005}
+--- !u!114 &3138509024607561696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581f43c940081476a84ec1f8091b146b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &228805100952192999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireCircle: {fileID: 7652556736494237299}
+  splash: {fileID: 7341217877377959895}
+  material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
+  playerAnim: {fileID: 9070032884028841073}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
