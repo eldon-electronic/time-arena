@@ -46,6 +46,17 @@ public class PlayerHud : MonoBehaviour
         {
             Destroy(UI);
         }
+
+        // Link scenechange event to onscenechange
+        SceneManager.activeSceneChanged += OnSceneChange;
+    }
+
+    void OnSceneChange(Scene current, Scene next)
+    {
+        if (next.name == "GameScene")
+        {
+            game = FindObjectOfType<GameController>();
+        }
     }
 
 
