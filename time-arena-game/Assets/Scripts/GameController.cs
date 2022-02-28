@@ -42,10 +42,10 @@ public class GameController : MonoBehaviour
 
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		players.Add(player); //player.timeTravel.GetTimePosition()
-		otherPlayersElapsedTime.Add(player.view.ViewID, 0); // adds yourself before adding remaining players
+		otherPlayersElapsedTime.Add(player.view.ViewID, 0f); // adds yourself before adding remaining players
 		for(int i = 0; i < objs.Length; i++){
 			players.Add(objs[i].GetComponent<PlayerMovement>());
-			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0);
+			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0f);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
 	void setupNewGame(PlayerMovement client){
 		// set players position to spawn point
 		if (players.Count > 1) { // if testing with one player, they are hider, otherwise one player will randomly be seeker
-			players[Random.Range(0, players.Count-1)].changeTeam();
+			players[Random.Range(0, players.Count-1)].getFound();
 		}
 		int n = 0;
 		for (int i = 0; i < players.Count; i++) {
@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour
 				otherPlayersElapsedTime[key] += Time.deltaTime / gameLength;
 			}
 		}
+
 		if (!gameStarted) { // if pregame timer is counting
 			if (timeElapsedInGame >= 5f) {
 				gameStarted = true;
@@ -91,6 +92,7 @@ public class GameController : MonoBehaviour
 				player.onGameEnded();
 			}
 		}
+		
 		checkGameOver();
 	}
 

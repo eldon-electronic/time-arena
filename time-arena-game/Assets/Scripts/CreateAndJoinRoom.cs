@@ -12,6 +12,7 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 	public InputField nameInput;
 	public InputField roomInput;
 
+
 	private Color transRed = new Color(1.0f, 0.0f, 0.0f, 0.5f);
 
 	//user presses join or create room button

@@ -45,7 +45,7 @@ public class TimeLord : MonoBehaviour
         {
             //if(t == ticks.getHead())
             //{
-                Debug.Log("Tick Written: " + t.ToString());
+               // Debug.Log("Tick Written: " + t.ToString());
                 TimeTick newTick = new TimeTick();
                 newTick.p = timeObject.transform.position;
                 newTick.r = timeObject.transform.rotation;
@@ -160,7 +160,7 @@ public class TimeLord : MonoBehaviour
                 {
                     ticks = ticks.Take(ticks.Length - 1).ToArray();
                 }
-                Debug.Log("Tick Count: " + ticks.Length.ToString());
+                // Debug.Log("Tick Count: " + ticks.Length.ToString());
                 while(obv.Item2.Count < ticks.Length)
                 {
                     obv.Item2.Add(CreateProxy(obv.Item1));

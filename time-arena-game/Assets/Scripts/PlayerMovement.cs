@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 
+/*
+* TODO: 
+* 1. (in edit mode test) add tests for testing time travel past the total elapsed time/beginning
+* 2. fix assignment of player icons on time bar
+*/
+
 public class PlayerMovement : MonoBehaviour {
 
 	// variables defining player values
@@ -34,6 +40,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float ab1Cooldown = 0f;
 	private float ab2Cooldown = 0f;
 	private float ab3Cooldown = 0f;
+	private int timeJumpAmount = 100;
 
 	// references to materials for user team id
 	public Material seekerMat;
@@ -64,7 +71,9 @@ public class PlayerMovement : MonoBehaviour {
     public Slider otherPlayerIcon3;
     public Slider otherPlayerIcon4;
 	private Slider[] playerIcons = new Slider[5];
-
+	public Image Forward;
+	public Image ForwardPressed;
+	public Image ForwardUnable;
 
     // variables corresponding to player Animations
 	public Animator playerAnim;
@@ -205,9 +214,9 @@ public class PlayerMovement : MonoBehaviour {
 					int n = 0;
 					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
 					foreach(int key in keys){
-						playerIcons[n++].value = game.otherPlayersElapsedTime[key];
+						playerIcons[n].value = game.otherPlayersElapsedTime[key];
+						n++;
 					}
-
 				} else if(game.gameEnded) {
 					winningDispl.transform.parent.gameObject.SetActive(true);
 					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
@@ -221,12 +230,17 @@ public class PlayerMovement : MonoBehaviour {
 					int n = 0;
 					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
 					foreach(int key in keys){
-						playerIcons[n++].value = 0;
+						playerIcons[n].value = 0;
+						n++;
 					}
 				}
 			}
 		}
 	}
+
+	/*******************
+	* Movement Control *
+	********************/
 
     // handle movement axis inputs (wasd, arrowkeys, joystick)
 	void movementControl() {
@@ -291,24 +305,32 @@ public class PlayerMovement : MonoBehaviour {
 		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
 	}
 
-	// handle all other button presses for abilities and UI
+	/*****************
+	* Button Presses *
+	******************/
+
 	void keyControl(){
 		// only allow movement after game has started
-		if(SceneManager.GetActiveScene().name == "PreGameScene" || (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)){
+		if(SceneManager.GetActiveScene().name == "PreGameScene" || 
+		  (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)) {
 			// set cooldown values
-			ab1Cooldown=(ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
-			ab2Cooldown=(ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
-			ab3Cooldown=(ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
+			ab1Cooldown = (ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+			ab2Cooldown = (ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+			ab3Cooldown = (ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
 
 			// handle ability buttonpresses
-			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0){
-				if(SceneManager.GetActiveScene().name == "GameScene"){
-					jumpForward();
+			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0) {
+				// only allow time travel forwards if it doesn't go past the end.
+				if(SceneManager.GetActiveScene().name == "GameScene" && 
+				   timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick()) {
+					jumpForward(); 
 				}
 			}
 
 			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
-				if(SceneManager.GetActiveScene().name == "GameScene") {
+				// only allow time travel backwards if it doesn't go past the beginning.
+				if(SceneManager.GetActiveScene().name == "GameScene" && 
+				   timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0) { 
 					jumpBackwards();
 				}
 			}
@@ -387,12 +409,16 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+	/************
+	* RPC Calls *
+	*************/
+
 	[PunRPC]
 	void RPC_jumpBackwards() {
-		timeTravel.TimeJump(-100);
+		timeTravel.TimeJump(-timeJumpAmount);
 		StartJumpingBackward();
 		ab2Cooldown = 15;
-		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID] -= timeJumpAmount / timeTravel.MaxTick();
 	}
 
 	public void jumpBackwards() {
@@ -401,10 +427,10 @@ public class PlayerMovement : MonoBehaviour {
 
 	[PunRPC]
 	void RPC_jumpForward() {
-		timeTravel.TimeJump(100);
+		timeTravel.TimeJump(timeJumpAmount);
 		StartJumpingForward();
 		ab1Cooldown = 15;
-		game.otherPlayersElapsedTime[view.ViewID] = timeTravel.GetTimePosition();
+		game.otherPlayersElapsedTime[view.ViewID] += timeJumpAmount / timeTravel.MaxTick();
 	}
 
 	public void jumpForward() {
@@ -469,6 +495,10 @@ public class PlayerMovement : MonoBehaviour {
 	public void StopJumpingBackward() {
 		playerAnim.SetBool("isJumpingBackward", false);
 	}
+
+	/*******************
+	* Travel Animation *
+	********************/
 
 	void BlueBeam()
     {
