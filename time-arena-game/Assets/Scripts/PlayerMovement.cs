@@ -324,7 +324,7 @@ public class PlayerMovement : MonoBehaviour {
 				if(SceneManager.GetActiveScene().name == "GameScene" && 
 				   timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick()) {
 					jumpForward(); 
-				} 
+				}
 			}
 
 			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
