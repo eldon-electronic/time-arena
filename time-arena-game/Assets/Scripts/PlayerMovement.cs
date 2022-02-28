@@ -46,34 +46,8 @@ public class PlayerMovement : MonoBehaviour {
 	public Material seekerMat;
 	public Material hiderMat;
 
-    // variables corresponding to the player's UI/HUD
-    public Canvas UI;
+	// variables corresponding to UI
 	public PauseManager pauseUI;
-	public Text debugMenu_speed;
-	public Text debugMenu_room;
-	public Text debugMenu_sprint;
-	public Text debugMenu_grab;
-	public Text debugMenu_ground;
-	public Text masterClientOpts;
-	public Text ab1Cooldown_displ;
-	public Text ab2Cooldown_displ;
-	public Text ab3Cooldown_displ;
-	public Text teamDispl;
-	public Text timeDispl;
-	public Text startTimeDispl;
-	public Text winningDispl;
-	private float secondsTillGame;
-	private bool isCountingTillGameStart;
-    public Slider elapsedTimeSlider;
-    public Slider playerIcon;
-	public Slider otherPlayerIcon1;
-    public Slider otherPlayerIcon2;
-    public Slider otherPlayerIcon3;
-    public Slider otherPlayerIcon4;
-	private Slider[] playerIcons = new Slider[5];
-	public Image Forward;
-	public Image ForwardPressed;
-	public Image ForwardUnable;
 
     // variables corresponding to player Animations
 	public Animator playerAnim;
@@ -93,13 +67,10 @@ public class PlayerMovement : MonoBehaviour {
 	
 	public ParticleController particles;
 
+	public PlayerHud hud;
+
 	// Start is called before the first frame update
 	void Start() {
-		playerIcons[0] = playerIcon;
-		playerIcons[1] = otherPlayerIcon1;
-		playerIcons[2] = otherPlayerIcon2;
-		playerIcons[3] = otherPlayerIcon3;
-		playerIcons[4] = otherPlayerIcon4;
 		DontDestroyOnLoad(this.gameObject);
 		// set the player's colour depending on their team
 		changeTeam();
@@ -109,7 +80,6 @@ public class PlayerMovement : MonoBehaviour {
 			//destroy other player cameras and ui in local environment
 			Destroy(cam);
 			Destroy(cam.gameObject.GetComponent<AudioListener>());
-			Destroy(UI);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 			
@@ -151,85 +121,32 @@ public class PlayerMovement : MonoBehaviour {
 				cameraControl();
 				keyControl();
 			}
-		}
-	}
 
-	// LateUpdate is called once per frame after all rendering (for UI mainly)
-	void LateUpdate() {
-		if(view.IsMine) {
-
-            /********************
-			* Update player HUD *
-			*********************/
-
-            // if master client, show 'press e o start' text or 'starting in' text
-            masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
-            teamDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-            timeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-            startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-            elapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-            playerIcon.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-			otherPlayerIcon1.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 2);
-			otherPlayerIcon2.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 3);
-			otherPlayerIcon3.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 4);
-			otherPlayerIcon4.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= 5);
-
-			if(isCountingTillGameStart) {
-				masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
-				if(System.Math.Round (secondsTillGame, 0) <= 0.0f) {
-					// PhotonNetwork.Room.open = false;
-					masterClientOpts.text = "Loading...";
-				}
-			}
-
+			// Set the debug items and send to HUD to be displayed
+			Hashtable debugItems = new Hashtable();
 			Vector3 movementVector = transform.position - lastPos;
 			float distTravelled = movementVector.magnitude / Time.deltaTime;
-			debugMenu_speed.text = "Speed: " + distTravelled;
-			debugMenu_room.text = "Room: " + PhotonNetwork.CurrentRoom.Name;
-			debugMenu_sprint.text = "Sprint: " + Input.GetKey("left shift");
-			debugMenu_grab.text = "Grab: " + damageWindow;
-			debugMenu_ground.text = "Ground: " + isGrounded;
+			debugItems.Add("Speed", distTravelled);
+			debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
+			debugItems.Add("Sprint", Input.GetKey("left shift"));
+			debugItems.Add("Grab", damageWindow);
+			debugItems.Add("Ground", isGrounded);
+			hud.SetDebugValues(debugItems);
 
 			// update player ability displays
-			ab1Cooldown_displ.text = "" + (int)ab1Cooldown;
-			ab2Cooldown_displ.text = "" + (int)ab2Cooldown;
-			ab3Cooldown_displ.text = "" + (int)ab3Cooldown;
+			float[] abilityValues = new float[]{ab1Cooldown, ab2Cooldown, ab3Cooldown};
+			hud.SetAbilityValues(abilityValues);
 
-			// update winningTeam Text
-
-			// update gametimer
-			if (SceneManager.GetActiveScene().name == "GameScene") {
-				float t = game.gameLength - game.timeElapsedInGame;
-				startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
-				if (game.gameStarted && !game.gameEnded) {
-					timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
-					elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength; // update time bar
-					int n = 0;
-					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
-					foreach(int key in keys){
-						playerIcons[n].value = game.otherPlayersElapsedTime[key];
-						n++;
-					}
-				} else if(game.gameEnded) {
-					winningDispl.transform.parent.gameObject.SetActive(true);
-					winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
-					pauseUI.isPaused = true;
-					pauseUI.pauseMenuUI.SetActive(true);
-					Cursor.lockState = CursorLockMode.None;
-				} else {
-					startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
-					timeDispl.text = "0:00:00";
-                    playerIcon.value = 0;
-					int n = 0;
-					List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
-					foreach(int key in keys){
-						playerIcons[n].value = 0;
-						n++;
-					}
-				}
+			// update pauseUI and cursor lock if game is ended
+			if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
+			{
+				pauseUI.isPaused = true;
+				pauseUI.pauseMenuUI.SetActive(true);
+				Cursor.lockState = CursorLockMode.None;
 			}
 		}
 	}
+
 
 	/*******************
 	* Movement Control *
@@ -346,27 +263,18 @@ public class PlayerMovement : MonoBehaviour {
 					playerAnim.SetBool("isGrabbing", true);
 				}
 			}
-			// start game onpress 'e'
+
+			// Start game onpress 'e'
 			if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient &&
-			Input.GetKeyDown(KeyCode.E) && !isCountingTillGameStart) {
-				isCountingTillGameStart = true;
-				secondsTillGame = 5.0f;
+				Input.GetKeyDown(KeyCode.E)) {
+				hud.StartCountingDown();
 			}
-			// if counting for game launch and user presses esc - stop
+
+			// If counting for game launch and user presses esc - stop
 			if (Input.GetKeyDown(KeyCode.Escape)) {
-				isCountingTillGameStart = false;
-				secondsTillGame = 0;
-			}
-			// if counting, reduce timer
-			if (PhotonNetwork.IsMasterClient && isCountingTillGameStart) {
-				secondsTillGame -= Time.deltaTime;
-				if (secondsTillGame <= 0) {
-					PhotonNetwork.LoadLevel("GameScene");
-					isCountingTillGameStart = false;
-				}
+				hud.StopCountingDown();
 			}
 		}
-
 	}
 
 	// change player teams
@@ -384,8 +292,7 @@ public class PlayerMovement : MonoBehaviour {
 			handThumb.GetComponent<Renderer>().material = seekerMat;
 			handThumbTip.GetComponent<Renderer>().material = seekerMat;
 
-			
-			teamDispl.text = "SEEKER";
+			hud.SetTeam("SEEKER");
 		} else {
 			team = 0;
 			playerBody.GetComponent<Renderer>().material = hiderMat;
@@ -398,7 +305,7 @@ public class PlayerMovement : MonoBehaviour {
 			handThumb.GetComponent<Renderer>().material = hiderMat;
 			handThumbTip.GetComponent<Renderer>().material = hiderMat;
 
-			teamDispl.text = "HIDER";
+			hud.SetTeam("HIDER");
 		}
 	}
 
