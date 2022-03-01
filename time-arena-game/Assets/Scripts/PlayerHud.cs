@@ -9,7 +9,6 @@ public class PlayerHud : MonoBehaviour
 {
     public GameController game;
 	public PhotonView view;
-    public Canvas UI;
     public Text teamDispl;
 	public Text debugPanelText;
 	public Text masterClientOpts;
@@ -42,10 +41,6 @@ public class PlayerHud : MonoBehaviour
         playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
 
         view = GetComponent<PhotonView>();
-        if (!view.IsMine)
-        {
-            Destroy(UI);
-        }
 
         // Link scenechange event to onscenechange
         SceneManager.activeSceneChanged += OnSceneChange;

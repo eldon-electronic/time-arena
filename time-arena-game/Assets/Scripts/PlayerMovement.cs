@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	// variables defining player values
 	public CharacterController characterBody;
 	public Camera cam;
+	public Canvas UI;
 	public Transform groundCheck;
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
@@ -80,6 +81,7 @@ public class PlayerMovement : MonoBehaviour {
 			//destroy other player cameras and ui in local environment
 			Destroy(cam);
 			Destroy(cam.gameObject.GetComponent<AudioListener>());
+			Destroy(UI);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 			
