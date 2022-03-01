@@ -37,13 +37,17 @@ public class PlayerHud : MonoBehaviour
 
     void Start()
     {
-        // The first Slider in the array corresponds to this player
-        playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
-
         view = GetComponent<PhotonView>();
+        if(!view.IsMine)
+        {
+            Destroy(elapsedTimeSlider.transform.parent.gameObject);
+        } else {
+            // The first Slider in the array corresponds to this player
+            playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
 
-        // Link scenechange event to onscenechange
-        SceneManager.activeSceneChanged += OnSceneChange;
+            // Link scenechange event to onscenechange
+            SceneManager.activeSceneChanged += OnSceneChange;
+        }
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -175,7 +179,7 @@ public class PlayerHud : MonoBehaviour
     void Update()
     {
         // if counting, reduce timer
-        if (PhotonNetwork.IsMasterClient && isCountingTillGameStart) {
+        if (PhotonNetwork.IsMasterClient && isCountingTillGameStart && view.IsMine) {
             secondsTillGame -= Time.deltaTime;
             if (secondsTillGame <= 0) {
                 PhotonNetwork.LoadLevel("GameScene");
@@ -211,7 +215,7 @@ public class PlayerHud : MonoBehaviour
     public void StartCountingDown()
     {
         if (isCountingTillGameStart) return;
-        
+
         isCountingTillGameStart = true;
         secondsTillGame = 5.0f;
     }
