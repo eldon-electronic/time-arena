@@ -79,8 +79,8 @@ public class PlayerMovement : MonoBehaviour {
 		view = GetComponent<PhotonView>();
 		if (!view.IsMine) {
 			//destroy other player cameras and ui in local environment
-			Destroy(cam);
 			Destroy(cam.gameObject.GetComponent<AudioListener>());
+			Destroy(cam);
 			Destroy(UI);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
