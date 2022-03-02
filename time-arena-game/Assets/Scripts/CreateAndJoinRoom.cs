@@ -27,14 +27,13 @@ public class CreateAndJoinRoom : MonoBehaviourPunCallbacks{
 	}
 
 	//when user connects to room - load scene as level
-	public override void OnJoinedRoom(){
+	public override void OnJoinedRoom() {
 		PhotonNetwork.LoadLevel("PreGameScene");
 	}
 
 	//onpress of back button - return to home screen and disconnect
-	public void Back(){
+	public void Back() {
 		SceneManager.LoadScene("MenuScene");
 		PhotonNetwork.Disconnect();
 	}
-
 }

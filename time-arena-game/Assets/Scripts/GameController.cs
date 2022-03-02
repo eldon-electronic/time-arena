@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
 {
 
     // variables referring to the game state
-    public float gameLength = 5f * 60f; //5 minute rounds * sixty seconds
+    public float gameLength = 5f * 60f; // 5 minute rounds * sixty seconds
     public float timeElapsedInGame = 0f;
 
 	public PlayerMovement player;
@@ -42,7 +42,6 @@ public class GameController : MonoBehaviour
 
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		players.Add(player); //player.timeTravel.GetTimePosition()
-		otherPlayersElapsedTime.Add(player.view.ViewID, 0f); // adds yourself before adding remaining players
 		for(int i = 0; i < objs.Length; i++){
 			players.Add(objs[i].GetComponent<PlayerMovement>());
 			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0f);
