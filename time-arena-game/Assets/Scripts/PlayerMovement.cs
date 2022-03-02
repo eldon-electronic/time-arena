@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 	public GameObject handMiddle;
 	public GameObject handMiddleTip;
 
-	public int team = 1;//0 seeker 1 hider //iniitialised to 0 but changeTeam is called on start to sync values
+	public int team = 1; //0 seeker 1 hider // initialised to 0 but changeTeam is called on start to sync values
 	private float speed = 5f;
 	private float gravity = 40f;
 	private float jumpPower = 3f;
@@ -78,20 +78,15 @@ public class PlayerMovement : MonoBehaviour {
 		// define the photonView component
 		view = GetComponent<PhotonView>();
 		if (!view.IsMine) {
-			//destroy other player cameras and ui in local environment
-			Debug.Log("A");
-			Destroy(cam);
-			Debug.Log("B");
+			// destroy other player cameras and ui in local environment
+			Destroy(cam.gameObject);
 			Destroy(cam.gameObject.GetComponent<AudioListener>());
-			Debug.Log("C");
 			Destroy(UI);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-			
 		} else {
 			gameObject.tag = "Client";
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-		
 		}
         PhotonNetwork.AutomaticallySyncScene = true;      // allow master client to move players from one scene to another
         Cursor.lockState = CursorLockMode.Locked;         // lock players cursor to center screen
@@ -106,7 +101,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (next.name == "GameScene") {
 			game = FindObjectOfType<GameController>();
 			timeTravel.connectToTimeLord();
-			if(game == null) {
+			if (game == null) {
 				Debug.Log("FUCK");
 			}
 			ab1Cooldown = 15;
@@ -169,8 +164,6 @@ public class PlayerMovement : MonoBehaviour {
 			} else {
 				speed = 5f;
 			}
-
-			// Hello Zac
 
             // get movement axis values
 			float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");

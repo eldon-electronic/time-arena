@@ -38,7 +38,7 @@ public class PlayerHud : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
-        if(!view.IsMine)
+        if (!view.IsMine)
         {
             Destroy(elapsedTimeSlider.transform.parent.gameObject);
         } else {
