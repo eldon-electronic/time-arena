@@ -64,7 +64,9 @@ public class PlayerHud : MonoBehaviour
     private void LateUpdateMasterClientOptions()
     {
         // If master client, show 'press e to start' text or 'starting in' text
-        masterClientOpts.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient);
+        masterClientOpts.transform.parent.gameObject.SetActive(
+            SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient
+        );
 
         if (isCountingTillGameStart)
         {
@@ -79,7 +81,10 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateStartTimeDisplay()
     {
-        startTimeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+        startTimeDispl.transform.parent.gameObject.SetActive(
+            SceneManager.GetActiveScene().name != "PreGameScene"
+        );
+
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
@@ -93,16 +98,18 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeDisplay()
     {
-        timeDispl.transform.parent.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+        timeDispl.transform.parent.gameObject.SetActive(
+            SceneManager.GetActiveScene().name != "PreGameScene"
+        );
+
         if (SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)
         {
             if (game.gameStarted)
             {
                 float t = game.gameLength - game.timeElapsedInGame;
-                timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
-            }
-            else
-            {
+                timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" 
+                + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
+            } else {
                 timeDispl.text = "0:00:00";
             }
         }
@@ -116,7 +123,10 @@ public class PlayerHud : MonoBehaviour
         playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         for (int i=1; i < 5; i++)
         {
-            playerIcons[i].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene" && game.otherPlayersElapsedTime.Count >= i + 1);
+            playerIcons[i].gameObject.SetActive(
+                SceneManager.GetActiveScene().name != "PreGameScene" && 
+                game.otherPlayersElapsedTime.Count >= i + 1
+            );
         }
 
         // Set player icon positions
@@ -132,9 +142,7 @@ public class PlayerHud : MonoBehaviour
                     playerIcons[n].value = game.otherPlayersElapsedTime[key];
                     n++;
                 }
-            }
-            else if (!game.gameStarted && !game.gameEnded)
-            {
+            } else if (!game.gameStarted && !game.gameEnded) {
                 playerIcons[0].value = 0;
                 int n = 0;
                 List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);

@@ -119,7 +119,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 		Debug.Log(view.ViewID);
 		// local keys only affect client's player
-		if(view.IsMine) {
+		if (view.IsMine) {
 			if(SceneManager.GetActiveScene().name == "PreGameScene" ||
 			(SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)) {
 				movementControl();
@@ -164,11 +164,13 @@ public class PlayerMovement : MonoBehaviour {
         // only allow movement after game has started
 		if(SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted) {
             // sprint speed
-			if(Input.GetKey("left shift")){
+			if(Input.GetKey("left shift")) {
 				speed = 10f;
 			} else {
 				speed = 5f;
 			}
+
+			// Hello Zac
 
             // get movement axis values
 			float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
@@ -182,7 +184,9 @@ public class PlayerMovement : MonoBehaviour {
 			if(movement.magnitude != 1 && movement.magnitude != 0){
 				movement /= movement.magnitude;
 			}
-            characterBody.Move(movement * speed * Time.deltaTime); // transform according to movement vector
+            
+			// transform according to movement vector
+			characterBody.Move(movement * speed * Time.deltaTime);
 		}
 
 		// jump control
