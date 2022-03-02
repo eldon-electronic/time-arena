@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
 {
 
     // variables referring to the game state
-    public float gameLength = 5f * 60f; //5 minute rounds * sixty seconds
+    public float gameLength = 5f * 60f; // 5 minute rounds * sixty seconds
     public float timeElapsedInGame = 0f;
 
 	public PlayerMovement player;

@@ -65,18 +65,14 @@ public class PlayerMovement : MonoBehaviour {
 
     // variables corresponding to the gamestate
     public GameController game;
-	
 	public ParticleController particles;
-
 	public PlayerHud hud;
 
 	// Start is called before the first frame update
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
-		// set the player's colour depending on their team
-		changeTeam();
-		// define the photonView component
-		view = GetComponent<PhotonView>();
+		changeTeam(); // set the player's colour depending on their team
+		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
 			Destroy(cam.gameObject);
@@ -115,7 +111,7 @@ public class PlayerMovement : MonoBehaviour {
 		Debug.Log(view.ViewID);
 		// local keys only affect client's player
 		if (view.IsMine) {
-			if(SceneManager.GetActiveScene().name == "PreGameScene" ||
+			if (SceneManager.GetActiveScene().name == "PreGameScene" ||
 			(SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)) {
 				movementControl();
 				cameraControl();
@@ -157,9 +153,9 @@ public class PlayerMovement : MonoBehaviour {
         lastPos = transform.position; // update lastPos from prev frame
 
         // only allow movement after game has started
-		if(SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted) {
+		if (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted) {
             // sprint speed
-			if(Input.GetKey("left shift")) {
+			if (Input.GetKey("left shift")) {
 				speed = 10f;
 			} else {
 				speed = 5f;
@@ -174,7 +170,7 @@ public class PlayerMovement : MonoBehaviour {
 
             // set and normalise movement vector
 			Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
-			if(movement.magnitude != 1 && movement.magnitude != 0){
+			if (movement.magnitude != 1 && movement.magnitude != 0) {
 				movement /= movement.magnitude;
 			}
             
@@ -189,12 +185,12 @@ public class PlayerMovement : MonoBehaviour {
 
 		// gravity effect
 		velocity.y -= gravity * Time.deltaTime;
-		if(velocity.y <= -100f){
+		if (velocity.y <= -100f) {
 			velocity.y = -100f;
 		}
 
 		// reset vertical velocity value when grounded
-		if(isGrounded && velocity.y < 0){
+		if (isGrounded && velocity.y < 0) {
 			velocity.y = 0f;
 		}
 
