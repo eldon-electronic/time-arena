@@ -106,7 +106,6 @@ public class GameController : MonoBehaviour
 		for (int i = 0; i < players.Count; i++) {
 			isHidersRemaining |= (players[i].team == (int) Teams.Hider);
 		}
-		Debug.Log("Hiders left: " + isHidersRemaining);
 		if (!isHidersRemaining) { // Code reaches here even though hiders are remaining
 			gameEnded = true;
 			winningTeam = (int) Teams.Seeker;
