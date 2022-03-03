@@ -17,6 +17,7 @@ env:
 
 jobs:
   test:
+    if: github.event.action != 'published'
     name: Test project
     runs-on: ubuntu-latest
     steps:
