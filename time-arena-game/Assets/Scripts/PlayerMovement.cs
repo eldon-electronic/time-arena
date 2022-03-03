@@ -253,7 +253,8 @@ public class PlayerMovement : MonoBehaviour {
 					foreach (var playerGotGrab in playersGrab) {
 						// call grabplayer function on that player
 						PlayerMovement targetPlayer = playerGotGrab.GetComponent<PlayerMovement>();
-						if (team == 0 && targetPlayer.team == 1) {
+						if (team == (int) GameController.Teams.Seeker && 
+						    targetPlayer.team == (int) GameController.Teams.Hider) {
 							targetPlayer.getFound();
 						}
 					}
@@ -276,9 +277,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	// change player teams
 	public void changeTeam() {
-		// if team is odd, set to 0, else set to 1
-		if (team == 0) {
-			team = 1;
+		if (team == (int) GameController.Teams.Hider) {
+			team = (int) GameController.Teams.Seeker;
 			playerBody.GetComponent<Renderer>().material = seekerMat;
 			playerArm.GetComponent<Renderer>().material = seekerMat;
 			
@@ -291,7 +291,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			hud.SetTeam("SEEKER");
 		} else {
-			team = 0;
+			team = GameController.Teams.Hider;
 			playerBody.GetComponent<Renderer>().material = hiderMat;
 			playerArm.GetComponent<Renderer>().material = hiderMat;
 			
