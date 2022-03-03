@@ -42,7 +42,7 @@ public class GameController : MonoBehaviour
 
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		players.Add(player); //player.timeTravel.GetTimePosition()
-		for(int i = 0; i < objs.Length; i++) {
+		for (int i = 0; i < objs.Length; i++) {
 			players.Add(objs[i].GetComponent<PlayerMovement>());
 			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0f);
 		}
@@ -62,7 +62,7 @@ public class GameController : MonoBehaviour
 
 		/*int n = 0;
 		for (int i = 0; i < players.Count; i++) {
-			if (players[i].team == Teams.Hider) {
+			if (players[i].team == (int) Teams.Hider) {
 				players[i].movePlayer(hiderSpawnPoints[n++], new Vector3(0f, -90f, 0f));
 			} else {
 				players[i].movePlayer(seekerSpawnPoint, new Vector3(0f, 90f, 0f));
@@ -105,9 +105,7 @@ public class GameController : MonoBehaviour
 	public void checkHidersLeft(){
 		bool isHidersRemaining = true;
 		for (int i = 0; i < players.Count; i++) {
-			Debug.Log(players[i].team);
 			isHidersRemaining |= (players[i].team == (int) Teams.Hider);
-			Debug.Log(isHidersRemaining |= (players[i].team == (int) Teams.Hider));
 		}
 		
 		if (!isHidersRemaining) { // Code reaches here even though hiders are remaining
