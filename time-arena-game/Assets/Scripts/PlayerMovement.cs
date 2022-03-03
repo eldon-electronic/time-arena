@@ -291,7 +291,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			hud.SetTeam("SEEKER");
 		} else {
-			team = GameController.Teams.Hider;
+			team = (int) GameController.Teams.Hider;
 			playerBody.GetComponent<Renderer>().material = hiderMat;
 			playerArm.GetComponent<Renderer>().material = hiderMat;
 			
