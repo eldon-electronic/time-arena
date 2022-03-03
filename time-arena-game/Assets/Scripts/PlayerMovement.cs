@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour {
 			game = FindObjectOfType<GameController>();
 			timeTravel.connectToTimeLord();
 			if (game == null) {
-				Debug.Log("FUCK");
+				Debug.Log("PlayerMovement scene change error: GameController is null");
 			}
 			ab1Cooldown = 15;
 			ab2Cooldown = 15;

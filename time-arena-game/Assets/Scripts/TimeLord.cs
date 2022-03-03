@@ -192,7 +192,7 @@ public class TimeLord : MonoBehaviour
     {
         //Set framerate to desired tickrate
         Application.targetFrameRate = tps;
-        Debug.Log(FractureList<int>.Test());
+        // Debug.Log(FractureList<int>.Test());
     }
 
     // Update is called once per frame

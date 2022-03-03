@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
 			player = clients[0].GetComponent<PlayerMovement>();
 			player.game = this;
 		} else {
-			Debug.Log("wtf");
+			Debug.Log("GameController error: Number of clients is not 1");
 		}
 
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
