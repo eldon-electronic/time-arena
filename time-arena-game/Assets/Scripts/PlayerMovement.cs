@@ -76,6 +76,7 @@ public class PlayerMovement : MonoBehaviour {
 		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
+			Destroy(cam.gameObject.GetComponent<UniversalAdditionalCameraData>());
 			Destroy(cam.gameObject.GetComponent<AudioListener>());
 			Destroy(cam);
 			Destroy(UI.gameObject);
