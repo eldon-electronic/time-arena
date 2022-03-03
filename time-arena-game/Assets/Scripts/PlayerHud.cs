@@ -45,7 +45,7 @@ public class PlayerHud : MonoBehaviour
             // The first Slider in the array corresponds to this player
             playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
 
-            // Link scenechange event to onscenechange
+            // Link SceneChange event to OnSceneChange
             SceneManager.activeSceneChanged += OnSceneChange;
         }
     }
@@ -177,7 +177,7 @@ public class PlayerHud : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
         {
             winningDispl.transform.parent.gameObject.SetActive(true);
-            winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            winningDispl.text = (game.winningTeam == game.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 

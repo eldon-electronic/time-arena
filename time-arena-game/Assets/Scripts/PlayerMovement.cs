@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 	public GameObject handMiddle;
 	public GameObject handMiddleTip;
 
-	public int team = 1; //0 seeker 1 hider // initialised to 0 but changeTeam is called on start to sync values
+	public int team = 1; // 0 seeker 1 hider // initialised to 0 but changeTeam is called on start to sync values
 	private float speed = 5f;
 	private float gravity = 40f;
 	private float jumpPower = 3f;
@@ -108,7 +108,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		Debug.Log(view.ViewID);
 		// local keys only affect client's player
 		if (view.IsMine) {
 			if (SceneManager.GetActiveScene().name == "PreGameScene" ||

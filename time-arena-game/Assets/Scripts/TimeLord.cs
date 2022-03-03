@@ -58,7 +58,7 @@ public class TimeLord : MonoBehaviour
 
         public TimeTick[] Recall(int t)
         {
-            Debug.Log("Current written ticks: " + ticks.GetHead());
+            // Debug.Log("Current written ticks: " + ticks.GetHead());
             return ticks.Recall(t);
         }
 
@@ -94,7 +94,7 @@ public class TimeLord : MonoBehaviour
 
             public void Update(TimeTick t)
             {
-                Debug.Log(t.p.ToString());
+                // Debug.Log(t.p.ToString());
                 copy.transform.position = t.p;
                 copy.transform.rotation = t.r;
             }
@@ -139,9 +139,9 @@ public class TimeLord : MonoBehaviour
 
         public void Test()
         {
-            Debug.Log("Number of observed objects: " + observations.Count.ToString());
-            Debug.Log("Current time offset: " + timeOffset.ToString());
-            Debug.Log("Active proxy objects: " + observations[0].Item2.Count.ToString());
+            // Debug.Log("Number of observed objects: " + observations.Count.ToString());
+            // Debug.Log("Current time offset: " + timeOffset.ToString());
+            // Debug.Log("Active proxy objects: " + observations[0].Item2.Count.ToString());
         }
 
         private Proxy CreateProxy(TimeStream t)
@@ -154,7 +154,7 @@ public class TimeLord : MonoBehaviour
             Test();
             foreach((TimeStream, List<Proxy>) obv in observations)
             {
-                Debug.Log("Reality Tick: " + (time + timeOffset).ToString());
+                // Debug.Log("Reality Tick: " + (time + timeOffset).ToString());
                 TimeTick[] ticks = obv.Item1.Recall(time + timeOffset);
                 if (obv.Item1.checkObjectReference(owner.GetObject()))
                 {
