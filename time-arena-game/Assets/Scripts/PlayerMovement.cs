@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	// variables corresponding to UI
 	public PauseManager pauseUI;
+	public GameObject nametag;
 
     // variables corresponding to player Animations
 	public Animator playerAnim;
@@ -76,11 +77,12 @@ public class PlayerMovement : MonoBehaviour {
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
 			Destroy(cam.gameObject);
-			Destroy(cam.gameObject.GetComponent<AudioListener>());
-			Destroy(UI);
+			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		} else {
+			// destroy your own nametag
+			Destroy(nametag);
 			gameObject.tag = "Client";
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		}
