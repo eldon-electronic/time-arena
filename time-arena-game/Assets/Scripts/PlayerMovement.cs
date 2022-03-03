@@ -72,12 +72,12 @@ public class PlayerMovement : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
-		DontDestroyOnLoad(playerArm);
 		changeTeam(); // set the player's colour depending on their team
 		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
-			Destroy(cam.gameObject);
+			Destroy(cam.gameObject.GetComponent<AudioListener>());
+			Destroy(cam);
 			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
