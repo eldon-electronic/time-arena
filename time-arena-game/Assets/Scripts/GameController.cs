@@ -95,9 +95,10 @@ public class GameController : MonoBehaviour
 				gameEnded = true;
 				winningTeam = (int) Teams.Hider;
 				player.onGameEnded();
+			} else {
+				checkHidersLeft();
 			}
 		}
-		checkHidersLeft();
 	}
 
 	// checks to see if there are no hiders left
