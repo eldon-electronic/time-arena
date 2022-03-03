@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
+		DontDestroyOnLoad(playerArm);
 		changeTeam(); // set the player's colour depending on their team
 		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
