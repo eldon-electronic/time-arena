@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
 			Destroy(cam.gameObject);
-			Destroy(UI);
+			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		} else {

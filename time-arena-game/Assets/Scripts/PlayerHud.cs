@@ -38,10 +38,8 @@ public class PlayerHud : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
-        if (!view.IsMine)
+        if (view.IsMine)
         {
-            Destroy(elapsedTimeSlider.transform.parent.gameObject);
-        } else {
             // The first Slider in the array corresponds to this player
             playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
 
