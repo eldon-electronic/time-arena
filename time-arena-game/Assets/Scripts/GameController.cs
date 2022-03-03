@@ -19,8 +19,8 @@ public class GameController : MonoBehaviour
 	public bool gameStarted = false;
 	public bool gameEnded = false;
 
-	public int winningTeam = Teams.Hider;
-	enum Teams {
+	public int winningTeam = (int) Teams.Hider;
+	public enum Teams {
 		Seeker, Hider
 	}
 

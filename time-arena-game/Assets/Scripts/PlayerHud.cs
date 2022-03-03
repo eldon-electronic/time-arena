@@ -177,7 +177,7 @@ public class PlayerHud : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
         {
             winningDispl.transform.parent.gameObject.SetActive(true);
-            winningDispl.text = (game.winningTeam == game.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            winningDispl.text = (game.winningTeam == (int) GameController.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 
