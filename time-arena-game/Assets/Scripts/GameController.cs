@@ -91,23 +91,22 @@ public class GameController : MonoBehaviour
 				}
 			}
 		} else { // else game is in play
+			checkHidersLeft();
 			if (timeElapsedInGame >= gameLength && !gameEnded) {
 				gameEnded = true;
 				winningTeam = (int) Teams.Hider;
 				player.onGameEnded();
-			} else {
-				checkHidersLeft();
 			}
 		}
 	}
 
 	// checks to see if there are no hiders left
-	public void checkHidersLeft(){
-		bool isHidersRemaining = true;
+	public void checkHidersLeft() {
+		bool isHidersRemaining = false;
 		for (int i = 0; i < players.Count; i++) {
 			isHidersRemaining |= (players[i].team == (int) Teams.Hider);
 		}
-		
+		Debug.Log("Hiders left: " + isHidersRemaining);
 		if (!isHidersRemaining) { // Code reaches here even though hiders are remaining
 			gameEnded = true;
 			winningTeam = (int) Teams.Seeker;
