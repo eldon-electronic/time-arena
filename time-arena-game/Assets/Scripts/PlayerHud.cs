@@ -10,11 +10,11 @@ public class PlayerHud : MonoBehaviour
     public GameController game;
 	public PhotonView view;
     public Text teamDispl;
+    public CanvasGroup debugCanvasGroup;
 	public Text debugPanelText;
 	public Text masterClientOpts;
 	public Text ab1Cooldown_displ;
 	public Text ab2Cooldown_displ;
-	public Text ab3Cooldown_displ;
 	public Text timeDispl;
 	public Text startTimeDispl;
 	public Text winningDispl;
@@ -33,6 +33,7 @@ public class PlayerHud : MonoBehaviour
 
     private Hashtable debugItems;
     private float[] abilities;
+    private bool debug;
 
 
     void Start()
@@ -47,7 +48,8 @@ public class PlayerHud : MonoBehaviour
         }
 
         debugItems = new Hashtable();
-        abilities = new float[3];
+        abilities = new float[2];
+        debug = false;
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -157,19 +159,26 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateDebugPanel()
     {
-        System.String debugText = "";
-        foreach (DictionaryEntry de in debugItems)
+        if (debug)
         {
-            debugText += $"{de.Key}: {de.Value}\n";
+            System.String debugText = "";
+            foreach (DictionaryEntry de in debugItems)
+            {
+                debugText += $"{de.Key}: {de.Value}\n";
+            }
+            debugPanelText.text = debugText;
+            debugCanvasGroup.alpha = 1.0f;
         }
-        debugPanelText.text = debugText;
+        else
+        {
+            debugCanvasGroup.alpha = 0.0f;
+        }
     }
 
     private void LateUpdateAbilities()
     {
         ab1Cooldown_displ.text = abilities[0].ToString();
         ab2Cooldown_displ.text = abilities[1].ToString();
-        ab3Cooldown_displ.text = abilities[2].ToString();
     }
 
     private void LateUpdateWinningDisplay()
@@ -244,5 +253,10 @@ public class PlayerHud : MonoBehaviour
     public void SetAbilityValues(float[] items)
     {
         abilities = items;
+    }
+
+    public void ToggleDebug()
+    {
+        debug = !debug;
     }
 }
