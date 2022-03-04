@@ -212,9 +212,9 @@ public class PlayerHud : MonoBehaviour
     // ------------ PUBLIC METHODS ------------
 
 
-        public void SetTeam(System.String teamName)
+    public void SetTeam(System.String teamName)
     {
-        teamDispl.text = teamName;
+        if (view.IsMine) teamDispl.text = teamName;
     }
 
 
