@@ -13,13 +13,14 @@ public class PlayerHud : MonoBehaviour
     public CanvasGroup debugCanvasGroup;
 	public Text debugPanelText;
 	public Text masterClientOpts;
-	public Text ab1Cooldown_displ;
-	public Text ab2Cooldown_displ;
+	public Text forwardCooldownDispl;
+	public Text backCooldownDispl;
 	public Text timeDispl;
 	public Text startTimeDispl;
 	public Text winningDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
+    public CanvasGroup timelineCanvasGroup;
     public Slider elapsedTimeSlider;
     public Slider playerIcon0;
     public Slider playerIcon1;
@@ -50,6 +51,7 @@ public class PlayerHud : MonoBehaviour
         debugItems = new Hashtable();
         abilities = new float[2];
         debug = false;
+        debugCanvasGroup.alpha = 0.0f;
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -120,7 +122,8 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeline()
     {
-        // Set visibility of timeline and player icons
+        // Set visibility of timeline, player icons and jump cooldowns
+        timelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
         elapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         for (int i=1; i < 5; i++)
@@ -177,8 +180,8 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateAbilities()
     {
-        ab1Cooldown_displ.text = abilities[0].ToString();
-        ab2Cooldown_displ.text = abilities[1].ToString();
+        forwardCooldownDispl.text = abilities[0].ToString();
+        backCooldownDispl.text = abilities[1].ToString();
     }
 
     private void LateUpdateWinningDisplay()
