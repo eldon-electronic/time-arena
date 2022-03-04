@@ -19,7 +19,10 @@ public class GameController : MonoBehaviour
 	public bool gameStarted = false;
 	public bool gameEnded = false;
 
-	public int winningTeam = 1;
+	public int winningTeam = (int) Teams.Hider;
+	public enum Teams {
+		Seeker, Hider
+	}
 
 	public Vector3[] hiderSpawnPoints = {new Vector3(-42f, 0f, 22f), new Vector3(-15f, -0.5f, -4f), new Vector3(-12f, -0.5f, -40f), new Vector3(-47f, -0.5f, -8f), new Vector3(-36f, -2.5f, 2.2f)};
 	public Vector3 seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
@@ -33,18 +36,19 @@ public class GameController : MonoBehaviour
 		if (clients.Length == 1) {
 			player = clients[0].GetComponent<PlayerMovement>();
 			player.game = this;
-			if(PhotonNetwork.IsMasterClient){
-				setupNewGame(player);
-			}
 		} else {
-			Debug.Log("wtf");
+			Debug.Log("GameController error: Number of clients is not 1");
 		}
 
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		players.Add(player); //player.timeTravel.GetTimePosition()
-		for(int i = 0; i < objs.Length; i++){
+		for (int i = 0; i < objs.Length; i++) {
 			players.Add(objs[i].GetComponent<PlayerMovement>());
 			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0f);
+		}
+
+		if (PhotonNetwork.IsMasterClient) {
+				setupNewGame(player);
 		}
 	}
 
@@ -52,16 +56,18 @@ public class GameController : MonoBehaviour
 	void setupNewGame(PlayerMovement client){
 		// set players position to spawn point
 		if (players.Count > 1) { // if testing with one player, they are hider, otherwise one player will randomly be seeker
-			players[Random.Range(0, players.Count-1)].getFound();
+			int randomIndex = Random.Range(0, players.Count-1); 
+			players[randomIndex].getFound();
 		}
-		int n = 0;
+
+		/*int n = 0;
 		for (int i = 0; i < players.Count; i++) {
-			if (players[i].team == 1) {
+			if (players[i].team == (int) Teams.Hider) {
 				players[i].movePlayer(hiderSpawnPoints[n++], new Vector3(0f, -90f, 0f));
 			} else {
 				players[i].movePlayer(seekerSpawnPoint, new Vector3(0f, 90f, 0f));
 			}
-		}
+		}*/
 	}
 
 	// Update is called once per frame
@@ -85,25 +91,24 @@ public class GameController : MonoBehaviour
 				}
 			}
 		} else { // else game is in play
-			if(timeElapsedInGame >= gameLength && !gameEnded){
+			checkHidersLeft();
+			if (timeElapsedInGame >= gameLength && !gameEnded) {
 				gameEnded = true;
-				winningTeam = 1;
+				winningTeam = (int) Teams.Hider;
 				player.onGameEnded();
 			}
 		}
-		
-		checkGameOver();
 	}
 
 	// checks to see if there are no hiders left
-	public void checkGameOver(){
-		bool isHidersRemaining = true;
-		for(int i = 0; i < players.Count; i++){
-			isHidersRemaining &= (players[i].team == 0);
+	public void checkHidersLeft() {
+		bool isHidersRemaining = false;
+		for (int i = 0; i < players.Count; i++) {
+			isHidersRemaining |= (players[i].team == (int) Teams.Hider);
 		}
-		if(!isHidersRemaining){
+		if (!isHidersRemaining) { // Code reaches here even though hiders are remaining
 			gameEnded = true;
-			winningTeam = 0;
+			winningTeam = (int) Teams.Seeker;
 			player.onGameEnded();
 		}
 	}

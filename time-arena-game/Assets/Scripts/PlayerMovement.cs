@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	// variables defining player values
 	public CharacterController characterBody;
 	public Camera cam;
+	public GameObject cameraHolder;
 	public Canvas UI;
 	public Transform groundCheck;
 	public LayerMask groundMask;
@@ -29,7 +30,7 @@ public class PlayerMovement : MonoBehaviour {
 	public GameObject handMiddle;
 	public GameObject handMiddleTip;
 
-	public int team = 1; //0 seeker 1 hider // initialised to 0 but changeTeam is called on start to sync values
+	public int team = (int) GameController.Teams.Seeker; // 0 seeker 1 hider // initialised to 0 but changeTeam is called on start to sync values
 	private float speed = 5f;
 	private float gravity = 40f;
 	private float jumpPower = 3f;
@@ -49,6 +50,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	// variables corresponding to UI
 	public PauseManager pauseUI;
+	public GameObject nametag;
 
     // variables corresponding to player Animations
 	public Animator playerAnim;
@@ -72,15 +74,15 @@ public class PlayerMovement : MonoBehaviour {
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		changeTeam(); // set the player's colour depending on their team
-		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
 			Destroy(cam.gameObject);
-			Destroy(cam.gameObject.GetComponent<AudioListener>());
-			Destroy(UI);
+			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		} else {
+			// destroy your own nametag
+			Destroy(nametag);
 			gameObject.tag = "Client";
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		}
@@ -98,7 +100,7 @@ public class PlayerMovement : MonoBehaviour {
 			game = FindObjectOfType<GameController>();
 			timeTravel.connectToTimeLord();
 			if (game == null) {
-				Debug.Log("FUCK");
+				Debug.Log("PlayerMovement scene change error: GameController is null");
 			}
 			ab1Cooldown = 15;
 			ab2Cooldown = 15;
@@ -108,7 +110,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		Debug.Log(view.ViewID);
 		// local keys only affect client's player
 		if (view.IsMine) {
 			if (SceneManager.GetActiveScene().name == "PreGameScene" ||
@@ -209,7 +210,7 @@ public class PlayerMovement : MonoBehaviour {
 		xRot -= mouseY;
 		xRot = Mathf.Clamp(xRot, -90f, 90f);
 		//apply rotation
-		cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+		cameraHolder.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
 		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
 	}
 
@@ -254,7 +255,8 @@ public class PlayerMovement : MonoBehaviour {
 					foreach (var playerGotGrab in playersGrab) {
 						// call grabplayer function on that player
 						PlayerMovement targetPlayer = playerGotGrab.GetComponent<PlayerMovement>();
-						if (team == 0 && targetPlayer.team == 1) {
+						if (team == (int) GameController.Teams.Seeker && 
+						    targetPlayer.team == (int) GameController.Teams.Hider) {
 							targetPlayer.getFound();
 						}
 					}
@@ -277,9 +279,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	// change player teams
 	public void changeTeam() {
-		// if team is odd, set to 0, else set to 1
-		if (team == 0) {
-			team = 1;
+		if (team == (int) GameController.Teams.Hider) {
+			team = (int) GameController.Teams.Seeker;
 			playerBody.GetComponent<Renderer>().material = seekerMat;
 			playerArm.GetComponent<Renderer>().material = seekerMat;
 			
@@ -292,7 +293,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			hud.SetTeam("SEEKER");
 		} else {
-			team = 0;
+			team = (int) GameController.Teams.Hider;
 			playerBody.GetComponent<Renderer>().material = hiderMat;
 			playerArm.GetComponent<Renderer>().material = hiderMat;
 			
@@ -352,7 +353,7 @@ public class PlayerMovement : MonoBehaviour {
 	void RPC_movePlayer(Vector3 pos, Vector3 rot) {
 		transform.position = pos;
 		transform.rotation = Quaternion.Euler(rot);
-		cam.transform.rotation = Quaternion.Euler(rot);
+		cameraHolder.transform.rotation = Quaternion.Euler(rot);
 	}
 
 	// function to move this player by calling RPC for all others

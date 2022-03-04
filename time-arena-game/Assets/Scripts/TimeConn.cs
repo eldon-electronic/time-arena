@@ -45,7 +45,7 @@ public class TimeConn : MonoBehaviour
 
     public void TimeJump(int distance)
     {
-        Debug.Log("Time Travel Triggered on ID " + timeID.ToString());
+        // Debug.Log("Time Travel Triggered on ID " + timeID.ToString());
         tl.Travel(distance, timeID);
         tl.RealityTest(timeID);
     }

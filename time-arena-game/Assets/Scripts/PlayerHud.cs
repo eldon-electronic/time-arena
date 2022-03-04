@@ -37,17 +37,17 @@ public class PlayerHud : MonoBehaviour
 
     void Start()
     {
-        view = GetComponent<PhotonView>();
-        if (!view.IsMine)
+        if (view.IsMine)
         {
-            Destroy(elapsedTimeSlider.transform.parent.gameObject);
-        } else {
             // The first Slider in the array corresponds to this player
             playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
 
-            // Link scenechange event to onscenechange
+            // Link SceneChange event to OnSceneChange
             SceneManager.activeSceneChanged += OnSceneChange;
         }
+
+        debugItems = new Hashtable();
+        abilities = new float[3];
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -177,7 +177,7 @@ public class PlayerHud : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
         {
             winningDispl.transform.parent.gameObject.SetActive(true);
-            winningDispl.text = (game.winningTeam == 1) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            winningDispl.text = (game.winningTeam == (int) GameController.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 
@@ -214,9 +214,9 @@ public class PlayerHud : MonoBehaviour
     // ------------ PUBLIC METHODS ------------
 
 
-        public void SetTeam(System.String teamName)
+    public void SetTeam(System.String teamName)
     {
-        teamDispl.text = teamName;
+        if (view.IsMine) teamDispl.text = teamName;
     }
 
 
