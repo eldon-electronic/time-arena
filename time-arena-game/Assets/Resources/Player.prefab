@@ -6009,6 +6009,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 624314824885172894}
+  - component: {fileID: 1210135894946606263}
   m_Layer: 3
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -6033,6 +6034,22 @@ Transform:
   m_Father: {fileID: 6458975045518551234}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1210135894946606263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3168561785147484150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &3224867964171595958
 GameObject:
   m_ObjectHideFlags: 0
@@ -8388,7 +8405,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 2136822693732079899}
   - {fileID: -6067572978315274679}
-  - {fileID: 2015061193421964843}
+  - {fileID: 0}
   - {fileID: 2797506944382728591}
   - {fileID: 4577466478462711610}
   - {fileID: 2654400998571681570}
@@ -8804,7 +8821,6 @@ GameObject:
   - component: {fileID: 6458975046434770678}
   - component: {fileID: 6458975046434770673}
   - component: {fileID: 6458975046434770672}
-  - component: {fileID: 2015061193421964843}
   - component: {fileID: 6737257321077796775}
   m_Layer: 3
   m_Name: Camera
@@ -8878,22 +8894,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6458975046434770675}
   m_Enabled: 1
---- !u!114 &2015061193421964843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6458975046434770675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 0
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &6737257321077796775
 MonoBehaviour:
   m_ObjectHideFlags: 0
