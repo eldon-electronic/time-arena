@@ -206,10 +206,11 @@ public class PlayerMovement : MonoBehaviour {
 		float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
 		float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-		//invert vertical rotation and restrict up/down
+		// invert vertical rotation and restrict up/down
 		xRot -= mouseY;
 		xRot = Mathf.Clamp(xRot, -90f, 90f);
-		//apply rotation
+		
+		// apply rotation
 		cameraHolder.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
 		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
 	}
