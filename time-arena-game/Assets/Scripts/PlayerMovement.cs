@@ -74,7 +74,6 @@ public class PlayerMovement : MonoBehaviour {
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		changeTeam(); // set the player's colour depending on their team
-		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
 			Destroy(cam.gameObject);

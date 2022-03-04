@@ -37,7 +37,6 @@ public class PlayerHud : MonoBehaviour
 
     void Start()
     {
-        view = GetComponent<PhotonView>();
         if (view.IsMine)
         {
             // The first Slider in the array corresponds to this player
@@ -46,6 +45,9 @@ public class PlayerHud : MonoBehaviour
             // Link SceneChange event to OnSceneChange
             SceneManager.activeSceneChanged += OnSceneChange;
         }
+
+        debugItems = new Hashtable();
+        abilities = new float[3];
     }
 
     void OnSceneChange(Scene current, Scene next)
