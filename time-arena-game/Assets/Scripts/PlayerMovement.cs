@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	// variables defining player values
 	public CharacterController characterBody;
 	public Camera cam;
+	public GameObject cameraHolder;
 	public Canvas UI;
 	public Transform groundCheck;
 	public LayerMask groundMask;
@@ -76,9 +77,7 @@ public class PlayerMovement : MonoBehaviour {
 		view = GetComponent<PhotonView>(); // define the photonView component
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment
-			Destroy(cam.gameObject.GetComponent<UniversalAdditionalCameraData>());
-			Destroy(cam.gameObject.GetComponent<AudioListener>());
-			Destroy(cam);
+			Destroy(cam.gameObject);
 			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
@@ -212,7 +211,7 @@ public class PlayerMovement : MonoBehaviour {
 		xRot -= mouseY;
 		xRot = Mathf.Clamp(xRot, -90f, 90f);
 		//apply rotation
-		cam.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+		cameraHolder.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
 		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
 	}
 
@@ -355,7 +354,7 @@ public class PlayerMovement : MonoBehaviour {
 	void RPC_movePlayer(Vector3 pos, Vector3 rot) {
 		transform.position = pos;
 		transform.rotation = Quaternion.Euler(rot);
-		cam.transform.rotation = Quaternion.Euler(rot);
+		cameraHolder.transform.rotation = Quaternion.Euler(rot);
 	}
 
 	// function to move this player by calling RPC for all others
