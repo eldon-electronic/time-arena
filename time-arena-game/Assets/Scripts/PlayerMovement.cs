@@ -130,9 +130,13 @@ public class PlayerMovement : MonoBehaviour {
 		debugItems.Add("Ground", isGrounded);
 		hud.SetDebugValues(debugItems);
 
-		// update player ability displays
-		float[] abilityValues = new float[]{ab1Cooldown, ab2Cooldown};
-		hud.SetAbilityValues(abilityValues);
+		// update player cooldown displays
+		float[] cooldownValues = new float[]{1.0f - (ab1Cooldown / 15.0f), 1.0f - (ab2Cooldown / 15.0f)};
+		hud.SetCooldownValues(cooldownValues);
+
+		bool canJumpForward = ab1Cooldown <= 0.0f && timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick();
+		bool canJumpBack = ab2Cooldown <= 0.0f && timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0;
+		hud.SetCanJump(canJumpForward, canJumpBack);
 
 		// update pauseUI and cursor lock if game is ended
 		if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
@@ -331,6 +335,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(-timeJumpAmount);
 		particles.StartJumpingBackward();
 		ab2Cooldown = 15;
+		hud.PressForwardJumpButton();
 		game.otherPlayersElapsedTime[view.ViewID] -= timeJumpAmount / timeTravel.MaxTick();
 	}
 
@@ -343,6 +348,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(timeJumpAmount);
 		particles.StartJumpingForward();
 		ab1Cooldown = 15;
+		hud.PressBackJumpButton();
 		game.otherPlayersElapsedTime[view.ViewID] += timeJumpAmount / timeTravel.MaxTick();
 	}
 

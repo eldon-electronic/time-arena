@@ -13,8 +13,8 @@ public class PlayerHud : MonoBehaviour
     public CanvasGroup debugCanvasGroup;
 	public Text debugPanelText;
 	public Text masterClientOpts;
-	public Text forwardCooldownDispl;
-	public Text backCooldownDispl;
+	public Slider forwardCooldownSlider;
+	public Slider backCooldownSlider;
 	public Text timeDispl;
 	public Text startTimeDispl;
 	public Text winningDispl;
@@ -28,13 +28,17 @@ public class PlayerHud : MonoBehaviour
     public Slider playerIcon3;
     public Slider playerIcon4;
 	private Slider[] playerIcons;
-	public Image Forward;
-	public Image ForwardPressed;
-	public Image ForwardUnable;
+	public Image forwardJumpIcon;
+    public Image backJumpIcon;
+    public Sprite redPressedSprite;
+    public Sprite greenPressedSprite;
+    public Sprite greenUnpressedSprite;
 
     private Hashtable debugItems;
-    private float[] abilities;
+    private float[] cooldowns;
     private bool debug;
+    private bool canJumpForward;
+    private bool canJumpBack;
 
 
     void Start()
@@ -49,9 +53,11 @@ public class PlayerHud : MonoBehaviour
         }
 
         debugItems = new Hashtable();
-        abilities = new float[2];
+        cooldowns = new float[2];
         debug = false;
         debugCanvasGroup.alpha = 0.0f;
+        canJumpForward = false;
+        canJumpBack = false;
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -178,10 +184,15 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-    private void LateUpdateAbilities()
+    private void LateUpdateCooldowns()
     {
-        forwardCooldownDispl.text = abilities[0].ToString();
-        backCooldownDispl.text = abilities[1].ToString();
+        forwardCooldownSlider.value = cooldowns[0];
+        backCooldownSlider.value = cooldowns[1];
+
+        if (canJumpForward) forwardJumpIcon.sprite = greenUnpressedSprite;
+        else forwardJumpIcon.sprite = redPressedSprite;
+        if (canJumpBack) backJumpIcon.sprite = greenUnpressedSprite;
+        else backJumpIcon.sprite = redPressedSprite;
     }
 
     private void LateUpdateWinningDisplay()
@@ -218,7 +229,7 @@ public class PlayerHud : MonoBehaviour
         LateUpdateTimeDisplay();
         LateUpdateTimeline();
         LateUpdateDebugPanel();
-        LateUpdateAbilities();
+        LateUpdateCooldowns();
         LateUpdateWinningDisplay();
     }
 
@@ -253,13 +264,30 @@ public class PlayerHud : MonoBehaviour
         debugItems = items;
     }
 
-    public void SetAbilityValues(float[] items)
+    public void SetCooldownValues(float[] items)
     {
-        abilities = items;
+        // each item should be a float between 0.0f (empty) and 1.0f (full)
+        cooldowns = items;
     }
 
     public void ToggleDebug()
     {
         debug = !debug;
+    }
+
+    public void PressForwardJumpButton()
+    {
+        forwardJumpIcon.sprite = greenPressedSprite;
+    }
+
+    public void PressBackJumpButton()
+    {
+        backJumpIcon.sprite = greenPressedSprite;
+    }
+
+    public void SetCanJump(bool forward, bool back)
+    {
+        canJumpForward = forward;
+        canJumpBack = back;
     }
 }
