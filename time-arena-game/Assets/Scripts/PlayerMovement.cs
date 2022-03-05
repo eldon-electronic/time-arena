@@ -230,25 +230,25 @@ public class PlayerMovement : MonoBehaviour {
 
 	void KeyControl()
 	{
-		// Keypress '1' -> time jump forward
+		// Keypress '1' -> time jump backward
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-		{
-			// only allow time travel forwards if it doesn't go past the end.
-			if (SceneManager.GetActiveScene().name == "GameScene" && ab1Cooldown <= 0 &&
-				timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick())
-			{
-				jumpForward(); 
-			}
-		}
-
-		// Keypress '2' -> time jump backward
-		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
 			// only allow time travel backwards if it doesn't go past the beginning.
 			if (SceneManager.GetActiveScene().name == "GameScene" && ab2Cooldown <= 0 &&
 				timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0)
 			{ 
 				jumpBackwards();
+			}
+		}
+
+		// Keypress '2' -> time jump forward
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			// only allow time travel forwards if it doesn't go past the end.
+			if (SceneManager.GetActiveScene().name == "GameScene" && ab1Cooldown <= 0 &&
+				timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick())
+			{
+				jumpForward(); 
 			}
 		}
 
