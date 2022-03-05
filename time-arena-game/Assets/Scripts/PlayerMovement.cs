@@ -134,8 +134,10 @@ public class PlayerMovement : MonoBehaviour {
 		float[] cooldownValues = new float[]{1.0f - (ab1Cooldown / 15.0f), 1.0f - (ab2Cooldown / 15.0f)};
 		hud.SetCooldownValues(cooldownValues);
 
-		bool canJumpForward = ab1Cooldown <= 0.0f && timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick();
-		bool canJumpBack = ab2Cooldown <= 0.0f && timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0;
+		bool canJumpForward = SceneManager.GetActiveScene().name == "GameScene" && ab1Cooldown <= 0.0f && 
+							timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick();
+		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && ab2Cooldown <= 0.0f && 
+							timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0;
 		hud.SetCanJump(canJumpForward, canJumpBack);
 
 		// update pauseUI and cursor lock if game is ended
