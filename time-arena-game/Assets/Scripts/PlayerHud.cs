@@ -10,16 +10,17 @@ public class PlayerHud : MonoBehaviour
     public GameController game;
 	public PhotonView view;
     public Text teamDispl;
+    public CanvasGroup debugCanvasGroup;
 	public Text debugPanelText;
 	public Text masterClientOpts;
-	public Text ab1Cooldown_displ;
-	public Text ab2Cooldown_displ;
-	public Text ab3Cooldown_displ;
+	public Slider forwardCooldownSlider;
+	public Slider backCooldownSlider;
 	public Text timeDispl;
 	public Text startTimeDispl;
 	public Text winningDispl;
 	private float secondsTillGame;
 	private bool isCountingTillGameStart;
+    public CanvasGroup timelineCanvasGroup;
     public Slider elapsedTimeSlider;
     public Slider playerIcon0;
     public Slider playerIcon1;
@@ -27,12 +28,17 @@ public class PlayerHud : MonoBehaviour
     public Slider playerIcon3;
     public Slider playerIcon4;
 	private Slider[] playerIcons;
-	public Image Forward;
-	public Image ForwardPressed;
-	public Image ForwardUnable;
+	public Image forwardJumpIcon;
+    public Image backJumpIcon;
+    public Sprite redPressedSprite;
+    public Sprite greenPressedSprite;
+    public Sprite greenUnpressedSprite;
 
     private Hashtable debugItems;
-    private float[] abilities;
+    private float[] cooldowns;
+    private bool debug;
+    private bool canJumpForward;
+    private bool canJumpBack;
 
 
     void Start()
@@ -47,7 +53,11 @@ public class PlayerHud : MonoBehaviour
         }
 
         debugItems = new Hashtable();
-        abilities = new float[3];
+        cooldowns = new float[2];
+        debug = false;
+        debugCanvasGroup.alpha = 0.0f;
+        canJumpForward = false;
+        canJumpBack = false;
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -118,7 +128,8 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeline()
     {
-        // Set visibility of timeline and player icons
+        // Set visibility of timeline, player icons and jump cooldowns
+        timelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
         elapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         for (int i=1; i < 5; i++)
@@ -157,19 +168,31 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateDebugPanel()
     {
-        System.String debugText = "";
-        foreach (DictionaryEntry de in debugItems)
+        if (debug)
         {
-            debugText += $"{de.Key}: {de.Value}\n";
+            System.String debugText = "";
+            foreach (DictionaryEntry de in debugItems)
+            {
+                debugText += $"{de.Key}: {de.Value}\n";
+            }
+            debugPanelText.text = debugText;
+            debugCanvasGroup.alpha = 1.0f;
         }
-        debugPanelText.text = debugText;
+        else
+        {
+            debugCanvasGroup.alpha = 0.0f;
+        }
     }
 
-    private void LateUpdateAbilities()
+    private void LateUpdateCooldowns()
     {
-        ab1Cooldown_displ.text = abilities[0].ToString();
-        ab2Cooldown_displ.text = abilities[1].ToString();
-        ab3Cooldown_displ.text = abilities[2].ToString();
+        forwardCooldownSlider.value = cooldowns[0];
+        backCooldownSlider.value = cooldowns[1];
+
+        if (canJumpForward) forwardJumpIcon.sprite = greenUnpressedSprite;
+        else forwardJumpIcon.sprite = redPressedSprite;
+        if (canJumpBack) backJumpIcon.sprite = greenUnpressedSprite;
+        else backJumpIcon.sprite = redPressedSprite;
     }
 
     private void LateUpdateWinningDisplay()
@@ -206,7 +229,7 @@ public class PlayerHud : MonoBehaviour
         LateUpdateTimeDisplay();
         LateUpdateTimeline();
         LateUpdateDebugPanel();
-        LateUpdateAbilities();
+        LateUpdateCooldowns();
         LateUpdateWinningDisplay();
     }
 
@@ -241,8 +264,30 @@ public class PlayerHud : MonoBehaviour
         debugItems = items;
     }
 
-    public void SetAbilityValues(float[] items)
+    public void SetCooldownValues(float[] items)
     {
-        abilities = items;
+        // each item should be a float between 0.0f (empty) and 1.0f (full)
+        cooldowns = items;
+    }
+
+    public void ToggleDebug()
+    {
+        debug = !debug;
+    }
+
+    public void PressForwardJumpButton()
+    {
+        forwardJumpIcon.sprite = greenPressedSprite;
+    }
+
+    public void PressBackJumpButton()
+    {
+        backJumpIcon.sprite = greenPressedSprite;
+    }
+
+    public void SetCanJump(bool forward, bool back)
+    {
+        canJumpForward = forward;
+        canJumpBack = back;
     }
 }

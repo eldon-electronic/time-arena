@@ -41,7 +41,6 @@ public class PlayerMovement : MonoBehaviour {
 	private Vector3 lastPos;
 	private float ab1Cooldown = 0f;
 	private float ab2Cooldown = 0f;
-	private float ab3Cooldown = 0f;
 	private int timeJumpAmount = 100;
 
 	// references to materials for user team id
@@ -104,43 +103,49 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			ab1Cooldown = 15;
 			ab2Cooldown = 15;
-			ab3Cooldown = 3;
 		}
 	}
 
 	// Update is called once per frame
 	void Update() {
 		// local keys only affect client's player
-		if (view.IsMine) {
-			if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-			(SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)) {
-				movementControl();
-				cameraControl();
-				keyControl();
-			}
+		if (!view.IsMine) return;
 
-			// Set the debug items and send to HUD to be displayed
-			Hashtable debugItems = new Hashtable();
-			Vector3 movementVector = transform.position - lastPos;
-			float distTravelled = movementVector.magnitude / Time.deltaTime;
-			debugItems.Add("Speed", distTravelled);
-			debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
-			debugItems.Add("Sprint", Input.GetKey("left shift"));
-			debugItems.Add("Grab", damageWindow);
-			debugItems.Add("Ground", isGrounded);
-			hud.SetDebugValues(debugItems);
+		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
+		(SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)) {
+			movementControl();
+			cameraControl();
+			UpdateCooldowns();
+			KeyControl();
+		}
 
-			// update player ability displays
-			float[] abilityValues = new float[]{ab1Cooldown, ab2Cooldown, ab3Cooldown};
-			hud.SetAbilityValues(abilityValues);
+		// Set the debug items and send to HUD to be displayed
+		Hashtable debugItems = new Hashtable();
+		Vector3 movementVector = transform.position - lastPos;
+		float distTravelled = movementVector.magnitude / Time.deltaTime;
+		debugItems.Add("Speed", distTravelled);
+		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
+		debugItems.Add("Sprint", Input.GetKey("left shift"));
+		debugItems.Add("Grab", damageWindow);
+		debugItems.Add("Ground", isGrounded);
+		hud.SetDebugValues(debugItems);
 
-			// update pauseUI and cursor lock if game is ended
-			if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
-			{
-				pauseUI.isPaused = true;
-				pauseUI.pauseMenuUI.SetActive(true);
-				Cursor.lockState = CursorLockMode.None;
-			}
+		// update player cooldown displays
+		float[] cooldownValues = new float[]{1.0f - (ab1Cooldown / 15.0f), 1.0f - (ab2Cooldown / 15.0f)};
+		hud.SetCooldownValues(cooldownValues);
+
+		bool canJumpForward = SceneManager.GetActiveScene().name == "GameScene" && ab1Cooldown <= 0.0f && 
+							timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick();
+		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && ab2Cooldown <= 0.0f && 
+							timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0;
+		hud.SetCanJump(canJumpForward, canJumpBack);
+
+		// update pauseUI and cursor lock if game is ended
+		if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
+		{
+			pauseUI.isPaused = true;
+			pauseUI.pauseMenuUI.SetActive(true);
+			Cursor.lockState = CursorLockMode.None;
 		}
 	}
 
@@ -206,10 +211,11 @@ public class PlayerMovement : MonoBehaviour {
 		float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
 		float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-		//invert vertical rotation and restrict up/down
+		// invert vertical rotation and restrict up/down
 		xRot -= mouseY;
 		xRot = Mathf.Clamp(xRot, -90f, 90f);
-		//apply rotation
+		
+		// apply rotation
 		cameraHolder.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
 		transform.Rotate(Vector3.up * mouseX); //rotate player about y axis with mouseX movement
 	}
@@ -218,62 +224,76 @@ public class PlayerMovement : MonoBehaviour {
 	* Button Presses *
 	******************/
 
-	void keyControl(){
-		// only allow movement after game has started
-		if(SceneManager.GetActiveScene().name == "PreGameScene" || 
-		  (SceneManager.GetActiveScene().name == "GameScene" && game.gameStarted)) {
-			// set cooldown values
-			ab1Cooldown = (ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
-			ab2Cooldown = (ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
-			ab3Cooldown = (ab3Cooldown > 0) ? (ab3Cooldown - Time.deltaTime) : 0;
+	void UpdateCooldowns()
+	{
+		ab1Cooldown = (ab1Cooldown > 0) ? (ab1Cooldown - Time.deltaTime) : 0;
+		ab2Cooldown = (ab2Cooldown > 0) ? (ab2Cooldown - Time.deltaTime) : 0;
+	}
 
-			// handle ability buttonpresses
-			if(Input.GetKeyDown(KeyCode.Alpha1) && ab1Cooldown <= 0) {
-				// only allow time travel forwards if it doesn't go past the end.
-				if(SceneManager.GetActiveScene().name == "GameScene" && 
-				   timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick()) {
-					jumpForward(); 
-				}
+	void KeyControl()
+	{
+		// Keypress '1' -> time jump backward
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			// only allow time travel backwards if it doesn't go past the beginning.
+			if (SceneManager.GetActiveScene().name == "GameScene" && ab2Cooldown <= 0 &&
+				timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0)
+			{ 
+				jumpBackwards();
 			}
+		}
 
-			if (Input.GetKeyDown(KeyCode.Alpha2) && ab2Cooldown <= 0) {
-				// only allow time travel backwards if it doesn't go past the beginning.
-				if(SceneManager.GetActiveScene().name == "GameScene" && 
-				   timeTravel.GetRealityTick() - (float) timeJumpAmount >= 0) { 
-					jumpBackwards();
-				}
+		// Keypress '2' -> time jump forward
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			// only allow time travel forwards if it doesn't go past the end.
+			if (SceneManager.GetActiveScene().name == "GameScene" && ab1Cooldown <= 0 &&
+				timeTravel.GetRealityTick() + (float) timeJumpAmount <= timeTravel.GetCurrentTick())
+			{
+				jumpForward(); 
 			}
+		}
 
-			if (Input.GetKeyDown(KeyCode.Alpha3) && ab3Cooldown <= 0) {
-				ab3Cooldown = 3;
-			}
-			// start grab animation on click
-			if (Input.GetMouseButtonDown(0)) {
-				// if grabbing, check for intersection with player
-				if (!damageWindow) {
-					Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
-					foreach (var playerGotGrab in playersGrab) {
-						// call grabplayer function on that player
-						PlayerMovement targetPlayer = playerGotGrab.GetComponent<PlayerMovement>();
-						if (team == (int) GameController.Teams.Seeker && 
-						    targetPlayer.team == (int) GameController.Teams.Hider) {
-							targetPlayer.getFound();
-						}
+		// Left mouse click -> start grabbing
+		if (Input.GetMouseButtonDown(0))
+		{
+			// if grabbing, check for intersection with player
+			if (!damageWindow)
+			{
+				Collider[] playersGrab = Physics.OverlapSphere(grabCheck.position, grabCheckRadius, grabMask);
+				foreach (var playerGotGrab in playersGrab)
+				{
+					// call grabplayer function on that player
+					PlayerMovement targetPlayer = playerGotGrab.GetComponent<PlayerMovement>();
+					if (team == (int) GameController.Teams.Seeker && 
+						targetPlayer.team == (int) GameController.Teams.Hider)
+					{
+						targetPlayer.getFound();
 					}
-					playerAnim.SetBool("isGrabbing", true);
 				}
+				playerAnim.SetBool("isGrabbing", true);
 			}
+		}
 
-			// Start game onpress 'e'
-			if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient &&
-				Input.GetKeyDown(KeyCode.E)) {
+		// Keypress 'e' -> start game
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient)
+			{
 				hud.StartCountingDown();
 			}
+		}
 
-			// If counting for game launch and user presses esc - stop
-			if (Input.GetKeyDown(KeyCode.Escape)) {
-				hud.StopCountingDown();
-			}
+		// Keypress `ESC` -> stop counting down to game launch
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			hud.StopCountingDown();
+		}
+
+		// Keypress 'p' -> toggle debug mode
+		if (Input.GetKeyDown(KeyCode.P))
+		{
+			hud.ToggleDebug();
 		}
 	}
 
@@ -317,6 +337,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(-timeJumpAmount);
 		particles.StartJumpingBackward();
 		ab2Cooldown = 15;
+		hud.PressForwardJumpButton();
 		game.otherPlayersElapsedTime[view.ViewID] -= timeJumpAmount / timeTravel.MaxTick();
 	}
 
@@ -329,6 +350,7 @@ public class PlayerMovement : MonoBehaviour {
 		timeTravel.TimeJump(timeJumpAmount);
 		particles.StartJumpingForward();
 		ab1Cooldown = 15;
+		hud.PressBackJumpButton();
 		game.otherPlayersElapsedTime[view.ViewID] += timeJumpAmount / timeTravel.MaxTick();
 	}
 
