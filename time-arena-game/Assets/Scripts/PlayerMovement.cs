@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour {
 	public GameObject handMiddle;
 	public GameObject handMiddleTip;
 
-	public int team = (int) GameController.Teams.Seeker; // 0 seeker 1 hider // initialised to 0 but changeTeam is called on start to sync values
+	public int team; // 0 seeker 1 hider 
 	private float speed = 5f;
 	private float gravity = 40f;
 	private float jumpPower = 3f;
@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
+		team = (int) GameController.Teams.Seeker; // Initialise to Seeker but call chang
 		changeTeam(); // set the player's colour depending on their team
 		if (!view.IsMine) {
 			// destroy other player cameras and ui in local environment

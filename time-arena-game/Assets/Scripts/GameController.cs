@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour
 		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
 		if (clients.Length == 1) {
 			player = clients[0].GetComponent<PlayerMovement>();
+			otherPlayersElapsedTime.Add(player.view.ViewID, 0f); // add yourself to array of tracking elapsed time
 			player.game = this;
 		} else {
 			Debug.Log("GameController error: Number of clients is not 1");
@@ -43,8 +44,9 @@ public class GameController : MonoBehaviour
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		players.Add(player); //player.timeTravel.GetTimePosition()
 		for (int i = 0; i < objs.Length; i++) {
-			players.Add(objs[i].GetComponent<PlayerMovement>());
-			otherPlayersElapsedTime.Add(players[i].view.ViewID, 0f);
+			PlayerMovement playerComponent = objs[i].GetComponent<PlayerMovement>();
+			players.Add(playerComponent);
+			otherPlayersElapsedTime.Add(playerComponent.view.ViewID, 0f); // add other players
 		}
 
 		if (PhotonNetwork.IsMasterClient) {
