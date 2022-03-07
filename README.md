@@ -1,2 +1,2 @@
-# time-arena
-arena based puzzle/combat game with time travel
+# Time Arena
+Hide and seek with time travel.
