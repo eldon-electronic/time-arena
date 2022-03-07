@@ -7,64 +7,64 @@ using UnityEngine.UI;
 
 public class PlayerHud : MonoBehaviour
 {
-    public GameController game;
-	public PhotonView view;
-    public Text teamDispl;
-    public CanvasGroup debugCanvasGroup;
-	public Text debugPanelText;
-	public Text masterClientOpts;
-	public Slider forwardCooldownSlider;
-	public Slider backCooldownSlider;
-	public Text timeDispl;
-	public Text startTimeDispl;
-	public Text winningDispl;
-	private float secondsTillGame;
-	private bool isCountingTillGameStart;
-    public CanvasGroup timelineCanvasGroup;
-    public Slider elapsedTimeSlider;
-    public Slider playerIcon0;
-    public Slider playerIcon1;
-    public Slider playerIcon2;
-    public Slider playerIcon3;
-    public Slider playerIcon4;
-	private Slider[] playerIcons;
-	public Image forwardJumpIcon;
-    public Image backJumpIcon;
-    public Sprite redPressedSprite;
-    public Sprite greenPressedSprite;
-    public Sprite greenUnpressedSprite;
+    public GameController Game;
+	public PhotonView View;
+    public Text TeamDispl;
+    public CanvasGroup DebugCanvasGroup;
+	public Text DebugPanelText;
+	public Text MasterClientOpt;
+	public Slider ForwardCooldownSlider;
+	public Slider BackCooldownSlider;
+	public Text TimeDispl;
+	public Text StartTimeDispl;
+	public Text WinningDispl;
+    public CanvasGroup TimelineCanvasGroup;
+    public Slider ElapsedTimeSlider;
+    public Slider PlayerIcon0;
+    public Slider PlayerIcon1;
+    public Slider PlayerIcon2;
+    public Slider PlayerIcon3;
+    public Slider PlayerIcon4;
+	public Image ForwardJumpIcon;
+    public Image BackJumpIcon;
+    public Sprite RedPressedSprite;
+    public Sprite GreenPressedSprite;
+    public Sprite GreenUnpressedSprite;
 
-    private Hashtable debugItems;
-    private float[] cooldowns;
-    private bool debug;
-    private bool canJumpForward;
-    private bool canJumpBack;
+    private float _secondsTillGame;
+	private bool _isCountingTillGameStart;
+    private Slider[] _playerIcons;
+    private Hashtable _debugItems;
+    private float[] _cooldowns;
+    private bool _debug;
+    private bool _canJumpForward;
+    private bool _canJumpBack;
 
 
     void Start()
     {
-        if (view.IsMine)
+        if (View.IsMine)
         {
-            // The first Slider in the array corresponds to this player
-            playerIcons = new Slider[]{playerIcon0, playerIcon1, playerIcon2, playerIcon3, playerIcon4};
+            // The first Slider in the array corresponds to this player.
+            _playerIcons = new Slider[]{PlayerIcon0, PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
 
-            // Link SceneChange event to OnSceneChange
+            // Link SceneChange event to OnSceneChange.
             SceneManager.activeSceneChanged += OnSceneChange;
         }
 
-        debugItems = new Hashtable();
-        cooldowns = new float[2];
-        debug = false;
-        debugCanvasGroup.alpha = 0.0f;
-        canJumpForward = false;
-        canJumpBack = false;
+        _debugItems = new Hashtable();
+        _cooldowns = new float[2];
+        _debug = false;
+        DebugCanvasGroup.alpha = 0.0f;
+        _canJumpForward = false;
+        _canJumpBack = false;
     }
 
     void OnSceneChange(Scene current, Scene next)
     {
         if (next.name == "GameScene")
         {
-            game = FindObjectOfType<GameController>();
+            Game = FindObjectOfType<GameController>();
         }
     }
 
@@ -73,17 +73,18 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateMasterClientOptions()
     {
-        // If master client, show 'press e to start' text or 'starting in' text
-        masterClientOpts.transform.parent.gameObject.SetActive(
+        // If master client, show 'press e to start' text or 'starting in' text.
+        MasterClientOpt.transform.parent.gameObject.SetActive(
             SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient
         );
 
-        if (isCountingTillGameStart)
+        if (_isCountingTillGameStart)
         {
-            masterClientOpts.text = "Starting in " + System.Math.Round (secondsTillGame, 0) + "s";
-            if (System.Math.Round (secondsTillGame, 0) <= 0.0f)
+            var timeLeft = System.Math.Round(_secondsTillGame, 0);
+            MasterClientOpt.text = $"Starting in {timeLeft}s";
+            if (System.Math.Round (_secondsTillGame, 0) <= 0.0f)
             {
-                masterClientOpts.text = "Loading...";
+                MasterClientOpt.text = "Loading...";
             }
         }
     }
@@ -91,16 +92,17 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateStartTimeDisplay()
     {
-        startTimeDispl.transform.parent.gameObject.SetActive(
+        StartTimeDispl.transform.parent.gameObject.SetActive(
             SceneManager.GetActiveScene().name != "PreGameScene"
         );
 
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            startTimeDispl.transform.parent.gameObject.SetActive(!game.gameStarted);
-            if (!game.gameStarted && !game.gameEnded)
+            StartTimeDispl.transform.parent.gameObject.SetActive(!Game.gameStarted);
+            if (!Game.gameStarted && !Game.gameEnded)
             {
-                startTimeDispl.text = "" + (5-(int)(game.timeElapsedInGame+0.9f));
+                var elapsed = 5 - (int) (Game.timeElapsedInGame + 0.9f);
+                StartTimeDispl.text = $"{elapsed}";
             }
         }
     }
@@ -108,19 +110,20 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeDisplay()
     {
-        timeDispl.transform.parent.gameObject.SetActive(
+        TimeDispl.transform.parent.gameObject.SetActive(
             SceneManager.GetActiveScene().name != "PreGameScene"
         );
 
-        if (SceneManager.GetActiveScene().name == "GameScene" && !game.gameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)
         {
-            if (game.gameStarted)
+            if (Game.gameStarted)
             {
-                float t = game.gameLength - game.timeElapsedInGame;
-                timeDispl.text = (int)(t/60) + ":" + ((int)(t%60)).ToString().PadLeft(2, '0') + ":" 
-                + (((int)(((t%60)-(int)(t%60))*100))*60/100).ToString().PadLeft(2, '0');
+                float t = Game.gameLength - Game.timeElapsedInGame;
+                int minutes = (int) (t / 60);
+                int seconds = (int) (t % 60);
+                TimeDispl.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
             } else {
-                timeDispl.text = "0:00:00";
+                TimeDispl.text = "0:00:00";
             }
         }
     }
@@ -128,37 +131,37 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeline()
     {
-        // Set visibility of timeline, player icons and jump cooldowns
-        timelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
-        elapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+        // Set visibility of timeline, player icons and jump cooldowns.
+        TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
+        ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+        _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         for (int i=1; i < 5; i++)
         {
-            playerIcons[i].gameObject.SetActive(
+            _playerIcons[i].gameObject.SetActive(
                 SceneManager.GetActiveScene().name != "PreGameScene" && 
-                game.otherPlayersElapsedTime.Count >= i + 1
+                Game.otherPlayersElapsedTime.Count >= i + 1
             );
         }
 
-        // Set player icon positions
+        // Set player icon positions.
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            if (game.gameStarted && !game.gameEnded)
+            if (Game.gameStarted && !Game.gameEnded)
             {
-                elapsedTimeSlider.value = game.timeElapsedInGame / game.gameLength;
+                ElapsedTimeSlider.value = Game.timeElapsedInGame / Game.gameLength;
                 int n = 0;
-                List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
+                List<int> keys = new List<int>(Game.otherPlayersElapsedTime.Keys);
                 foreach(int key in keys)
                 {
-                    playerIcons[n].value = game.otherPlayersElapsedTime[key];
+                    _playerIcons[n].value = Game.otherPlayersElapsedTime[key];
                     n++;
                 }
-            } else if (!game.gameStarted && !game.gameEnded) {
-                playerIcons[0].value = 0;
+            } else if (!Game.gameStarted && !Game.gameEnded) {
+                _playerIcons[0].value = 0;
                 int n = 0;
-                List<int> keys = new List<int>(game.otherPlayersElapsedTime.Keys);
+                List<int> keys = new List<int>(Game.otherPlayersElapsedTime.Keys);
                 foreach(int key in keys){
-                    playerIcons[n].value = 0;
+                    _playerIcons[n].value = 0;
                     n++;
                 }
             }
@@ -168,39 +171,39 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateDebugPanel()
     {
-        if (debug)
+        if (_debug)
         {
             System.String debugText = "";
-            foreach (DictionaryEntry de in debugItems)
+            foreach (DictionaryEntry de in _debugItems)
             {
                 debugText += $"{de.Key}: {de.Value}\n";
             }
-            debugPanelText.text = debugText;
-            debugCanvasGroup.alpha = 1.0f;
+            DebugPanelText.text = debugText;
+            DebugCanvasGroup.alpha = 1.0f;
         }
         else
         {
-            debugCanvasGroup.alpha = 0.0f;
+            DebugCanvasGroup.alpha = 0.0f;
         }
     }
 
     private void LateUpdateCooldowns()
     {
-        forwardCooldownSlider.value = cooldowns[0];
-        backCooldownSlider.value = cooldowns[1];
+        ForwardCooldownSlider.value = _cooldowns[0];
+        BackCooldownSlider.value = _cooldowns[1];
 
-        if (canJumpForward) forwardJumpIcon.sprite = greenUnpressedSprite;
-        else forwardJumpIcon.sprite = redPressedSprite;
-        if (canJumpBack) backJumpIcon.sprite = greenUnpressedSprite;
-        else backJumpIcon.sprite = redPressedSprite;
+        if (_canJumpForward) ForwardJumpIcon.sprite = GreenUnpressedSprite;
+        else ForwardJumpIcon.sprite = RedPressedSprite;
+        if (_canJumpBack) BackJumpIcon.sprite = GreenUnpressedSprite;
+        else BackJumpIcon.sprite = RedPressedSprite;
     }
 
     private void LateUpdateWinningDisplay()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && Game.gameEnded)
         {
-            winningDispl.transform.parent.gameObject.SetActive(true);
-            winningDispl.text = (game.winningTeam == (int) GameController.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            WinningDispl.transform.parent.gameObject.SetActive(true);
+            WinningDispl.text = (Game.winningTeam == (int) GameController.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 
@@ -209,12 +212,12 @@ public class PlayerHud : MonoBehaviour
 
     void Update()
     {
-        // if counting, reduce timer
-        if (PhotonNetwork.IsMasterClient && isCountingTillGameStart && view.IsMine) {
-            secondsTillGame -= Time.deltaTime;
-            if (secondsTillGame <= 0) {
+        // If counting, reduce timer.
+        if (PhotonNetwork.IsMasterClient && _isCountingTillGameStart && View.IsMine) {
+            _secondsTillGame -= Time.deltaTime;
+            if (_secondsTillGame <= 0) {
                 PhotonNetwork.LoadLevel("GameScene");
-                isCountingTillGameStart = false;
+                _isCountingTillGameStart = false;
             }
         }
     }
@@ -222,7 +225,7 @@ public class PlayerHud : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!view.IsMine) return;
+        if (!View.IsMine) return;
 
         LateUpdateMasterClientOptions();
         LateUpdateStartTimeDisplay();
@@ -239,55 +242,55 @@ public class PlayerHud : MonoBehaviour
 
     public void SetTeam(System.String teamName)
     {
-        if (view.IsMine) teamDispl.text = teamName;
+        if (View.IsMine) TeamDispl.text = teamName;
     }
 
 
     public void StartCountingDown()
     {
-        if (isCountingTillGameStart) return;
+        if (_isCountingTillGameStart) return;
 
-        isCountingTillGameStart = true;
-        secondsTillGame = 5.0f;
+        _isCountingTillGameStart = true;
+        _secondsTillGame = 5.0f;
     }
 
 
     public void StopCountingDown()
     {
-        isCountingTillGameStart = false;
-        secondsTillGame = 0.0f;
+        _isCountingTillGameStart = false;
+        _secondsTillGame = 0.0f;
     }
 
 
     public void SetDebugValues(Hashtable items)
     {
-        debugItems = items;
+        _debugItems = items;
     }
 
     public void SetCooldownValues(float[] items)
     {
-        // each item should be a float between 0.0f (empty) and 1.0f (full)
-        cooldowns = items;
+        // Each item should be a float between 0.0f (empty) and 1.0f (full).
+        _cooldowns = items;
     }
 
     public void ToggleDebug()
     {
-        debug = !debug;
+        _debug = !_debug;
     }
 
     public void PressForwardJumpButton()
     {
-        forwardJumpIcon.sprite = greenPressedSprite;
+        ForwardJumpIcon.sprite = GreenPressedSprite;
     }
 
     public void PressBackJumpButton()
     {
-        backJumpIcon.sprite = greenPressedSprite;
+        BackJumpIcon.sprite = GreenPressedSprite;
     }
 
     public void SetCanJump(bool forward, bool back)
     {
-        canJumpForward = forward;
-        canJumpBack = back;
+        _canJumpForward = forward;
+        _canJumpBack = back;
     }
 }
