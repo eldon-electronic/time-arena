@@ -21,15 +21,6 @@ public class PlayerMovement : MonoBehaviour {
 	public Transform groundCheck;
 	public LayerMask groundMask;
 	public float mouseSensitivity = 100f;
-	public GameObject playerBody;
-	public GameObject playerArm;
-	public GameObject handThumb;
-	public GameObject handThumbTip;
-	public GameObject handIndex;
-	public GameObject handIndexTip;
-	public GameObject handMiddle;
-	public GameObject handMiddleTip;
-
 	public int team; // 0 seeker 1 hider 
 	private float speed = 5f;
 	private float gravity = 40f;
@@ -42,10 +33,6 @@ public class PlayerMovement : MonoBehaviour {
 	private float ab1Cooldown = 0f;
 	private float ab2Cooldown = 0f;
 	private int timeJumpAmount = 100;
-
-	// references to materials for user team id
-	public Material seekerMat;
-	public Material hiderMat;
 
 	// variables corresponding to UI
 	public PauseManager pauseUI;
@@ -68,6 +55,7 @@ public class PlayerMovement : MonoBehaviour {
     public GameController game;
 	public ParticleController particles;
 	public PlayerHud hud;
+	public PlayerMaterial material;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -79,19 +67,14 @@ public class PlayerMovement : MonoBehaviour {
 			Destroy(cam.gameObject);
 			Destroy(UI.gameObject);
 			gameObject.layer = 7;
-			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		} else {
 			// destroy your own nametag
 			Destroy(nametag);
 			gameObject.tag = "Client";
-			playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		}
         PhotonNetwork.AutomaticallySyncScene = true;      // allow master client to move players from one scene to another
         Cursor.lockState = CursorLockMode.Locked;         // lock players cursor to center screen
         SceneManager.activeSceneChanged += onSceneChange; // link scenechange event to onscenechange
-
-		hiderMat.SetFloat("_CutoffHeight", 50.0f);
-		seekerMat.SetFloat("_CutoffHeight", 50.0f);
 	}
 
 	// onSceneChange is called by the SceneManager.activeSceneChanged event;
@@ -302,29 +285,11 @@ public class PlayerMovement : MonoBehaviour {
 	public void changeTeam() {
 		if (team == (int) GameController.Teams.Hider) {
 			team = (int) GameController.Teams.Seeker;
-			playerBody.GetComponent<Renderer>().material = seekerMat;
-			playerArm.GetComponent<Renderer>().material = seekerMat;
-			
-			handIndex.GetComponent<Renderer>().material = seekerMat;
-			handIndexTip.GetComponent<Renderer>().material = seekerMat;
-			handMiddle.GetComponent<Renderer>().material = seekerMat;
-			handMiddleTip.GetComponent<Renderer>().material = seekerMat;
-			handThumb.GetComponent<Renderer>().material = seekerMat;
-			handThumbTip.GetComponent<Renderer>().material = seekerMat;
-
+			material.SetMaterial("seeker");
 			hud.SetTeam("SEEKER");
 		} else {
 			team = (int) GameController.Teams.Hider;
-			playerBody.GetComponent<Renderer>().material = hiderMat;
-			playerArm.GetComponent<Renderer>().material = hiderMat;
-			
-			handIndex.GetComponent<Renderer>().material = hiderMat;
-			handIndexTip.GetComponent<Renderer>().material = hiderMat;
-			handMiddle.GetComponent<Renderer>().material = hiderMat;
-			handMiddleTip.GetComponent<Renderer>().material = hiderMat;
-			handThumb.GetComponent<Renderer>().material = hiderMat;
-			handThumbTip.GetComponent<Renderer>().material = hiderMat;
-
+			material.SetMaterial("hider");
 			hud.SetTeam("HIDER");
 		}
 	}

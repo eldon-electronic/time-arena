@@ -8609,6 +8609,7 @@ GameObject:
   - component: {fileID: 2206506049548669404}
   - component: {fileID: 3138509024607561696}
   - component: {fileID: 228805100952192999}
+  - component: {fileID: 2023830040026805525}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -8669,7 +8670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObservedComponentsFoldoutOpen: 1
   Group: 0
-  prefixField: -1
+  prefixField: 0
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
@@ -8955,17 +8956,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   mouseSensitivity: 100
-  playerBody: {fileID: 6458975046544177892}
-  playerArm: {fileID: 3493748242805195335}
-  handThumb: {fileID: 7821992714558930419}
-  handThumbTip: {fileID: 3951103480495365361}
-  handIndex: {fileID: 1797320078370533272}
-  handIndexTip: {fileID: 5766457012169621098}
-  handMiddle: {fileID: 2799039165242071877}
-  handMiddleTip: {fileID: 512938505191447430}
   team: 1
-  seekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
-  hiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
   pauseUI: {fileID: 5276288210589276353}
   nametag: {fileID: 2491143808538081395}
   playerAnim: {fileID: 9070032884028841073}
@@ -8978,6 +8969,7 @@ MonoBehaviour:
   game: {fileID: 0}
   particles: {fileID: 228805100952192999}
   hud: {fileID: 3138509024607561696}
+  material: {fileID: 2023830040026805525}
 --- !u!114 &3078873912917717710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9054,6 +9046,29 @@ MonoBehaviour:
   Splash: {fileID: 7341217877377959895}
   Material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
   PlayerAnim: {fileID: 9070032884028841073}
+--- !u!114 &2023830040026805525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3cc45b51fe7428594a64335f548593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerBody: {fileID: 6458975046544177892}
+  PlayerArm: {fileID: 3493748242805195335}
+  HandThumb: {fileID: 7821992714558930419}
+  HandThumbTip: {fileID: 3951103480495365361}
+  HandIndex: {fileID: 1797320078370533272}
+  HandIndexTip: {fileID: 5766457012169621098}
+  HandMiddle: {fileID: 2799039165242071877}
+  HandMiddleTip: {fileID: 512938505191447430}
+  SeekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
+  HiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
+  View: {fileID: 5690578699466181193}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
