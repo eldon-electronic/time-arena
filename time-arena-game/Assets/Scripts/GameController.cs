@@ -59,7 +59,7 @@ public class GameController : MonoBehaviour
 		// set players position to spawn point
 		if (players.Count > 1) { // if testing with one player, they are hider, otherwise one player will randomly be seeker
 			int randomIndex = Random.Range(0, players.Count-1); 
-			players[randomIndex].getFound();
+			players[randomIndex].GetFound();
 		}
 
 		/*int n = 0;
@@ -97,7 +97,7 @@ public class GameController : MonoBehaviour
 			if (timeElapsedInGame >= gameLength && !gameEnded) {
 				gameEnded = true;
 				winningTeam = (int) Teams.Hider;
-				player.onGameEnded();
+				player.OnGameEnded();
 			}
 		}
 	}
@@ -106,12 +106,12 @@ public class GameController : MonoBehaviour
 	public void checkHidersLeft() {
 		bool isHidersRemaining = false;
 		for (int i = 0; i < players.Count; i++) {
-			isHidersRemaining |= (players[i].team == (int) Teams.Hider);
+			isHidersRemaining |= (players[i].Team == (int) Teams.Hider);
 		}
 		if (!isHidersRemaining) { // Code reaches here even though hiders are remaining
 			gameEnded = true;
 			winningTeam = (int) Teams.Seeker;
-			player.onGameEnded();
+			player.OnGameEnded();
 		}
 	}
 }
