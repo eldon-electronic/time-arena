@@ -8610,6 +8610,7 @@ GameObject:
   - component: {fileID: 3138509024607561696}
   - component: {fileID: 228805100952192999}
   - component: {fileID: 2023830040026805525}
+  - component: {fileID: 1790736153170312991}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -8947,15 +8948,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256a66293b5a844abbbf145fa8e9274d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterBody: {fileID: 6458975045518551229}
   cam: {fileID: 6458975046434770673}
   cameraHolder: {fileID: 3168561785147484150}
   UI: {fileID: 1130251741066097712}
-  groundCheck: {fileID: 6458975045590433014}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  mouseSensitivity: 100
   team: 1
   pauseUI: {fileID: 5276288210589276353}
   nametag: {fileID: 2491143808538081395}
@@ -8964,12 +8959,13 @@ MonoBehaviour:
   grabMask:
     serializedVersion: 2
     m_Bits: 128
-  view: {fileID: 5690578699466181193}
-  timeTravel: {fileID: 3078873912917717710}
-  game: {fileID: 0}
-  particles: {fileID: 228805100952192999}
-  hud: {fileID: 3138509024607561696}
-  material: {fileID: 2023830040026805525}
+  View: {fileID: 5690578699466181193}
+  TimeTravel: {fileID: 3078873912917717710}
+  Game: {fileID: 0}
+  Particles: {fileID: 228805100952192999}
+  Hud: {fileID: 3138509024607561696}
+  Material: {fileID: 2023830040026805525}
+  Movement: {fileID: 1790736153170312991}
 --- !u!114 &3078873912917717710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9069,6 +9065,27 @@ MonoBehaviour:
   SeekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
   HiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
   View: {fileID: 5690578699466181193}
+--- !u!114 &1790736153170312991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c30fc5872cf4f0e96ae1a7e0af4293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Game: {fileID: 0}
+  View: {fileID: 5690578699466181193}
+  CharacterBody: {fileID: 6458975045518551229}
+  PauseUI: {fileID: 5276288210589276353}
+  GroundCheck: {fileID: 6458975045518551234}
+  GroundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  CameraHolder: {fileID: 3168561785147484150}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0

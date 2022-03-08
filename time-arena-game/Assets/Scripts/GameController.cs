@@ -10,8 +10,8 @@ public class GameController : MonoBehaviour
     public float gameLength = 5f * 60f; // 5 minute rounds * sixty seconds
     public float timeElapsedInGame = 0f;
 
-	public PlayerMovement player;
-	public List<PlayerMovement> players;
+	public PlayerController player;
+	public List<PlayerController> players;
 
 	// list to keep track of elapsed time for all players
   	public Dictionary<int, float> otherPlayersElapsedTime = new Dictionary<int, float>();
@@ -34,9 +34,9 @@ public class GameController : MonoBehaviour
 
 		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
 		if (clients.Length == 1) {
-			player = clients[0].GetComponent<PlayerMovement>();
-			otherPlayersElapsedTime.Add(player.view.ViewID, 0f); // add yourself to array of tracking elapsed time
-			player.game = this;
+			player = clients[0].GetComponent<PlayerController>();
+			otherPlayersElapsedTime.Add(player.View.ViewID, 0f); // add yourself to array of tracking elapsed time
+			player.Game = this;
 		} else {
 			Debug.Log("GameController error: Number of clients is not 1");
 		}
@@ -44,9 +44,9 @@ public class GameController : MonoBehaviour
 		GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
 		players.Add(player); //player.timeTravel.GetTimePosition()
 		for (int i = 0; i < objs.Length; i++) {
-			PlayerMovement playerComponent = objs[i].GetComponent<PlayerMovement>();
+			PlayerController playerComponent = objs[i].GetComponent<PlayerController>();
 			players.Add(playerComponent);
-			otherPlayersElapsedTime.Add(playerComponent.view.ViewID, 0f); // add other players
+			otherPlayersElapsedTime.Add(playerComponent.View.ViewID, 0f); // add other players
 		}
 
 		if (PhotonNetwork.IsMasterClient) {
@@ -55,7 +55,7 @@ public class GameController : MonoBehaviour
 	}
 
     // initialise teams and spawn locations for the new game;
-	void setupNewGame(PlayerMovement client){
+	void setupNewGame(PlayerController client){
 		// set players position to spawn point
 		if (players.Count > 1) { // if testing with one player, they are hider, otherwise one player will randomly be seeker
 			int randomIndex = Random.Range(0, players.Count-1); 
