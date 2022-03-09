@@ -11,13 +11,14 @@ public class PlayerController : MonoBehaviour {
 	// Variables defining player values.
 	public Camera Cam;
 	public GameObject CameraHolder;
-	public Canvas UI;
-	// 0 seeker 1 hider.
-	public int Team;
+	public PlayerMaterial Material;
+	public PlayerMovement Movement;
 
 	// Variables corresponding to UI.
+	public Canvas UI;
 	public PauseManager PauseUI;
 	public GameObject Nametag;
+	public PlayerHud Hud;
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour {
 	public LayerMask GrabMask;
 	private float _grabCheckRadius = 1f;
 	private bool _damageWindow = false;
+	public ParticleController Particles;
 
     // The photonView component that syncs with the network.
 	public PhotonView View;
@@ -34,25 +36,26 @@ public class PlayerController : MonoBehaviour {
 
     // Variables corresponding to the gamestate.
     public GameController Game;
-	public ParticleController Particles;
-	public PlayerHud Hud;
-	public PlayerMaterial Material;
-	public PlayerMovement Movement;
 
+	// 0 seeker 1 hider.
+	public int Team;
 	private float _forwardsJumpCooldown = 0f;
 	private float _backJumpCooldown = 0f;
 	private int _timeJumpAmount = 100;
 
-	// Start is called before the first frame update.
+
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		Team = (int) GameController.Teams.Seeker;
 		ChangeTeam();
-		if (!View.IsMine) {
+		if (!View.IsMine)
+		{
 			Destroy(Cam.gameObject);
 			Destroy(UI.gameObject);
 			gameObject.layer = 7;
-		} else {
+		}
+		else
+		{
 			Destroy(Nametag);
 			gameObject.tag = "Client";
 		}
@@ -60,11 +63,12 @@ public class PlayerController : MonoBehaviour {
         PhotonNetwork.AutomaticallySyncScene = true;
 		// Lock players cursor to center screen.
         Cursor.lockState = CursorLockMode.Locked;
-		// Link scenechange event to onscenechange.
+		// Link scenechange event to Onscenechange.
         SceneManager.activeSceneChanged += OnSceneChange;
 	}
 
-	// onSceneChange is called by the SceneManager.activeSceneChanged event.
+
+	// OnSceneChange is called by the SceneManager.activeSceneChanged event.
 	void OnSceneChange(Scene current, Scene next) {
 		if (next.name == "GameScene") {
 			Game = FindObjectOfType<GameController>();
@@ -77,116 +81,98 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void Update() {
-		// Local keys only affect client's player.
-		if (!View.IsMine) return;
 
-		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)) {
-			UpdateCooldowns();
-			KeyControl();
-		}
+	// ------------ RPC FUNCTIONS ------------
 
-		// Set the debug items and send to HUD to be displayed.
-		Hashtable debugItems = new Hashtable();
-		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
-		debugItems.Add("Sprint", Input.GetKey("left shift"));
-		debugItems.Add("Grab", _damageWindow);
-		Hud.SetDebugValues(debugItems);
 
-		// Update player cooldown displays.
-		float[] cooldownValues = new float[]{1.0f - (_forwardsJumpCooldown / 15.0f), 1.0f - (_backJumpCooldown / 15.0f)};
-		Hud.SetCooldownValues(cooldownValues);
+	[PunRPC]
+	void RPC_jumpBackwards()
+	{
+		TimeTravel.TimeJump(-_timeJumpAmount);
+		Particles.StartJumpingBackward();
+		_backJumpCooldown = 15;
+		Hud.PressForwardJumpButton();
+		Game.otherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
+	}
 
-		bool canJumpForward = SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0.0f && 
-							TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick();
-		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0.0f && 
-							TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0;
-		Hud.SetCanJump(canJumpForward, canJumpBack);
+	[PunRPC]
+	void RPC_jumpForward()
+	{
+		TimeTravel.TimeJump(_timeJumpAmount);
+		Particles.StartJumpingForward();
+		_forwardsJumpCooldown = 15;
+		Hud.PressBackJumpButton();
+		Game.otherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
+	}
 
-		// Update pauseUI and cursor lock if game is ended.
-		if (SceneManager.GetActiveScene().name == "GameScene" && Game.gameEnded)
+	// RPC function to be called when another player finds this one.
+	[PunRPC]
+	void RPC_getFound()
+	{
+		ChangeTeam();
+	}
+
+	// RPC function to be called by other machines to set this players transform.
+	[PunRPC]
+	void RPC_movePlayer(Vector3 pos, Vector3 rot)
+	{
+		transform.position = pos;
+		transform.rotation = Quaternion.Euler(rot);
+		CameraHolder.transform.rotation = Quaternion.Euler(rot);
+	}
+
+
+	// ------------ ACTIONS ------------
+
+
+	public void JumpBackwards()
+	{
+		// Only allow time travel backwards if it doesn't go past the beginning.
+		if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
+			TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0)
 		{
-			PauseUI.isPaused = true;
-			PauseUI.pauseMenuUI.SetActive(true);
-			Cursor.lockState = CursorLockMode.None;
+			View.RPC("RPC_jumpBackwards", RpcTarget.All);
 		}
 	}
 
-	void UpdateCooldowns()
+	public void JumpForward()
 	{
-		_forwardsJumpCooldown = (_forwardsJumpCooldown > 0) ? (_forwardsJumpCooldown - Time.deltaTime) : 0;
-		_backJumpCooldown = (_backJumpCooldown > 0) ? (_backJumpCooldown - Time.deltaTime) : 0;
+		// Only allow time travel forwards if it doesn't go past the end.
+		if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
+			TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick())
+		{
+			View.RPC("RPC_jumpForward", RpcTarget.All);
+		}
 	}
 
-	void KeyControl()
+	private void Grab()
 	{
-		// Keypress '1' -> time jump backward.
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+		// If grabbing, check for intersection with player.
+		if (!_damageWindow)
 		{
-			// Only allow time travel backwards if it doesn't go past the beginning.
-			if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
-				TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0)
-			{ 
-				JumpBackwards();
-			}
-		}
-
-		// Keypress '2' -> time jump forward.
-		if (Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			// Only allow time travel forwards if it doesn't go past the end.
-			if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
-				TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick())
+			Collider[] playersGrab = Physics.OverlapSphere(GrabCheck.position, _grabCheckRadius, GrabMask);
+			foreach (var playerGotGrab in playersGrab)
 			{
-				JumpForward(); 
-			}
-		}
-
-		// Left mouse click -> start grabbing.
-		if (Input.GetMouseButtonDown(0))
-		{
-			// If grabbing, check for intersection with player.
-			if (!_damageWindow)
-			{
-				Collider[] playersGrab = Physics.OverlapSphere(GrabCheck.position, _grabCheckRadius, GrabMask);
-				foreach (var playerGotGrab in playersGrab)
+				// Call grabplayer function on that player.
+				PlayerController targetPlayer = playerGotGrab.GetComponent<PlayerController>();
+				if (Team == (int) GameController.Teams.Seeker && 
+					targetPlayer.Team == (int) GameController.Teams.Hider)
 				{
-					// Call grabplayer function on that player.
-					PlayerController targetPlayer = playerGotGrab.GetComponent<PlayerController>();
-					if (Team == (int) GameController.Teams.Seeker && 
-						targetPlayer.Team == (int) GameController.Teams.Hider)
-					{
-						targetPlayer.GetFound();
-					}
+					targetPlayer.GetFound();
 				}
-				PlayerAnim.SetBool("isGrabbing", true);
 			}
-		}
-
-		// Keypress 'e' -> start game.
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient)
-			{
-				Hud.StartCountingDown();
-			}
-		}
-
-		// Keypress `ESC` -> stop counting down to game launch.
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			Hud.StopCountingDown();
-		}
-
-		// Keypress 'p' -> toggle debug mode.
-		if (Input.GetKeyDown(KeyCode.P))
-		{
-			Hud.ToggleDebug();
+			PlayerAnim.SetBool("isGrabbing", true);
 		}
 	}
 
-	// Change player teams.
+	private void StartGame()
+	{
+		if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient)
+		{
+			Hud.StartCountingDown();
+		}
+	}
+
 	public void ChangeTeam()
 	{
 		if (Team == (int) GameController.Teams.Hider)
@@ -203,57 +189,11 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	[PunRPC]
-	void RPC_jumpBackwards()
-	{
-		TimeTravel.TimeJump(-_timeJumpAmount);
-		Particles.StartJumpingBackward();
-		_backJumpCooldown = 15;
-		Hud.PressForwardJumpButton();
-		Game.otherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
-	}
-
-	public void JumpBackwards()
-	{
-		View.RPC("RPC_jumpBackwards", RpcTarget.All);
-	}
-
-	[PunRPC]
-	void RPC_jumpForward()
-	{
-		TimeTravel.TimeJump(_timeJumpAmount);
-		Particles.StartJumpingForward();
-		_forwardsJumpCooldown = 15;
-		Hud.PressBackJumpButton();
-		Game.otherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
-	}
-
-	public void JumpForward()
-	{
-		View.RPC("RPC_jumpForward", RpcTarget.All);
-	}
-
-	// RPC function to be called when another player finds this one.
-	[PunRPC]
-	void RPC_getFound()
-	{
-		ChangeTeam();
-	}
-
 	// RPC function to be called when another player hits this one.
 	// Function to get found by calling RPC on all machines.
 	public void GetFound()
 	{
 		View.RPC("RPC_getFound", RpcTarget.All);
-	}
-
-	// RPC function to be called by other machines to set this players transform.
-	[PunRPC]
-	void RPC_movePlayer(Vector3 pos, Vector3 rot)
-	{
-		transform.position = pos;
-		transform.rotation = Quaternion.Euler(rot);
-		CameraHolder.transform.rotation = Quaternion.Euler(rot);
 	}
 
 	// Function to move this player by calling RPC for all others.
@@ -262,13 +202,13 @@ public class PlayerController : MonoBehaviour {
 		View.RPC("RPC_movePlayer", RpcTarget.All, pos, rot);
 	}
 
-	// Function to enable player to damage others.
+	// Function to enable player to grab others.
 	public void StartGrabbing()
 	{
 		_damageWindow = true;
 	}
 
-	// Function to disable player to damage others.
+	// Function to disable player to grab others.
 	public void StopGrabbing()
 	{
 		_damageWindow = false;
@@ -281,5 +221,69 @@ public class PlayerController : MonoBehaviour {
 		/*if(PhotonNetwork.IsMasterClient){
 			PhotonNetwork.LoadLevel("PreGameScene");
 		}*/
+	}
+
+
+	// ------------ UPDATE HELPER FUNCTIONS ------------
+
+
+	private void UpdateCooldowns()
+	{
+		_forwardsJumpCooldown = (_forwardsJumpCooldown > 0) ? (_forwardsJumpCooldown - Time.deltaTime) : 0;
+		_backJumpCooldown = (_backJumpCooldown > 0) ? (_backJumpCooldown - Time.deltaTime) : 0;
+		float forwardBarHeight = 1.0f - (_forwardsJumpCooldown / 15.0f);
+		float backBarHeight = 1.0f - (_backJumpCooldown / 15.0f);
+		float[] cooldownValues = new float[]{forwardBarHeight, backBarHeight};
+		Hud.SetCooldownValues(cooldownValues);
+
+		bool canJumpForward = SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0.0f && 
+							TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick();
+		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0.0f && 
+							TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0;
+		Hud.SetCanJump(canJumpForward, canJumpBack);
+	}
+
+	private void UpdateDebugDisplay()
+	{
+		Hashtable debugItems = new Hashtable();
+		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
+		debugItems.Add("Sprint", Input.GetKey("left shift"));
+		debugItems.Add("Grab", _damageWindow);
+		Hud.SetDebugValues(debugItems);
+	}
+
+	void KeyControl()
+	{
+		if (Input.GetKeyDown(KeyCode.Alpha1)) JumpBackwards();
+
+		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward();
+
+		if (Input.GetMouseButtonDown(0)) Grab();
+
+		if (Input.GetKeyDown(KeyCode.E)) StartGame();
+
+		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
+
+		if (Input.GetKeyDown(KeyCode.P)) Hud.ToggleDebug();
+	}
+
+	void Update() {
+		// Local keys only affect client's player.
+		if (!View.IsMine) return;
+
+		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
+		(SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)) {
+			UpdateCooldowns();
+			UpdateDebugDisplay();
+			KeyControl();
+		}
+
+		// Update pauseUI and cursor lock if game is ended.
+		if (SceneManager.GetActiveScene().name == "GameScene" && Game.gameEnded)
+		{
+			PauseUI.isPaused = true;
+			PauseUI.pauseMenuUI.SetActive(true);
+			Cursor.lockState = CursorLockMode.None;
+		}
 	}
 }
