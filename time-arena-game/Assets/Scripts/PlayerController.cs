@@ -249,6 +249,10 @@ public class PlayerController : MonoBehaviour {
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
 		debugItems.Add("Grab", _damageWindow);
+
+		Hashtable movementState = Movement.GetState();
+		Utilities.Union(ref debugItems, movementState);
+		
 		Hud.SetDebugValues(debugItems);
 	}
 

@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public PhotonView View;
     public CharacterController CharacterBody;
     public PauseManager PauseUI;
-    public Transform GroundCheck;
+    public Transform PlayerTransform;
     public LayerMask GroundMask;
     public GameObject CameraHolder;
 
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _speed = 5f;
-        _groundCheckRadius = 0.5f;
+        _groundCheckRadius = 0.1f;
         _jumpPower = 3f;
         _gravity = 40f;
         _isGrounded = true;
@@ -57,8 +57,10 @@ public class PlayerMovement : MonoBehaviour
         float xMove = PauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
         float zMove = PauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
 
-        // Check if player's GroundCheck intersects with any environment object.
-        bool isGrounded = Physics.CheckSphere(GroundCheck.position, _groundCheckRadius, GroundMask);
+        // Check if player's bottom intersects with any environment object.
+        Vector3 groundCheck = PlayerTransform.position;
+        groundCheck.y -= 1f;
+        _isGrounded = Physics.CheckSphere(groundCheck, _groundCheckRadius, GroundMask);
 
         // Set and normalise movement vector.
         Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
@@ -116,5 +118,12 @@ public class PlayerMovement : MonoBehaviour
             UpdatePosition();
             UpdateRotation();
         }
+    }
+
+    public Hashtable GetState()
+    {
+        var values = new Hashtable();
+        values.Add("IsGrounded", _isGrounded);
+        return values;
     }
 }
