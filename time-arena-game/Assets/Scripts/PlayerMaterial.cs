@@ -49,4 +49,28 @@ public class PlayerMaterial : MonoBehaviour
             bodyPart.GetComponent<Renderer>().material = _materials[material];
         }
     }
+
+    public void SetSeekerMaterial()
+    {
+        PlayerBody.GetComponent<Renderer>().material = SeekerMat;
+        PlayerArm.GetComponent<Renderer>().material = SeekerMat;
+        HandThumb.GetComponent<Renderer>().material = SeekerMat;
+        HandThumbTip.GetComponent<Renderer>().material = SeekerMat;
+        HandIndex.GetComponent<Renderer>().material = SeekerMat;
+        HandIndexTip.GetComponent<Renderer>().material = SeekerMat;
+        HandMiddle.GetComponent<Renderer>().material = SeekerMat;
+        HandMiddleTip.GetComponent<Renderer>().material = SeekerMat;
+    }
+
+    public void SetHiderMaterial()
+    {
+        PlayerBody.GetComponent<Renderer>().material = HiderMat;
+        PlayerArm.GetComponent<Renderer>().material = HiderMat;
+        HandThumb.GetComponent<Renderer>().material = HiderMat;
+        HandThumbTip.GetComponent<Renderer>().material = HiderMat;
+        HandIndex.GetComponent<Renderer>().material = HiderMat;
+        HandIndexTip.GetComponent<Renderer>().material = HiderMat;
+        HandMiddle.GetComponent<Renderer>().material = HiderMat;
+        HandMiddleTip.GetComponent<Renderer>().material = HiderMat;
+    }
 }

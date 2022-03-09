@@ -46,8 +46,9 @@ public class PlayerController : MonoBehaviour {
 
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
-		Team = (int) GameController.Teams.Seeker;
-		ChangeTeam();
+		Team = (int) GameController.Teams.Hider;
+		Material.SetHiderMaterial();
+		Hud.SetTeam("HIDER");
 		if (!View.IsMine)
 		{
 			Destroy(Cam.gameObject);
