@@ -9,22 +9,26 @@ public class MenuManager : MonoBehaviour
     [SerializeField] Menu[] menus;
 
     void Awake() {
-        Instance = this; // References this script, and not an object
+        Instance = this;
     }
 
-    // Allows reference to menus inside scripts simply using strings, rather than storing them
     public void OpenMenu(string name) { 
+        // Loop through all our Menu instances
         for (int i = 0; i < menus.Length; i++) {
             if (menus[i].menuName == name) {
-                OpenMenu(menus[i]);
+                menus[i].Open();
             } else if (menus[i].open) {
                 CloseMenu(menus[i]);
             }
         }
     }
 
-    // Allows us to attach menu GameObjects from the Inspector
-    public void OpenMenu(Menu menu) { 
+    public void OpenMenu(Menu menu) {
+        for (int i = 0; i < menus.Length; i++) {
+            if (menus[i].open) {
+                CloseMenu(menus[i]);
+            }
+        }
         menu.Open();
     }
 
