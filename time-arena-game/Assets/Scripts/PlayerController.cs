@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour {
 	{
 		// Only allow time travel backwards if it doesn't go past the beginning.
 		if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
-			TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0)
+			TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0 && !Particles.IsJumping())
 		{
 			View.RPC("RPC_jumpBackwards", RpcTarget.All);
 		}
@@ -175,7 +175,8 @@ public class PlayerController : MonoBehaviour {
 	{
 		// Only allow time travel forwards if it doesn't go past the end.
 		if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
-			TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick())
+			TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick() &&
+			!Particles.IsJumping())
 		{
 			View.RPC("RPC_jumpForward", RpcTarget.All);
 		}
