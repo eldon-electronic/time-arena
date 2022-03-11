@@ -92,8 +92,8 @@ public class PlayerHud : MonoBehaviour
         _canJumpForward = false;
         _canJumpBack = false;
 
-         //SetArrowPosition("timebar");
-         //SetMessage("Hi");
+         //SetArrowPosition("backJump");
+         //SetMessage("Press");
          //SetArrowPosition("timer");
          //SetMessage("Hello");
     }
@@ -348,6 +348,11 @@ public class PlayerHud : MonoBehaviour
         _message = tutorialMessage;
         PopUpText.GetComponent<TextMeshProUGUI>().text = _message;
           
+    }
+
+    public void SetArrowVisibility(bool ArrowVisibility){
+        
+        ArrowImage.gameObject.SetActive(ArrowVisibility);
     }
 
 
