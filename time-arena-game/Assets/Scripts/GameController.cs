@@ -55,21 +55,14 @@ public class GameController : MonoBehaviour
 	}
 
     // initialise teams and spawn locations for the new game;
-	void setupNewGame(PlayerController client){
-		// set players position to spawn point
-		if (players.Count > 1) { // if testing with one player, they are hider, otherwise one player will randomly be seeker
+	void setupNewGame(PlayerController client)
+	{
+		// If testing with one player, they are hider, otherwise one player will randomly be seeker.
+		if (players.Count > 1)
+		{
 			int randomIndex = Random.Range(0, players.Count-1); 
 			players[randomIndex].GetFound();
 		}
-
-		/*int n = 0;
-		for (int i = 0; i < players.Count; i++) {
-			if (players[i].team == (int) Teams.Hider) {
-				players[i].movePlayer(hiderSpawnPoints[n++], new Vector3(0f, -90f, 0f));
-			} else {
-				players[i].movePlayer(seekerSpawnPoint, new Vector3(0f, 90f, 0f));
-			}
-		}*/
 	}
 
 	// Update is called once per frame

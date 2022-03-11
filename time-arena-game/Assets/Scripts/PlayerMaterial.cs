@@ -17,13 +17,12 @@ public class PlayerMaterial : MonoBehaviour
     public Material HiderMat;
     public PhotonView View;
 
-    private GameObject[] _bodyParts;
+    private GameObject[] _armParts;
     private Dictionary<string, Material> _materials;
     
     void Start()
     {
-        _bodyParts = new GameObject[]{PlayerBody, PlayerArm, HandThumb, 
-            HandThumbTip, HandIndex, HandIndexTip, HandMiddle, HandMiddleTip};
+        _armParts = new GameObject[]{PlayerArm, HandThumb, HandThumbTip, HandIndex, HandIndexTip, HandMiddle, HandMiddleTip};
         
         _materials = new Dictionary<string, Material>();
         _materials.Add("seeker", SeekerMat);
@@ -44,9 +43,10 @@ public class PlayerMaterial : MonoBehaviour
 
     public void SetMaterial(string material)
     {
-        foreach (GameObject bodyPart in _bodyParts)
+        PlayerBody.GetComponent<Renderer>().material = _materials[material];
+        foreach (GameObject armPart in _armParts)
         {
-            bodyPart.GetComponent<Renderer>().material = _materials[material];
+            armPart.GetComponent<Renderer>().material = _materials[material];
         }
     }
 
@@ -72,5 +72,13 @@ public class PlayerMaterial : MonoBehaviour
         HandIndexTip.GetComponent<Renderer>().material = HiderMat;
         HandMiddle.GetComponent<Renderer>().material = HiderMat;
         HandMiddleTip.GetComponent<Renderer>().material = HiderMat;
+    }
+
+    public void SetArmActive(bool on)
+    {
+        foreach(GameObject armPart in _armParts)
+        {
+            armPart.SetActive(on);
+        }
     }
 }

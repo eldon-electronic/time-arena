@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour {
 			_backJumpCooldown = 15;
 
 			MoveToSpawnPoint();
+			Material.SetArmActive(Team == (int) GameController.Teams.Seeker);
 		}
 	}
 
@@ -214,12 +215,14 @@ public class PlayerController : MonoBehaviour {
 		{
 			Team = (int) GameController.Teams.Seeker;
 			Material.SetMaterial("seeker");
+			Material.SetArmActive(true);
 			Hud.SetTeam("SEEKER");
 		}
 		else
 		{
 			Team = (int) GameController.Teams.Hider;
 			Material.SetMaterial("hider");
+			Material.SetArmActive(false);
 			Hud.SetTeam("HIDER");
 		}
 	}
