@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameStarted) return;
 
         // Sprint speed.
-        if (Input.GetKey("left shift")) _speed = 10f;
+        if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
 		else _speed = 5f;
 
         // Get movement axis values.
