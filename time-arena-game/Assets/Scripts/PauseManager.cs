@@ -7,33 +7,36 @@ using Photon.Pun;
 public class PauseManager : MonoBehaviour {
 
 	//pause tracking vars
-	public bool isPaused = false;
-	public GameObject pauseMenuUI;
+    public bool IsPaused = false;
+	public GameObject PauseMenuUI;
 
 	// Update is called once per frame
 	void Update() {
-		//on user pressing esc
 		if(Input.GetKeyDown(KeyCode.Escape)){
-			//flip pause and show/remove menu and update cursor state
-			isPaused = !isPaused;
-			pauseMenuUI.SetActive(isPaused);
-			Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+			IsPaused = !IsPaused;
+			PauseMenuUI.SetActive(IsPaused);
+			Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
 		}
 	}
 
-	public void Resume(){
-		isPaused = false;
-		pauseMenuUI.SetActive(isPaused);
-		Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+	public void Resume() {
+		IsPaused = false;
+		PauseMenuUI.SetActive(IsPaused);
+		Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
 	}
 
-	public void ReturnToLobby(){
+	private void disconnectPlayer() {
+		StartCoroutine(DisconnectAndLoad());
+	}
+
+	IEnumerator DisconnectAndLoad() {
 		PhotonNetwork.LeaveRoom();
-		SceneManager.LoadScene("LobbyScene");
+		while (PhotonNetwork.InRoom) yield return null; // Busy waiting
+		SceneManager.LoadScene("MenuScene");
+		Destroy(gameObject);
 	}
 
-	public void Quit(){
-		SceneManager.LoadScene("MenuScene");
-		PhotonNetwork.Disconnect();
+	public void Leave() {
+		disconnectPlayer();
 	}
 }

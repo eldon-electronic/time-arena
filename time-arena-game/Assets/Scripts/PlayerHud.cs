@@ -68,7 +68,6 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-
     // ------------ LATE UPDATE HELPER FUNCTIONS ------------
 
     private void LateUpdateMasterClientOptions()

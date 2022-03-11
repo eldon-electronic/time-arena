@@ -33,8 +33,10 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
 	// Start is called before the first frame update
 	void Start() {
-		Debug.Log("Connecting to Master");
-		PhotonNetwork.ConnectUsingSettings();
+		if (!PhotonNetwork.IsConnected) {	
+			Debug.Log("Connecting to Master");
+			PhotonNetwork.ConnectUsingSettings();
+		}
 	}
 
 	public void StartGame() {
@@ -43,7 +45,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	}
 
 	public void QuitGame() {
-		Application.Quit();
+		UnityEditor.EditorApplication.isPlaying = false;
 	}
 
 	public override void OnConnectedToMaster() {
@@ -148,6 +150,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	}
 
     public override void OnLeftRoom() {
+		Debug.Log(PhotonNetwork.InLobby);
 		MenuManager.Instance.OpenMenu("mainMenu");
     }
 

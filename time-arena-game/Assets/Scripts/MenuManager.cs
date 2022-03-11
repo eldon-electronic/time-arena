@@ -15,9 +15,9 @@ public class MenuManager : MonoBehaviour
     public void OpenMenu(string name) { 
         // Loop through all our Menu instances
         for (int i = 0; i < menus.Length; i++) {
-            if (menus[i].menuName == name) {
+            if (menus[i].MenuName == name) {
                 menus[i].Open();
-            } else if (menus[i].open) {
+            } else if (menus[i].IsOpen) {
                 CloseMenu(menus[i]);
             }
         }
@@ -25,7 +25,7 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMenu(Menu menu) {
         for (int i = 0; i < menus.Length; i++) {
-            if (menus[i].open) {
+            if (menus[i].IsOpen) {
                 CloseMenu(menus[i]);
             }
         }

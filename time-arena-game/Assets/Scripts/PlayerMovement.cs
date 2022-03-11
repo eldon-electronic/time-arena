@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			ab1Cooldown = 15;
 			ab2Cooldown = 15;
-		}
+		} 
 	}
 
 	// Update is called once per frame
@@ -144,8 +144,8 @@ public class PlayerMovement : MonoBehaviour {
 		// update pauseUI and cursor lock if game is ended
 		if (SceneManager.GetActiveScene().name == "GameScene" && game.gameEnded)
 		{
-			pauseUI.isPaused = true;
-			pauseUI.pauseMenuUI.SetActive(true);
+			pauseUI.IsPaused = true;
+			pauseUI.PauseMenuUI.SetActive(true);
 			Cursor.lockState = CursorLockMode.None;
 		}
 	}
@@ -169,8 +169,8 @@ public class PlayerMovement : MonoBehaviour {
 			}
 
             // get movement axis values
-			float xMove = pauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
-			float zMove = pauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
+			float xMove = pauseUI.IsPaused ? 0 : Input.GetAxis("Horizontal");
+			float zMove = pauseUI.IsPaused ? 0 : Input.GetAxis("Vertical");
 
             // check if player's GroundCheck intersects with any environment object
 			isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
@@ -186,7 +186,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		// jump control
-		if (Input.GetButtonDown("Jump") && isGrounded && !pauseUI.isPaused) {
+		if (Input.GetButtonDown("Jump") && isGrounded && !pauseUI.IsPaused) {
 			velocity.y += Mathf.Sqrt(jumpPower * 2f * gravity);
 		}
 
@@ -209,8 +209,8 @@ public class PlayerMovement : MonoBehaviour {
 	void cameraControl() {
 		// rotate player about y and playercam about x
 		//get axis values from input
-		float mouseX = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
-		float mouseY = pauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+		float mouseX = pauseUI.IsPaused ? 0 : Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime; //deltatime used for fps correction
+		float mouseY = pauseUI.IsPaused ? 0 : Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
 		// invert vertical rotation and restrict up/down
 		xRot -= mouseY;
