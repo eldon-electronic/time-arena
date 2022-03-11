@@ -29,6 +29,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	[SerializeField] private GameObject _playerListItemPrefab;
 	[SerializeField] private TMP_Text _creationFailedText;
 	[SerializeField] private Button _startButton;
+	[SerializeField] private TMP_Text _usernameErrorText;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -41,6 +42,10 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		PhotonNetwork.LoadLevel(1);
 	}
 
+	public void QuitGame() {
+		Application.Quit();
+	}
+
 	public override void OnConnectedToMaster() {
 		Debug.Log("Connected to Master");
 		PhotonNetwork.JoinLobby();
@@ -50,7 +55,6 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	public override void OnJoinedLobby() {
 		Debug.Log("Joined Lobby");
 		MenuManager.Instance.OpenMenu("mainMenu");
-		PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
 	}
 
 	public void CreateRoom() {
@@ -62,14 +66,40 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		MenuManager.Instance.OpenMenu("loadingMenu");
 	}
 
+	// Helper function to disable no username error text after some time has passed.
+	private void disableUsernameErrorText() {
+		_usernameErrorText.gameObject.SetActive(false);
+	}
+
+	// Not using MenuManager for opening the find room or create room menus, to check
+	// if a user has set a nickname yet.
+	public void OpenCreateRoomMenu() {
+		if (string.IsNullOrEmpty(PhotonNetwork.NickName)) {
+			_usernameErrorText.gameObject.SetActive(true);
+			Invoke("disableUsernameErrorText", 3f);
+		} else {
+			MenuManager.Instance.OpenMenu("createRoomMenu");
+		}
+	}
+
+	public void OpenFindRoomMenu() {
+		if (string.IsNullOrEmpty(PhotonNetwork.NickName)) {
+			_usernameErrorText.gameObject.SetActive(true);
+			Invoke("disableUsernameErrorText", 3f);
+		} else {
+			MenuManager.Instance.OpenMenu("findRoomMenu");
+		}
+	}
+
     public override void OnJoinedRoom() {
 		MenuManager.Instance.OpenMenu("roomMenu");
 		_roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
 		Player[] players = PhotonNetwork.PlayerList;
-		
+
 		// Purge old player list
 		foreach (Transform playerListItem in _playerListContainer) {
+			Debug.Log("Destroying " + playerListItem);
 			Destroy(playerListItem.gameObject);
 		}
 
@@ -85,8 +115,12 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		_startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
 	}
 
-	// Helper function to disable text pop-up OnCreateRoomFailed
-	private void disableErrorText() {
+	public override void OnPlayerEnteredRoom(Player newPlayer) { 
+		Instantiate(_playerListItemPrefab, _playerListContainer).GetComponent<PlayerListItem>().SetUp(newPlayer);
+	}
+
+	// Helper function to disable text pop-up OnCreateRoomFailed after some time has passed.
+	private void disableCreationErrorText() {
 		_creationFailedText.gameObject.SetActive(false);
 	}
 
@@ -96,7 +130,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		if (returnCode == (short) 32766) { // Error code when creating a room that already exists
 			_creationFailedText.text = "ROOM CREATION FAILED: " + _roomNameInput.text + " already exists...";
 			_creationFailedText.gameObject.SetActive(true);
-			Invoke("disableErrorText", 3f);
+			Invoke("disableCreationErrorText", 3f);
 		} else {
 			_errorText.text = debugText;
 			MenuManager.Instance.OpenMenu("errorMenu");
