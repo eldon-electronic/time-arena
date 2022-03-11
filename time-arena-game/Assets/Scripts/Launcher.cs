@@ -150,9 +150,16 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	}
 
     public override void OnLeftRoom() {
-		Debug.Log(PhotonNetwork.InLobby);
-		MenuManager.Instance.OpenMenu("mainMenu");
+		if (PhotonNetwork.IsConnected) {
+			PhotonNetwork.Disconnect();
+		} else {
+			MenuManager.Instance.OpenMenu("mainMenu");
+		}
     }
+
+	public override void OnDisconnected(DisconnectCause cause) {
+		Start();
+	}
 
 	public override void OnRoomListUpdate(List<RoomInfo> rooms) {
 		// Destroy all the items in the room list

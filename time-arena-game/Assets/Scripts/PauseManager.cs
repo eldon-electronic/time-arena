@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Realtime;
 
-public class PauseManager : MonoBehaviour {
+public class PauseManager : MonoBehaviourPunCallbacks {
 
 	//pause tracking vars
     public bool IsPaused = false;
@@ -25,18 +26,22 @@ public class PauseManager : MonoBehaviour {
 		Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
 	}
 
+	/* Work on this in the future. Pressing "Leave" should take the user back to main screen.
 	private void disconnectPlayer() {
 		StartCoroutine(DisconnectAndLoad());
 	}
 
 	IEnumerator DisconnectAndLoad() {
 		PhotonNetwork.LeaveRoom();
-		while (PhotonNetwork.InRoom) yield return null; // Busy waiting
+		while (PhotonNetwork.InRoom) { // Busy waiting
+			Debug.Log("Busy waiting");
+			yield return null; 
+		}
 		SceneManager.LoadScene("MenuScene");
 		Destroy(gameObject);
-	}
+	}*/
 
 	public void Leave() {
-		disconnectPlayer();
+		UnityEditor.EditorApplication.isPlaying = false;
 	}
 }
