@@ -47,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdatePosition()
     {
+        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameStarted) return;
+
         // Sprint speed.
         if (Input.GetKey("left shift")) _speed = 10f;
 		else _speed = 5f;
@@ -123,5 +125,10 @@ public class PlayerMovement : MonoBehaviour
         var values = new Hashtable();
         values.Add("IsGrounded", _isGrounded);
         return values;
+    }
+
+    public void MoveTo(Vector3 position)
+    {
+        PlayerTransform.position = position;
     }
 }

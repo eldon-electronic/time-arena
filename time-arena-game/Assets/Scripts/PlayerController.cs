@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour {
 	private float _forwardsJumpCooldown = 0f;
 	private float _backJumpCooldown = 0f;
 	private int _timeJumpAmount = 100;
+	private Vector3[] _hiderSpawnPoints;
+	private Vector3 _seekerSpawnPoint;
 
 
 	void Start() {
@@ -66,19 +68,51 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
 		// Link scenechange event to Onscenechange.
         SceneManager.activeSceneChanged += OnSceneChange;
+
+		_hiderSpawnPoints =  new Vector3[] {
+			new Vector3(-42f, 0f, 22f), 
+			new Vector3(-15f, -0.5f, -4f), 
+			new Vector3(-12f, -0.5f, -40f), 
+			new Vector3(-47f, -0.5f, -8f), 
+			new Vector3(-36f, -2.5f, 2.2f)
+		};
+
+		_seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
+	}
+
+
+	private void MoveToSpawnPoint()
+	{
+		if (Team == (int) GameController.Teams.Hider)
+		{
+			int index = Random.Range(0, _hiderSpawnPoints.Length);
+			Vector3 position = _hiderSpawnPoints[index];
+			Movement.MoveTo(position);
+		}
+		else
+		{
+			Movement.MoveTo(_seekerSpawnPoint);
+		}
 	}
 
 
 	// OnSceneChange is called by the SceneManager.activeSceneChanged event.
-	void OnSceneChange(Scene current, Scene next) {
-		if (next.name == "GameScene") {
+	void OnSceneChange(Scene current, Scene next)
+	{
+		if (next.name == "GameScene")
+		{
 			Game = FindObjectOfType<GameController>();
-			TimeTravel.connectToTimeLord();
-			if (Game == null) {
+			if (Game == null)
+			{
 				Debug.Log("Scene change error: GameController is null");
 			}
+
+			TimeTravel.connectToTimeLord();
+
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
+
+			MoveToSpawnPoint();
 		}
 	}
 
