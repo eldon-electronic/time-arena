@@ -130,9 +130,9 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateStartTimeDisplay()
     {
-       // StartTimeDispl.transform.parent.gameObject.SetActive(
-           // SceneManager.GetActiveScene().name != "PreGameScene"
-       // );
+        StartTimeDispl.transform.parent.gameObject.SetActive(
+            SceneManager.GetActiveScene().name != "PreGameScene"
+        );
 
 
 
@@ -248,6 +248,15 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
+    private void LateUpdateTutorial()
+    {
+        if (SceneManager.GetActiveScene().name != "PreGameScene")
+        {
+            PopUp.gameObject.SetActive(false);
+            
+        }
+    }
+
 
 
     // ------------ UPDATE METHODS ------------
@@ -276,6 +285,7 @@ public class PlayerHud : MonoBehaviour
         LateUpdateDebugPanel();
         LateUpdateCooldowns();
         LateUpdateWinningDisplay();
+        LateUpdateTutorial();
         
     }
 
