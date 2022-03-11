@@ -42,6 +42,8 @@ public class UsernameManager : MonoBehaviour
             PhotonNetwork.NickName = userInput;
             welcomeText = "Welcome to Time Arena " + userInput + ".";
             _welcomeText.text = welcomeText;
+            PlayerPrefs.SetString("username", userInput);
+            PlayerPrefs.Save();
             displayWelcomeMessage();
         } else {
             _errorText.gameObject.SetActive(true);
