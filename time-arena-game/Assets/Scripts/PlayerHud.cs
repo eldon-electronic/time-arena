@@ -330,11 +330,14 @@ public class PlayerHud : MonoBehaviour
 
     public void PressForwardJumpButton()
     {
+        if (!View.IsMine) return;
+
         ForwardJumpIcon.sprite = GreenPressedSprite;
     }
 
     public void PressBackJumpButton()
     {
+        if (!View.IsMine) return;
         BackJumpIcon.sprite = GreenPressedSprite;
     }
 
@@ -346,11 +349,15 @@ public class PlayerHud : MonoBehaviour
 
     public void SetArrowPosition(string uiElement){
 
+        if (!View.IsMine) return;
+
         ArrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         ArrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
     }
 
     public void SetMessage(string tutorialMessage){
+        
+        if (!View.IsMine) return;
 
         _message = tutorialMessage;
         PopUpText.GetComponent<TextMeshProUGUI>().text = _message;
@@ -358,6 +365,8 @@ public class PlayerHud : MonoBehaviour
     }
 
     public void SetArrowVisibility(bool ArrowVisibility){
+
+        if (!View.IsMine) return;
         
         ArrowImage.gameObject.SetActive(ArrowVisibility);
     }
