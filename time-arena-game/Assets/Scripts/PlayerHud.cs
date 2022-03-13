@@ -63,7 +63,7 @@ public class PlayerHud : MonoBehaviour
         _uiPositions.Add("timebar",new Vector2(-342f,-122f));
         _uiPositions.Add("timer",new Vector2(-290f,105f));
         _uiPositions.Add("team",new Vector2(284f,104f));
-        _uiPositions.Add("debugDisplay",new Vector2(-160f,-1.0f));
+        
 
         _uiRotations = new Dictionary<string, Vector3>();
         _uiRotations.Add("forwardJump",new Vector3(-10.1f,-720.2f,18.5f));
@@ -71,7 +71,7 @@ public class PlayerHud : MonoBehaviour
         _uiRotations.Add("timebar",new Vector3(-10.1f,-535.5f,4.7f));
         _uiRotations.Add("timer",new Vector3(-10.1f,-535.5f,-150f));
         _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
-        _uiRotations.Add("debugDisplay",new Vector3(-10.1f,-355.5f,-68f));
+       
         
 
 
@@ -92,10 +92,7 @@ public class PlayerHud : MonoBehaviour
         _canJumpForward = false;
         _canJumpBack = false;
 
-         //SetArrowPosition("backJump");
-         //SetMessage("Press");
-         //SetArrowPosition("timer");
-         //SetMessage("Hello");
+        
     }
 
     void OnSceneChange(Scene current, Scene next)

@@ -43,22 +43,21 @@ public class Tutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_currentState < _states.Count){
-            
-            if(Input.GetKeyDown(_states[_currentState].InputTrigger))
-            {
-                _currentState++;
+       // MoveToNextState();
+        //Debug.Log(_currentState);
+        if((_currentState == (_states.Count-1)) && Input.GetKeyDown(KeyCode.T))
+        {
+                _currentState = 0;
                 TutorialHud.SetMessage(_states[_currentState].Message);
                 TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
                 TutorialHud.SetArrowVisibility(_states[_currentState]._visibilityOfArrow); 
                 
+                MoveToNextState();
+                //Debug.Log(_currentState);
+                
                             
-            }
-
-            
-            
-
         }
+        MoveToNextState();
        
     
        
@@ -95,21 +94,25 @@ public class Tutorial : MonoBehaviour
         _states.Add(state13);
          State state14 = new State("Please press 2 to travel forwards!", "forwardJump",KeyCode.Alpha2,true);
         _states.Add(state14);
-        State state15 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\nPlease press E to start the game.", "forwardJump",KeyCode.T,false);
+        State state15 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\nPlease press E to start the game OR press T to go back to tutorial.", "forwardJump",KeyCode.T,false);
         _states.Add(state15);
-       
-        
-       // if(Input.GetKeyDown(KeyCode.T)){
-                
-               // CreateStates();
-            //}  
+         
     
         
     }
-    //private void GoBackToTutorial(){
+    private void MoveToNextState(){
         
-       // if()
-    //}
+       if(_currentState < _states.Count){
+            
+            if(Input.GetKeyDown(_states[_currentState].InputTrigger))
+            {
+                _currentState++;
+                TutorialHud.SetMessage(_states[_currentState].Message);
+                TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
+                TutorialHud.SetArrowVisibility(_states[_currentState]._visibilityOfArrow); 
+            }   
+        }
+    }
     
 } 
 
