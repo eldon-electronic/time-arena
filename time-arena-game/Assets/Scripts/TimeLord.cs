@@ -89,7 +89,7 @@ public class TimeLord : MonoBehaviour
             {
                 original = t;
                 copy = Object.Instantiate(copier);
-                copy.layer = 30 - id;
+                copy.layer = 9 + id;
             }
 
             public void Update(TimeTick t)
