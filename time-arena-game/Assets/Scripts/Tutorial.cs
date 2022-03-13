@@ -11,7 +11,7 @@ public class Tutorial : MonoBehaviour
         public string Message;
         public string ElementToPointTo;
         public KeyCode InputTrigger;
-        public bool _visibilityOfArrow;
+        public bool VisibilityOfArrow;
     
 
         public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow)
@@ -19,7 +19,7 @@ public class Tutorial : MonoBehaviour
             Message = message;
             ElementToPointTo = elementToPointTo;
             InputTrigger = inputTrigger;
-            _visibilityOfArrow = visibilityOfArrow;
+            VisibilityOfArrow = visibilityOfArrow;
 
         }
     }
@@ -36,24 +36,23 @@ public class Tutorial : MonoBehaviour
         CreateStates();
         TutorialHud.SetMessage(_states[_currentState].Message);
         TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        TutorialHud.SetArrowVisibility(_states[_currentState]._visibilityOfArrow);  
+        TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
         
     }
 
     // Update is called once per frame
     void Update()
     {
-       // MoveToNextState();
-        //Debug.Log(_currentState);
+       
         if((_currentState == (_states.Count-1)) && Input.GetKeyDown(KeyCode.T))
         {
                 _currentState = 0;
                 TutorialHud.SetMessage(_states[_currentState].Message);
                 TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-                TutorialHud.SetArrowVisibility(_states[_currentState]._visibilityOfArrow); 
+                TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow); 
                 
                 MoveToNextState();
-                //Debug.Log(_currentState);
+                
                 
                             
         }
@@ -109,7 +108,7 @@ public class Tutorial : MonoBehaviour
                 _currentState++;
                 TutorialHud.SetMessage(_states[_currentState].Message);
                 TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-                TutorialHud.SetArrowVisibility(_states[_currentState]._visibilityOfArrow); 
+                TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow); 
             }   
         }
     }
