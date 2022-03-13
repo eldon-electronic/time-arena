@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _speed = 5f;
-        _groundCheckRadius = 0.1f;
+        _groundCheckRadius = 0.5f;
         _jumpPower = 3f;
         _gravity = 40f;
         _isGrounded = true;
@@ -47,10 +47,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdatePosition()
     {
-		if (!(SceneManager.GetActiveScene().name == "GameScene" && Game.gameStarted)) return;
+        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameStarted) return;
 
         // Sprint speed.
-        if (Input.GetKey("left shift")) _speed = 10f;
+        if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
 		else _speed = 5f;
 
         // Get movement axis values.
@@ -125,5 +125,10 @@ public class PlayerMovement : MonoBehaviour
         var values = new Hashtable();
         values.Add("IsGrounded", _isGrounded);
         return values;
+    }
+
+    public void MoveTo(Vector3 position)
+    {
+        PlayerTransform.position = position;
     }
 }
