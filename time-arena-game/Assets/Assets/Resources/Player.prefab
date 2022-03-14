@@ -8780,6 +8780,7 @@ GameObject:
   - component: {fileID: 1743376766255182593}
   - component: {fileID: 3792925184382037071}
   - component: {fileID: 7995784166818512175}
+  - component: {fileID: 561111332934807323}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -9120,7 +9121,7 @@ MonoBehaviour:
   Cam: {fileID: 6458975046434770673}
   CameraHolder: {fileID: 3168561785147484150}
   Material: {fileID: 1743376766255182593}
-  Movement: {fileID: 0}
+  Movement: {fileID: 561111332934807323}
   UI: {fileID: 1130251741066097712}
   PauseUI: {fileID: 3792925184382037071}
   Nametag: {fileID: 2491143808538081395}
@@ -9264,6 +9265,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TutorialHud: {fileID: 3138509024607561696}
+--- !u!114 &561111332934807323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c30fc5872cf4f0e96ae1a7e0af4293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Game: {fileID: 0}
+  View: {fileID: 5690578699466181193}
+  CharacterBody: {fileID: 6458975045518551229}
+  PauseUI: {fileID: 3792925184382037071}
+  PlayerTransform: {fileID: 6458975045518551234}
+  GroundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  CameraHolder: {fileID: 3168561785147484150}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
