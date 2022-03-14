@@ -401,7 +401,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6482976270863749943}
+      - m_Target: {fileID: 3792925184382037071}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
         m_MethodName: Resume
         m_Mode: 1
@@ -8535,6 +8535,7 @@ RectTransform:
   - {fileID: 6943886782646710588}
   - {fileID: 458364641658532850}
   - {fileID: 5732540030874282237}
+  - {fileID: 293762843480790341}
   m_Father: {fileID: 6458975045518551234}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8635,7 +8636,7 @@ RectTransform:
   m_Children:
   - {fileID: 209330822478390110}
   m_Father: {fileID: 8749797133797185787}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -8746,7 +8747,7 @@ RectTransform:
   - {fileID: 7477786056132143003}
   - {fileID: 749380773548125656}
   m_Father: {fileID: 8749797133797185787}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9119,36 +9120,21 @@ MonoBehaviour:
   Cam: {fileID: 6458975046434770673}
   CameraHolder: {fileID: 3168561785147484150}
   Material: {fileID: 1743376766255182593}
-  Movement: {fileID: 3792925184382037071}
+  Movement: {fileID: 0}
   UI: {fileID: 1130251741066097712}
-  groundCheck: {fileID: 6458975045590433014}
-  groundMask:
+  PauseUI: {fileID: 0}
+  Nametag: {fileID: 2491143808538081395}
+  Hud: {fileID: 0}
+  PlayerAnim: {fileID: 0}
+  GrabCheck: {fileID: 0}
+  GrabMask:
     serializedVersion: 2
-    m_Bits: 64
-  mouseSensitivity: 100
-  playerBody: {fileID: 6458975046544177892}
-  playerArm: {fileID: 3493748242805195335}
-  handThumb: {fileID: 7821992714558930419}
-  handThumbTip: {fileID: 3951103480495365361}
-  handIndex: {fileID: 1797320078370533272}
-  handIndexTip: {fileID: 5766457012169621098}
-  handMiddle: {fileID: 2799039165242071877}
-  handMiddleTip: {fileID: 512938505191447430}
-  team: 1
-  seekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
-  hiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
-  pauseUI: {fileID: 6482976270863749943}
-  nametag: {fileID: 2491143808538081395}
-  playerAnim: {fileID: 9070032884028841073}
-  grabCheck: {fileID: 5427792942196514227}
-  grabMask:
-    serializedVersion: 2
-    m_Bits: 128
-  view: {fileID: 5690578699466181193}
-  timeTravel: {fileID: 3078873912917717710}
-  game: {fileID: 0}
-  particles: {fileID: 228805100952192999}
-  hud: {fileID: 3138509024607561696}
+    m_Bits: 0
+  Particles: {fileID: 0}
+  View: {fileID: 0}
+  TimeTravel: {fileID: 0}
+  Game: {fileID: 0}
+  Team: 0
 --- !u!114 &3078873912917717710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9263,15 +9249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec4e7ad44313452fa1905c28c6426a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Game: {fileID: 0}
-  View: {fileID: 5690578699466181193}
-  CharacterBody: {fileID: 6458975045518551229}
-  PauseUI: {fileID: 5276288210589276353}
-  PlayerTransform: {fileID: 6458975045518551234}
-  GroundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  CameraHolder: {fileID: 3168561785147484150}
+  IsPaused: 0
+  PauseMenuUI: {fileID: 6189879322987748197}
 --- !u!114 &7995784166818512175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10172,7 +10151,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6482976270863749943}
+      - m_Target: {fileID: 3792925184382037071}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
         m_MethodName: Leave
         m_Mode: 1
@@ -15330,139 +15309,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &8647892551511034486
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4908875426980299952}
-  - component: {fileID: 2651838328406248061}
-  - component: {fileID: 7273159319794942068}
-  - component: {fileID: 2230522625632645443}
-  m_Layer: 5
-  m_Name: Exit Lobby
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4908875426980299952
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647892551511034486}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 8491143253620386333}
-  m_Father: {fileID: 293762843480790341}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &2651838328406248061
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647892551511034486}
-  m_CullTransparentMesh: 1
---- !u!114 &7273159319794942068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647892551511034486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: af30a28e855f7481f8b0550ebd6c6551, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!114 &2230522625632645443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647892551511034486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 807e56e6f0f574e2aa3051b4b04b0c84, type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: 807e56e6f0f574e2aa3051b4b04b0c84, type: 3}
-    m_SelectedSprite: {fileID: 21300000, guid: af30a28e855f7481f8b0550ebd6c6551, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: af30a28e855f7481f8b0550ebd6c6551, type: 3}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 7273159319794942068}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5276288210589276353}
-        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
-        m_MethodName: ReturnToLobby
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &8954552116137901807
 GameObject:
   m_ObjectHideFlags: 0
