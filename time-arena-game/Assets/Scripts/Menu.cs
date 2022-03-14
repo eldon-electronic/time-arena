@@ -5,8 +5,8 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
 
-    public string MenuName; // when naming menus in Unity, use camelCase of the GameObject name
-    public bool IsOpen;       // only for access accross scripts
+    public string MenuName;
+    public bool IsOpen;
 
     public void Open() {
         IsOpen = true;

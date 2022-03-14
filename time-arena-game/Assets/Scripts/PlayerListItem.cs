@@ -8,7 +8,7 @@ using Photon.Pun;
 public class PlayerListItem : MonoBehaviourPunCallbacks
 {
 
-    [SerializeField] TMP_Text _playerName;
+    [SerializeField] private TMP_Text _playerName;
     private Player _player;
 
     public void SetUp(Player player) { 

@@ -6,12 +6,12 @@ using Photon.Realtime;
 
 public class RoomListItem : MonoBehaviour
 {
-    [SerializeField] TMP_Text roomText;
+    [SerializeField] TMP_Text _roomText;
     public RoomInfo Info;
 
     public void SetUp(RoomInfo roomInfo) { 
         Info = roomInfo;
-        roomText.text = roomInfo.Name;
+        _roomText.text = roomInfo.Name;
     }
 
     public void OnClick() {
