@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _speed = 5f;
-        _groundCheckRadius = 0.1f;
+        _groundCheckRadius = 0.5f;
         _jumpPower = 3f;
         _gravity = 40f;
         _isGrounded = true;
@@ -47,15 +47,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdatePosition()
     {
-		if (!(SceneManager.GetActiveScene().name == "GameScene" && Game.gameStarted)) return;
+        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameStarted) return;
 
         // Sprint speed.
-        if (Input.GetKey("left shift")) _speed = 10f;
+        if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
 		else _speed = 5f;
 
         // Get movement axis values.
-        float xMove = PauseUI.isPaused ? 0 : Input.GetAxis("Horizontal");
-        float zMove = PauseUI.isPaused ? 0 : Input.GetAxis("Vertical");
+        float xMove = PauseUI.IsPaused ? 0 : Input.GetAxis("Horizontal");
+        float zMove = PauseUI.IsPaused ? 0 : Input.GetAxis("Vertical");
 
         // Check if player's bottom intersects with any environment object.
         Vector3 groundCheck = PlayerTransform.position;
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
 		// Jump control.
-		if (Input.GetButtonDown("Jump") && _isGrounded && !PauseUI.isPaused)
+		if (Input.GetButtonDown("Jump") && _isGrounded && !PauseUI.IsPaused)
         {
 			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
 		}
@@ -94,8 +94,8 @@ public class PlayerMovement : MonoBehaviour
         // Rotate player about y and playercam about x.
 		// Get axis values from input.
         // deltaTime used for fps correction.
-		float mouseX = PauseUI.isPaused ? 0 : Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
-		float mouseY = PauseUI.isPaused ? 0 : Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+		float mouseX = PauseUI.IsPaused ? 0 : Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
+		float mouseY = PauseUI.IsPaused ? 0 : Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
 
 		// Invert vertical rotation and restrict up/down.
 		_xRot -= mouseY;
@@ -125,5 +125,10 @@ public class PlayerMovement : MonoBehaviour
         var values = new Hashtable();
         values.Add("IsGrounded", _isGrounded);
         return values;
+    }
+
+    public void MoveTo(Vector3 position)
+    {
+        PlayerTransform.position = position;
     }
 }

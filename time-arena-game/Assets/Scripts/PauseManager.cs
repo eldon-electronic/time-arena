@@ -3,37 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Realtime;
 
-public class PauseManager : MonoBehaviour {
+public class PauseManager : MonoBehaviourPunCallbacks {
 
 	//pause tracking vars
-	public bool isPaused = false;
-	public GameObject pauseMenuUI;
+    public bool IsPaused = false;
+	public GameObject PauseMenuUI;
 
 	// Update is called once per frame
 	void Update() {
-		//on user pressing esc
-		if(Input.GetKeyDown(KeyCode.Escape)){
-			//flip pause and show/remove menu and update cursor state
-			isPaused = !isPaused;
-			pauseMenuUI.SetActive(isPaused);
-			Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			IsPaused = !IsPaused;
+			PauseMenuUI.SetActive(IsPaused);
+			Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
 		}
 	}
 
-	public void Resume(){
-		isPaused = false;
-		pauseMenuUI.SetActive(isPaused);
-		Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+	public void Resume() {
+		IsPaused = false;
+		PauseMenuUI.SetActive(IsPaused);
+		Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
 	}
 
-	public void ReturnToLobby(){
+	/* Work on this in the future. Pressing "Leave" should take the user back to main screen.
+	private void disconnectPlayer() {
+		StartCoroutine(DisconnectAndLoad());
+	}
+
+	IEnumerator DisconnectAndLoad() {
 		PhotonNetwork.LeaveRoom();
-		SceneManager.LoadScene("LobbyScene");
-	}
-
-	public void Quit(){
+		while (PhotonNetwork.InRoom) { // Busy waiting
+			Debug.Log("Busy waiting");
+			yield return null; 
+		}
 		SceneManager.LoadScene("MenuScene");
-		PhotonNetwork.Disconnect();
+		Destroy(gameObject);
+	}*/
+
+	public void Leave() {
+		Application.Quit();
 	}
 }
