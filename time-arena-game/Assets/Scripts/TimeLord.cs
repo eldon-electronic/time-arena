@@ -89,7 +89,7 @@ public class TimeLord : MonoBehaviour
             {
                 original = t;
                 copy = Object.Instantiate(copier);
-                copy.layer = 9 + id;
+                copy.layer = 30 - id;
             }
 
             public void Update(TimeTick t)
@@ -147,14 +147,6 @@ public class TimeLord : MonoBehaviour
         private Proxy CreateProxy(TimeStream t)
         {
             return new Proxy(t, id, copier);
-        }
-
-        public void UpdateObservations(List<TimeStream> streams){
-            observations.Clear();
-            foreach(TimeStream s in streams)
-            {
-                observations.Add((s, new List<Proxy>()));
-            }
         }
 
         public void UpdateProxies(int time)
@@ -240,9 +232,6 @@ public class TimeLord : MonoBehaviour
     public int AllocateReality(GameObject t)
     {
         Reality newReality = new Reality(this, streams, realities.Count, FindStream(t), replayer);
-        foreach(Reality reality in realities){
-            reality.UpdateObservations(streams);
-        }
         realities.Add(newReality);
         return realities.Count - 1;
     }
