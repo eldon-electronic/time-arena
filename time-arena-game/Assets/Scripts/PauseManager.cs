@@ -13,7 +13,7 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 
 	// Update is called once per frame
 	void Update() {
-		if(Input.GetKeyDown(KeyCode.Escape)){
+		if (Input.GetKeyDown(KeyCode.Escape)) {
 			IsPaused = !IsPaused;
 			PauseMenuUI.SetActive(IsPaused);
 			Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
