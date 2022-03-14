@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class PlayerHud : MonoBehaviour
 {
@@ -30,7 +32,9 @@ public class PlayerHud : MonoBehaviour
     public Sprite RedPressedSprite;
     public Sprite GreenPressedSprite;
     public Sprite GreenUnpressedSprite;
-
+    public GameObject ArrowImage;
+    public GameObject PopUpText;
+    public GameObject PopUp;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
     private Slider[] _playerIcons;
@@ -39,11 +43,40 @@ public class PlayerHud : MonoBehaviour
     private bool _debug;
     private bool _canJumpForward;
     private bool _canJumpBack;
+    private string _message;
+   
+    private Dictionary<string, Vector2> _uiPositions;
+    private Dictionary<string, Vector3> _uiRotations;
 
 
     void Start()
     {
+       
+
+        //vector2 forwardJumpPos = new vector2(-400f,-125f);
+        //vector2 backJumpPos = new vector2{-400f,-125f};
+       // vector2 forwardJumpPos = new vector2{-400f,-125f};
+
+        _uiPositions = new Dictionary<string, Vector2>();
+        _uiPositions.Add("forwardJump",new Vector2(381f,-76f));
+        _uiPositions.Add("backJump",new Vector2(-397f,-82f));
+        _uiPositions.Add("timebar",new Vector2(-342f,-122f));
+        _uiPositions.Add("timer",new Vector2(-290f,105f));
+        _uiPositions.Add("team",new Vector2(284f,104f));
+        
+
+        _uiRotations = new Dictionary<string, Vector3>();
+        _uiRotations.Add("forwardJump",new Vector3(-10.1f,-720.2f,18.5f));
+        _uiRotations.Add("backJump",new Vector3(-10.1f,-535.5f,4.7f));
+        _uiRotations.Add("timebar",new Vector3(-10.1f,-535.5f,4.7f));
+        _uiRotations.Add("timer",new Vector3(-10.1f,-535.5f,-150f));
+        _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
+       
+        
+
+
         if (View.IsMine)
+
         {
             // The first Slider in the array corresponds to this player.
             _playerIcons = new Slider[]{PlayerIcon0, PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
@@ -58,6 +91,8 @@ public class PlayerHud : MonoBehaviour
         DebugCanvasGroup.alpha = 0.0f;
         _canJumpForward = false;
         _canJumpBack = false;
+
+        
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -95,6 +130,8 @@ public class PlayerHud : MonoBehaviour
             SceneManager.GetActiveScene().name != "PreGameScene"
         );
 
+
+
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             StartTimeDispl.transform.parent.gameObject.SetActive(!Game.gameStarted);
@@ -109,9 +146,9 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeDisplay()
     {
-        TimeDispl.transform.parent.gameObject.SetActive(
-            SceneManager.GetActiveScene().name != "PreGameScene"
-        );
+       // TimeDispl.transform.parent.gameObject.SetActive(
+           // SceneManager.GetActiveScene().name != "PreGameScene"
+        //);
 
         if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)
         {
@@ -131,9 +168,9 @@ public class PlayerHud : MonoBehaviour
     private void LateUpdateTimeline()
     {
         // Set visibility of timeline, player icons and jump cooldowns.
-        TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
-        ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+       // TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
+      //  ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+       // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         for (int i=1; i < 5; i++)
         {
             _playerIcons[i].gameObject.SetActive(
@@ -166,6 +203,7 @@ public class PlayerHud : MonoBehaviour
             }
         }
     }
+
 
 
     private void LateUpdateDebugPanel()
@@ -206,6 +244,16 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
+    private void LateUpdateTutorial()
+    {
+        if (SceneManager.GetActiveScene().name != "PreGameScene")
+        {
+            PopUp.gameObject.SetActive(false);
+            
+        }
+    }
+
+
 
     // ------------ UPDATE METHODS ------------
 
@@ -233,6 +281,8 @@ public class PlayerHud : MonoBehaviour
         LateUpdateDebugPanel();
         LateUpdateCooldowns();
         LateUpdateWinningDisplay();
+        LateUpdateTutorial();
+        
     }
 
 
@@ -279,11 +329,14 @@ public class PlayerHud : MonoBehaviour
 
     public void PressForwardJumpButton()
     {
+        if (!View.IsMine) return;
+
         ForwardJumpIcon.sprite = GreenPressedSprite;
     }
 
     public void PressBackJumpButton()
     {
+        if (!View.IsMine) return;
         BackJumpIcon.sprite = GreenPressedSprite;
     }
 
@@ -292,4 +345,30 @@ public class PlayerHud : MonoBehaviour
         _canJumpForward = forward;
         _canJumpBack = back;
     }
+
+    public void SetArrowPosition(string uiElement){
+
+        if (!View.IsMine) return;
+
+        ArrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
+        ArrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
+    }
+
+    public void SetMessage(string tutorialMessage){
+        
+        if (!View.IsMine) return;
+
+        _message = tutorialMessage;
+        PopUpText.GetComponent<TextMeshProUGUI>().text = _message;
+          
+    }
+
+    public void SetArrowVisibility(bool ArrowVisibility){
+
+        if (!View.IsMine) return;
+        
+        ArrowImage.gameObject.SetActive(ArrowVisibility);
+    }
+
+
 }
