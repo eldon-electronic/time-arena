@@ -4,79 +4,79 @@ using UnityEngine;
 
 public class ParticleController : MonoBehaviour
 {
-    public ParticleSystem fireCircle;
-	public ParticleSystem splash;
-  	public Material material;
-    public Animator playerAnim;
+    public ParticleSystem FireCircle;
+	public ParticleSystem Splash;
+  	public Material Material;
+    public Animator PlayerAnim;
 
-  	Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
-  	Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
-  	Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+  	private Color Orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
+  	private Color Blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
+  	private Color White = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     
     void Start()
     {
-        material.SetFloat("_CutoffHeight", 50.0f);
+        Material.SetFloat("_CutoffHeight", 50.0f);
     }
 
-    // Called by code, sets a variable to trigger animation
+    // Called by code, sets a variable to trigger animation.
     public void StartJumpingForward()
     {
-		playerAnim.SetBool("isJumpingForward", true);
+		PlayerAnim.SetBool("isJumpingForward", true);
 	}
 
-    // Called by animation, unsets the variable to stop animating
+    // Called by animation, unsets the variable to stop animating.
 	public void StopJumpingForward()
     {
-		playerAnim.SetBool("isJumpingForward", false);
+		PlayerAnim.SetBool("isJumpingForward", false);
 	}
 
-    // Called by code, sets a variable to trigger animation
+    // Called by code, sets a variable to trigger animation.
 	public void StartJumpingBackward()
     {
-		playerAnim.SetBool("isJumpingBackward", true);
+		PlayerAnim.SetBool("isJumpingBackward", true);
 	}
 
-    // Called by animation, unsets the variable to stop animating
+    // Called by animation, unsets the variable to stop animating.
 	public void StopJumpingBackward()
     {
-		playerAnim.SetBool("isJumpingBackward", false);
+		PlayerAnim.SetBool("isJumpingBackward", false);
 	}
 
-    // Called by animation, starts the particle systems
+    // Called by animation, starts the particle systems.
 	void BlueBeam()
     {
-        var fcm = fireCircle.main;
-        fcm.startColor = BLUE;
+        var fireCircleMain = FireCircle.main;
+        fireCircleMain.startColor = Blue;
 
-        var fct = fireCircle.trails;
-        fct.colorOverTrail = BLUE;
+        var fireCircleTrails = FireCircle.trails;
+        fireCircleTrails.colorOverTrail = Blue;
 
-        var sm = splash.main;
-        sm.startColor = WHITE;
+        var splashMain = Splash.main;
+        splashMain.startColor = White;
 
-        var st = splash.trails;
-        st.colorOverTrail = BLUE;
+        var splashTrails = Splash.trails;
+        splashTrails.colorOverTrail = Blue;
 
-        fireCircle.Play();
-        splash.Play();
+        FireCircle.Play();
+        Splash.Play();
     }
 
-    // Called by animation, starts the particle systems
+    // Called by animation, starts the particle systems.
     void OrangeBeam()
     {
-        var fcm = fireCircle.main;
-        fcm.startColor = ORANGE;
+        var fireCircleMain = FireCircle.main;
+        fireCircleMain.startColor = Orange;
 
-        var fct = fireCircle.trails;
-        fct.colorOverTrail = ORANGE;
+        var fireCircleTrails = FireCircle.trails;
+        fireCircleTrails.colorOverTrail = Orange;
 
-        var sm = splash.main;
-        sm.startColor = WHITE;
+        var splashMain = Splash.main;
+        splashMain.startColor = White;
 
-        var st = splash.trails;
-        st.colorOverTrail = ORANGE;
+        var splashTrails = Splash.trails;
+        splashTrails.colorOverTrail = Orange;
 
-        fireCircle.Play();
-        splash.Play();
+        FireCircle.Play();
+        Splash.Play();
 	}
 }
