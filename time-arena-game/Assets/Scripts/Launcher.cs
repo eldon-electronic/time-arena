@@ -45,7 +45,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	}
 
 	public void QuitGame() {
-		UnityEditor.EditorApplication.isPlaying = false;
+		Application.Quit();
 	}
 
 	public override void OnConnectedToMaster() {
@@ -168,10 +168,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		}
 
 		// Refresh the room container
+		Debug.Log("Rooms open: " + rooms.Count);
 		for (int i = 0; i < rooms.Count; i++) {
 			// Photon doesn't remove rooms, they store the state of their existence in a list of bools
 			if (rooms[i].RemovedFromList) continue;
-			Instantiate(_roomListItemPrefab, _roomListContainer).GetComponent<RoomListItem>().SetUp(rooms[i]);
+			else Instantiate(_roomListItemPrefab, _roomListContainer).GetComponent<RoomListItem>().SetUp(rooms[i]);
 		}
 	}
 }

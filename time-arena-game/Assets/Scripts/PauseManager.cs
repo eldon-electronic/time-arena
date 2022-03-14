@@ -42,6 +42,6 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 	}*/
 
 	public void Leave() {
-		UnityEditor.EditorApplication.isPlaying = false;
+		Application.Quit();
 	}
 }
