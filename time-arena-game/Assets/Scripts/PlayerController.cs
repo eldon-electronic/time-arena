@@ -324,9 +324,7 @@ public class PlayerController : MonoBehaviour {
 		// Update pauseUI and cursor lock if game is ended.
 		if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
 		{
-			PauseUI.IsPaused = true;
-			PauseUI.PauseMenuUI.SetActive(true);
-			Cursor.lockState = CursorLockMode.None;
+			PauseUI.Pause();
 		}
 	}
 }

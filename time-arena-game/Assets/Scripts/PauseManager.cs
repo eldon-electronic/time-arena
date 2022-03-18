@@ -8,23 +8,24 @@ using Photon.Realtime;
 public class PauseManager : MonoBehaviourPunCallbacks {
 
 	//pause tracking vars
-    public bool IsPaused = false;
+    private bool _paused = false;
 	public GameObject PauseMenuUI;
 
 	// Update is called once per frame
 	void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			IsPaused = !IsPaused;
-			PauseMenuUI.SetActive(IsPaused);
-			Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
-		}
+		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;
+		
+		PauseMenuUI.SetActive(_paused);
+		Cursor.lockState = _paused ? CursorLockMode.None : CursorLockMode.Locked;
 	}
 
-	public void Resume() {
-		IsPaused = false;
-		PauseMenuUI.SetActive(IsPaused);
-		Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
-	}
+	public void Pause() { _paused = true; }
+
+	public void Resume() { _paused = false; }
+
+	public bool IsPaused() { return _paused; }
+
+	public void Leave() { Application.Quit(); }
 
 	/* Work on this in the future. Pressing "Leave" should take the user back to main screen.
 	private void disconnectPlayer() {
@@ -40,8 +41,4 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 		SceneManager.LoadScene("MenuScene");
 		Destroy(gameObject);
 	}*/
-
-	public void Leave() {
-		Application.Quit();
-	}
 }
