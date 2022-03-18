@@ -4,79 +4,88 @@ using UnityEngine;
 
 public class ParticleController : MonoBehaviour
 {
-    public ParticleSystem fireCircle;
-	public ParticleSystem splash;
-  	public Material material;
-    public Animator playerAnim;
+    public ParticleSystem FireCircle;
+	public ParticleSystem Splash;
+  	public Material Material;
+    public Animator PlayerAnim;
 
-  	Color ORANGE = new Color(1.0f, 0.46f, 0.19f, 1.0f);
-  	Color BLUE = new Color(0.19f, 0.38f, 1.0f, 1.0f);
-  	Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+  	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
+  	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
+  	private Color _white = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+    private bool _isJumping;
     
     void Start()
     {
-        material.SetFloat("_CutoffHeight", 50.0f);
+        Material.SetFloat("_CutoffHeight", 50.0f);
+
+        _isJumping = false;
     }
 
-    // Called by code, sets a variable to trigger animation
+    // Called by code, sets a variable to trigger animation.
     public void StartJumpingForward()
     {
-		playerAnim.SetBool("isJumpingForward", true);
+        _isJumping = true;
+		PlayerAnim.SetBool("isJumpingForward", true);
 	}
 
-    // Called by animation, unsets the variable to stop animating
+    // Called by animation, unsets the variable to stop animating.
 	public void StopJumpingForward()
     {
-		playerAnim.SetBool("isJumpingForward", false);
+        _isJumping = false;
+		PlayerAnim.SetBool("isJumpingForward", false);
 	}
 
-    // Called by code, sets a variable to trigger animation
+    // Called by code, sets a variable to trigger animation.
 	public void StartJumpingBackward()
     {
-		playerAnim.SetBool("isJumpingBackward", true);
+        _isJumping = true;
+		PlayerAnim.SetBool("isJumpingBackward", true);
 	}
 
-    // Called by animation, unsets the variable to stop animating
+    // Called by animation, unsets the variable to stop animating.
 	public void StopJumpingBackward()
     {
-		playerAnim.SetBool("isJumpingBackward", false);
+        _isJumping = false;
+		PlayerAnim.SetBool("isJumpingBackward", false);
 	}
 
-    // Called by animation, starts the particle systems
+    public bool IsJumping() { return _isJumping; }
+
+    // Called by animation, starts the particle systems.
 	void BlueBeam()
     {
-        var fcm = fireCircle.main;
-        fcm.startColor = BLUE;
+        var fireCircleMain = FireCircle.main;
+        fireCircleMain.startColor = _blue;
 
-        var fct = fireCircle.trails;
-        fct.colorOverTrail = BLUE;
+        var fireCircleTrails = FireCircle.trails;
+        fireCircleTrails.colorOverTrail = _blue;
 
-        var sm = splash.main;
-        sm.startColor = WHITE;
+        var splashMain = Splash.main;
+        splashMain.startColor = _white;
 
-        var st = splash.trails;
-        st.colorOverTrail = BLUE;
+        var splashTrails = Splash.trails;
+        splashTrails.colorOverTrail = _blue;
 
-        fireCircle.Play();
-        splash.Play();
+        FireCircle.Play();
+        Splash.Play();
     }
 
-    // Called by animation, starts the particle systems
+    // Called by animation, starts the particle systems.
     void OrangeBeam()
     {
-        var fcm = fireCircle.main;
-        fcm.startColor = ORANGE;
+        var fireCircleMain = FireCircle.main;
+        fireCircleMain.startColor = _orange;
 
-        var fct = fireCircle.trails;
-        fct.colorOverTrail = ORANGE;
+        var fireCircleTrails = FireCircle.trails;
+        fireCircleTrails.colorOverTrail = _orange;
 
-        var sm = splash.main;
-        sm.startColor = WHITE;
+        var splashMain = Splash.main;
+        splashMain.startColor = _white;
 
-        var st = splash.trails;
-        st.colorOverTrail = ORANGE;
+        var splashTrails = Splash.trails;
+        splashTrails.colorOverTrail = _orange;
 
-        fireCircle.Play();
-        splash.Play();
+        FireCircle.Play();
+        Splash.Play();
 	}
 }
