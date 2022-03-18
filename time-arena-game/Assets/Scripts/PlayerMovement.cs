@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdatePosition()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameStarted) return;
+        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.GameStarted) return;
 
         // Sprint speed.
         if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
@@ -113,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
         if (!View.IsMine) return;
 
         if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded))
+		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded))
         {
             UpdatePosition();
             UpdateRotation();

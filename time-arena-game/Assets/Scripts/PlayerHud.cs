@@ -134,10 +134,10 @@ public class PlayerHud : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            StartTimeDispl.transform.parent.gameObject.SetActive(!Game.gameStarted);
-            if (!Game.gameStarted && !Game.gameEnded)
+            StartTimeDispl.transform.parent.gameObject.SetActive(!Game.GameStarted);
+            if (!Game.GameStarted && !Game.GameEnded)
             {
-                var elapsed = 5 - (int) (Game.timeElapsedInGame + 0.9f);
+                var elapsed = 5 - (int) (Game.TimeElapsedInGame + 0.9f);
                 StartTimeDispl.text = $"{elapsed}";
             }
         }
@@ -150,11 +150,11 @@ public class PlayerHud : MonoBehaviour
            // SceneManager.GetActiveScene().name != "PreGameScene"
         //);
 
-        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded)
         {
-            if (Game.gameStarted)
+            if (Game.GameStarted)
             {
-                float t = Game.gameLength - Game.timeElapsedInGame;
+                float t = Game.GameLength - Game.TimeElapsedInGame;
                 int minutes = (int) (t / 60);
                 int seconds = (int) (t % 60);
                 TimeDispl.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
@@ -175,27 +175,27 @@ public class PlayerHud : MonoBehaviour
         {
             _playerIcons[i].gameObject.SetActive(
                 SceneManager.GetActiveScene().name != "PreGameScene" && 
-                Game.otherPlayersElapsedTime.Count >= i + 1
+                Game.OtherPlayersElapsedTime.Count >= i + 1
             );
         }
 
         // Set player icon positions.
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            if (Game.gameStarted && !Game.gameEnded)
+            if (Game.GameStarted && !Game.GameEnded)
             {
-                ElapsedTimeSlider.value = Game.timeElapsedInGame / Game.gameLength;
+                ElapsedTimeSlider.value = Game.TimeElapsedInGame / Game.GameLength;
                 int n = 0;
-                List<int> keys = new List<int>(Game.otherPlayersElapsedTime.Keys);
+                List<int> keys = new List<int>(Game.OtherPlayersElapsedTime.Keys);
                 foreach(int key in keys)
                 {
-                    _playerIcons[n].value = Game.otherPlayersElapsedTime[key];
+                    _playerIcons[n].value = Game.OtherPlayersElapsedTime[key];
                     n++;
                 }
-            } else if (!Game.gameStarted && !Game.gameEnded) {
+            } else if (!Game.GameStarted && !Game.GameEnded) {
                 _playerIcons[0].value = 0;
                 int n = 0;
-                List<int> keys = new List<int>(Game.otherPlayersElapsedTime.Keys);
+                List<int> keys = new List<int>(Game.OtherPlayersElapsedTime.Keys);
                 foreach(int key in keys){
                     _playerIcons[n].value = 0;
                     n++;
@@ -237,10 +237,10 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateWinningDisplay()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && Game.gameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
         {
             WinningDispl.transform.parent.gameObject.SetActive(true);
-            WinningDispl.text = (Game.winningTeam == (int) GameController.Teams.Hider) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            WinningDispl.text = (Game.WinningTeam == Constants.Team.Miner) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 

@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour {
     public GameController Game;
 
 	// 0 seeker 1 hider.
-	public int Team;
+	public Constants.Team Team;
 	private float _forwardsJumpCooldown = 0f;
 	private float _backJumpCooldown = 0f;
 	private int _timeJumpAmount = 100;
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
-		Team = (int) GameController.Teams.Hider;
+		Team = Constants.Team.Miner;
 		Material.SetHiderMaterial();
 		Hud.SetTeam("HIDER");
 		if (!View.IsMine)
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void MoveToSpawnPoint()
 	{
-		if (Team == (int) GameController.Teams.Hider)
+		if (Team == Constants.Team.Miner)
 		{
 			int index = Random.Range(0, _hiderSpawnPoints.Length);
 			Vector3 position = _hiderSpawnPoints[index];
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour {
 			_backJumpCooldown = 15;
 
 			MoveToSpawnPoint();
-			Material.SetArmActive(Team == (int) GameController.Teams.Seeker);
+			Material.SetArmActive(Team == Constants.Team.Guardian);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour {
 		Particles.StartJumpingBackward();
 		_backJumpCooldown = 15;
 		Hud.PressForwardJumpButton();
-		Game.otherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
+		Game.OtherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
 	}
 
 	[PunRPC]
@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour {
 		Particles.StartJumpingForward();
 		_forwardsJumpCooldown = 15;
 		Hud.PressBackJumpButton();
-		Game.otherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
+		Game.OtherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
 	}
 
 	// RPC function to be called when another player finds this one.
@@ -192,8 +192,8 @@ public class PlayerController : MonoBehaviour {
 			{
 				// Call grabplayer function on that player.
 				PlayerController targetPlayer = playerGotGrab.GetComponent<PlayerController>();
-				if (Team == (int) GameController.Teams.Seeker && 
-					targetPlayer.Team == (int) GameController.Teams.Hider)
+				if (Team == Constants.Team.Guardian && 
+					targetPlayer.Team == Constants.Team.Miner)
 				{
 					targetPlayer.GetFound();
 				}
@@ -212,16 +212,16 @@ public class PlayerController : MonoBehaviour {
 
 	public void ChangeTeam()
 	{
-		if (Team == (int) GameController.Teams.Hider)
+		if (Team == Constants.Team.Miner)
 		{
-			Team = (int) GameController.Teams.Seeker;
+			Team = Constants.Team.Guardian;
 			Material.SetMaterial("seeker");
 			Material.SetArmActive(true);
 			Hud.SetTeam("SEEKER");
 		}
 		else
 		{
-			Team = (int) GameController.Teams.Hider;
+			Team = Constants.Team.Miner;
 			Material.SetMaterial("hider");
 			Material.SetArmActive(false);
 			Hud.SetTeam("HIDER");
@@ -315,14 +315,14 @@ public class PlayerController : MonoBehaviour {
 		if (!View.IsMine) return;
 
 		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)) {
+		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded)) {
 			UpdateCooldowns();
 			UpdateDebugDisplay();
 			KeyControl();
 		}
 
 		// Update pauseUI and cursor lock if game is ended.
-		if (SceneManager.GetActiveScene().name == "GameScene" && Game.gameEnded)
+		if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
 		{
 			PauseUI.IsPaused = true;
 			PauseUI.PauseMenuUI.SetActive(true);
