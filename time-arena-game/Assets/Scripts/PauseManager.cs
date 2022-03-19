@@ -10,9 +10,12 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 	//pause tracking vars
     private bool _paused = false;
 	public GameObject PauseMenuUI;
+	public PhotonView View;
 
 	// Update is called once per frame
 	void Update() {
+		if (!View.IsMine) return;
+
 		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;
 		
 		PauseMenuUI.SetActive(_paused);

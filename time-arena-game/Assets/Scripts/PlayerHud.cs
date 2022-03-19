@@ -363,11 +363,11 @@ public class PlayerHud : MonoBehaviour
           
     }
 
-    public void SetArrowVisibility(bool ArrowVisibility){
+    public void SetArrowVisibility(bool arrowVisibility){
 
         if (!View.IsMine) return;
         
-        ArrowImage.gameObject.SetActive(ArrowVisibility);
+        ArrowImage.gameObject.SetActive(arrowVisibility);
     }
 
 

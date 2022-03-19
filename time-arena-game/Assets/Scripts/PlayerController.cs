@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour {
 	public PauseManager PauseUI;
 	public GameObject Nametag;
 	public PlayerHud Hud;
+	public Tutorial Tutorial;
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour {
 		Team = Constants.Team.Miner;
 		Material.SetMaterialMiner();
 		Hud.SetTeam("HIDER");
+		Tutorial.SetTeam(Constants.Team.Miner);
+		Tutorial.StartTutorial();
 		if (!View.IsMine)
 		{
 			Destroy(Cam.gameObject);
@@ -114,6 +117,8 @@ public class PlayerController : MonoBehaviour {
 
 			MoveToSpawnPoint();
 			Material.SetArmActive(Team == Constants.Team.Guardian);
+
+			Tutorial.StopTutorial();
 		}
 	}
 
