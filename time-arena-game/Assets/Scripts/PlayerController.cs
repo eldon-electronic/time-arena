@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour {
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		Team = Constants.Team.Miner;
-		Material.SetHiderMaterial();
+		Material.SetMaterialMiner();
 		Hud.SetTeam("HIDER");
 		if (!View.IsMine)
 		{
@@ -215,14 +215,14 @@ public class PlayerController : MonoBehaviour {
 		if (Team == Constants.Team.Miner)
 		{
 			Team = Constants.Team.Guardian;
-			Material.SetMaterial("seeker");
+			Material.SetMaterial(Constants.Team.Guardian);
 			Material.SetArmActive(true);
 			Hud.SetTeam("SEEKER");
 		}
 		else
 		{
 			Team = Constants.Team.Miner;
-			Material.SetMaterial("hider");
+			Material.SetMaterial(Constants.Team.Miner);
 			Material.SetArmActive(false);
 			Hud.SetTeam("HIDER");
 		}
