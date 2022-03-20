@@ -8,37 +8,28 @@ public class TimeLord : MonoBehaviour
 {
     private class TimeTick
     {
-        public Vector3 p;
-        public Quaternion r;
-        private BitArray f;
+        public Vector3 Pos;
+        public Quaternion Rot;
+        private BitArray _flags;
 
-        public TimeTick()
-        {
-            f = new BitArray(16, false);
-        }
+        public TimeTick() { _flags = new BitArray(16, false); }
 
-        public bool flags(int i)
-        {
-            return f[i];
-        }
+        public bool GetFlag(int i) { return _flags[i]; }
 
-        public void flags(int i, bool b)
-        {
-            f[i] = b;
-        }
+        public void SetFlag(int i, bool b) { _flags[i] = b; }
     }
 
     private class TimeStream
     {
-        GameObject timeObject;
-        int firstTick;
-        FractureList<TimeTick> ticks;
+        private GameObject _timeObject;
+        private int _firstTick;
+        private FractureList<TimeTick> _ticks;
 
         public TimeStream(GameObject t, int start, int length)
         {
-            ticks = new FractureList<TimeTick>(length);
-            timeObject = t;
-            firstTick = start;
+            _ticks = new FractureList<TimeTick>(length);
+            _timeObject = t;
+            _firstTick = start;
         }
 
         public bool Record(int t)
@@ -47,10 +38,10 @@ public class TimeLord : MonoBehaviour
             //{
                // Debug.Log("Tick Written: " + t.ToString());
                 TimeTick newTick = new TimeTick();
-                newTick.p = timeObject.transform.position;
-                newTick.r = timeObject.transform.rotation;
-                newTick.flags(0, true);
-                ticks.AddData(newTick);
+                newTick.Pos = _timeObject.transform.position;
+                newTick.Rot = _timeObject.transform.rotation;
+                newTick.SetFlag(0, true);
+                _ticks.AddData(newTick);
                 return true;
             //}
             //return false;
@@ -59,81 +50,69 @@ public class TimeLord : MonoBehaviour
         public TimeTick[] Recall(int t)
         {
             // Debug.Log("Current written ticks: " + ticks.GetHead());
-            return ticks.Recall(t);
+            return _ticks.Recall(t);
         }
 
-        public bool checkObjectReference(GameObject t)
-        {
-            return GameObject.ReferenceEquals(timeObject, t);
-        }
+        public bool CheckObjectReference(GameObject t) { return GameObject.ReferenceEquals(_timeObject, t); }
 
-        public GameObject GetObject()
-        {
-            return timeObject;
-        }
+        public GameObject GetObject() { return _timeObject; }
 
-        public void Travel(int start, int end)
-        {
-            ticks.AddFracture(start, end);
-        }
+        public void Travel(int start, int end) { _ticks.AddFracture(start, end); }
     }
 
     private class Reality
     {
         private class Proxy
         {
-            readonly TimeStream original;
-            public GameObject copy;
+            readonly TimeStream Original;
+            public GameObject Copy;
 
             public Proxy(TimeStream t, int id, GameObject copier)
             {
-                original = t;
-                copy = Object.Instantiate(copier);
-                copy.layer = 30 - id;
+                Original = t;
+                Copy = Object.Instantiate(copier);
+                Copy.layer = 30 - id;
             }
 
             public void Update(TimeTick t)
             {
                 // Debug.Log(t.p.ToString());
-                copy.transform.position = t.p;
-                copy.transform.rotation = t.r;
+                Copy.transform.position = t.Pos;
+                Copy.transform.rotation = t.Rot;
             }
 
-            public void EndProxy()
-            {
-                Destroy(copy);
-            }
+            public void EndProxy() { Destroy(Copy); }
         }
 
-        List<(TimeStream, List<Proxy>)> observations = new List<(TimeStream, List<Proxy>)>();
-        int id = 0;
-        public int timeOffset = 0;
-        TimeStream owner;
-        GameObject copier;
-        TimeLord tl;
+        private List<(TimeStream, List<Proxy>)> _observations = new List<(TimeStream, List<Proxy>)>();
+        private int _id = 0;
+        public int TimeOffset = 0;
+        private TimeStream _owner;
+        private GameObject _copier;
+        private TimeLord _tl;
 
         public Reality(TimeLord controller, List<TimeStream> streams, int id, TimeStream owner, GameObject copier)
         {
-            tl = controller;
-            this.id = id;
-            this.owner = owner;
-            this.copier = copier;
+            _tl = controller;
+            this._id = id;
+            this._owner = owner;
+            this._copier = copier;
             foreach(TimeStream s in streams)
             {
-                observations.Add((s, new List<Proxy>()));
+                _observations.Add((s, new List<Proxy>()));
             }
         }
 
-        public void addStream(TimeStream stream)
+        public void AddStream(TimeStream stream)
         {
-            observations.Add((stream, new List<Proxy>()));
+            _observations.Add((stream, new List<Proxy>()));
         }
 
         public void Advance(int x)
         {
-            owner.Travel(tl.GetCurrentTick() + timeOffset, tl.GetCurrentTick() + timeOffset + x);
-            timeOffset += x;
-            if (timeOffset > 0) timeOffset = 0;
+            _owner.Travel(_tl.GetCurrentTick() + TimeOffset, _tl.GetCurrentTick() + TimeOffset + x);
+            TimeOffset += x;
+            if (TimeOffset > 0) TimeOffset = 0;
 
         }
 
@@ -144,33 +123,30 @@ public class TimeLord : MonoBehaviour
             // Debug.Log("Active proxy objects: " + observations[0].Item2.Count.ToString());
         }
 
-        private Proxy CreateProxy(TimeStream t)
-        {
-            return new Proxy(t, id, copier);
-        }
+        private Proxy CreateProxy(TimeStream t) { return new Proxy(t, _id, _copier); }
 
         public void UpdateProxies(int time)
         {
             Test();
-            foreach((TimeStream, List<Proxy>) obv in observations)
+            foreach((TimeStream, List<Proxy>) obv in _observations)
             {
                 // Debug.Log("Reality Tick: " + (time + timeOffset).ToString());
-                TimeTick[] ticks = obv.Item1.Recall(time + timeOffset);
-                if (obv.Item1.checkObjectReference(owner.GetObject()))
+                TimeTick[] ticks = obv.Item1.Recall(time + TimeOffset);
+                if (obv.Item1.CheckObjectReference(_owner.GetObject()))
                 {
                     ticks = ticks.Take(ticks.Length - 1).ToArray();
                 }
                 // Debug.Log("Tick Count: " + ticks.Length.ToString());
-                while(obv.Item2.Count < ticks.Length)
+                while (obv.Item2.Count < ticks.Length)
                 {
                     obv.Item2.Add(CreateProxy(obv.Item1));
                 }
-                while(obv.Item2.Count > ticks.Length)
+                while (obv.Item2.Count > ticks.Length)
                 {
                     obv.Item2[obv.Item2.Count - 1].EndProxy();
                     obv.Item2.RemoveAt(obv.Item2.Count - 1);
                 }
-                for(int i = 0; i < ticks.Length; i++)
+                for (int i = 0; i < ticks.Length; i++)
                 {
                     obv.Item2[i].Update(ticks[i]);
                 }
@@ -181,99 +157,85 @@ public class TimeLord : MonoBehaviour
     [Tooltip("Max number of ticks that can be recorded.")]
     public int maxTicks;
     [Tooltip("Number of ticks per second.")]
-    public int tps;
+    private int _tps;
     public GameObject replayer;
-    private List<TimeStream> streams = new List<TimeStream>();
-    private List<Reality> realities = new List<Reality>();
-    private int currentTick = 0;
+    private List<TimeStream> _streams = new List<TimeStream>();
+    private List<Reality> _realities = new List<Reality>();
+    private int _currentTick = 0;
     public bool active = false;
-    // Start is called before the first frame update
+    
+
     void Start()
     {
-        //Set framerate to desired tickrate
-        Application.targetFrameRate = tps;
+        // Set framerate to desired tickrate.
+        Application.targetFrameRate = _tps;
         // Debug.Log(FractureList<int>.Test());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (active)
         {
-            if (currentTick >= maxTicks) { active = false; }
-            currentTick++;
+            if (_currentTick >= maxTicks) active = false;
+            _currentTick++;
         }
     }
 
     private TimeStream FindStream(GameObject t)
     {
-        foreach (TimeStream stream in streams)
+        foreach (TimeStream stream in _streams)
         {
-            if (stream.checkObjectReference(t)) return stream;
+            if (stream.CheckObjectReference(t)) return stream;
         }
         return null;
     }
 
-    public int GetCurrentTick()
-    {
-        return currentTick;
-    }
+    public int GetCurrentTick() { return _currentTick; }
 
-    public int GetRealityTick(int id){
-        return currentTick + realities[id].timeOffset;
-    }
+    public int GetRealityTick(int id) { return _currentTick + _realities[id].TimeOffset; }
 
     public void AddTimeObject(GameObject t)
     {
-        TimeStream newStream = new TimeStream(t, currentTick, maxTicks - currentTick);
-        streams.Add(newStream);
+        TimeStream newStream = new TimeStream(t, _currentTick, maxTicks - _currentTick);
+        _streams.Add(newStream);
     }
 
     public int AllocateReality(GameObject t)
     {
-        Reality newReality = new Reality(this, streams, realities.Count, FindStream(t), replayer);
-        realities.Add(newReality);
-        return realities.Count - 1;
+        Reality newReality = new Reality(this, _streams, _realities.Count, FindStream(t), replayer);
+        _realities.Add(newReality);
+        return _realities.Count - 1;
     }
 
-    public void DestroyReality(int id)
-    {
-        realities.RemoveAt(id);
-    }
+    public void DestroyReality(int id) { _realities.RemoveAt(id); }
 
     public void Travel(int distance, int id)
     {
-        realities[id].Advance(distance);
-        realities[id].UpdateProxies(currentTick);
+        _realities[id].Advance(distance);
+        _realities[id].UpdateProxies(_currentTick);
     }
 
-    public void UpdateReality(int id)
-    {
-        realities[id].UpdateProxies(currentTick);
-    }
+    public void UpdateReality(int id) { _realities[id].UpdateProxies(_currentTick); }
 
-    public void RealityTest(int id)
-    {
-        realities[id].Test();
-    }
+    public void RealityTest(int id) { _realities[id].Test(); }
 
     public void Record(GameObject t)
     {
         TimeStream s = FindStream(t);
-        s.Record(currentTick);
+        s.Record(_currentTick);
     }
 
     public (Vector3, Quaternion) GetTimeTick(GameObject t, int tick, int age = 0)
     {
         TimeTick[] ticks = FindStream(t).Recall(tick);
-        return (ticks[ticks.Length - age].p, ticks[ticks.Length - age].r);
+        return (ticks[ticks.Length - age].Pos, ticks[ticks.Length - age].Rot);
     }
 
     private void Record()
     {
-        foreach(TimeStream s in streams)
+        foreach(TimeStream s in _streams)
         {
-            s.Record(currentTick);
+            s.Record(_currentTick);
         }
     }
 }
