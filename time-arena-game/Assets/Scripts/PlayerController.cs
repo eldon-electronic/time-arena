@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour {
 				Debug.Log("Scene change error: GameController is null");
 			}
 
-			TimeTravel.connectToTimeLord();
+			TimeTravel.ConnectToTimeLord();
 
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
