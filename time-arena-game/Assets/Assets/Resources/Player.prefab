@@ -9126,6 +9126,7 @@ MonoBehaviour:
   PauseUI: {fileID: 3792925184382037071}
   Nametag: {fileID: 2491143808538081395}
   Hud: {fileID: 3138509024607561696}
+  Tutorial: {fileID: 7995784166818512175}
   PlayerAnim: {fileID: 9070032884028841073}
   GrabCheck: {fileID: 5427792942196514227}
   GrabMask:
@@ -9227,17 +9228,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe3cc45b51fe7428594a64335f548593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerBody: {fileID: 6458975046544177892}
-  PlayerArm: {fileID: 3493748242805195335}
-  HandThumb: {fileID: 7821992714558930419}
-  HandThumbTip: {fileID: 3951103480495365361}
-  HandIndex: {fileID: 1797320078370533272}
-  HandIndexTip: {fileID: 5766457012169621098}
-  HandMiddle: {fileID: 2799039165242071877}
-  HandMiddleTip: {fileID: 512938505191447430}
-  SeekerMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
-  HiderMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
-  View: {fileID: 5690578699466181193}
+  _playerBody: {fileID: 6458975046544177892}
+  _playerArm: {fileID: 3493748242805195335}
+  _handThumb: {fileID: 7821992714558930419}
+  _handThumbTip: {fileID: 3951103480495365361}
+  _handIndex: {fileID: 1797320078370533272}
+  _handIndexTip: {fileID: 5766457012169621098}
+  _handMiddle: {fileID: 2799039165242071877}
+  _handMiddleTip: {fileID: 512938505191447430}
+  _guardianMat: {fileID: 2100000, guid: d52c8a82450d64251ac21a978cd61baf, type: 2}
+  _minerMat: {fileID: 2100000, guid: 9529d12032a3c4cebbb541400faf9e0d, type: 2}
+  _view: {fileID: 5690578699466181193}
 --- !u!114 &3792925184382037071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9250,8 +9251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec4e7ad44313452fa1905c28c6426a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsPaused: 0
   PauseMenuUI: {fileID: 6189879322987748197}
+  View: {fileID: 5690578699466181193}
 --- !u!114 &7995784166818512175
 MonoBehaviour:
   m_ObjectHideFlags: 0

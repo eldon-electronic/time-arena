@@ -6,68 +6,71 @@ using UnityEngine.SceneManagement;
 
 public class TimeConn : MonoBehaviour
 {
-    private TimeLord tl;
-    private int tick = 0;
-    private int lastTick = 0;
-    private int timeID = -1;
-    // Start is called before the first frame update
+    private TimeLord _tl;
+    private int _tick;
+    private int _lastTick;
+    private int _timeID;
+    
     void Start()
     {
-
+      _tick = 0;
+      _lastTick = 0;
+      _timeID = -1;
     }
 
-    public void connectToTimeLord(){
-      tl = GameObject.FindGameObjectWithTag("TimeLord").GetComponent<TimeLord>();
-      tl.AddTimeObject(this.gameObject);
-      timeID = tl.AllocateReality(this.gameObject);
+    public void ConnectToTimeLord()
+    {
+      _tl = GameObject.FindGameObjectWithTag("TimeLord").GetComponent<TimeLord>();
+      _tl.AddTimeObject(this.gameObject);
+      _timeID = _tl.AllocateReality(this.gameObject);
       SetCameraLayers();
     }
 
-    // Update is called once per frame
     void Update()
     {
-      if(SceneManager.GetActiveScene().name == "GameScene"){
-        if(tl == null){ connectToTimeLord(); }
-        Tick(tl.GetCurrentTick());
+      if (SceneManager.GetActiveScene().name == "GameScene")
+      {
+        if (_tl == null) ConnectToTimeLord();
+        Tick(_tl.GetCurrentTick());
       }
     }
 
     public void Tick(int t)
     {
-        tick = t;
-        if(tick != lastTick || tick == 0)
+        _tick = t;
+        if (_tick != _lastTick || _tick == 0)
         {
-            tl.Record(this.gameObject);
-            tl.UpdateReality(timeID);
+            _tl.Record(this.gameObject);
+            _tl.UpdateReality(_timeID);
         }
-        lastTick = tick;
+        _lastTick = _tick;
     }
 
     public void TimeJump(int distance)
     {
         // Debug.Log("Time Travel Triggered on ID " + timeID.ToString());
-        tl.Travel(distance, timeID);
-        tl.RealityTest(timeID);
+        _tl.Travel(distance, _timeID);
+        _tl.RealityTest(_timeID);
     }
 
     public float GetTimePosition()
     {
-        return (float)tl.GetRealityTick(timeID) / (float)tl.maxTicks;
+        return (float) _tl.GetRealityTick(_timeID) / (float) _tl.maxTicks;
     }
 
     public float GetRealityTick() 
     {
-      return (float) tl.GetRealityTick(timeID);
+      return (float) _tl.GetRealityTick(_timeID);
     }
 
     public float GetCurrentTick() 
     {
-      return (float) tl.GetCurrentTick();
+      return (float) _tl.GetCurrentTick();
     }
 
     public float MaxTick() 
     {
-      return (float) tl.maxTicks;
+      return (float) _tl.maxTicks;
     }
 
     private void SetCameraLayers()

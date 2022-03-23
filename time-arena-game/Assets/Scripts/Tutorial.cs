@@ -173,7 +173,24 @@ public class Tutorial : MonoBehaviour
     }
 
 
-    
+    // ------------ PUBLIC METHODS ------------
+
+    public void SetTeam(Constants.Team team)
+    {
+        // TODO: This should update the team, changing which tutorial we follow.
+    }
+
+    public void StartTutorial()
+    {
+        // TODO: This should reset the tutorial to the first state and then make the tutorial active and visible.
+        // (Possibly just by setting some boolean which you check for in the Update() method).
+    }
+
+    public void StopTutorial()
+    {
+        // TODO: This should make the tutorial inactive and switch off visibility.
+    }
+
     
 } 
 

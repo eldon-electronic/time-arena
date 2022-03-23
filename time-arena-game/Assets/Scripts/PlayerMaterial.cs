@@ -5,73 +5,61 @@ using UnityEngine;
 
 public class PlayerMaterial : MonoBehaviour
 {
-    public GameObject PlayerBody;
-	public GameObject PlayerArm;
-	public GameObject HandThumb;
-	public GameObject HandThumbTip;
-	public GameObject HandIndex;
-	public GameObject HandIndexTip;
-	public GameObject HandMiddle;
-	public GameObject HandMiddleTip;
-    public Material SeekerMat;
-    public Material HiderMat;
-    public PhotonView View;
+    [SerializeField] private GameObject _playerBody;
+    [SerializeField] private GameObject _playerArm;
+    [SerializeField] private GameObject _handThumb;
+    [SerializeField] private GameObject _handThumbTip;
+    [SerializeField] private GameObject _handIndex;
+    [SerializeField] private GameObject _handIndexTip;
+    [SerializeField] private GameObject _handMiddle;
+    [SerializeField] private GameObject _handMiddleTip;
+    [SerializeField] private Material _guardianMat;
+    [SerializeField] private Material _minerMat;
+    [SerializeField] private PhotonView _view;
 
     private GameObject[] _armParts;
-    private Dictionary<string, Material> _materials;
+    private Dictionary<Constants.Team, Material> _materials;
     
+
     void Start()
-    {
-        _armParts = new GameObject[]{PlayerArm, HandThumb, HandThumbTip, HandIndex, HandIndexTip, HandMiddle, HandMiddleTip};
+    {   
+        _armParts = new GameObject[]{_playerArm, _handThumb, _handThumbTip, _handIndex, _handIndexTip, _handMiddle, _handMiddleTip};
         
-        _materials = new Dictionary<string, Material>();
-        _materials.Add("seeker", SeekerMat);
-        _materials.Add("hider", HiderMat);
-        
-        if (!View.IsMine)
+        _materials = new Dictionary<Constants.Team, Material>();
+        _materials.Add(Constants.Team.Guardian, _guardianMat);
+        _materials.Add(Constants.Team.Miner, _minerMat);
+
+        if (!_view.IsMine)
         {
-            PlayerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            _playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
         }
         else
         {
-            PlayerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            _playerBody.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
         }
 
-        HiderMat.SetFloat("_CutoffHeight", 50.0f);
-		SeekerMat.SetFloat("_CutoffHeight", 50.0f);
+        _minerMat.SetFloat("_CutoffHeight", 50.0f);
+		_guardianMat.SetFloat("_CutoffHeight", 50.0f);
     }
 
-    public void SetMaterial(string material)
+    public void SetMaterial(Constants.Team team)
     {
-        PlayerBody.GetComponent<Renderer>().material = _materials[material];
+        _playerBody.GetComponent<Renderer>().material = _materials[team];
         foreach (GameObject armPart in _armParts)
         {
-            armPart.GetComponent<Renderer>().material = _materials[material];
+            armPart.GetComponent<Renderer>().material = _materials[team];
         }
     }
 
-    public void SetSeekerMaterial()
+    public void SetMaterialMiner()
     {
-        PlayerBody.GetComponent<Renderer>().material = SeekerMat;
-        PlayerArm.GetComponent<Renderer>().material = SeekerMat;
-        HandThumb.GetComponent<Renderer>().material = SeekerMat;
-        HandThumbTip.GetComponent<Renderer>().material = SeekerMat;
-        HandIndex.GetComponent<Renderer>().material = SeekerMat;
-        HandIndexTip.GetComponent<Renderer>().material = SeekerMat;
-        HandMiddle.GetComponent<Renderer>().material = SeekerMat;
-        HandMiddleTip.GetComponent<Renderer>().material = SeekerMat;
-    }
-
-    public void SetHiderMaterial()
-    {
-        PlayerBody.GetComponent<Renderer>().material = HiderMat;
-        PlayerArm.GetComponent<Renderer>().material = HiderMat;
-        HandThumb.GetComponent<Renderer>().material = HiderMat;
-        HandThumbTip.GetComponent<Renderer>().material = HiderMat;
-        HandIndex.GetComponent<Renderer>().material = HiderMat;
-        HandIndexTip.GetComponent<Renderer>().material = HiderMat;
-        HandMiddle.GetComponent<Renderer>().material = HiderMat;
-        HandMiddleTip.GetComponent<Renderer>().material = HiderMat;
+        _playerArm.GetComponent<Renderer>().material = _minerMat;
+        _handThumb.GetComponent<Renderer>().material = _minerMat;
+        _handThumbTip.GetComponent<Renderer>().material = _minerMat;
+        _handIndex.GetComponent<Renderer>().material = _minerMat;
+        _handIndexTip.GetComponent<Renderer>().material = _minerMat;
+        _handMiddle.GetComponent<Renderer>().material = _minerMat;
+        _handMiddleTip.GetComponent<Renderer>().material = _minerMat;
     }
 
     public void SetArmActive(bool on)
