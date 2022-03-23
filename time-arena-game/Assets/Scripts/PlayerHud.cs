@@ -47,15 +47,12 @@ public class PlayerHud : MonoBehaviour
    
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
+    
 
 
     void Start()
     {
        
-
-        //vector2 forwardJumpPos = new vector2(-400f,-125f);
-        //vector2 backJumpPos = new vector2{-400f,-125f};
-       // vector2 forwardJumpPos = new vector2{-400f,-125f};
 
         _uiPositions = new Dictionary<string, Vector2>();
         _uiPositions.Add("forwardJump",new Vector2(381f,-76f));
@@ -72,7 +69,6 @@ public class PlayerHud : MonoBehaviour
         _uiRotations.Add("timer",new Vector3(-10.1f,-535.5f,-150f));
         _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
        
-        
 
 
         if (View.IsMine)
@@ -167,22 +163,23 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeline()
     {
-        // Set visibility of timeline, player icons and jump cooldowns.
-       // TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
-      //  ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+        //Set visibility of timeline, player icons and jump cooldowns.
+        //TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
+       // ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
        // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         for (int i=1; i < 5; i++)
         {
             _playerIcons[i].gameObject.SetActive(
-                SceneManager.GetActiveScene().name != "PreGameScene" && 
+                //SceneManager.GetActiveScene().name != "PreGameScene" && 
                 Game.otherPlayersElapsedTime.Count >= i + 1
             );
         }
 
         // Set player icon positions.
-        if (SceneManager.GetActiveScene().name == "GameScene")
+       if (SceneManager.GetActiveScene().name == "GameScene" || SceneManager.GetActiveScene().name == "PreGameScene")
         {
-            if (Game.gameStarted && !Game.gameEnded)
+            //if (Game.gameStarted && !Game.gameEnded)
+            if (!Game.gameEnded)
             {
                 ElapsedTimeSlider.value = Game.timeElapsedInGame / Game.gameLength;
                 int n = 0;
@@ -369,6 +366,7 @@ public class PlayerHud : MonoBehaviour
         
         ArrowImage.gameObject.SetActive(ArrowVisibility);
     }
+    
 
 
 }
