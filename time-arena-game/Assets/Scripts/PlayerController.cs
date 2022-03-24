@@ -34,9 +34,10 @@ public class PlayerController : MonoBehaviour {
 
 	// Time control variables.
 	public TimeConn TimeTravel;
+	private Constants.JumpDirection _jumpDirection;
 
     // Variables corresponding to the gamestate.
-    public GameController Game;
+    private GameController _game;
 
 	// 0 seeker 1 hider.
 	public Constants.Team Team;
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour {
 		Hud.SetTeam("HIDER");
 		Tutorial.SetTeam(Constants.Team.Miner);
 		Tutorial.StartTutorial();
+		Particles.Subscribe(this);
 		if (!View.IsMine)
 		{
 			Destroy(Cam.gameObject);
@@ -81,6 +83,8 @@ public class PlayerController : MonoBehaviour {
 		};
 
 		_seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
+
+		_jumpDirection = Constants.JumpDirection.Static;
 	}
 
 
@@ -104,11 +108,9 @@ public class PlayerController : MonoBehaviour {
 	{
 		if (next.name == "GameScene")
 		{
-			Game = FindObjectOfType<GameController>();
-			if (Game == null)
-			{
-				Debug.Log("Scene change error: GameController is null");
-			}
+			_game = FindObjectOfType<GameController>();
+			if (_game == null) Debug.LogError("GameController not found");
+			else _game.Connect(View.ViewID);
 
 			TimeTravel.ConnectToTimeLord();
 
@@ -125,33 +127,43 @@ public class PlayerController : MonoBehaviour {
 
 	// ------------ RPC FUNCTIONS ------------
 
-
 	[PunRPC]
-	void RPC_jumpBackwards()
+	void RPC_jumpBackOut()
 	{
-		TimeTravel.TimeJump(-_timeJumpAmount);
-		Particles.StartJumpingBackward();
+		_jumpDirection = Constants.JumpDirection.Backward;
+		Particles.StartDissolving(_jumpDirection, true);
 		_backJumpCooldown = 15;
 		Hud.PressForwardJumpButton();
-		Game.OtherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
 	}
 
 	[PunRPC]
-	void RPC_jumpForward()
+	void RPC_jumpForwardOut()
 	{
-		TimeTravel.TimeJump(_timeJumpAmount);
-		Particles.StartJumpingForward();
+		_jumpDirection = Constants.JumpDirection.Forward;
+		Particles.StartDissolving(_jumpDirection, true);
 		_forwardsJumpCooldown = 15;
 		Hud.PressBackJumpButton();
-		Game.OtherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
+	}
+
+	[PunRPC]
+	void RPC_jumpBackIn()
+	{
+		_jumpDirection = Constants.JumpDirection.Backward;
+		Particles.StartDissolving(_jumpDirection, false);
+		_game.EnterReality(View.ViewID);
+	}
+
+	[PunRPC]
+	void RPC_jumpForwardIn()
+	{
+		_jumpDirection = Constants.JumpDirection.Forward;
+		Particles.StartDissolving(_jumpDirection, false);
+		_game.EnterReality(View.ViewID);
 	}
 
 	// RPC function to be called when another player finds this one.
 	[PunRPC]
-	void RPC_getFound()
-	{
-		ChangeTeam();
-	}
+	void RPC_getFound() { ChangeTeam(); }
 
 	// RPC function to be called by other machines to set this players transform.
 	[PunRPC]
@@ -165,26 +177,33 @@ public class PlayerController : MonoBehaviour {
 
 	// ------------ ACTIONS ------------
 
-
-	public void JumpBackwards()
+	public void JumpBackwards(bool jumpOut)
 	{
 		// Only allow time travel backwards if it doesn't go past the beginning.
-		if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
-			TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0 && !Particles.IsJumping())
+		if (jumpOut)
 		{
-			View.RPC("RPC_jumpBackwards", RpcTarget.All);
+			if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
+				TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0 && Particles.IsDissolving())
+			{
+				View.RPC("RPC_jumpBackOut", RpcTarget.All);
+			}
 		}
+		else View.RPC("RPC_jumpBackIn", RpcTarget.All);
 	}
 
-	public void JumpForward()
+	public void JumpForward(bool jumpOut)
 	{
 		// Only allow time travel forwards if it doesn't go past the end.
-		if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
-			TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick() &&
-			!Particles.IsJumping())
+		if (jumpOut)
 		{
-			View.RPC("RPC_jumpForward", RpcTarget.All);
+			if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
+				TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick() &&
+				!Particles.IsDissolving())
+			{
+				View.RPC("RPC_jumpForwardOut", RpcTarget.All);
+			}
 		}
+		else View.RPC("RPC_jumpForwardIn", RpcTarget.All);
 	}
 
 	private void Grab()
@@ -270,7 +289,6 @@ public class PlayerController : MonoBehaviour {
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
 
-
 	private void UpdateCooldowns()
 	{
 		_forwardsJumpCooldown = (_forwardsJumpCooldown > 0) ? (_forwardsJumpCooldown - Time.deltaTime) : 0;
@@ -302,9 +320,13 @@ public class PlayerController : MonoBehaviour {
 
 	void KeyControl()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1)) JumpBackwards();
+		if (Input.GetKeyDown(KeyCode.Alpha1)) JumpBackwards(true);
 
-		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward();
+		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward(true);
+
+		if (Input.GetKeyUp(KeyCode.Alpha1)) JumpBackwards(false);
+
+		if (Input.GetKeyUp(KeyCode.Alpha2)) JumpForward(false);
 
 		if (Input.GetMouseButtonDown(0)) Grab();
 
@@ -320,16 +342,38 @@ public class PlayerController : MonoBehaviour {
 		if (!View.IsMine) return;
 
 		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded)) {
+		(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)) {
 			UpdateCooldowns();
 			UpdateDebugDisplay();
 			KeyControl();
 		}
 
+		if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
+		{
+			Vector3 pos = Movement.GetPosition();
+			Quaternion rot = Movement.GetRotation();
+			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+			_game.RecordState(ps);
+
+			if (_jumpDirection != Constants.JumpDirection.Static)
+			{
+				_game.TimeTravel(View.ViewID, _jumpDirection);
+			}
+		}
+
 		// Update pauseUI and cursor lock if game is ended.
-		if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
+		if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
 		{
 			PauseUI.Pause();
 		}
+	}
+
+
+	// ------------ PUBLIC METHODS ------------
+
+	public void NotifyStoppedDissolving(bool dissolvedOut)
+	{
+		if (dissolvedOut) _game.LeaveReality(View.ViewID);
+		else _jumpDirection = Constants.JumpDirection.Static;
 	}
 }

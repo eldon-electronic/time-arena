@@ -12,46 +12,65 @@ public class ParticleController : MonoBehaviour
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
   	private Color _white = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-    private bool _isJumping;
+    private bool _isDissolving;
+    private PlayerController _subscriber;
     
     void Start()
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
-
-        _isJumping = false;
+        _isDissolving = false;
     }
 
-    // Called by code, sets a variable to trigger animation.
-    public void StartJumpingForward()
+
+    // ------------ HELPER FUNCTIONS ------------
+
+    private void SetDissolveAnimationVariable(Constants.JumpDirection jd, bool dissolveOut, bool active)
     {
-        _isJumping = true;
-		PlayerAnim.SetBool("isJumpingForward", true);
-	}
+        if (jd == Constants.JumpDirection.Forward && dissolveOut)
+        {
+            PlayerAnim.SetBool("isDissolvingForwardOut", active);
+        }
+        else if (jd == Constants.JumpDirection.Forward && !dissolveOut)
+        {
+            PlayerAnim.SetBool("isDissolvingForwardIn", active);
+        }
+        else if (jd == Constants.JumpDirection.Backward && dissolveOut)
+        {
+            PlayerAnim.SetBool("isDissolvingBackwardOut", active);
+        }
+        else if (jd == Constants.JumpDirection.Backward && !dissolveOut)
+        {
+            PlayerAnim.SetBool("isDissolvingBackwardIn", active);
+        }
+    }
 
-    // Called by animation, unsets the variable to stop animating.
-	public void StopJumpingForward()
+    // TODO: Remove isJumpingForward=false from being the condition for leaving the animation state, make it happen unconditionally if possible.
+    // TODO: An alternative may be to have separate Animation systems (for grabbing, walking, jumping, etc., allowing multiple to happen simultaneously).
+    private void StopDissolving(Constants.JumpDirection jd, bool dissolveOut)
     {
-        _isJumping = false;
-		PlayerAnim.SetBool("isJumpingForward", false);
-	}
+        SetDissolveAnimationVariable(jd, dissolveOut, false);
+        _subscriber.NotifyStoppedDissolving(dissolveOut);
+        _isDissolving = false;
+    }
 
-    // Called by code, sets a variable to trigger animation.
-	public void StartJumpingBackward()
+
+    // ------------ PUBLIC METHODS ------------
+
+    // TODO: Establish the difference between jumping out and in w.r.t. animation.
+    public void StartDissolving(Constants.JumpDirection jd, bool dissolveOut)
     {
-        _isJumping = true;
-		PlayerAnim.SetBool("isJumpingBackward", true);
-	}
+        SetDissolveAnimationVariable(jd, dissolveOut, true);
+        _isDissolving = true;
+    }
 
-    // Called by animation, unsets the variable to stop animating.
-	public void StopJumpingBackward()
-    {
-        _isJumping = false;
-		PlayerAnim.SetBool("isJumpingBackward", false);
-	}
+    public bool IsDissolving() { return _isDissolving; }
 
-    public bool IsJumping() { return _isJumping; }
+    public void Subscribe(PlayerController pc) { _subscriber = pc; }
 
-    // Called by animation, starts the particle systems.
+
+    // ------------ FUNCTIONS CALLED BY ANIMATION ------------
+
+    // Starts the blue particle systems.
 	void BlueBeam()
     {
         var fireCircleMain = FireCircle.main;
@@ -70,7 +89,7 @@ public class ParticleController : MonoBehaviour
         Splash.Play();
     }
 
-    // Called by animation, starts the particle systems.
+    // Starts the orange particle systems.
     void OrangeBeam()
     {
         var fireCircleMain = FireCircle.main;
@@ -88,4 +107,12 @@ public class ParticleController : MonoBehaviour
         FireCircle.Play();
         Splash.Play();
 	}
+
+    void StopDissolvingBackOut() { StopDissolving(Constants.JumpDirection.Backward, true); }
+
+    void StopDissolvingBackIn() { StopDissolving(Constants.JumpDirection.Backward, false); }
+
+    void StopDissolvingForwardOut() { StopDissolving(Constants.JumpDirection.Forward, true); }
+
+    void StopDissolvingForwardIn() { StopDissolving(Constants.JumpDirection.Forward, false); }
 }

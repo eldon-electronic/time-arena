@@ -131,4 +131,8 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerTransform.position = position;
     }
+
+    public Vector3 GetPosition() { return PlayerTransform.position; }
+
+    public Quaternion GetRotation() { return PlayerTransform.rotation; }
 }

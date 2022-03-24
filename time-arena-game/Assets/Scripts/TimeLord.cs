@@ -12,7 +12,7 @@ public class TimeLord : MonoBehaviour
     private int _tps;
     public GameObject Replayer;
     private List<TimeStream> _streams = new List<TimeStream>();
-    private List<Reality> _realities = new List<Reality>();
+    private List<OldReality> _realities = new List<OldReality>();
     private int _currentTick = 0;
     public bool Active = false;
     
@@ -54,7 +54,7 @@ public class TimeLord : MonoBehaviour
 
     public int AllocateReality(GameObject t)
     {
-        Reality newReality = new Reality(this, _streams, _realities.Count, FindStream(t), Replayer);
+        OldReality newReality = new OldReality(this, _streams, _realities.Count, FindStream(t), Replayer);
         _realities.Add(newReality);
         return _realities.Count - 1;
     }

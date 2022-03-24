@@ -5,6 +5,11 @@ using Photon.Pun;
 
 public class GameController : MonoBehaviour
 {
+	private int _totalFrames;
+	private int _currentFrame;
+	private RealityManager _realities;
+	private Dictionary<int, (int currentReality, int nextReality)> _heads;
+	private List<PlayerState>[] _tails;
 
     // Variables referring to the game state.
 	// 5 minute rounds * sixty seconds.
@@ -22,61 +27,30 @@ public class GameController : MonoBehaviour
 	public Constants.Team WinningTeam = Constants.Team.Miner;
 
 
-	void Start() {
+	void Start()
+	{
 		// Prevent anyone else from joining room.
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 
-		AddClient();
-		AddPlayers();
-		
+		_totalFrames = Constants.GameLength * Constants.FrameRate;
+		_currentFrame = 0;
+
+		_tails = new List<PlayerState>[_totalFrames];
+		_realities = new RealityManager();
+
 		if (PhotonNetwork.IsMasterClient) SetupNewGame();
 	}
 
-
-	// ------------ START HELPER FUNCTIONS ------------
-
-	private void AddClient()
+	// TODO: Revise this ground up.
+	void Update()
 	{
-		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
-		if (clients.Length == 1)
-		{
-			_client = clients[0].GetComponent<PlayerController>();
-			_players.Add(_client);
-			OtherPlayersElapsedTime.Add(_client.View.ViewID, 0f);
-			_client.Game = this;
-		}
-		else Debug.LogError("Number of clients is not 1");
-	}
-
-	private void AddPlayers()
-	{
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		foreach (GameObject player in players)
-		{
-			PlayerController playerComponent = player.GetComponent<PlayerController>();
-			_players.Add(playerComponent);
-			OtherPlayersElapsedTime.Add(playerComponent.View.ViewID, 0f);
-		}
-	}
-
-    // Initialise teams and spawn locations for the new game.
-	private void SetupNewGame()
-	{
-		// If testing with one player, they are hider, otherwise one player will randomly be seeker.
-		if (_players.Count > 1)
-		{
-			int randomIndex = Random.Range(0, _players.Count - 1); 
-			_players[randomIndex].GetFound();
-		}
-	}
-
-
-	// ------------ UPDATE METHODS ------------
-
-	void Update() {
 		// Increment global timer and individual player timers.
 		if (!GameEnded)
 		{
+			_currentFrame++;
+			_realities.Increment();
+
+			// TODO: Remove this and refactor dependent code.
 			TimeElapsedInGame += Time.deltaTime;
 			List<int> keys = new List<int>(OtherPlayersElapsedTime.Keys);
 			foreach (int key in keys)
@@ -109,6 +83,100 @@ public class GameController : MonoBehaviour
 				WinningTeam = Constants.Team.Miner;
 				_client.OnGameEnded();
 			}
+		}
+	}
+
+
+	// ------------ PUBLIC FUNCTIONS ------------
+
+
+	public void Connect(int playerID)
+	{
+		_realities.AddHead(playerID);
+	}
+
+	public void RecordState(PlayerState ps)
+	{
+		List<int> frames = _realities.GetTailFrames(ps.PlayerID);
+		foreach (var frame in frames)
+		{
+			_tails[frame].Add(ps);
+		}
+	}
+
+	public void TimeTravel(int playerID, Constants.JumpDirection jd)
+	{
+		int offset = (jd == Constants.JumpDirection.Forward) ? Constants.TimeTravelVelocity : - Constants.TimeTravelVelocity;
+		_realities.OffsetPerceivedFrame(playerID, offset);
+	}
+
+	// TODO: Think more carefully about the 3 or 4 cases when you leave and enter in a different order.
+	public void LeaveReality(int playerID)
+	{
+		_realities.RemoveTail(playerID);
+	}
+
+	// Snap to the nearest reality within range, else create a new reality.
+	public void EnterReality(int playerID)
+	{
+		int frame = _realities.GetPerceivedFrame(playerID);
+		int closestFrame = _realities.GetClosestFrame(playerID, frame);
+		if (Mathf.Abs(closestFrame - frame) < Constants.MinTimeSnapDistance)
+		{
+			frame = closestFrame;
+		}
+		_realities.AddTail(playerID, frame);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// ------------ START HELPER FUNCTIONS ------------
+
+	private void AddClient()
+	{
+		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
+		if (clients.Length == 1)
+		{
+			_client = clients[0].GetComponent<PlayerController>();
+			_players.Add(_client);
+			OtherPlayersElapsedTime.Add(_client.View.ViewID, 0f);
+			// _client._game = this;
+		}
+		else Debug.LogError("No master client");
+	}
+
+	private void AddPlayers()
+	{
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (GameObject player in players)
+		{
+			PlayerController playerComponent = player.GetComponent<PlayerController>();
+			_players.Add(playerComponent);
+			OtherPlayersElapsedTime.Add(playerComponent.View.ViewID, 0f);
+		}
+	}
+
+    // Initialise teams and spawn locations for the new game.
+	private void SetupNewGame()
+	{
+		// If testing with one player, they are hider, otherwise one player will randomly be seeker.
+		if (_players.Count > 1)
+		{
+			int randomIndex = Random.Range(0, _players.Count - 1); 
+			_players[randomIndex].GetFound();
 		}
 	}
 
