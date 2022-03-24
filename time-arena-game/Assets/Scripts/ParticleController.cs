@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public interface ParticleUser
+{
+    public void NotifyStoppedDissolving(bool dissolvedOut);
+}
+
+
 public class ParticleController : MonoBehaviour
 {
     public ParticleSystem FireCircle;

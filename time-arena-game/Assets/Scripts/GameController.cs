@@ -8,8 +8,10 @@ public class GameController : MonoBehaviour
 	private int _totalFrames;
 	private int _currentFrame;
 	private RealityManager _realities;
-	private Dictionary<int, (int currentReality, int nextReality)> _heads;
-	private List<PlayerState>[] _tails;
+	private List<PlayerState>[] _playerStates;
+	[SerializeField] private GameObject _tailPrefab;
+	private Dictionary<int, TailController> _tails;
+	private int _masterClient;
 
     // Variables referring to the game state.
 	// 5 minute rounds * sixty seconds.
@@ -35,8 +37,10 @@ public class GameController : MonoBehaviour
 		_totalFrames = Constants.GameLength * Constants.FrameRate;
 		_currentFrame = 0;
 
-		_tails = new List<PlayerState>[_totalFrames];
+		_playerStates = new List<PlayerState>[_totalFrames];
 		_realities = new RealityManager();
+
+		_tails = new Dictionary<int, TailController>();
 
 		if (PhotonNetwork.IsMasterClient) SetupNewGame();
 	}
@@ -49,6 +53,31 @@ public class GameController : MonoBehaviour
 		{
 			_currentFrame++;
 			_realities.Increment();
+
+			int masterClientFrame = _realities.GetPerceivedFrame(_masterClient);
+			
+			// This handles the state of tails in your reality.
+			foreach (var state in _playerStates[masterClientFrame])
+			{
+				int id = state.TailID;
+
+				if (!_tails.ContainsKey(id))
+				{
+					// A tail enters your reality.
+					GameObject tail = (GameObject) Resources.Load("rePlayer");
+					TailController tailController = tail.GetComponent<TailController>();
+					tailController.Initialise(state);
+					_tails.Add(id, tailController);
+				}
+				else _tails[id].SetState(state);
+
+				if (state.Kill)
+				{
+					// A tail leaves your reality.
+					_tails[id].Destroy();
+					_tails.Remove(id);
+				}
+			}
 
 			// TODO: Remove this and refactor dependent code.
 			TimeElapsedInGame += Time.deltaTime;
@@ -90,9 +119,10 @@ public class GameController : MonoBehaviour
 	// ------------ PUBLIC FUNCTIONS ------------
 
 
-	public void Connect(int playerID)
+	public void Connect(int playerID, bool isMasterClient)
 	{
 		_realities.AddHead(playerID);
+		if (isMasterClient) _masterClient = playerID;
 	}
 
 	public void RecordState(PlayerState ps)
@@ -103,7 +133,7 @@ public class GameController : MonoBehaviour
 		{
 			ps.TailID = lastTailID + i;
 			int frame = frames[i];
-			_tails[frame].Add(ps);
+			_playerStates[frame].Add(ps);
 		}
 	}
 
@@ -120,8 +150,10 @@ public class GameController : MonoBehaviour
 	}
 
 	// Snap to the nearest reality within range, else create a new reality.
+	// Return a list of tails that exist here
 	public void EnterReality(int playerID)
 	{
+		// Start recording the player in the new reality.
 		int frame = _realities.GetPerceivedFrame(playerID);
 		int closestFrame = _realities.GetClosestFrame(playerID, frame);
 		if (Mathf.Abs(closestFrame - frame) < Constants.MinTimeSnapDistance)
@@ -129,6 +161,34 @@ public class GameController : MonoBehaviour
 			frame = closestFrame;
 		}
 		_realities.AddTail(playerID, frame);
+		
+		// Add tails to the game.
+
+	}
+
+	public void DestroyTails()
+	{
+		foreach (var tail in _tails)
+		{
+			tail.Value.Destroy();
+		}
+		_tails = new Dictionary<int, TailController>();
+	}
+
+	public void BirthTails()
+	{
+		int frame = _realities.GetPerceivedFrame(_masterClient);
+
+		foreach (List<PlayerState> tailStates in _playerStates)
+		{
+			foreach (PlayerState tailState in tailStates)
+			{
+				GameObject tail = (GameObject) Resources.Load("rePlayer");
+				TailController tailController = tail.GetComponent<TailController>();
+				tailController.Initialise(tailState);
+				_tails.Add(tailState.TailID, tailController);
+			}
+		}
 	}
 
 

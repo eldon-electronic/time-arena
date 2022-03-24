@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour, ParticleUser
+{
 
 	// Variables defining player values.
 	public Camera Cam;
@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour {
 	// Time control variables.
 	public TimeConn TimeTravel;
 	private Constants.JumpDirection _jumpDirection;
+	private bool _dissolvedOut;
 
     // Variables corresponding to the gamestate.
     private GameController _game;
@@ -85,6 +86,7 @@ public class PlayerController : MonoBehaviour {
 		_seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
 
 		_jumpDirection = Constants.JumpDirection.Static;
+		_dissolvedOut = false;
 	}
 
 
@@ -110,7 +112,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			_game = FindObjectOfType<GameController>();
 			if (_game == null) Debug.LogError("GameController not found");
-			else _game.Connect(View.ViewID);
+			else _game.Connect(View.ViewID, PhotonNetwork.IsMasterClient);
 
 			TimeTravel.ConnectToTimeLord();
 
@@ -186,9 +188,14 @@ public class PlayerController : MonoBehaviour {
 				TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0 && Particles.IsDissolving())
 			{
 				View.RPC("RPC_jumpBackOut", RpcTarget.All);
+				_game.DestroyTails();
 			}
 		}
-		else View.RPC("RPC_jumpBackIn", RpcTarget.All);
+		else
+		{
+			View.RPC("RPC_jumpBackIn", RpcTarget.All);
+			_game.BirthTails();
+		}
 	}
 
 	public void JumpForward(bool jumpOut)
@@ -201,9 +208,14 @@ public class PlayerController : MonoBehaviour {
 				!Particles.IsDissolving())
 			{
 				View.RPC("RPC_jumpForwardOut", RpcTarget.All);
+				_game.DestroyTails();
 			}
 		}
-		else View.RPC("RPC_jumpForwardIn", RpcTarget.All);
+		else
+		{
+			View.RPC("RPC_jumpForwardIn", RpcTarget.All);
+			_game.BirthTails();
+		}
 	}
 
 	private void Grab()
@@ -350,11 +362,17 @@ public class PlayerController : MonoBehaviour {
 
 		if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
 		{
+			// Record your state in all realities you exist in.
 			Vector3 pos = Movement.GetPosition();
 			Quaternion rot = Movement.GetRotation();
-			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection, _dissolvedOut);
 			_game.RecordState(ps);
 
+			// Stop recording your state in the previous reality if you've finished dissolving out.
+			if (_dissolvedOut) _game.LeaveReality(View.ViewID);
+			_dissolvedOut = false;
+
+			// Time travel.
 			if (_jumpDirection != Constants.JumpDirection.Static)
 			{
 				_game.TimeTravel(View.ViewID, _jumpDirection);
@@ -373,7 +391,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
-		if (dissolvedOut) _game.LeaveReality(View.ViewID);
+		if (dissolvedOut) _dissolvedOut = true;
 		else _jumpDirection = Constants.JumpDirection.Static;
 	}
 }
