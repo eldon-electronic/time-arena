@@ -8,12 +8,14 @@ public class FrameData
 {
     private int _perceivedFrame;
     private List<int> _tailFrames;
+    private int _lastTailID;
 
     public FrameData()
     {
         _perceivedFrame = 0;
         _tailFrames = new List<int>();
         _tailFrames.Add(0);
+        _lastTailID = 0;
     }
 
     public int GetPerceivedFrame() { return _perceivedFrame; }
@@ -24,7 +26,7 @@ public class FrameData
 
     public int GetLatestFrame() { return _tailFrames.Last(); }
 
-    public async void Increment()
+    public void Increment()
     {
         _perceivedFrame++;
         for (int i=0; i < _tailFrames.Count; i++)
@@ -32,6 +34,8 @@ public class FrameData
             _tailFrames[i]++;
         }
     }
+
+    public int GetLastTailID() { return _lastTailID; }
 
     public void AddTail(int frame)
     {
@@ -42,6 +46,10 @@ public class FrameData
     public void RemoveTail()
     {
         if (_tailFrames.Count == 0) Debug.LogError("No tracked tails to remove.");
-        else _tailFrames.RemoveAt(0);
+        else
+        {
+            _tailFrames.RemoveAt(0);
+            _lastTailID++;
+        }
     }
 }

@@ -83,6 +83,8 @@ public class RealityManager
         }
         return heads;
     }
+
+    public int GetLastTailID(int playerID) { return _heads[playerID].GetLastTailID(); }
 }
 
 

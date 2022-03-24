@@ -8,13 +8,14 @@ using UnityEngine;
 public class PlayerState
 {
     public readonly int PlayerID;
+    public int TailID;
     public readonly Vector3 Pos;
     public readonly Quaternion Rot;
     public readonly Constants.JumpDirection JumpDirection;
 
-    public PlayerState(int id, Vector3 pos, Quaternion rot, Constants.JumpDirection dir)
+    public PlayerState(int playerID, Vector3 pos, Quaternion rot, Constants.JumpDirection dir)
     {
-        PlayerID = id;
+        PlayerID = playerID;
         Pos = pos;
         Rot = rot;
         JumpDirection = dir;

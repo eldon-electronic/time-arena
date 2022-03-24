@@ -97,9 +97,12 @@ public class GameController : MonoBehaviour
 
 	public void RecordState(PlayerState ps)
 	{
+		int lastTailID = _realities.GetLastTailID(ps.PlayerID);
 		List<int> frames = _realities.GetTailFrames(ps.PlayerID);
-		foreach (var frame in frames)
+		for (int i=0; i < frames.Count; i++)
 		{
+			ps.TailID = lastTailID + i;
+			int frame = frames[i];
 			_tails[frame].Add(ps);
 		}
 	}
