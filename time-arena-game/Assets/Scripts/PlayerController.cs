@@ -312,18 +312,24 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	private void UpdateTimeline()
 	{
-		float yourPos = _game.GetYourPosition();
-		List<float> players = _game.GetPlayerPositions();
-		Hud.SetPlayerPositions(yourPos, players);
+		if (SceneManager.GetActiveScene().name == "GameScene")
+		{
+			float yourPos = _game.GetYourPosition();
+			List<float> players = _game.GetPlayerPositions();
+			Hud.SetPlayerPositions(yourPos, players);
 
-		float time = _game.GetTimeProportion();
-		Hud.SetTimeBarPosition(time);
+			float time = _game.GetTimeProportion();
+			Hud.SetTimeBarPosition(time);
+		}
 	}
 
 	private void UpdateTimer()
 	{
-		int time = _game.GetElapsedTime();
-		Hud.SetTime(time);
+		if (SceneManager.GetActiveScene().name == "GameScene")
+		{
+			int time = _game.GetElapsedTime();
+			Hud.SetTime(time);
+		}
 	}
 
 	private void UpdateDebugDisplay()

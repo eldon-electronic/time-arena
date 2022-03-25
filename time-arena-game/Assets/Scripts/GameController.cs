@@ -40,7 +40,6 @@ public class GameController : MonoBehaviour
 
 	// ------------ UPDATE FUNCTIONS ------------
 
-
 	// Checks to see if there are no hiders left.
 	private void CheckWon()
 	{

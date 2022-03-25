@@ -83,6 +83,7 @@ public class PlayerHud : MonoBehaviour
         if (View.IsMine)
 
         {
+            _playerPositions = new List<float>();
             _yourIcon = PlayerIcon0;
             _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
 
@@ -158,7 +159,7 @@ public class PlayerHud : MonoBehaviour
         {
             if (Game.GameStarted)
             {
-                float t = (Constants.GameLength / Constants.FrameRate) - _time;
+                float t = Constants.GameLength - _time;
                 int minutes = (int) (t / 60);
                 int seconds = (int) (t % 60);
                 TimeDispl.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
