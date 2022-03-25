@@ -112,7 +112,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			_game = FindObjectOfType<GameController>();
 			if (_game == null) Debug.LogError("GameController not found");
-			else _game.Connect(View.ViewID, PhotonNetwork.IsMasterClient);
+			else _game.Connect(View.ViewID, View.IsMine);
+
+			if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
+			{
+				// Become the Guardian.
+				GetFound();
+			}
 
 			TimeTravel.ConnectToTimeLord();
 
@@ -185,7 +191,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (jumpOut)
 		{
 			if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
-				TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0 && Particles.IsDissolving())
+				_game.CanJump(View.ViewID, Constants.JumpDirection.Backward) && !Particles.IsDissolving())
 			{
 				View.RPC("RPC_jumpBackOut", RpcTarget.All);
 				_game.DestroyTails();
@@ -204,8 +210,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (jumpOut)
 		{
 			if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
-				TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick() &&
-				!Particles.IsDissolving())
+				_game.CanJump(View.ViewID, Constants.JumpDirection.Forward) && !Particles.IsDissolving())
 			{
 				View.RPC("RPC_jumpForwardOut", RpcTarget.All);
 				_game.DestroyTails();
@@ -251,17 +256,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (Team == Constants.Team.Miner)
 		{
 			Team = Constants.Team.Guardian;
-			Material.SetMaterial(Constants.Team.Guardian);
 			Material.SetArmActive(true);
 			Hud.SetTeam("SEEKER");
 		}
 		else
 		{
 			Team = Constants.Team.Miner;
-			Material.SetMaterial(Constants.Team.Miner);
 			Material.SetArmActive(false);
 			Hud.SetTeam("HIDER");
 		}
+		Material.SetMaterial(Team);
+		_game.SetTeam(View.ViewID, Team);
 	}
 
 	// RPC function to be called when another player hits this one.
@@ -290,14 +295,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		PlayerAnim.SetBool("isGrabbing", false);
 	}
 
-	// Function called on game gameEnded.
-	public void OnGameEnded()
-	{
-		/*if(PhotonNetwork.IsMasterClient){
-			PhotonNetwork.LoadLevel("PreGameScene");
-		}*/
-	}
-
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
 
@@ -315,6 +312,22 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0.0f && 
 							TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0;
 		Hud.SetCanJump(canJumpForward, canJumpBack);
+	}
+
+	private void UpdateTimeline()
+	{
+		float yourPos = _game.GetYourPosition();
+		List<float> players = _game.GetPlayerPositions();
+		Hud.SetPlayerPositions(yourPos, players);
+
+		float time = _game.GetTimeProportion();
+		Hud.SetTimeBarPosition(time);
+	}
+
+	private void UpdateTimer()
+	{
+		int time = _game.GetElapsedTime();
+		Hud.SetTime(time);
 	}
 
 	private void UpdateDebugDisplay()
@@ -356,6 +369,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
 		(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)) {
 			UpdateCooldowns();
+			UpdateTimeline();
+			UpdateTimer();
 			UpdateDebugDisplay();
 			KeyControl();
 		}

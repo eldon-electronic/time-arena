@@ -7,16 +7,15 @@ public class GameController : MonoBehaviour
 {
 	private int _totalFrames;
 	private int _currentFrame;
+	private List<int> _miners;
+	private List<int> _guardians;
 	private RealityManager _realities;
 	private List<PlayerState>[] _playerStates;
 	[SerializeField] private GameObject _tailPrefab;
 	private Dictionary<int, TailController> _tails;
-	private int _masterClient;
+	private int _myID;
+	private float _timer;
 
-    // Variables referring to the game state.
-	// 5 minute rounds * sixty seconds.
-    public float GameLength = 5f * 60f;
-    public float TimeElapsedInGame = 0f;
 
 	private PlayerController _client;
 	public List<PlayerController> _players;
@@ -42,76 +41,76 @@ public class GameController : MonoBehaviour
 
 		_tails = new Dictionary<int, TailController>();
 
+		_timer = 0f;
+		_ended = false;
+
 		if (PhotonNetwork.IsMasterClient) SetupNewGame();
 	}
 
-	// TODO: Revise this ground up.
-	void Update()
+
+	// ------------ UPDATE FUNCTIONS ------------
+
+
+	// Checks to see if there are no hiders left.
+	private void CheckWon()
 	{
-		// Increment global timer and individual player timers.
-		if (!GameEnded)
+		if (_miners.Count == 0)
 		{
-			_currentFrame++;
-			_realities.Increment();
-
-			int masterClientFrame = _realities.GetPerceivedFrame(_masterClient);
-			
-			// This handles the state of tails in your reality.
-			foreach (var state in _playerStates[masterClientFrame])
-			{
-				int id = state.TailID;
-
-				if (!_tails.ContainsKey(id))
-				{
-					// A tail enters your reality.
-					GameObject tail = (GameObject) Resources.Load("rePlayer");
-					TailController tailController = tail.GetComponent<TailController>();
-					tailController.Initialise(state);
-					_tails.Add(id, tailController);
-				}
-				else _tails[id].SetState(state);
-
-				if (state.Kill)
-				{
-					// A tail leaves your reality.
-					_tails[id].Destroy();
-					_tails.Remove(id);
-				}
-			}
-
-			// TODO: Remove this and refactor dependent code.
-			TimeElapsedInGame += Time.deltaTime;
-			List<int> keys = new List<int>(OtherPlayersElapsedTime.Keys);
-			foreach (int key in keys)
-			{
-				OtherPlayersElapsedTime[key] += Time.deltaTime / GameLength;
-			}
+			// Code reaches here even though hiders are remaining.
+			GameEnded = true;
+			WinningTeam = Constants.Team.Guardian;
 		}
-
-		// If pregame timer is counting.
-		if (!GameStarted)
-		{
-			if (TimeElapsedInGame >= 5f)
-			{
-				GameStarted = true;
-				TimeElapsedInGame = 0f;
-				List<int> keys = new List<int>(OtherPlayersElapsedTime.Keys);
-				foreach (int key in keys)
-				{
-					OtherPlayersElapsedTime[key] = 0f;
-				}
-			}
-		}
-		// Else game is in play.
-		else
-		{
-			CheckHidersLeft();
-			if (TimeElapsedInGame >= GameLength && !GameEnded)
+		
+		if (_currentFrame >= Constants.GameLength && !GameEnded)
 			{
 				GameEnded = true;
 				WinningTeam = Constants.Team.Miner;
-				_client.OnGameEnded();
 			}
+	}
+
+
+	void Update()
+	{
+		if (!GameStarted)
+		{
+			// Pregame timer is counting.
+			if (_timer >= 5f) GameStarted = true;
+			else _timer += Time.deltaTime;
+		}
+		else
+		{
+			// Increment global frame and individual player frames.
+			if (!GameEnded)
+			{
+				_currentFrame++;
+				_realities.Increment();
+
+				int myFrame = _realities.GetPerceivedFrame(_myID);
+				
+				// This handles the state of tails in your reality.
+				foreach (var state in _playerStates[myFrame])
+				{
+					int id = state.TailID;
+
+					if (!_tails.ContainsKey(id))
+					{
+						// A tail enters your reality.
+						GameObject tail = (GameObject) Resources.Load("rePlayer");
+						TailController tailController = tail.GetComponent<TailController>();
+						tailController.Initialise(state);
+						_tails.Add(id, tailController);
+					}
+					else _tails[id].SetState(state);
+
+					if (state.Kill)
+					{
+						// A tail leaves your reality.
+						_tails[id].Destroy();
+						_tails.Remove(id);
+					}
+				}
+			}
+			CheckWon();
 		}
 	}
 
@@ -119,10 +118,10 @@ public class GameController : MonoBehaviour
 	// ------------ PUBLIC FUNCTIONS ------------
 
 
-	public void Connect(int playerID, bool isMasterClient)
+	public void Connect(int playerID, bool isMe)
 	{
 		_realities.AddHead(playerID);
-		if (isMasterClient) _masterClient = playerID;
+		if (isMe) _myID = playerID;
 	}
 
 	public void RecordState(PlayerState ps)
@@ -143,7 +142,6 @@ public class GameController : MonoBehaviour
 		_realities.OffsetPerceivedFrame(playerID, offset);
 	}
 
-	// TODO: Think more carefully about the 3 or 4 cases when you leave and enter in a different order.
 	public void LeaveReality(int playerID)
 	{
 		_realities.RemoveTail(playerID);
@@ -160,10 +158,15 @@ public class GameController : MonoBehaviour
 		{
 			frame = closestFrame;
 		}
+		else if (frame <= Constants.MinTimeSnapDistance)
+		{
+			frame = 0;
+		}
+		else if (frame + Constants.MinTimeSnapDistance >= _currentFrame)
+		{
+			frame = _currentFrame;
+		}
 		_realities.AddTail(playerID, frame);
-		
-		// Add tails to the game.
-
 	}
 
 	public void DestroyTails()
@@ -177,7 +180,7 @@ public class GameController : MonoBehaviour
 
 	public void BirthTails()
 	{
-		int frame = _realities.GetPerceivedFrame(_masterClient);
+		int frame = _realities.GetPerceivedFrame(_myID);
 
 		foreach (List<PlayerState> tailStates in _playerStates)
 		{
@@ -191,72 +194,67 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// ------------ START HELPER FUNCTIONS ------------
-
-	private void AddClient()
+	// TODO: adapt so it takes in a Constants.Team as parameter
+	public List<float> GetPlayerPositions()
 	{
-		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
-		if (clients.Length == 1)
+		List<float> positions = new List<float>();
+
+		List<(int id, int frame)> players = _realities.GetPerceivedFrames();
+		foreach (var player in players)
 		{
-			_client = clients[0].GetComponent<PlayerController>();
-			_players.Add(_client);
-			OtherPlayersElapsedTime.Add(_client.View.ViewID, 0f);
-			// _client._game = this;
+			if (player.id != _myID)
+			{
+				float position = (float) player.frame / (float) _totalFrames;
+				positions.Add(position);
+			}
 		}
-		else Debug.LogError("No master client");
+
+		return positions;
 	}
 
-	private void AddPlayers()
+	public float GetYourPosition()
 	{
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		foreach (GameObject player in players)
+		int frame = _realities.GetPerceivedFrame(_myID);
+		float position = (float) frame / (float) _totalFrames;
+		return position;
+	}
+
+	// Returns the fraction through the game time.
+	public float GetTimeProportion()
+	{
+		return (float) _currentFrame / (float) _totalFrames;
+	}
+
+	// Returns the elapsed time in seconds.
+	public int GetElapsedTime()
+	{
+		return _currentFrame / Constants.FrameRate;
+	}
+
+	public bool CanJump(int playerID, Constants.JumpDirection direction)
+	{
+		int frame = _realities.GetPerceivedFrame(playerID);
+		if (direction == Constants.JumpDirection.Backward)
 		{
-			PlayerController playerComponent = player.GetComponent<PlayerController>();
-			_players.Add(playerComponent);
-			OtherPlayersElapsedTime.Add(playerComponent.View.ViewID, 0f);
+			return frame - Constants.TimeTravelVelocity >= 0;
+		}
+		else
+		{
+			return frame + Constants.TimeTravelVelocity <= _currentFrame;
 		}
 	}
 
-    // Initialise teams and spawn locations for the new game.
-	private void SetupNewGame()
+	public void SetTeam(int playerID, Constants.Team team)
 	{
-		// If testing with one player, they are hider, otherwise one player will randomly be seeker.
-		if (_players.Count > 1)
+		if (team == Constants.Team.Guardian)
 		{
-			int randomIndex = Random.Range(0, _players.Count - 1); 
-			_players[randomIndex].GetFound();
+			_miners.Remove(playerID);
+			_guardians.Add(playerID);
 		}
-	}
-
-	// Checks to see if there are no hiders left.
-	public void CheckHidersLeft()
-	{
-		bool isHidersRemaining = false;
-		for (int i = 0; i < _players.Count; i++)
+		else if (team == Constants.Team.Miner)
 		{
-			isHidersRemaining |= (_players[i].Team == Constants.Team.Miner);
-		}
-		if (!isHidersRemaining)
-		{
-			// Code reaches here even though hiders are remaining.
-			GameEnded = true;
-			WinningTeam = Constants.Team.Guardian;
-			_client.OnGameEnded();
+			_guardians.Remove(playerID);
+			_miners.Add(playerID);
 		}
 	}
 }

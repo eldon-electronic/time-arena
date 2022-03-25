@@ -37,9 +37,14 @@ public class PlayerHud : MonoBehaviour
     public GameObject PopUp;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
+    private int _time;
+    private Slider _yourIcon;
     private Slider[] _playerIcons;
     private Hashtable _debugItems;
     private float[] _cooldowns;
+    private float _yourPosition;
+    private List<float> _playerPositions;
+    private float _timeBarPosition;
     private bool _debug;
     private bool _canJumpForward;
     private bool _canJumpBack;
@@ -78,8 +83,8 @@ public class PlayerHud : MonoBehaviour
         if (View.IsMine)
 
         {
-            // The first Slider in the array corresponds to this player.
-            _playerIcons = new Slider[]{PlayerIcon0, PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
+            _yourIcon = PlayerIcon0;
+            _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
 
             // Link SceneChange event to OnSceneChange.
             SceneManager.activeSceneChanged += OnSceneChange;
@@ -102,6 +107,7 @@ public class PlayerHud : MonoBehaviour
             Game = FindObjectOfType<GameController>();
         }
     }
+
 
     // ------------ LATE UPDATE HELPER FUNCTIONS ------------
 
@@ -130,14 +136,12 @@ public class PlayerHud : MonoBehaviour
             SceneManager.GetActiveScene().name != "PreGameScene"
         );
 
-
-
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             StartTimeDispl.transform.parent.gameObject.SetActive(!Game.GameStarted);
             if (!Game.GameStarted && !Game.GameEnded)
             {
-                var elapsed = 5 - (int) (Game.TimeElapsedInGame + 0.9f);
+                int elapsed = 5 - _time;
                 StartTimeDispl.text = $"{elapsed}";
             }
         }
@@ -154,12 +158,12 @@ public class PlayerHud : MonoBehaviour
         {
             if (Game.GameStarted)
             {
-                float t = Game.GameLength - Game.TimeElapsedInGame;
+                float t = (Constants.GameLength / Constants.FrameRate) - _time;
                 int minutes = (int) (t / 60);
                 int seconds = (int) (t % 60);
                 TimeDispl.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
             } else {
-                TimeDispl.text = "0:00:00";
+                TimeDispl.text = "0:00";
             }
         }
     }
@@ -171,12 +175,9 @@ public class PlayerHud : MonoBehaviour
        // TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
       //  ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
        // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        for (int i=1; i < 5; i++)
+        for (int i=0; i < _playerPositions.Count; i++)
         {
-            _playerIcons[i].gameObject.SetActive(
-                SceneManager.GetActiveScene().name != "PreGameScene" && 
-                Game.OtherPlayersElapsedTime.Count >= i + 1
-            );
+            _playerIcons[i].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         }
 
         // Set player icon positions.
@@ -184,21 +185,19 @@ public class PlayerHud : MonoBehaviour
         {
             if (Game.GameStarted && !Game.GameEnded)
             {
-                ElapsedTimeSlider.value = Game.TimeElapsedInGame / Game.GameLength;
-                int n = 0;
-                List<int> keys = new List<int>(Game.OtherPlayersElapsedTime.Keys);
-                foreach(int key in keys)
+                ElapsedTimeSlider.value = _timeBarPosition;
+                _yourIcon.value = _yourPosition;
+                for (int i=0; i < _playerPositions.Count; i++)
                 {
-                    _playerIcons[n].value = Game.OtherPlayersElapsedTime[key];
-                    n++;
+                    _playerIcons[i].value = _playerPositions[i];
                 }
-            } else if (!Game.GameStarted && !Game.GameEnded) {
-                _playerIcons[0].value = 0;
-                int n = 0;
-                List<int> keys = new List<int>(Game.OtherPlayersElapsedTime.Keys);
-                foreach(int key in keys){
-                    _playerIcons[n].value = 0;
-                    n++;
+            }
+            else if (!Game.GameStarted && !Game.GameEnded)
+            {
+                _yourIcon.value = 0;
+                for (int i=0; i < _playerPositions.Count; i++)
+                {
+                    _playerIcons[i].value = 0;
                 }
             }
         }
@@ -316,11 +315,24 @@ public class PlayerHud : MonoBehaviour
         _debugItems = items;
     }
 
+    public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
+    {
+        _yourPosition = clientPosition;
+        _playerPositions = playerPositions;
+    }
+
+    public void SetTimeBarPosition(float position)
+    {
+        _timeBarPosition = position;
+    }
+
     public void SetCooldownValues(float[] items)
     {
         // Each item should be a float between 0.0f (empty) and 1.0f (full).
         _cooldowns = items;
     }
+
+    public void SetTime(int second) { _time = second; }
 
     public void ToggleDebug()
     {
