@@ -16,13 +16,6 @@ public class GameController : MonoBehaviour
 	private int _myID;
 	private float _timer;
 
-
-	private PlayerController _client;
-	public List<PlayerController> _players;
-
-	// List to keep track of elapsed time for all players.
-  	public Dictionary<int, float> OtherPlayersElapsedTime = new Dictionary<int, float>();
-
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
@@ -42,9 +35,6 @@ public class GameController : MonoBehaviour
 		_tails = new Dictionary<int, TailController>();
 
 		_timer = 0f;
-		_ended = false;
-
-		if (PhotonNetwork.IsMasterClient) SetupNewGame();
 	}
 
 

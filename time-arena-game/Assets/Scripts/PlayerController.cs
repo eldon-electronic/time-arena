@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public PhotonView View;
 
 	// Time control variables.
-	public TimeConn TimeTravel;
 	private Constants.JumpDirection _jumpDirection;
 	private bool _dissolvedOut;
 
@@ -44,7 +43,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public Constants.Team Team;
 	private float _forwardsJumpCooldown = 0f;
 	private float _backJumpCooldown = 0f;
-	private int _timeJumpAmount = 100;
 	private Vector3[] _hiderSpawnPoints;
 	private Vector3 _seekerSpawnPoint;
 
@@ -119,8 +117,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				// Become the Guardian.
 				GetFound();
 			}
-
-			TimeTravel.ConnectToTimeLord();
 
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
@@ -308,9 +304,9 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Hud.SetCooldownValues(cooldownValues);
 
 		bool canJumpForward = SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0.0f && 
-							TimeTravel.GetRealityTick() + (float) _timeJumpAmount <= TimeTravel.GetCurrentTick();
+							_game.CanJump(View.ViewID, Constants.JumpDirection.Forward);
 		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0.0f && 
-							TimeTravel.GetRealityTick() - (float) _timeJumpAmount >= 0;
+							_game.CanJump(View.ViewID, Constants.JumpDirection.Backward);
 		Hud.SetCanJump(canJumpForward, canJumpBack);
 	}
 
