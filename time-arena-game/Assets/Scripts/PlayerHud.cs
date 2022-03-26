@@ -33,8 +33,9 @@ public class PlayerHud : MonoBehaviour
     public Sprite GreenPressedSprite;
     public Sprite GreenUnpressedSprite;
     public GameObject ArrowImage;
+    public GameObject Tutorial;
     public GameObject PopUpText;
-    public GameObject PopUp;
+    //public GameObject PopUp;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
     private Slider[] _playerIcons;
@@ -248,7 +249,7 @@ public class PlayerHud : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != "PreGameScene")
         {
-            PopUp.gameObject.SetActive(false);
+            Tutorial.gameObject.SetActive(false);
             
         }
     }
@@ -368,6 +369,13 @@ public class PlayerHud : MonoBehaviour
         if (!View.IsMine) return;
         
         ArrowImage.gameObject.SetActive(arrowVisibility);
+    }
+    public void SetTutorialVisibility(bool tutorialVisibility){
+
+        if (!View.IsMine) return;
+        
+        Tutorial.gameObject.SetActive(tutorialVisibility);
+
     }
     
 

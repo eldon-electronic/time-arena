@@ -8781,6 +8781,7 @@ GameObject:
   - component: {fileID: 3792925184382037071}
   - component: {fileID: 7995784166818512175}
   - component: {fileID: 561111332934807323}
+  - component: {fileID: 7338628182176829711}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -9198,8 +9199,8 @@ MonoBehaviour:
   GreenPressedSprite: {fileID: 21300000, guid: 99a6940fc522545a6b07507373492a55, type: 3}
   GreenUnpressedSprite: {fileID: 21300000, guid: 3ec36685211ee4ee083b95ca1dbd0264, type: 3}
   ArrowImage: {fileID: 5931293119998304570}
+  Tutorial: {fileID: 6420919972992914706}
   PopUpText: {fileID: 931299746159129857}
-  PopUp: {fileID: 5341095245311348044}
 --- !u!114 &228805100952192999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9266,6 +9267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TutorialHud: {fileID: 3138509024607561696}
+  TutorialController: {fileID: 6458975045518551228}
 --- !u!114 &561111332934807323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9287,6 +9289,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   CameraHolder: {fileID: 3168561785147484150}
+--- !u!114 &7338628182176829711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81554a44c893142b78b5b45d3368051b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 6458975045518551231}
+  spawningPoint:
+  - {x: -62, y: -2, z: 20}
+  - {x: 2, y: 5, z: 0}
+  - {x: 15, y: 5, z: 0}
+  - {x: 23, y: 5, z: 0}
+  - {x: 30, y: 5, z: 0}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
@@ -15388,3 +15409,13 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1029 &102900000
+DefaultAsset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Message: This default asset was generated because the worker process has crashed
+    during last import.
+  m_IsWarning: 1
