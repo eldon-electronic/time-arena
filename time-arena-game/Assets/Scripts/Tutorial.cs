@@ -97,7 +97,7 @@ public class Tutorial : MonoBehaviour
         _states.Add(state15);
          State state16 = new State("Please press 2 to travel forwards!", "forwardJump",KeyCode.Alpha2,true);
         _states.Add(state16);
-        State state17 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\nPlease press E to start the game OR press T to go back to tutorial.", "forwardJump",KeyCode.T,false);
+        State state17 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\nPlease press F to start the game OR press T to go back to tutorial.", "forwardJump",KeyCode.T,false);
         _states.Add(state17);
          
     
