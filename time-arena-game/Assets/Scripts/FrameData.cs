@@ -37,6 +37,12 @@ public class FrameData
 
     public int GetLastTailID() { return _lastTailID; }
 
+    public int GetNextTailID()
+    {
+        if (_tailFrames.Count <= 1) return _lastTailID;
+        else return _lastTailID + 1;
+    }
+
     public void AddTail(int frame)
     {
         if (_tailFrames.Count == 2) Debug.LogError("Cannot write to more than two tails simultaneously.");

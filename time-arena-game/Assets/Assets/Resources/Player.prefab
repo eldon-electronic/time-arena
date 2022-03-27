@@ -8773,7 +8773,6 @@ GameObject:
   - component: {fileID: 7955099349307058717}
   - component: {fileID: 9070032884028841073}
   - component: {fileID: 6458975045518551228}
-  - component: {fileID: 3078873912917717710}
   - component: {fileID: 2206506049548669404}
   - component: {fileID: 3138509024607561696}
   - component: {fileID: 228805100952192999}
@@ -8781,6 +8780,7 @@ GameObject:
   - component: {fileID: 3792925184382037071}
   - component: {fileID: 7995784166818512175}
   - component: {fileID: 561111332934807323}
+  - component: {fileID: 77372880126097527}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -8893,12 +8893,6 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: isGrabbing
-  - Type: 4
-    SynchronizeType: 1
-    Name: isJumpingForward
-  - Type: 4
-    SynchronizeType: 1
-    Name: isJumpingBackward
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -9134,21 +9128,8 @@ MonoBehaviour:
     m_Bits: 128
   Particles: {fileID: 228805100952192999}
   View: {fileID: 5690578699466181193}
-  TimeTravel: {fileID: 3078873912917717710}
-  Game: {fileID: 0}
+  _tailManager: {fileID: 77372880126097527}
   Team: 0
---- !u!114 &3078873912917717710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6458975045518551231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 397c08b8676d2114bb1bd31e3d69f481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2206506049548669404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9287,6 +9268,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   CameraHolder: {fileID: 3168561785147484150}
+--- !u!114 &77372880126097527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7e21743b95c4269ae954395893d039, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0

@@ -97,4 +97,6 @@ public class RealityManager
     }
 
     public int GetLastTailID(int playerID) { return _heads[playerID].GetLastTailID(); }
+
+    public int GetNextTailID(int playerID) { return _heads[playerID].GetNextTailID(); }
 }
