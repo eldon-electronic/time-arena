@@ -35,7 +35,7 @@ public class PlayerHud : MonoBehaviour
     public GameObject ArrowImage;
     public GameObject Tutorial;
     public GameObject PopUpText;
-    //public GameObject PopUp;
+    public GameObject OptionsPopUpText;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
     private Slider[] _playerIcons;
@@ -45,6 +45,7 @@ public class PlayerHud : MonoBehaviour
     private bool _canJumpForward;
     private bool _canJumpBack;
     private string _message;
+    private string _optionsMessage;
    
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
@@ -375,6 +376,14 @@ public class PlayerHud : MonoBehaviour
         if (!View.IsMine) return;
         
         Tutorial.gameObject.SetActive(tutorialVisibility);
+
+    }
+    public void SetOptionsText(string optionsMessage){
+
+        if (!View.IsMine) return;
+
+        _optionsMessage = optionsMessage;
+        OptionsPopUpText.GetComponent<TextMeshProUGUI>().text = _optionsMessage;
 
     }
     
