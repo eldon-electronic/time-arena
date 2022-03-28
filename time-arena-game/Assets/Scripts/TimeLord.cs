@@ -60,6 +60,7 @@ public class TimeLord
     }
 
     // Returns the states of all tails that exist on your perceived frame.
+    // May return null.
     public Dictionary<int, PlayerState> GetAllTails()
     {
         int frame = _realities.GetPerceivedFrame(_myID);
@@ -74,8 +75,11 @@ public class TimeLord
     public PlayerState GetState(int tailID)
     {
         int frame = _realities.GetPerceivedFrame(_myID);
-        if (_playerStates[frame].ContainsKey(_myID)) return _playerStates[frame][_myID];
-        else return null;
+        if (_playerStates[frame] != null)
+        {
+            if (_playerStates[frame].ContainsKey(_myID)) return _playerStates[frame][_myID];
+        }
+        return null;
     }
 
 
@@ -97,7 +101,8 @@ public class TimeLord
 		{
 			ps.TailID = lastTailID + i;
 			int frame = frames[i];
-			_playerStates[frame].Add(ps.TailID, ps);
+            if (_playerStates[frame] == null) _playerStates[frame] = new Dictionary<int, PlayerState>();
+            _playerStates[frame].Add(ps.TailID, ps);
 		}
 	}
 

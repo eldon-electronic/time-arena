@@ -48,5 +48,7 @@ public class TestTimeLordSimulation
             Assert.AreEqual(dir, ps.JumpDirection, $"Jump direction not recorded correctly at frame {i}");
             Assert.IsFalse(ps.Kill, $"Kill not recorded correcty at frame {i}");
         }
+
+        Debug.Log("All assertions pass.");
     }
 }
