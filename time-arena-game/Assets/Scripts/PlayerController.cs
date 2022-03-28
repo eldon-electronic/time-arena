@@ -115,7 +115,12 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (next.name == "GameScene")
 		{
-			if (View.IsMine) _preGame.Kill();
+			if (View.IsMine)
+			{
+				_preGame.Kill();
+				_tailManager.DestroyTails();
+				_tailManager.Deactivate();
+			}
 
 			_game = FindObjectOfType<GameController>();
 			if (_game == null) Debug.LogError("GameController not found");
@@ -321,24 +326,18 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	private void UpdateTimeline()
 	{
-		if (SceneManager.GetActiveScene().name == "GameScene")
-		{
-			float yourPos = _timelord.GetYourPosition();
-			List<float> players = _timelord.GetPlayerPositions();
-			Hud.SetPlayerPositions(yourPos, players);
+		float yourPos = _timelord.GetYourPosition();
+		List<float> players = _timelord.GetPlayerPositions();
+		Hud.SetPlayerPositions(yourPos, players);
 
-			float time = _timelord.GetTimeProportion();
-			Hud.SetTimeBarPosition(time);
-		}
+		float time = _timelord.GetTimeProportion();
+		Hud.SetTimeBarPosition(time);
 	}
 
 	private void UpdateTimer()
 	{
-		if (SceneManager.GetActiveScene().name == "GameScene")
-		{
-			int time = _timelord.GetElapsedTime();
-			Hud.SetTime(time);
-		}
+		int time = _timelord.GetElapsedTime();
+		Hud.SetTime(time);
 	}
 
 	private void UpdateDebugDisplay()
@@ -347,6 +346,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
 		debugItems.Add("Grab", _damageWindow);
+		debugItems.Add("My Time", _timelord.GetYourPosition());
+		debugItems.Add("The Time", _timelord.GetTimeProportion());
 
 		Hashtable movementState = Movement.GetState();
 		Utilities.Union(ref debugItems, movementState);
@@ -428,7 +429,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_timelord.EnterReality(View.ViewID);
 		if (View.IsMine)
 		{
-			_tailManager.DestroyTails();
 			_tailManager.SetTimeLord(_timelord);
 		}
 	}

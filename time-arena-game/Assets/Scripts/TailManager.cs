@@ -6,10 +6,12 @@ public class TailManager : MonoBehaviour
 {
     private TimeLord _timeLord;
     private Dictionary<int, TailController> _tails;
+    private bool _activated;
 
     void Start()
     {
         _tails = new Dictionary<int, TailController>();
+        _activated = false;
     }
 
     // Creates tail objects for any tails that come into existance on this frame. 
@@ -27,7 +29,7 @@ public class TailManager : MonoBehaviour
 
     void Update()
     {
-        if (_timeLord != null) CreateNewTails();
+        if (_activated && _timeLord != null) CreateNewTails();
     }
 
 
@@ -37,6 +39,8 @@ public class TailManager : MonoBehaviour
 
     public void DestroyTails()
     {
+        if (!_activated) _activated = true;
+
         foreach (var tail in _tails)
 		{
 			tail.Value.Kill();
@@ -56,4 +60,6 @@ public class TailManager : MonoBehaviour
 			_tails.Add(tail.Key, tailController);
 		}
     }
+
+    public void Deactivate() { _activated = false; }
 }

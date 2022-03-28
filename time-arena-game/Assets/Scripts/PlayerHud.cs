@@ -176,31 +176,17 @@ public class PlayerHud : MonoBehaviour
        // TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
       //  ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
        // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        for (int i=0; i < _playerPositions.Count; i++)
-        {
-            _playerIcons[i].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        }
+        // for (int i=0; i < _playerPositions.Count; i++)
+        // {
+        //     _playerIcons[i].gameObject.SetActive(true);
+        // }
 
         // Set player icon positions.
-        if (SceneManager.GetActiveScene().name == "GameScene")
+        ElapsedTimeSlider.value = _timeBarPosition;
+        _yourIcon.value = _yourPosition;
+        for (int i=0; i < _playerPositions.Count; i++)
         {
-            if (Game.GameStarted && !Game.GameEnded)
-            {
-                ElapsedTimeSlider.value = _timeBarPosition;
-                _yourIcon.value = _yourPosition;
-                for (int i=0; i < _playerPositions.Count; i++)
-                {
-                    _playerIcons[i].value = _playerPositions[i];
-                }
-            }
-            else if (!Game.GameStarted && !Game.GameEnded)
-            {
-                _yourIcon.value = 0;
-                for (int i=0; i < _playerPositions.Count; i++)
-                {
-                    _playerIcons[i].value = 0;
-                }
-            }
+            _playerIcons[i].value = _playerPositions[i];
         }
     }
 
