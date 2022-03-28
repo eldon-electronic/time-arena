@@ -14,7 +14,6 @@ public class FrameData
     {
         _perceivedFrame = 0;
         _tailFrames = new List<int>();
-        _tailFrames.Add(0);
         _lastTailID = 0;
     }
 

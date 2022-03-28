@@ -425,6 +425,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		_timelord = timelord;
 		_timelord.Connect(View.ViewID, View.IsMine);
+		_timelord.EnterReality(View.ViewID);
 		if (View.IsMine)
 		{
 			_tailManager.DestroyTails();

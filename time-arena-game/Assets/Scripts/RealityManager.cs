@@ -115,4 +115,8 @@ public class RealityManager
 
     // Return the tail ID of the current reality the given player is writing to.
     public int GetNextTailID(int playerID) { return _heads[playerID].GetNextTailID(); }
+
+
+    // WARNING: The following function is to be used by test framework only.
+    public Dictionary<int, FrameData> RevealHeads() { return _heads; }
 }

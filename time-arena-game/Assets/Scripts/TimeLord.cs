@@ -41,6 +41,7 @@ public class TimeLord
     }
 
     // Returns a list of states for all tails created on your perceived frame.
+    // May return null.
     public List<PlayerState> GetCreatedTails()
     {
         int frame = _realities.GetPerceivedFrame(_myID);
@@ -206,9 +207,11 @@ public class TimeLord
 		}
 	}
 
-    // WARNING: This function is to be used by test framework only.
-    public Dictionary<int, PlayerState>[] RevealPlayerStates()
-    {
-        return _playerStates;
-    }
+
+    // WARNING: The following functions are to be used by test framework only.
+    public Dictionary<int, PlayerState>[] RevealPlayerStates() { return _playerStates; }
+
+    public RealityManager RevealRealityManager() { return _realities; }
+
+    public Dictionary<int, List<int>> RevealTailCreations() { return _tailCreations; }
 }
