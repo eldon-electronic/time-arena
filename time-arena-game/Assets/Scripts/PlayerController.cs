@@ -302,13 +302,13 @@ public class PlayerController : MonoBehaviour {
 
 	void KeyControl()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1)) JumpBackwards();
+		if (Input.GetKeyDown(KeyCode.Q)) JumpBackwards();
 
-		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward();
+		if (Input.GetKeyDown(KeyCode.E)) JumpForward();
 
 		if (Input.GetMouseButtonDown(0)) Grab();
 
-		if (Input.GetKeyDown(KeyCode.E)) StartGame();
+		if (Input.GetKeyDown(KeyCode.F)) StartGame();
 
 		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
 
