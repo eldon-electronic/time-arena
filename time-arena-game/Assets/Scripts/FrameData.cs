@@ -28,7 +28,12 @@ public class FrameData
     public List<int> GetTailFrames() { return _tailFrames; }
 
     // Returns the tail frame pointer of the latest reality we're writing to.
-    public int GetLatestFrame() { return _tailFrames.Last(); }
+    // Returns -1 if there are currently no tail writers.
+    public int GetLatestFrame()
+    {
+        if (_tailFrames.Count > 0) return _tailFrames.Last();
+        else return -1;
+    }
 
     // Increments every frame (perceived frame and tail frames).
     public void Increment()

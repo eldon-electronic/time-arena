@@ -85,7 +85,7 @@ public class RealityManager
             if (head.Key != playerID)
             {
                 int f = head.Value.GetLatestFrame();
-                if (Mathf.Abs(f - frame) < Mathf.Abs(closest - frame))
+                if (f != -1 && Mathf.Abs(f - frame) < Mathf.Abs(closest - frame))
                 {
                     closest = f;
                 }
