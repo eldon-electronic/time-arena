@@ -200,4 +200,10 @@ public class TimeLord
 			return frame + Constants.TimeTravelVelocity <= _currentFrame;
 		}
 	}
+
+    // WARNING: This function is to be used by test framework only.
+    public Dictionary<int, PlayerState>[] RevealPlayerStates()
+    {
+        return _playerStates;
+    }
 }
