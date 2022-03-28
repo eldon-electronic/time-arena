@@ -53,17 +53,17 @@ public class TestTimeLordSimulation
         }
 
         // Perform assertions on Reality Manager.
-        Dictionary<int, FrameData> heads = realityManager.RevealHeads();
+        Dictionary<int, Reality> heads = realityManager.RevealHeads();
         Assert.AreEqual(1, heads.Count, "Incorrect number of realities.");
         Assert.IsTrue(heads.ContainsKey(0), "Reality Manager does not contain a reality for player 0.");
         
-        FrameData frameData = heads[0];
-        Assert.AreEqual(20, frameData.GetPerceivedFrame(), "Incorrect perceived frame.");
-        Assert.AreEqual(0, frameData.GetLastTailID(), "Incorrect last tail ID.");
+        Reality reality = heads[0];
+        Assert.AreEqual(20, reality.PerceivedFrame, "Incorrect perceived frame.");
+        Assert.AreEqual(0, reality.LastTailID, "Incorrect last tail ID.");
 
-        List<int> tailFrames = frameData.GetTailFrames();
-        Assert.AreEqual(1, tailFrames.Count, "Incorrect number of tail writer pointers.");
-        Assert.AreEqual(20, tailFrames[0], "Incorrect tail writer pointer position.");
+        List<int> writeFrames = reality.WriteFrames;
+        Assert.AreEqual(1, writeFrames.Count, "Incorrect number of tail writer pointers.");
+        Assert.AreEqual(20, writeFrames[0], "Incorrect tail writer pointer position.");
 
         // Perform assertions on Tail Creations.
         Assert.AreEqual(1, tailCreations.Count, "Incorrect number of tail creation frames.");

@@ -97,7 +97,7 @@ public class TimeLord
 	public void RecordState(PlayerState ps)
 	{
 		int lastTailID = _realities.GetLastTailID(ps.PlayerID);
-		List<int> frames = _realities.GetTailFrames(ps.PlayerID);
+		List<int> frames = _realities.GetWriteFrames(ps.PlayerID);
 		for (int i=0; i < frames.Count; i++)
 		{
 			ps.TailID = lastTailID + i;
@@ -117,7 +117,7 @@ public class TimeLord
     // Stops recording in your previous reality.
 	public void LeaveReality(int playerID)
 	{
-		_realities.RemoveTail(playerID);
+		_realities.RemoveWriter(playerID);
 	}
 
 	// Snaps your position to the nearest reality within range, else creates a new reality.
@@ -141,7 +141,7 @@ public class TimeLord
 		}
 
         // Start recording in the new reality.
-        _realities.AddTail(playerID, frame);
+        _realities.AddWriter(playerID, frame);
 
         // Record the frame at which this tail was created.
         int tailID = _realities.GetNextTailID(playerID);
