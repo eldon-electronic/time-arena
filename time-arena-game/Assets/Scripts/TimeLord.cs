@@ -147,9 +147,7 @@ public class TimeLord
         int tailID = _realities.GetNextTailID(playerID);
         if (_tailCreations.ContainsKey(frame))
         {
-            List<int> tailIDs = _tailCreations[frame];
-            tailIDs.Add(tailID);
-            _tailCreations[frame] = tailIDs;
+            _tailCreations[frame].Add(tailID);
         }
         else _tailCreations.Add(frame, new List<int>(){tailID});
 	}
