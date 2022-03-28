@@ -16,15 +16,12 @@ public class TailManager : MonoBehaviour
     private void CreateNewTails()
 	{
 		List<PlayerState> states = _timeLord.GetCreatedTails();
-		if (states != null)
+		foreach (var state in states)
 		{
-			foreach (var state in states)
-			{
-				GameObject tail = (GameObject) Resources.Load("rePlayer");
-				TailController tailController = tail.GetComponent<TailController>();
-				tailController.Initialise(state, _timeLord);
-				_tails.Add(state.TailID, tailController);
-			}
+			GameObject tail = (GameObject) Resources.Load("rePlayer");
+			TailController tailController = tail.GetComponent<TailController>();
+			tailController.Initialise(state, _timeLord);
+			_tails.Add(state.TailID, tailController);
 		}
 	}
 

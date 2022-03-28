@@ -40,35 +40,36 @@ public class TimeLord
         _realities.Increment();
     }
 
+    public bool TimeEnded() { return _currentFrame >= _totalFrames; }
+
+
+    // ------------ PUBLIC METHODS FOR TAIL MANAGER ------------
+
     // Returns a list of states for all tails created on your perceived frame.
-    // May return null.
     public List<PlayerState> GetCreatedTails()
     {
+        List<PlayerState> result = new List<PlayerState>();
+
         int frame = _realities.GetPerceivedFrame(_myID);
         if (_tailCreations.ContainsKey(frame))
         {
-            List<PlayerState> result = new List<PlayerState>();
-
             List<int> tailIDs = _tailCreations[frame];
             foreach (var id in tailIDs)
             {
                 result.Add(_playerStates[frame][id]);
             }
-
-            return result;
         }
-        else return null;
+
+        return result;
     }
 
     // Returns the states of all tails that exist on your perceived frame.
-    // May return null.
     public Dictionary<int, PlayerState> GetAllTails()
     {
         int frame = _realities.GetPerceivedFrame(_myID);
-        return _playerStates[frame];
+        if (_playerStates[frame] != null) return _playerStates[frame];
+        else return new Dictionary<int, PlayerState>();
     }
-
-    public bool TimeEnded() { return _currentFrame >= _totalFrames; }
 
 
     // ------------ PUBLIC METHODS FOR THE TAIL CONTROLLER ------------
