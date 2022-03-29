@@ -395,14 +395,20 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			JumpBackwards(true);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward(true);
+		if (Input.GetKeyDown(KeyCode.Alpha2)) {
+			Debug.Log("Key down 2");
+			JumpForward(true);
+		}
 
 		if (Input.GetKeyUp(KeyCode.Alpha1)) {
 			Debug.Log("Key up 1");
 			JumpBackwards(false);
 		}
 
-		if (Input.GetKeyUp(KeyCode.Alpha2)) JumpForward(false);
+		if (Input.GetKeyUp(KeyCode.Alpha2)) {
+			Debug.Log("Key up 2");
+			JumpForward(false);
+		}
 
 		if (Input.GetMouseButtonDown(0)) Grab();
 

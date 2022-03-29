@@ -40,7 +40,10 @@ public class TailController : MonoBehaviour
         transform.position = ps.Pos;
         transform.rotation = ps.Rot;
 
-        _particles.StartDissolving(ps.JumpDirection, false);
+        if (ps.JumpDirection != Constants.JumpDirection.Static)
+        {
+            _particles.StartDissolving(ps.JumpDirection, false);
+        }
     }
 
     public void Kill() { Destroy(gameObject); }
