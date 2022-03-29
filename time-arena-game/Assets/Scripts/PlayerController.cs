@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public PhotonView View;
 
 	// Time control variables.
+	private bool _isJumping;
 	private Constants.JumpDirection _jumpDirection;
 	private bool _dissolvedOut;
 
@@ -90,8 +91,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		_seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
 
+		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
-		_dissolvedOut = false;
 	}
 
 
@@ -148,6 +149,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackOut()
 	{
+		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Backward;
 		Particles.StartDissolving(_jumpDirection, true);
 		_backJumpCooldown = 15;
@@ -157,6 +159,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardOut()
 	{
+		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Forward;
 		Particles.StartDissolving(_jumpDirection, true);
 		_forwardsJumpCooldown = 15;
@@ -166,6 +169,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackIn()
 	{
+		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Backward;
 		Particles.StartDissolving(_jumpDirection, false);
 		_timelord.EnterReality(View.ViewID);
@@ -174,6 +178,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardIn()
 	{
+		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Forward;
 		Particles.StartDissolving(_jumpDirection, false);
 		_timelord.EnterReality(View.ViewID);
@@ -392,18 +397,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			// Record your state in all realities you exist in.
 			Vector3 pos = Movement.GetPosition();
 			Quaternion rot = Movement.GetRotation();
-			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection, _dissolvedOut);
+			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
 			_timelord.RecordState(ps);
 
-			// Stop recording your state in the previous reality if you've finished dissolving out.
-			if (_dissolvedOut) _timelord.LeaveReality(View.ViewID);
-			_dissolvedOut = false;
-
 			// Time travel.
-			if (_jumpDirection != Constants.JumpDirection.Static)
-			{
-				_timelord.TimeTravel(View.ViewID, _jumpDirection);
-			}
+			if (_isJumping) _timelord.TimeTravel(View.ViewID, _jumpDirection);
 		}
 
 		// Update pauseUI and cursor lock if game is ended.
@@ -418,7 +416,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
-		if (dissolvedOut) _dissolvedOut = true;
+		if (dissolvedOut) _timelord.LeaveReality(View.ViewID);
 		else _jumpDirection = Constants.JumpDirection.Static;
 	}
 

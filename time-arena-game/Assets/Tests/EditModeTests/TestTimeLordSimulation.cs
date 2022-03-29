@@ -25,7 +25,7 @@ public class TestTimeLordSimulation
         {
             pos = new Vector3(i, i, i);
             rot = new Quaternion(i, i, i, i);
-            PlayerState ps = new PlayerState(0, pos, rot, dir, false);
+            PlayerState ps = new PlayerState(0, pos, rot, dir);
             timeLord.RecordState(ps);
             timeLord.Tick();
         }

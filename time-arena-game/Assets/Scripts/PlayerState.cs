@@ -12,14 +12,12 @@ public class PlayerState
     public readonly Vector3 Pos;
     public readonly Quaternion Rot;
     public readonly Constants.JumpDirection JumpDirection;
-    public readonly bool Kill;
 
-    public PlayerState(int playerID, Vector3 pos, Quaternion rot, Constants.JumpDirection dir, bool kill)
+    public PlayerState(int playerID, Vector3 pos, Quaternion rot, Constants.JumpDirection dir)
     {
         PlayerID = playerID;
         Pos = pos;
         Rot = rot;
         JumpDirection = dir;
-        Kill = kill;
     }
 }
