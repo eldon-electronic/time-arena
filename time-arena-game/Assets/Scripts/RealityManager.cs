@@ -4,97 +4,157 @@ using System.Linq;
 using UnityEngine;
 
 
+public class Reality
+    {
+        public int PerceivedFrame;
+        public List<int> WriteFrames;
+        public int LastTailID;
+
+        public Reality()
+        {
+            PerceivedFrame = 0;
+            WriteFrames = new List<int>();
+            LastTailID = 0;
+        }
+
+        public void Increment()
+        {
+            PerceivedFrame++;
+            for (int i=0; i < WriteFrames.Count; i++)
+            {
+                WriteFrames[i]++;
+            }
+        }
+    }
+
+
 public class RealityManager
 {
-    private Dictionary<int, FrameData> _heads;
+    private Dictionary<int, Reality> _realities;
 
     public RealityManager()
     {
-        _heads = new Dictionary<int, FrameData>();
+        _realities = new Dictionary<int, Reality>();
     }
 
-    public int Size() { return _heads.Count; }
-
+    // Add a new player to the dictionary.
     public void AddHead(int playerID)
     {
-        _heads.Add(playerID, new FrameData());
+        _realities.Add(playerID, new Reality());
     }
 
+    // Increment the frame values of every player.
     public void Increment()
     {
-        foreach (var head in _heads)
+        foreach (var reality in _realities)
         {
-            head.Value.Increment();
+            reality.Value.Increment();
         }
     }
 
+    // Return the perceived frame of the given player.
     public int GetPerceivedFrame(int playerID)
     {
-        FrameData frames = _heads[playerID];
-        return frames.GetPerceivedFrame();
+        return _realities[playerID].PerceivedFrame;
     }
 
+    // Return the player ID and perceived frame of all players in the dictionary.
     public List<(int id, int frame)> GetPerceivedFrames()
     {
-        List<(int, int)> frames = new List<(int, int)>();
-        foreach (var head in _heads)
+        List<(int, int)> frameData = new List<(int, int)>();
+        foreach (var reality in _realities)
         {
-            frames.Add((head.Key, head.Value.GetPerceivedFrame()));
+            frameData.Add((reality.Key, reality.Value.PerceivedFrame));
         }
-        return frames;
+        return frameData;
     }
 
+    // Add the given offset to the given player's perceived frame.
     public void OffsetPerceivedFrame(int playerID, int offset)
     {
-        FrameData frames = _heads[playerID];
-        frames.OffsetPerceivedFrame(offset);
+        _realities[playerID].PerceivedFrame += offset;
     }
 
-    public List<int> GetTailFrames(int playerID)
+    // Return the write frames of the given player.
+    // Each player may have 0, 1 or 2 write frames at any time.
+    public List<int> GetWriteFrames(int playerID)
     {
-        FrameData frames = _heads[playerID];
-        return frames.GetTailFrames();
+        return _realities[playerID].WriteFrames;
     }
 
-    public void AddTail(int playerID, int frame)
+    // Make the given player start writing their state to a new place, starting from the given frame.
+    public void AddWriter(int playerID, int frame)
     {
-        _heads[playerID].AddTail(frame);
+        if (_realities[playerID].WriteFrames.Count == 2)
+        {
+            Debug.LogError("Cannot write to more than two frames simultaneously.");
+        }
+        else _realities[playerID].WriteFrames.Add(frame);
     }
 
-    public void RemoveTail(int playerID)
+    // Remove the earliest writer from the given player.
+    public void RemoveWriter(int playerID)
     {
-        _heads[playerID].RemoveTail();
+        if (_realities[playerID].WriteFrames.Count == 0)
+        {
+            Debug.LogError("No tracked writers to remove.");
+        }
+        else
+        {
+            _realities[playerID].WriteFrames.RemoveAt(0);
+            _realities[playerID].LastTailID++;
+        }
     }
 
+    // Given a player and their frame, return the closest frame of a different player.
+    // This should be from the last reality they were writing to.
     public int GetClosestFrame(int playerID, int frame)
     {
         int closest = int.MaxValue;
-        foreach(var head in _heads)
+        foreach(var reality in _realities)
         {
-            if (head.Key != playerID)
+            if (reality.Key != playerID)
             {
-                int f = head.Value.GetLatestFrame();
-                if (Mathf.Abs(f - frame) < Mathf.Abs(closest - frame))
+                if (reality.Value.WriteFrames.Count > 0)
                 {
-                    closest = f;
+                    int f = reality.Value.WriteFrames.Last();
+                    if (Mathf.Abs(f - frame) < Mathf.Abs(closest - frame))
+                    {
+                        closest = f;
+                    }
                 }
             }
         }
         return closest;
     }
 
+    // TODO: Use this function for finding out which heads (actual players) you need to render.
+    // Return a list of player IDs for those players who exist in the same reality
+    // as the given frame.
     public List<int> GetHeadsInFrame(int frame)
     {
         List<int> heads = new List<int>();
-        foreach (var head in _heads)
+        foreach (var reality in _realities)
         {
-            foreach (var f in head.Value.GetTailFrames())
+            foreach (var f in reality.Value.WriteFrames)
             {
-                if (f == frame) heads.Add(head.Key);
+                if (f == frame) heads.Add(reality.Key);
             }
         }
         return heads;
     }
 
-    public int GetLastTailID(int playerID) { return _heads[playerID].GetLastTailID(); }
+    // Return the tail ID of the last reality the given player was writing to.
+    public int GetLastTailID(int playerID) { return _realities[playerID].LastTailID; }
+
+    // Return the tail ID of the current reality the given player is writing to.
+    public int GetNextTailID(int playerID)
+    {
+        if (_realities[playerID].WriteFrames.Count <= 1) return _realities[playerID].LastTailID;
+        else return _realities[playerID].LastTailID + 1;
+    }
+
+
+    // WARNING: The following function is to be used by test framework only.
+    public Dictionary<int, Reality> RevealHeads() { return _realities; }
 }

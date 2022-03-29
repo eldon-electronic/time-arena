@@ -33,16 +33,19 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public PhotonView View;
 
 	// Time control variables.
+	private bool _isJumping;
 	private Constants.JumpDirection _jumpDirection;
 	private bool _dissolvedOut;
 
     // Variables corresponding to the gamestate.
+	private PreGameController _preGame;
     private GameController _game;
+	private TimeLord _timelord;
+	[SerializeField] private TailManager _tailManager;
 
-	// 0 seeker 1 hider.
 	public Constants.Team Team;
-	private float _forwardsJumpCooldown = 0f;
-	private float _backJumpCooldown = 0f;
+	private float _forwardsJumpCooldown = 15f;
+	private float _backJumpCooldown = 15f;
 	private Vector3[] _hiderSpawnPoints;
 	private Vector3 _seekerSpawnPoint;
 
@@ -55,6 +58,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Tutorial.SetTeam(Constants.Team.Miner);
 		Tutorial.StartTutorial();
 		Particles.Subscribe(this);
+
+		_preGame = FindObjectOfType<PreGameController>();
+		if (_preGame == null) Debug.LogError("PreGameController not found");
+		else _preGame.Register(this);
+		
 		if (!View.IsMine)
 		{
 			Destroy(Cam.gameObject);
@@ -83,8 +91,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		_seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
 
+		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
-		_dissolvedOut = false;
 	}
 
 
@@ -108,9 +116,16 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (next.name == "GameScene")
 		{
+			if (View.IsMine)
+			{
+				_preGame.Kill();
+				_tailManager.DestroyTails();
+				_tailManager.Deactivate();
+			}
+
 			_game = FindObjectOfType<GameController>();
 			if (_game == null) Debug.LogError("GameController not found");
-			else _game.Connect(View.ViewID, View.IsMine);
+			else _game.Register(View.ViewID, this, Team);
 
 			if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
 			{
@@ -134,6 +149,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackOut()
 	{
+		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Backward;
 		Particles.StartDissolving(_jumpDirection, true);
 		_backJumpCooldown = 15;
@@ -143,6 +159,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardOut()
 	{
+		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Forward;
 		Particles.StartDissolving(_jumpDirection, true);
 		_forwardsJumpCooldown = 15;
@@ -152,17 +169,19 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackIn()
 	{
+		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Backward;
 		Particles.StartDissolving(_jumpDirection, false);
-		_game.EnterReality(View.ViewID);
+		_timelord.EnterReality(View.ViewID);
 	}
 
 	[PunRPC]
 	void RPC_jumpForwardIn()
 	{
+		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Forward;
 		Particles.StartDissolving(_jumpDirection, false);
-		_game.EnterReality(View.ViewID);
+		_timelord.EnterReality(View.ViewID);
 	}
 
 	// RPC function to be called when another player finds this one.
@@ -179,43 +198,73 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	}
 
 
+	// ------------ HELPER CONDITION CHECKERS ------------
+
+	// Returns true if you're in a scene that allows time travelling.
+	private bool TimeTravelEnabled()
+	{
+		return SceneManager.GetActiveScene().name == "PreGameScene" ||
+			SceneManager.GetActiveScene().name == "GameScene" && _game.GameStarted && !_game.GameEnded;
+	}
+
+	// Returns true if you can jump in the given direction.
+	private bool CanTimeTravel(Constants.JumpDirection direction)
+	{
+		if (direction == Constants.JumpDirection.Backward)
+		{
+			return _backJumpCooldown <= 0f && _timelord.CanJump(View.ViewID, Constants.JumpDirection.Backward);
+		}
+		else if (direction == Constants.JumpDirection.Forward)
+		{
+			return _forwardsJumpCooldown <= 0f && _timelord.CanJump(View.ViewID, Constants.JumpDirection.Forward);
+		}
+		else
+		{
+			Debug.LogError("Can't jump without a direction.");
+			return false;
+		}
+	}
+
+
 	// ------------ ACTIONS ------------
 
 	public void JumpBackwards(bool jumpOut)
 	{
-		// Only allow time travel backwards if it doesn't go past the beginning.
-		if (jumpOut)
+		if (TimeTravelEnabled())
 		{
-			if (SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0 &&
-				_game.CanJump(View.ViewID, Constants.JumpDirection.Backward) && !Particles.IsDissolving())
+			if (jumpOut)
 			{
-				View.RPC("RPC_jumpBackOut", RpcTarget.All);
-				_game.DestroyTails();
+				if (CanTimeTravel(Constants.JumpDirection.Backward) && !Particles.IsDissolving())
+				{
+					View.RPC("RPC_jumpBackOut", RpcTarget.All);
+					if (View.IsMine) _tailManager.DestroyTails();
+				}
 			}
-		}
-		else
-		{
-			View.RPC("RPC_jumpBackIn", RpcTarget.All);
-			_game.BirthTails();
+			else
+			{
+				View.RPC("RPC_jumpBackIn", RpcTarget.All);
+				if (View.IsMine) _tailManager.BirthTails();
+			}
 		}
 	}
 
 	public void JumpForward(bool jumpOut)
 	{
-		// Only allow time travel forwards if it doesn't go past the end.
-		if (jumpOut)
+		if (TimeTravelEnabled())
 		{
-			if (SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0 &&
-				_game.CanJump(View.ViewID, Constants.JumpDirection.Forward) && !Particles.IsDissolving())
+			if (jumpOut)
 			{
-				View.RPC("RPC_jumpForwardOut", RpcTarget.All);
-				_game.DestroyTails();
+				if (CanTimeTravel(Constants.JumpDirection.Forward) && !Particles.IsDissolving())
+				{
+					View.RPC("RPC_jumpForwardOut", RpcTarget.All);
+					if (View.IsMine) _tailManager.DestroyTails();
+				}
 			}
-		}
-		else
-		{
-			View.RPC("RPC_jumpForwardIn", RpcTarget.All);
-			_game.BirthTails();
+			else
+			{
+				View.RPC("RPC_jumpForwardIn", RpcTarget.All);
+				if (View.IsMine) _tailManager.BirthTails();
+			}
 		}
 	}
 
@@ -303,33 +352,25 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		float[] cooldownValues = new float[]{forwardBarHeight, backBarHeight};
 		Hud.SetCooldownValues(cooldownValues);
 
-		bool canJumpForward = SceneManager.GetActiveScene().name == "GameScene" && _forwardsJumpCooldown <= 0.0f && 
-							_game.CanJump(View.ViewID, Constants.JumpDirection.Forward);
-		bool canJumpBack = SceneManager.GetActiveScene().name == "GameScene" && _backJumpCooldown <= 0.0f && 
-							_game.CanJump(View.ViewID, Constants.JumpDirection.Backward);
+		bool canJumpForward = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Forward);
+		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
 		Hud.SetCanJump(canJumpForward, canJumpBack);
 	}
 
 	private void UpdateTimeline()
 	{
-		if (SceneManager.GetActiveScene().name == "GameScene")
-		{
-			float yourPos = _game.GetYourPosition();
-			List<float> players = _game.GetPlayerPositions();
-			Hud.SetPlayerPositions(yourPos, players);
+		float yourPos = _timelord.GetYourPosition();
+		List<float> players = _timelord.GetPlayerPositions();
+		Hud.SetPlayerPositions(yourPos, players);
 
-			float time = _game.GetTimeProportion();
-			Hud.SetTimeBarPosition(time);
-		}
+		float time = _timelord.GetTimeProportion();
+		Hud.SetTimeBarPosition(time);
 	}
 
 	private void UpdateTimer()
 	{
-		if (SceneManager.GetActiveScene().name == "GameScene")
-		{
-			int time = _game.GetElapsedTime();
-			Hud.SetTime(time);
-		}
+		int time = _timelord.GetElapsedTime();
+		Hud.SetTime(time);
 	}
 
 	private void UpdateDebugDisplay()
@@ -338,6 +379,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
 		debugItems.Add("Grab", _damageWindow);
+		debugItems.Add("My Time", _timelord.GetYourPosition());
+		debugItems.Add("The Time", _timelord.GetTimeProportion());
 
 		Hashtable movementState = Movement.GetState();
 		Utilities.Union(ref debugItems, movementState);
@@ -347,11 +390,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	void KeyControl()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1)) JumpBackwards(true);
+		if (Input.GetKeyDown(KeyCode.Alpha1)) {
+			Debug.Log("Key down 1");
+			JumpBackwards(true);
+		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward(true);
 
-		if (Input.GetKeyUp(KeyCode.Alpha1)) JumpBackwards(false);
+		if (Input.GetKeyUp(KeyCode.Alpha1)) {
+			Debug.Log("Key up 1");
+			JumpBackwards(false);
+		}
 
 		if (Input.GetKeyUp(KeyCode.Alpha2)) JumpForward(false);
 
@@ -369,7 +418,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (!View.IsMine) return;
 
 		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)) {
+			(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)) {
 			UpdateCooldowns();
 			UpdateTimeline();
 			UpdateTimer();
@@ -377,23 +426,16 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			KeyControl();
 		}
 
-		if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
+		if (TimeTravelEnabled())
 		{
 			// Record your state in all realities you exist in.
 			Vector3 pos = Movement.GetPosition();
 			Quaternion rot = Movement.GetRotation();
-			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection, _dissolvedOut);
-			_game.RecordState(ps);
-
-			// Stop recording your state in the previous reality if you've finished dissolving out.
-			if (_dissolvedOut) _game.LeaveReality(View.ViewID);
-			_dissolvedOut = false;
+			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+			_timelord.RecordState(ps);
 
 			// Time travel.
-			if (_jumpDirection != Constants.JumpDirection.Static)
-			{
-				_game.TimeTravel(View.ViewID, _jumpDirection);
-			}
+			if (_isJumping) _timelord.TimeTravel(View.ViewID, _jumpDirection);
 		}
 
 		// Update pauseUI and cursor lock if game is ended.
@@ -408,7 +450,18 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
-		if (dissolvedOut) _dissolvedOut = true;
+		if (dissolvedOut) _timelord.LeaveReality(View.ViewID);
 		else _jumpDirection = Constants.JumpDirection.Static;
+	}
+
+	public void SetTimeLord(TimeLord timelord)
+	{
+		_timelord = timelord;
+		_timelord.Connect(View.ViewID, View.IsMine);
+		_timelord.EnterReality(View.ViewID);
+		if (View.IsMine)
+		{
+			_tailManager.SetTimeLord(_timelord);
+		}
 	}
 }

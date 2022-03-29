@@ -8,20 +8,34 @@ public class TailController : MonoBehaviour
     private int _playerID;
     private int _tailID;
     private bool _isDissolving;
+    private TimeLord _timeLord;
     
     void Start() { _isDissolving = false; }
 
     void Update()
     {
-        
+        PlayerState state = _timeLord.GetState(_tailID);
+        if (state == null) Destroy(gameObject);
+        else
+        {
+            transform.position = state.Pos;
+            transform.rotation = state.Rot;
+
+            if (!_isDissolving && state.JumpDirection != Constants.JumpDirection.Static)
+            {
+                _isDissolving = true;
+                _particles.StartDissolving(state.JumpDirection, true);
+            }
+        }
     }
 
     // ------------ PUBLIC METHODS ------------
 
-    public void Initialise(PlayerState ps)
+    public void Initialise(PlayerState ps, TimeLord timeLord)
     {
         _playerID = ps.PlayerID;
         _tailID = ps.TailID;
+        _timeLord = timeLord;
 
         transform.position = ps.Pos;
         transform.rotation = ps.Rot;
@@ -29,19 +43,5 @@ public class TailController : MonoBehaviour
         _particles.StartDissolving(ps.JumpDirection, false);
     }
 
-    public void SetState(PlayerState ps)
-    {
-        transform.position = ps.Pos;
-        transform.rotation = ps.Rot;
-
-        if (!_isDissolving && ps.JumpDirection != Constants.JumpDirection.Static)
-        {
-            _isDissolving = true;
-            _particles.StartDissolving(ps.JumpDirection, true);
-        }
-    }
-
-    public void Destroy() { Destroy(gameObject); }
-
-    public int GetID() { return _tailID; }
+    public void Kill() { Destroy(gameObject); }
 }
