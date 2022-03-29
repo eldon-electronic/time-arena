@@ -37,7 +37,7 @@ public class TimeLord
     public void Tick()
     {
         _currentFrame++;
-        _realities.Increment();
+        _realities.Tick();
     }
 
     public bool TimeEnded() { return _currentFrame >= _totalFrames; }

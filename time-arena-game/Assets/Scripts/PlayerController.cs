@@ -151,9 +151,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Backward;
-		Particles.StartDissolving(_jumpDirection, true);
+		_timelord.LeaveReality(View.ViewID);
 		_backJumpCooldown = 15;
-		Hud.PressForwardJumpButton();
+
+		if (View.IsMine) Hud.PressForwardJumpButton();
+		else Particles.StartDissolving(_jumpDirection, true);
 	}
 
 	[PunRPC]
@@ -161,27 +163,37 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Forward;
-		Particles.StartDissolving(_jumpDirection, true);
+		_timelord.LeaveReality(View.ViewID);
 		_forwardsJumpCooldown = 15;
-		Hud.PressBackJumpButton();
+
+		if (View.IsMine) Hud.PressBackJumpButton();
+		else Particles.StartDissolving(_jumpDirection, true);
 	}
 
 	[PunRPC]
 	void RPC_jumpBackIn()
 	{
 		_isJumping = false;
-		_jumpDirection = Constants.JumpDirection.Backward;
-		Particles.StartDissolving(_jumpDirection, false);
 		_timelord.EnterReality(View.ViewID);
+
+		if (!View.IsMine)
+		{
+			// TODO: Set visible and active.
+			Particles.StartDissolving(_jumpDirection, false);
+		}
 	}
 
 	[PunRPC]
 	void RPC_jumpForwardIn()
 	{
 		_isJumping = false;
-		_jumpDirection = Constants.JumpDirection.Forward;
-		Particles.StartDissolving(_jumpDirection, false);
 		_timelord.EnterReality(View.ViewID);
+
+		if (!View.IsMine)
+		{
+			// TODO: Set visible and active.
+			Particles.StartDissolving(_jumpDirection, false);
+		}
 	}
 
 	// RPC function to be called when another player finds this one.
@@ -237,13 +249,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				if (CanTimeTravel(Constants.JumpDirection.Backward) && !Particles.IsDissolving())
 				{
 					View.RPC("RPC_jumpBackOut", RpcTarget.All);
-					if (View.IsMine) _tailManager.DestroyTails();
+					_tailManager.DestroyTails();
+					// TODO: Start a warp post processing effect here.
 				}
 			}
 			else
 			{
 				View.RPC("RPC_jumpBackIn", RpcTarget.All);
-				if (View.IsMine) _tailManager.BirthTails();
+				_tailManager.BirthTails();
+				// TODO: Stop the warp post processing effect here.
 			}
 		}
 	}
@@ -257,13 +271,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				if (CanTimeTravel(Constants.JumpDirection.Forward) && !Particles.IsDissolving())
 				{
 					View.RPC("RPC_jumpForwardOut", RpcTarget.All);
-					if (View.IsMine) _tailManager.DestroyTails();
+					_tailManager.DestroyTails();
+					// TODO: Start a warp post processing effect here.
 				}
 			}
 			else
 			{
 				View.RPC("RPC_jumpForwardIn", RpcTarget.All);
-				if (View.IsMine) _tailManager.BirthTails();
+				_tailManager.BirthTails();
+				// TODO: Stop the warp post processing effect here.
 			}
 		}
 	}
@@ -442,6 +458,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 			// Time travel.
 			if (_isJumping) _timelord.TimeTravel(View.ViewID, _jumpDirection);
+			else _jumpDirection = Constants.JumpDirection.Static;
 		}
 
 		// Update pauseUI and cursor lock if game is ended.
@@ -456,8 +473,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
-		if (dissolvedOut) _timelord.LeaveReality(View.ViewID);
-		else _jumpDirection = Constants.JumpDirection.Static;
+		if (!View.IsMine && dissolvedOut)
+		{
+			// TODO: Hide this player and set them inactive.
+		}
 	}
 
 	public void SetTimeLord(TimeLord timelord)

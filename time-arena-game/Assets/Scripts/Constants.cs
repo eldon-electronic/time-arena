@@ -8,6 +8,7 @@ public static class Constants
     public static int MaxPlayers = 10;
     public static int MinTimeSnapDistance = 10 * FrameRate;
     public static int TimeTravelVelocity = 10;
+    public static int AnimationFrames = 3 * FrameRate;
 
     public enum Team
     {

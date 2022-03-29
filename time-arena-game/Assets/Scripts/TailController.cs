@@ -7,10 +7,15 @@ public class TailController : MonoBehaviour
     [SerializeField] private ParticleController _particles;
     private int _playerID;
     private int _tailID;
-    private bool _isDissolving;
     private TimeLord _timeLord;
+    private bool _activated;
+    private bool _amDying;
     
-    void Start() { _isDissolving = false; }
+    void Start()
+    {
+        _activated = false;
+        _amDying = false;
+    }
 
     void Update()
     {
@@ -21,10 +26,10 @@ public class TailController : MonoBehaviour
             transform.position = state.Pos;
             transform.rotation = state.Rot;
 
-            if (!_isDissolving && state.JumpDirection != Constants.JumpDirection.Static)
+            if (_activated && !_amDying && state.JumpDirection != Constants.JumpDirection.Static)
             {
-                _isDissolving = true;
                 _particles.StartDissolving(state.JumpDirection, true);
+                _amDying = true;
             }
         }
     }
@@ -44,6 +49,8 @@ public class TailController : MonoBehaviour
         {
             _particles.StartDissolving(ps.JumpDirection, false);
         }
+
+        _activated = true;
     }
 
     public void Kill() { Destroy(gameObject); }

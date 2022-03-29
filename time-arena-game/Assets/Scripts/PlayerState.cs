@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 
-// TODO: need to store the tail ID, not just the player ID in case they have multiple tails in the same frame
+// TODO: Might be able to get away with not storing PlayerID? It's not used for anything atm...
 public class PlayerState
 {
     public readonly int PlayerID;

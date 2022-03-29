@@ -9,12 +9,14 @@ public class Reality
         public int PerceivedFrame;
         public List<int> WriteFrames;
         public int LastTailID;
+        public int Countdown;
 
         public Reality()
         {
             PerceivedFrame = 0;
             WriteFrames = new List<int>();
             LastTailID = 0;
+            Countdown = -1;
         }
 
         public void Increment()
@@ -24,6 +26,7 @@ public class Reality
             {
                 WriteFrames[i]++;
             }
+            if (Countdown > -1) Countdown--;
         }
     }
 
@@ -44,11 +47,17 @@ public class RealityManager
     }
 
     // Increment the frame values of every player.
-    public void Increment()
+    // Remove a reality's writer if its countdown reaches 0.
+    public void Tick()
     {
         foreach (var reality in _realities)
         {
             reality.Value.Increment();
+            if (reality.Value.Countdown == 0)
+            {
+                reality.Value.WriteFrames.RemoveAt(0);
+                reality.Value.LastTailID++;
+            }
         }
     }
 
@@ -93,6 +102,7 @@ public class RealityManager
     }
 
     // Remove the earliest writer from the given player.
+    // Starts a countdown to remove the writer after enough frames have passed to play a dissolve animation.
     public void RemoveWriter(int playerID)
     {
         if (_realities[playerID].WriteFrames.Count == 0)
@@ -101,8 +111,7 @@ public class RealityManager
         }
         else
         {
-            _realities[playerID].WriteFrames.RemoveAt(0);
-            _realities[playerID].LastTailID++;
+            _realities[playerID].Countdown = Constants.AnimationFrames;
         }
     }
 
