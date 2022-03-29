@@ -89,15 +89,15 @@ public class Tutorial : MonoBehaviour
         _states.Add(state11);
         State state12 = new State("This icon shows the ability of time travelling backwards.\nOnce it turns to green you can travel back in time.", "backJump",KeyCode.Return,true);
         _states.Add(state12);
-        State state13 = new State("Now, you are ready to go to the past!!\nPlease press 1.", "backJump",KeyCode.Alpha1,true);
+        State state13 = new State("Now, you are ready to go to the past!!\nPlease press Q.", "backJump",KeyCode.Q,true);
         _states.Add(state13);
         State state14 = new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false);
         _states.Add(state14);
          State state15 = new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it turns to green you can travel forward in time.", "forwardJump",KeyCode.Return,true);
         _states.Add(state15);
-         State state16 = new State("Please press 2 to travel forwards!", "forwardJump",KeyCode.Alpha2,true);
+         State state16 = new State("Please press E to travel forwards!", "forwardJump",KeyCode.E,true);
         _states.Add(state16);
-        State state17 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\nPlease press E to start the game OR press T to go back to tutorial.", "forwardJump",KeyCode.T,false);
+        State state17 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\nPlease press F to start the game OR press T to go back to tutorial.", "forwardJump",KeyCode.T,false);
         _states.Add(state17);
          
     
@@ -115,6 +115,24 @@ public class Tutorial : MonoBehaviour
                 TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow); 
             }   
         }
+    }
+
+    // ------------ PUBLIC METHODS ------------
+
+    public void SetTeam(Constants.Team team)
+    {
+        // TODO: This should update the team, changing which tutorial we follow.
+    }
+
+    public void StartTutorial()
+    {
+        // TODO: This should reset the tutorial to the first state and then make the tutorial active and visible.
+        // (Possibly just by setting some boolean which you check for in the Update() method).
+    }
+
+    public void StopTutorial()
+    {
+        // TODO: This should make the tutorial inactive and switch off visibility.
     }
     
 } 

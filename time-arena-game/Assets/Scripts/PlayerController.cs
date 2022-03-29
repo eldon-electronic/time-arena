@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour {
 	public PauseManager PauseUI;
 	public GameObject Nametag;
 	public PlayerHud Hud;
+	public Tutorial Tutorial;
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
@@ -38,7 +39,7 @@ public class PlayerController : MonoBehaviour {
     public GameController Game;
 
 	// 0 seeker 1 hider.
-	public int Team;
+	public Constants.Team Team;
 	private float _forwardsJumpCooldown = 0f;
 	private float _backJumpCooldown = 0f;
 	private int _timeJumpAmount = 100;
@@ -48,9 +49,11 @@ public class PlayerController : MonoBehaviour {
 
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
-		Team = (int) GameController.Teams.Hider;
-		Material.SetHiderMaterial();
+		Team = Constants.Team.Miner;
+		Material.SetMaterialMiner();
 		Hud.SetTeam("HIDER");
+		Tutorial.SetTeam(Constants.Team.Miner);
+		Tutorial.StartTutorial();
 		if (!View.IsMine)
 		{
 			Destroy(Cam.gameObject);
@@ -83,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void MoveToSpawnPoint()
 	{
-		if (Team == (int) GameController.Teams.Hider)
+		if (Team == Constants.Team.Miner)
 		{
 			int index = Random.Range(0, _hiderSpawnPoints.Length);
 			Vector3 position = _hiderSpawnPoints[index];
@@ -107,13 +110,15 @@ public class PlayerController : MonoBehaviour {
 				Debug.Log("Scene change error: GameController is null");
 			}
 
-			TimeTravel.connectToTimeLord();
+			TimeTravel.ConnectToTimeLord();
 
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
 
 			MoveToSpawnPoint();
-			Material.SetArmActive(Team == (int) GameController.Teams.Seeker);
+			Material.SetArmActive(Team == Constants.Team.Guardian);
+
+			Tutorial.StopTutorial();
 		}
 	}
 
@@ -128,7 +133,7 @@ public class PlayerController : MonoBehaviour {
 		Particles.StartJumpingBackward();
 		_backJumpCooldown = 15;
 		Hud.PressForwardJumpButton();
-		Game.otherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
+		Game.OtherPlayersElapsedTime[View.ViewID] -= _timeJumpAmount / TimeTravel.MaxTick();
 	}
 
 	[PunRPC]
@@ -138,7 +143,7 @@ public class PlayerController : MonoBehaviour {
 		Particles.StartJumpingForward();
 		_forwardsJumpCooldown = 15;
 		Hud.PressBackJumpButton();
-		Game.otherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
+		Game.OtherPlayersElapsedTime[View.ViewID] += _timeJumpAmount / TimeTravel.MaxTick();
 	}
 
 	// RPC function to be called when another player finds this one.
@@ -192,8 +197,8 @@ public class PlayerController : MonoBehaviour {
 			{
 				// Call grabplayer function on that player.
 				PlayerController targetPlayer = playerGotGrab.GetComponent<PlayerController>();
-				if (Team == (int) GameController.Teams.Seeker && 
-					targetPlayer.Team == (int) GameController.Teams.Hider)
+				if (Team == Constants.Team.Guardian && 
+					targetPlayer.Team == Constants.Team.Miner)
 				{
 					targetPlayer.GetFound();
 				}
@@ -212,17 +217,17 @@ public class PlayerController : MonoBehaviour {
 
 	public void ChangeTeam()
 	{
-		if (Team == (int) GameController.Teams.Hider)
+		if (Team == Constants.Team.Miner)
 		{
-			Team = (int) GameController.Teams.Seeker;
-			Material.SetMaterial("seeker");
+			Team = Constants.Team.Guardian;
+			Material.SetMaterial(Constants.Team.Guardian);
 			Material.SetArmActive(true);
 			Hud.SetTeam("SEEKER");
 		}
 		else
 		{
-			Team = (int) GameController.Teams.Hider;
-			Material.SetMaterial("hider");
+			Team = Constants.Team.Miner;
+			Material.SetMaterial(Constants.Team.Miner);
 			Material.SetArmActive(false);
 			Hud.SetTeam("HIDER");
 		}
@@ -297,13 +302,13 @@ public class PlayerController : MonoBehaviour {
 
 	void KeyControl()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1)) JumpBackwards();
+		if (Input.GetKeyDown(KeyCode.Q)) JumpBackwards();
 
-		if (Input.GetKeyDown(KeyCode.Alpha2)) JumpForward();
+		if (Input.GetKeyDown(KeyCode.E)) JumpForward();
 
 		if (Input.GetMouseButtonDown(0)) Grab();
 
-		if (Input.GetKeyDown(KeyCode.E)) StartGame();
+		if (Input.GetKeyDown(KeyCode.F)) StartGame();
 
 		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
 
@@ -315,18 +320,16 @@ public class PlayerController : MonoBehaviour {
 		if (!View.IsMine) return;
 
 		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.gameEnded)) {
+		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded)) {
 			UpdateCooldowns();
 			UpdateDebugDisplay();
 			KeyControl();
 		}
 
 		// Update pauseUI and cursor lock if game is ended.
-		if (SceneManager.GetActiveScene().name == "GameScene" && Game.gameEnded)
+		if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
 		{
-			PauseUI.IsPaused = true;
-			PauseUI.PauseMenuUI.SetActive(true);
-			Cursor.lockState = CursorLockMode.None;
+			PauseUI.Pause();
 		}
 	}
 }
