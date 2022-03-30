@@ -213,4 +213,11 @@ public class TimeLord
     public RealityManager RevealRealityManager() { return _realities; }
 
     public Dictionary<int, List<int>> RevealTailCreations() { return _tailCreations; }
+
+	public int GetDebugValue()
+	{
+		int frame = _realities.GetPerceivedFrame(_myID);
+		if (_playerStates[frame] == null) return -1;
+		else return _playerStates[frame].Count;
+	}
 }

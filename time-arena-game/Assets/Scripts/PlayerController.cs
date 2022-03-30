@@ -395,8 +395,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
 		debugItems.Add("Grab", _damageWindow);
-		debugItems.Add("My Time", _timelord.GetYourPosition());
-		debugItems.Add("The Time", _timelord.GetTimeProportion());
+		debugItems.Add("States", _timelord.GetDebugValue());
 
 		Hashtable movementState = Movement.GetState();
 		Utilities.Union(ref debugItems, movementState);

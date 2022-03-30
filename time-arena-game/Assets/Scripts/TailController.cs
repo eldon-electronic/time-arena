@@ -8,6 +8,7 @@ public class TailController : MonoBehaviour
     private int _playerID;
     private int _tailID;
     private TimeLord _timeLord;
+    private TailManager _manager;
     private bool _activated;
     private bool _amDying;
     
@@ -19,8 +20,10 @@ public class TailController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log($"pos: {transform.position}");
+
         PlayerState state = _timeLord.GetState(_tailID);
-        if (state == null) Destroy(gameObject);
+        if (state == null) _manager.ReceiveResignation(_tailID);
         else
         {
             transform.position = state.Pos;
@@ -36,11 +39,12 @@ public class TailController : MonoBehaviour
 
     // ------------ PUBLIC METHODS ------------
 
-    public void Initialise(PlayerState ps, TimeLord timeLord)
+    public void Initialise(PlayerState ps, TimeLord timeLord, TailManager manager)
     {
         _playerID = ps.PlayerID;
         _tailID = ps.TailID;
         _timeLord = timeLord;
+        _manager = manager;
 
         transform.position = ps.Pos;
         transform.rotation = ps.Rot;
@@ -53,5 +57,8 @@ public class TailController : MonoBehaviour
         _activated = true;
     }
 
-    public void Kill() { Destroy(gameObject); }
+    public void Kill()
+    {
+        UnityEngine.Object.Destroy(gameObject);
+    }
 }

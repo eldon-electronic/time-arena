@@ -7,6 +7,7 @@ public class TailManager : MonoBehaviour
     private TimeLord _timeLord;
     private Dictionary<int, TailController> _tails;
     private bool _activated;
+    [SerializeField] private GameObject _tailPrefab;
 
     void Start()
     {
@@ -22,18 +23,21 @@ public class TailManager : MonoBehaviour
 		{
 			GameObject tail = (GameObject) Resources.Load("rePlayer");
 			TailController tailController = tail.GetComponent<TailController>();
-			tailController.Initialise(state, _timeLord);
+			tailController.Initialise(state, _timeLord, this);
 			_tails.Add(state.TailID, tailController);
 		}
 	}
 
     void Update()
     {
-        if (_activated && _timeLord != null) CreateNewTails();
+        if (_activated && _timeLord != null)
+        {
+            CreateNewTails();
+        }
     }
 
 
-    // ------------ PUBLIC FUNCTIONS ------------
+    // ------------ PUBLIC FUNCTIONS FOR PLAYER CONTROLLER ------------
 
     public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
 
@@ -54,12 +58,21 @@ public class TailManager : MonoBehaviour
 
 		foreach (var tail in tails)
 		{
-			GameObject tailObject = (GameObject) Resources.Load("rePlayer");
+            GameObject tailObject = Object.Instantiate(_tailPrefab);
 			TailController tailController = tailObject.GetComponent<TailController>();
-			tailController.Initialise(tail.Value, _timeLord);
+			tailController.Initialise(tail.Value, _timeLord, this);
 			_tails.Add(tail.Key, tailController);
 		}
     }
 
     public void Deactivate() { _activated = false; }
+
+
+    // ------------ PUBLIC FUNCTIONS FOR TAIL CONTROLLER ------------
+
+    public void ReceiveResignation(int tailID)
+    {
+        _tails[tailID].Kill();
+        _tails.Remove(tailID);
+    }
 }
