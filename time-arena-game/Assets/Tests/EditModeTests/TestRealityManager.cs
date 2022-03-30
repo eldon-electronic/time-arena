@@ -11,7 +11,7 @@ public class TestRealityManager
     {
         Reality reality = new Reality();
         reality.Increment();
-        Assert.AreEqual(reality.PerceivedFrame, 1, "increment() not working");
+        Assert.AreEqual(1, reality.PerceivedFrame, "increment() not working");
     }
     
     [Test]
@@ -29,7 +29,7 @@ public class TestRealityManager
         _realities = realityManager.RevealHeads();
         Assert.IsTrue(_realities.ContainsKey(0), "_realities does not contain an entry for playerID 0");
         Assert.IsTrue(_realities.ContainsKey(1), "_realities does not contain an entry for playerID 1");
-        Assert.AreEqual(_realities.Count, 2, "_realities is not the correct size");
+        Assert.AreEqual(2, _realities.Count, 2, "_realities is not the correct size");
         
 
         // Test the GetPercievedFrames and GetPercievedFrame methods
