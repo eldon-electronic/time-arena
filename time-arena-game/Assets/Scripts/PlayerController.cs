@@ -240,49 +240,36 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	// ------------ ACTIONS ------------
 
-	public void JumpBackwards(bool jumpOut)
+	private void TimeJump(Constants.JumpDirection direction, bool jumpOut)
 	{
 		if (TimeTravelEnabled())
 		{
 			if (jumpOut)
 			{
-				if (CanTimeTravel(Constants.JumpDirection.Backward) && !Particles.IsDissolving())
+				if (CanTimeTravel(direction) && !Particles.IsDissolving())
 				{
-					View.RPC("RPC_jumpBackOut", RpcTarget.All);
-					_tailManager.DestroyTails();
 					// TODO: Start a warp post processing effect here.
+					if (direction == Constants.JumpDirection.Backward)
+					{
+						View.RPC("RPC_jumpBackOut", RpcTarget.All);
+					}
+					else View.RPC("RPC_jumpForwardOut", RpcTarget.All);
+					_tailManager.DestroyTails();
 				}
 			}
-			else
+			else if (_isJumping)
 			{
-				View.RPC("RPC_jumpBackIn", RpcTarget.All);
-				_tailManager.BirthTails();
 				// TODO: Stop the warp post processing effect here.
+				if (direction == Constants.JumpDirection.Backward)
+				{
+					View.RPC("RPC_jumpBackIn", RpcTarget.All);
+				}
+				else View.RPC("RPC_jumpForwardIn", RpcTarget.All);
+				_tailManager.BirthTails();
 			}
 		}
 	}
 
-	public void JumpForward(bool jumpOut)
-	{
-		if (TimeTravelEnabled())
-		{
-			if (jumpOut)
-			{
-				if (CanTimeTravel(Constants.JumpDirection.Forward) && !Particles.IsDissolving())
-				{
-					View.RPC("RPC_jumpForwardOut", RpcTarget.All);
-					_tailManager.DestroyTails();
-					// TODO: Start a warp post processing effect here.
-				}
-			}
-			else
-			{
-				View.RPC("RPC_jumpForwardIn", RpcTarget.All);
-				_tailManager.BirthTails();
-				// TODO: Stop the warp post processing effect here.
-			}
-		}
-	}
 
 	private void Grab()
 	{
@@ -395,7 +382,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
 		debugItems.Add("Grab", _damageWindow);
-		debugItems.Add("States", _timelord.GetDebugValue());
+
+		(int mine, int game) frames = _timelord.GetDebugValue();
+		debugItems.Add("Frame mine", frames.mine);
+		debugItems.Add("Frame game", frames.game);
 
 		Hashtable movementState = Movement.GetState();
 		Utilities.Union(ref debugItems, movementState);
@@ -407,22 +397,22 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (Input.GetKeyDown(KeyCode.Alpha1)) {
 			Debug.Log("Key down 1");
-			JumpBackwards(true);
+			TimeJump(Constants.JumpDirection.Backward, true);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha2)) {
 			Debug.Log("Key down 2");
-			JumpForward(true);
+			TimeJump(Constants.JumpDirection.Forward, true);
 		}
 
 		if (Input.GetKeyUp(KeyCode.Alpha1)) {
 			Debug.Log("Key up 1");
-			JumpBackwards(false);
+			TimeJump(Constants.JumpDirection.Backward, false);
 		}
 
 		if (Input.GetKeyUp(KeyCode.Alpha2)) {
 			Debug.Log("Key up 2");
-			JumpForward(false);
+			TimeJump(Constants.JumpDirection.Forward, false);
 		}
 
 		if (Input.GetMouseButtonDown(0)) Grab();
@@ -433,6 +423,32 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (Input.GetKeyDown(KeyCode.P)) Hud.ToggleDebug();
 	}
+
+
+	private void UpdateTimeTravel()
+	{
+		// Record your state in all realities you exist in.
+		Vector3 pos = Movement.GetPosition();
+		Quaternion rot = Movement.GetRotation();
+		PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+		_timelord.RecordState(ps);
+
+		if (_isJumping)
+		{
+			// Perform the time jump.
+			if (_timelord.CanJump(View.ViewID, _jumpDirection))
+			{
+				_timelord.TimeTravel(View.ViewID, _jumpDirection);
+			}
+			// Force stop jumping.
+			else
+			{
+				TimeJump(_jumpDirection, false);
+			}
+		}
+		else _jumpDirection = Constants.JumpDirection.Static;
+	}
+
 
 	void Update() {
 		// Local keys only affect client's player.
@@ -447,18 +463,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			KeyControl();
 		}
 
-		if (TimeTravelEnabled())
-		{
-			// Record your state in all realities you exist in.
-			Vector3 pos = Movement.GetPosition();
-			Quaternion rot = Movement.GetRotation();
-			PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
-			_timelord.RecordState(ps);
-
-			// Time travel.
-			if (_isJumping) _timelord.TimeTravel(View.ViewID, _jumpDirection);
-			else _jumpDirection = Constants.JumpDirection.Static;
-		}
+		if (TimeTravelEnabled()) UpdateTimeTravel();		
 
 		// Update pauseUI and cursor lock if game is ended.
 		if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)

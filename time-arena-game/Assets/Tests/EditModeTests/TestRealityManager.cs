@@ -40,7 +40,7 @@ public class TestRealityManager
         Assert.AreEqual(0, percievedFrames[1].Item2, "GetPercievedFrames not returning correct value");
 
         // Test realityManager Increment. 
-        realityManager.Increment();
+        realityManager.Tick();
         percievedframe = realityManager.GetPerceivedFrame(1);
         Assert.AreEqual(1, percievedframe, "increment has not incremented the percieved frame by 1");
 
@@ -66,7 +66,7 @@ public class TestRealityManager
         Assert.AreEqual(20, realityManager.GetWriteFrames(0)[0], "RemoveWriter has removed the wrong writer.");
         Assert.AreEqual(1, realityManager.GetWriteFrames(0).Count, "RemoveWriter has removed wrong amount of writers");
 
-        realityManager.Increment();
+        realityManager.Tick();
         Assert.AreEqual(6001, realityManager.GetWriteFrames(1)[1], "Increment has not incremented the value of writeframes");
 
         // Test that GetClosestFrames returns the closest player.

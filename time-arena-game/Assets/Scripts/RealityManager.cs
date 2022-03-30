@@ -115,6 +115,7 @@ public class RealityManager
         }
     }
 
+    // TODO: You could refactor this to just take in playerID and lookup their perceived frame yourself.
     // Given a player and their frame, return the closest frame of a different player.
     // This should be from the last reality they were writing to.
     public int GetClosestFrame(int playerID, int frame)

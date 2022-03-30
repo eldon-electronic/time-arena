@@ -198,11 +198,11 @@ public class TimeLord
 		int frame = _realities.GetPerceivedFrame(playerID);
 		if (direction == Constants.JumpDirection.Backward)
 		{
-			return frame - Constants.TimeTravelVelocity >= 0;
+			return (frame - Constants.TimeTravelVelocity) >= 0;
 		}
 		else
 		{
-			return frame + Constants.TimeTravelVelocity <= _currentFrame;
+			return (frame + Constants.TimeTravelVelocity) <= _currentFrame;
 		}
 	}
 
@@ -214,10 +214,9 @@ public class TimeLord
 
     public Dictionary<int, List<int>> RevealTailCreations() { return _tailCreations; }
 
-	public int GetDebugValue()
+	public (int, int) GetDebugValue()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
-		if (_playerStates[frame] == null) return -1;
-		else return _playerStates[frame].Count;
+		return (frame, _currentFrame);
 	}
 }
