@@ -1,6 +1,7 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -34,8 +35,9 @@ public class TimeSimulator
     private List<Player> _players;
     private int _dissolveTime;
     private TimeLord _timeLord;
+    private bool _writeFinalStates;
 
-    public TimeSimulator(int length, int numPlayers, int dissolveTime)
+    public TimeSimulator(int length, int numPlayers, int dissolveTime, bool writeFinalStates)
     {
         _simulationLength = length;
 
@@ -47,6 +49,7 @@ public class TimeSimulator
 
         _dissolveTime = dissolveTime;
         _timeLord = new TimeLord(_simulationLength);
+        _writeFinalStates = writeFinalStates;
     }
 
     public void AddJump(int playerID, int exitFrame, Constants.JumpDirection direction, int duration)
@@ -128,6 +131,11 @@ public class TimeSimulator
             // Beware that this may happen before PlayerController:Update().
             // I don't believe this will be a problem until the final frame of the game.
             _timeLord.Tick();
+        }
+
+        if (_writeFinalStates)
+        {
+            _timeLord.SnapshotStates("StateSnapshot.txt");
         }
     }
 

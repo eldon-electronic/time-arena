@@ -422,6 +422,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
 
 		if (Input.GetKeyDown(KeyCode.P)) Hud.ToggleDebug();
+
+		if (Input.GetKeyDown(KeyCode.L)) _timelord.SnapshotStates("GameSnapshot.txt");
 	}
 
 

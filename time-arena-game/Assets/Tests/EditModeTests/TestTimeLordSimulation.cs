@@ -77,7 +77,7 @@ public class TestTimeLordSimulation
     public void TestSinglePlayerNoTimeTravelWithSimulator()
     {
         // Build and run the simulation.
-        TimeSimulator sim = new TimeSimulator(20, 1, 120);
+        TimeSimulator sim = new TimeSimulator(20, 1, 120, false);
         sim.Run();
 
         // Access the final resulting structures from the Simulator.
@@ -121,5 +121,15 @@ public class TestTimeLordSimulation
         Assert.AreEqual(0, tailCreations[0][0], "Incorrect tail ID created on frame 0.");
 
         Debug.Log("All assertions pass.");
+    }
+
+    [Test]
+    public void TestSinglePlayerNoTimeTravelOutput()
+    {
+        // Build and run the simulation.
+        TimeSimulator sim = new TimeSimulator(20, 1, 120, true);
+        sim.Run();
+
+        Debug.Log("Wrote to file.");
     }
 }

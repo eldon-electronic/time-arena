@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TimeLord
@@ -207,7 +210,7 @@ public class TimeLord
 	}
 
 
-    // WARNING: The following functions are to be used by test framework only.
+    // WARNING: The following functions are to be used by test framework and debugging only.
     public Dictionary<int, PlayerState>[] RevealPlayerStates() { return _playerStates; }
 
     public RealityManager RevealRealityManager() { return _realities; }
@@ -218,5 +221,31 @@ public class TimeLord
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
 		return (frame, _currentFrame);
+	}
+
+	// Writes a representation of _playerStates to a text file.
+	// Not sure, but might cause lag if trying to call this during the game.
+	public void SnapshotStates(string filename)
+	{
+		using StreamWriter file = new StreamWriter(filename);
+
+		for (int i=0; i < _playerStates.Length; i++)
+		{
+			StringBuilder sb = new StringBuilder(55);
+
+			sb.Append(i.ToString("D4"));
+
+			if (_playerStates[i] != null)
+			{
+				foreach (var item in _playerStates[i])
+				{
+					string player = item.Value.PlayerID.ToString("D4");
+					string tail = item.Key.ToString("D2");
+					sb.Append($" - ({player},{tail})");
+				}
+			}
+
+			file.WriteLine(sb.ToString());
+		}
 	}
 }
