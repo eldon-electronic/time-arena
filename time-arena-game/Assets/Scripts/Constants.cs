@@ -22,4 +22,10 @@ public static class Constants
         Forward,
         Backward
     }
+
+    public enum Layer
+    {
+        Player=3,
+        OutsideReality=9
+    }
 }

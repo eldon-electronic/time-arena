@@ -84,6 +84,11 @@ public class RealityManager
         _realities[playerID].PerceivedFrame += offset;
     }
 
+    public void SetPerceivedFrame(int playerID, int frame)
+    {
+        _realities[playerID].PerceivedFrame = frame;
+    }
+
     // Return the write frames of the given player.
     // Each player may have 0, 1 or 2 write frames at any time.
     public List<int> GetWriteFrames(int playerID)
@@ -152,6 +157,11 @@ public class RealityManager
             }
         }
         return heads;
+    }
+
+    public bool InSameFrame(int id1, int id2)
+    {
+        return (_realities[id1].PerceivedFrame == _realities[id2].PerceivedFrame);
     }
 
     // Return the tail ID of the last reality the given player was writing to.

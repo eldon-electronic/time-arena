@@ -155,7 +155,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_backJumpCooldown = 15;
 
 		if (View.IsMine) Hud.PressForwardJumpButton();
-		else Particles.StartDissolving(_jumpDirection, true);
+		else
+		{
+			Particles.StartDissolving(_jumpDirection, true);
+			gameObject.layer = Constants.Layer.OutsideReality;
+		}
 	}
 
 	[PunRPC]
@@ -167,7 +171,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_forwardsJumpCooldown = 15;
 
 		if (View.IsMine) Hud.PressBackJumpButton();
-		else Particles.StartDissolving(_jumpDirection, true);
+		else
+		{
+			Particles.StartDissolving(_jumpDirection, true);
+			gameObject.layer = Constants.Layer.OutsideReality;
+		}
 	}
 
 	[PunRPC]
@@ -178,7 +186,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (!View.IsMine)
 		{
-			// TODO: Set visible and active.
+			if (_timelord.InYourReality(View.ViewID))
+			{
+				gameObject.layer = Constants.Layer.Player;
+			}
 			Particles.StartDissolving(_jumpDirection, false);
 		}
 	}
@@ -191,7 +202,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (!View.IsMine)
 		{
-			// TODO: Set visible and active.
+			if (_timelord.InYourReality(View.ViewID))
+			{
+				gameObject.layer = Constants.Layer.Player;
+			}
 			Particles.StartDissolving(_jumpDirection, false);
 		}
 	}

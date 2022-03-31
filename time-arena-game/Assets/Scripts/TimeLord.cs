@@ -144,8 +144,9 @@ public class TimeLord
 			frame = _currentFrame;
 		}
 
-        // Start recording in the new reality.
-        _realities.AddWriter(playerID, frame);
+        // Set your perceived frame and start recording in the new reality.
+        _realities.SetPerceivedFrame(playerID, frame);
+		_realities.AddWriter(playerID, frame);
 
         // Record the frame at which this tail was created.
         int tailID = _realities.GetNextTailID(playerID);
@@ -173,6 +174,11 @@ public class TimeLord
 		}
 
 		return positions;
+	}
+
+	public bool InYourReality(int playerID)
+	{
+		return _realities.InSameFrame(playerID, _myID);
 	}
 
     // Returns your position in time as a fraction through the game time. 
