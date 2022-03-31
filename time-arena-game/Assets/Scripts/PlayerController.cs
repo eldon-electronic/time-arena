@@ -457,10 +457,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	private void UpdateTimeTravel()
 	{
 		// Record your state in all realities you exist in.
-		// Vector3 pos = Movement.GetPosition();
-		// Quaternion rot = Movement.GetRotation();
-		// PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
-		// _timelord.RecordState(ps);
+		Vector3 pos = Movement.GetPosition();
+		Quaternion rot = Movement.GetRotation();
+		PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+		_timelord.RecordState(ps);
 
 		if (_isJumping)
 		{

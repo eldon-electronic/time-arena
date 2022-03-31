@@ -9,7 +9,7 @@ public class TestRealityManager
     [Test]
     public void RealityTests()
     {
-        Reality reality = new Reality();
+        Reality reality = new Reality(0);
         reality.Increment();
         Assert.AreEqual(1, reality.PerceivedFrame, "increment() not working");
     }

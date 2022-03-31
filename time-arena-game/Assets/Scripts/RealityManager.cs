@@ -11,11 +11,13 @@ public class Reality
         public int LastTailID;
         public int Countdown;
 
-        public Reality()
+        public Reality(int playerID)
         {
             PerceivedFrame = 0;
             WriteFrames = new List<int>();
-            LastTailID = 0;
+
+            // Multiply playerID by 100 to shift it to the left, allowing 100 possible tails.
+            LastTailID = playerID * 100;
             Countdown = -1;
         }
 
@@ -43,7 +45,7 @@ public class RealityManager
     // Add a new player to the dictionary.
     public void AddHead(int playerID)
     {
-        _realities.Add(playerID, new Reality());
+        _realities.Add(playerID, new Reality(playerID));
     }
 
     // Increment the frame values of every player.

@@ -258,9 +258,8 @@ public class TimeLord
 			{
 				foreach (var item in _playerStates[i])
 				{
-					string player = item.Value.PlayerID.ToString("D4");
-					string tail = item.Key.ToString("D2");
-					sb.Append($" - ({player},{tail})");
+					string tail = item.Key.ToString();
+					sb.Append($" - {tail}");
 				}
 			}
 
