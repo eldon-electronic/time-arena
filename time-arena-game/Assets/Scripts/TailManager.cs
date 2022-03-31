@@ -18,6 +18,9 @@ public class TailManager : MonoBehaviour
     // Creates tail objects for any tails that come into existance on this frame. 
     private void CreateNewTails()
 	{
+        // TODO: Remove this.
+        return;
+
 		List<PlayerState> states = _timeLord.GetCreatedTails();
 		foreach (var state in states)
 		{
@@ -30,6 +33,9 @@ public class TailManager : MonoBehaviour
 
     void Update()
     {
+        // TODO: Remove this.
+        return;
+
         if (_activated && _timeLord != null)
         {
             CreateNewTails();
@@ -43,6 +49,9 @@ public class TailManager : MonoBehaviour
 
     public void DestroyTails()
     {
+        // TODO: Remove this.
+        return;
+
         if (!_activated) _activated = true;
 
         foreach (var tail in _tails)
@@ -54,6 +63,9 @@ public class TailManager : MonoBehaviour
 
     public void BirthTails()
     {
+        // TODO: Remove this.
+        return;
+
         Dictionary<int, PlayerState> tails = _timeLord.GetAllTails();
 
 		foreach (var tail in tails)
@@ -72,6 +84,7 @@ public class TailManager : MonoBehaviour
 
     public void ReceiveResignation(int tailID)
     {
+        
         _tails[tailID].Kill();
         _tails.Remove(tailID);
     }

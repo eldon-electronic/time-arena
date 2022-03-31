@@ -149,6 +149,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackOut()
 	{
+		Debug.Log($"{View.ViewID} jump back out");
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Backward;
 		_timelord.LeaveReality(View.ViewID);
@@ -165,6 +166,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardOut()
 	{
+		Debug.Log($"{View.ViewID} jump forward out");
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Forward;
 		_timelord.LeaveReality(View.ViewID);
@@ -181,6 +183,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackIn()
 	{
+		Debug.Log($"{View.ViewID} jump back in");
 		_isJumping = false;
 		_timelord.EnterReality(View.ViewID);
 
@@ -197,6 +200,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardIn()
 	{
+		Debug.Log($"{View.ViewID} jump forward in");
 		_isJumping = false;
 		_timelord.EnterReality(View.ViewID);
 
@@ -416,22 +420,22 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	void KeyControl()
 	{
 		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			Debug.Log("Key down 1");
+			// Debug.Log("Key down 1");
 			TimeJump(Constants.JumpDirection.Backward, true);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha2)) {
-			Debug.Log("Key down 2");
+			// Debug.Log("Key down 2");
 			TimeJump(Constants.JumpDirection.Forward, true);
 		}
 
 		if (Input.GetKeyUp(KeyCode.Alpha1)) {
-			Debug.Log("Key up 1");
+			// Debug.Log("Key up 1");
 			TimeJump(Constants.JumpDirection.Backward, false);
 		}
 
 		if (Input.GetKeyUp(KeyCode.Alpha2)) {
-			Debug.Log("Key up 2");
+			// Debug.Log("Key up 2");
 			TimeJump(Constants.JumpDirection.Forward, false);
 		}
 
@@ -450,10 +454,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	private void UpdateTimeTravel()
 	{
 		// Record your state in all realities you exist in.
-		Vector3 pos = Movement.GetPosition();
-		Quaternion rot = Movement.GetRotation();
-		PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
-		_timelord.RecordState(ps);
+		// Vector3 pos = Movement.GetPosition();
+		// Quaternion rot = Movement.GetRotation();
+		// PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+		// _timelord.RecordState(ps);
 
 		if (_isJumping)
 		{
@@ -474,24 +478,26 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	void Update() {
 		// Local keys only affect client's player.
-		if (!View.IsMine) return;
+		if (View.IsMine)
+		{
+			if (SceneManager.GetActiveScene().name == "PreGameScene" ||
+			(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded))
+			{
+				UpdateCooldowns();
+				UpdateTimeline();
+				UpdateTimer();
+				UpdateDebugDisplay();
+				KeyControl();
+			}
 
-		if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-			(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)) {
-			UpdateCooldowns();
-			UpdateTimeline();
-			UpdateTimer();
-			UpdateDebugDisplay();
-			KeyControl();
+			// Update pauseUI and cursor lock if game is ended.
+			if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
+			{
+				PauseUI.Pause();
+			}
 		}
 
 		if (TimeTravelEnabled()) UpdateTimeTravel();		
-
-		// Update pauseUI and cursor lock if game is ended.
-		if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
-		{
-			PauseUI.Pause();
-		}
 	}
 
 
