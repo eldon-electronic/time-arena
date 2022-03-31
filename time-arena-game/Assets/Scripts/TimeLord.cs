@@ -231,6 +231,11 @@ public class TimeLord
 		return _realities.GetHeadsInFrame(frame);
 	}
 
+	public List<int> GetAllPlayerIDs()
+	{
+		return _realities.GetAllHeads(_myID);
+	}
+
 
     // WARNING: The following functions are to be used by test framework and debugging only.
     public Dictionary<int, PlayerState>[] RevealPlayerStates() { return _playerStates; }

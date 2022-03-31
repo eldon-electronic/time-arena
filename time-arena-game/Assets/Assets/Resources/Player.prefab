@@ -8893,6 +8893,18 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: isGrabbing
+  - Type: 4
+    SynchronizeType: 0
+    Name: isDissolvingForwardIn
+  - Type: 4
+    SynchronizeType: 0
+    Name: isDissolvingForwardOut
+  - Type: 4
+    SynchronizeType: 0
+    Name: isDissolvingBackwardIn
+  - Type: 4
+    SynchronizeType: 0
+    Name: isDissolvingBackwardOut
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -9049,7 +9061,7 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   unityMicrophoneDevice: 
-  photonMicrophoneDeviceId: -1
+  photonMicrophoneDeviceId: 0
   interestGroup: 0
   debugEchoMode: 0
   reliableMode: 0

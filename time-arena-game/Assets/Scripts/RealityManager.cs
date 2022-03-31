@@ -161,6 +161,19 @@ public class RealityManager
         return heads;
     }
 
+    public List<int> GetAllHeads(int playerID)
+    {
+        List<int> heads = new List<int>();
+        foreach (var reality in _realities)
+        {
+            if (reality.Key != playerID)
+            {
+                heads.Add(reality.Key);
+            }
+        }
+        return heads;
+    }
+
     public bool InSameFrame(int id1, int id2)
     {
         return (_realities[id1].PerceivedFrame == _realities[id2].PerceivedFrame);

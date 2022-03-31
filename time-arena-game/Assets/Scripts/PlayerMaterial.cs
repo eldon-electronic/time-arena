@@ -42,6 +42,14 @@ public class PlayerMaterial : MonoBehaviour
 		_guardianMat.SetFloat("_CutoffHeight", 50.0f);
     }
 
+    void Update()
+    {
+        if (!_view.IsMine)
+        {
+            SetPlayerActive(gameObject.layer == Constants.LayerPlayer);
+        }
+    }
+
     public void SetMaterial(Constants.Team team)
     {
         _playerBody.GetComponent<Renderer>().material = _materials[team];
@@ -68,5 +76,15 @@ public class PlayerMaterial : MonoBehaviour
         {
             armPart.SetActive(on);
         }
+    }
+
+    public void SetPlayerActive(bool on)
+    {
+        _playerBody.SetActive(on);
+        foreach(GameObject armPart in _armParts)
+        {
+            armPart.SetActive(on);
+        }
+
     }
 }

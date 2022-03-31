@@ -54,7 +54,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		DontDestroyOnLoad(this.gameObject);
 		Team = Constants.Team.Miner;
 		Material.SetMaterialMiner();
-		Hud.SetTeam("HIDER");
+		Hud.SetTeam("MINER");
+		gameObject.layer = Constants.LayerPlayer;
 		Tutorial.SetTeam(Constants.Team.Miner);
 		Tutorial.StartTutorial();
 		Particles.Subscribe(this);
@@ -157,9 +158,20 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_timelord.LeaveReality(View.ViewID);
 		_backJumpCooldown = 15;
 
-		if (View.IsMine) Hud.PressForwardJumpButton();
-		else Particles.StartDissolving(_jumpDirection, true);
-		gameObject.layer = Constants.LayerOutsideReality;
+		if (View.IsMine) 
+		{
+			Hud.PressForwardJumpButton();
+			List<int> playerIDs = _timelord.GetAllPlayerIDs();
+			foreach (var id in playerIDs)
+			{
+				PhotonView.Find(id).gameObject.layer = Constants.LayerOutsideReality;
+			}
+		}
+		else 
+		{
+			Particles.StartDissolving(_jumpDirection, true);
+			gameObject.layer = Constants.LayerOutsideReality;
+		}
 	}
 
 	[PunRPC]
@@ -172,7 +184,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_timelord.LeaveReality(View.ViewID);
 		_forwardsJumpCooldown = 15;
 
-		if (View.IsMine) Hud.PressBackJumpButton();
+		if (View.IsMine) 
+		{
+			Hud.PressBackJumpButton();
+			List<int> playerIDs = _timelord.GetAllPlayerIDs();
+			foreach (var id in playerIDs)
+			{
+				PhotonView.Find(id).gameObject.layer = Constants.LayerOutsideReality;
+			}			
+		}
 		else Particles.StartDissolving(_jumpDirection, true);
 		gameObject.layer = Constants.LayerOutsideReality;
 	}
@@ -342,13 +362,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			Team = Constants.Team.Guardian;
 			Material.SetArmActive(true);
-			Hud.SetTeam("SEEKER");
+			Hud.SetTeam("GUARDIAN");
 		}
 		else
 		{
 			Team = Constants.Team.Miner;
 			Material.SetArmActive(false);
-			Hud.SetTeam("HIDER");
+			Hud.SetTeam("MINER");
 		}
 		Material.SetMaterial(Team);
 		_game.SetTeam(View.ViewID, Team);
