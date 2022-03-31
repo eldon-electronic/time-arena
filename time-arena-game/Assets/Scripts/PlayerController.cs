@@ -181,12 +181,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	}
 
 	[PunRPC]
-	void RPC_jumpBackIn()
+	void RPC_jumpBackIn(int playerID, int frame)
 	{
 		Debug.Log($"{View.ViewID} jump back in");
 		_isJumping = false;
+		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
-
+		
 		if (!View.IsMine)
 		{
 			if (_timelord.InYourReality(View.ViewID))
@@ -198,10 +199,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	}
 
 	[PunRPC]
-	void RPC_jumpForwardIn()
+	void RPC_jumpForwardIn(int playerID, int frame)
 	{
 		Debug.Log($"{View.ViewID} jump forward in");
 		_isJumping = false;
+		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
 
 		if (!View.IsMine)
@@ -278,11 +280,12 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			else if (_isJumping)
 			{
 				// TODO: Stop the warp post processing effect here.
+				int frame = _timelord.GetNearestReality(View.ViewID);
 				if (direction == Constants.JumpDirection.Backward)
 				{
-					View.RPC("RPC_jumpBackIn", RpcTarget.All);
+					View.RPC("RPC_jumpBackIn", RpcTarget.All, View.ViewID, frame);
 				}
-				else View.RPC("RPC_jumpForwardIn", RpcTarget.All);
+				else View.RPC("RPC_jumpForwardIn", RpcTarget.All, View.ViewID, frame);
 				_tailManager.BirthTails();
 			}
 		}

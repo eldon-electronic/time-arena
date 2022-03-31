@@ -124,11 +124,10 @@ public class TimeLord
 		_realities.RemoveWriter(playerID);
 	}
 
-	// Snaps your position to the nearest reality within range, else creates a new reality.
-    // Starts recording in this new reality.
-	public void EnterReality(int playerID)
+	// Finds the closest reality within range of the given player.
+	// If there are none, return the player's perceived frame.
+	public int GetNearestReality(int playerID)
 	{
-		// Snap to the closest frame.
 		int frame = _realities.GetPerceivedFrame(playerID);
 		int closestFrame = _realities.GetClosestFrame(playerID, frame);
 		if (Mathf.Abs(closestFrame - frame) < Constants.MinTimeSnapDistance)
@@ -143,6 +142,15 @@ public class TimeLord
 		{
 			frame = _currentFrame;
 		}
+		return frame;
+	}
+
+	// Snaps your position to the nearest reality within range, else creates a new reality.
+    // Starts recording in this new reality.
+	public void EnterReality(int playerID)
+	{
+		// Snap to the closest frame.
+		int frame = GetNearestReality(playerID);
 
         // Set your perceived frame and start recording in the new reality.
         _realities.SetPerceivedFrame(playerID, frame);
@@ -155,6 +163,12 @@ public class TimeLord
             _tailCreations[frame].Add(tailID);
         }
         else _tailCreations.Add(frame, new List<int>(){tailID});
+	}
+
+	// Set the perceived frame of the given player.
+	public void SetPerceivedFrame(int playerID, int frame)
+	{
+		_realities.SetPerceivedFrame(playerID, frame);
 	}
 
     // TODO: adapt so it takes in a Constants.Team as parameter
