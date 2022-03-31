@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded;
     private bool _isCeiling;
     private float _xRot;
-    private float _mouseSensitivity;
+    public static float _mouseSensitivity;
 
     void Start()
     {
@@ -38,14 +38,18 @@ public class PlayerMovement : MonoBehaviour
         SceneManager.activeSceneChanged += onSceneChange;
     }
 
-    void onSceneChange(Scene current, Scene next) {
+    public void onSceneChange(Scene current, Scene next) {
 		if (next.name == "GameScene") {
-			Game = FindObjectOfType<GameController>();
+			Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
 			if (Game == null) {
 				Debug.Log("Scene change error: GameController is null");
 			}
 		}
 	}
+
+    public void OnMouseSensChange(float a){
+      _mouseSensitivity = PauseUI.mouseSens;
+    }
 
     private void UpdatePosition()
     {
@@ -75,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         {
             movement /= movement.magnitude;
         }
-        
+
         // Transform according to movement vector.
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
@@ -111,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 		// Invert vertical rotation and restrict up/down.
 		_xRot -= mouseY;
 		_xRot = Mathf.Clamp(_xRot, -90f, 90f);
-		
+
 		// Apply rotation.
 		CameraHolder.transform.localRotation = Quaternion.Euler(_xRot, 0f, 0f);
 
@@ -123,8 +127,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!View.IsMine) return;
 
-        if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded))
+        string sceneName = SceneManager.GetActiveScene().name;
+        if(sceneName == "GameScene" && Game == null){
+          Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
+        }
+        if (sceneName == "PreGameScene" || (sceneName == "GameScene" && !Game.GameEnded))
         {
             UpdatePosition();
             UpdateRotation();
