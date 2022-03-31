@@ -223,10 +223,9 @@ public class TimeLord
 
     public Dictionary<int, List<int>> RevealTailCreations() { return _tailCreations; }
 
-	public (int, int) GetDebugValue()
+	public List<(int, int)> GetDebugValue()
 	{
-		int frame = _realities.GetPerceivedFrame(_myID);
-		return (frame, _currentFrame);
+		return _realities.GetPerceivedFrames();
 	}
 
 	// Writes a representation of _playerStates to a text file.

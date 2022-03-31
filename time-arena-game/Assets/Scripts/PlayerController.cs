@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		else
 		{
 			Particles.StartDissolving(_jumpDirection, true);
-			gameObject.layer = Constants.Layer.OutsideReality;
+			gameObject.layer = Constants.LayerOutsideReality;
 		}
 	}
 
@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		else
 		{
 			Particles.StartDissolving(_jumpDirection, true);
-			gameObject.layer = Constants.Layer.OutsideReality;
+			gameObject.layer = Constants.LayerOutsideReality;
 		}
 	}
 
@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			if (_timelord.InYourReality(View.ViewID))
 			{
-				gameObject.layer = Constants.Layer.Player;
+				gameObject.layer = Constants.LayerPlayer;
 			}
 			Particles.StartDissolving(_jumpDirection, false);
 		}
@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			if (_timelord.InYourReality(View.ViewID))
 			{
-				gameObject.layer = Constants.Layer.Player;
+				gameObject.layer = Constants.LayerPlayer;
 			}
 			Particles.StartDissolving(_jumpDirection, false);
 		}
@@ -397,9 +397,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
 		debugItems.Add("Grab", _damageWindow);
 
-		(int mine, int game) frames = _timelord.GetDebugValue();
-		debugItems.Add("Frame mine", frames.mine);
-		debugItems.Add("Frame game", frames.game);
+		List<(int id, int frame)> frames = _timelord.GetDebugValue();
+		foreach (var f in frames)
+		{
+			if (f.id == View.ViewID)
+			{
+				debugItems.Add("Frame mine", f.frame);
+			}
+			else debugItems.Add($"Frame {f.id}", f.frame);
+		}
 
 		Hashtable movementState = Movement.GetState();
 		Utilities.Union(ref debugItems, movementState);

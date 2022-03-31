@@ -34,8 +34,9 @@ public class PlayerMovement : MonoBehaviour
         _mouseSensitivity = 100f;
 
         SceneManager.activeSceneChanged += onSceneChange;
-        Physics.IgnoreLayerCollision(Constants.Layer.OutsideReality, Constants.Layer.Player);
-        Physics.IgnoreLayerCollision(Constants.Layer.OutsideReality, Constants.Layer.OutsideReality);
+
+        Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
+        Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
     }
 
     void onSceneChange(Scene current, Scene next) {

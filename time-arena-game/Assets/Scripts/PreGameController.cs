@@ -8,7 +8,9 @@ public class PreGameController : MonoBehaviour
 
     void Start()
     {
+        QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Constants.FrameRate;
+
         int totalFrames = Constants.FrameRate * 60 * 2;
         _timeLord = new TimeLord(totalFrames);
     }

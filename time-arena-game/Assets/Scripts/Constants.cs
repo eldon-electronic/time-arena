@@ -9,6 +9,8 @@ public static class Constants
     public static int MinTimeSnapDistance = 10 * FrameRate;
     public static int TimeTravelVelocity = 10;
     public static int AnimationFrames = 3 * FrameRate;
+    public static int LayerPlayer = 3;
+    public static int LayerOutsideReality = 9;
 
     public enum Team
     {
@@ -21,11 +23,5 @@ public static class Constants
         Static,
         Forward,
         Backward
-    }
-
-    public enum Layer
-    {
-        Player=3,
-        OutsideReality=9
     }
 }
