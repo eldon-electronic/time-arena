@@ -158,11 +158,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_backJumpCooldown = 15;
 
 		if (View.IsMine) Hud.PressForwardJumpButton();
-		else
-		{
-			Particles.StartDissolving(_jumpDirection, true);
-			gameObject.layer = Constants.LayerOutsideReality;
-		}
+		else Particles.StartDissolving(_jumpDirection, true);
+		gameObject.layer = Constants.LayerOutsideReality;
 	}
 
 	[PunRPC]
@@ -176,11 +173,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_forwardsJumpCooldown = 15;
 
 		if (View.IsMine) Hud.PressBackJumpButton();
-		else
-		{
-			Particles.StartDissolving(_jumpDirection, true);
-			gameObject.layer = Constants.LayerOutsideReality;
-		}
+		else Particles.StartDissolving(_jumpDirection, true);
+		gameObject.layer = Constants.LayerOutsideReality;
 	}
 
 	[PunRPC]
@@ -191,7 +185,16 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
 		
-		if (!View.IsMine)
+		if (View.IsMine)
+		{
+			gameObject.layer = Constants.LayerPlayer;
+			List<int> playerIDs = _timelord.GetPlayersInReality();
+			foreach (var id in playerIDs)
+			{
+				PhotonView.Find(id).gameObject.layer = Constants.LayerPlayer;
+			}
+		}
+		else
 		{
 			if (_timelord.InYourReality(View.ViewID))
 			{
@@ -209,7 +212,16 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
 
-		if (!View.IsMine)
+		if (View.IsMine)
+		{
+			gameObject.layer = Constants.LayerPlayer;
+			List<int> playerIDs = _timelord.GetPlayersInReality();
+			foreach (var id in playerIDs)
+			{
+				PhotonView.Find(id).gameObject.layer = Constants.LayerPlayer;
+			}
+		}
+		else
 		{
 			if (_timelord.InYourReality(View.ViewID))
 			{

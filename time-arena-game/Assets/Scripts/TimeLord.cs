@@ -225,6 +225,12 @@ public class TimeLord
 		}
 	}
 
+	public List<int> GetPlayersInReality()
+	{
+		int frame = _realities.GetPerceivedFrame(_myID);
+		return _realities.GetHeadsInFrame(frame);
+	}
+
 
     // WARNING: The following functions are to be used by test framework and debugging only.
     public Dictionary<int, PlayerState>[] RevealPlayerStates() { return _playerStates; }
