@@ -114,7 +114,8 @@ public class TimeSimulator
                     id,
                     new Vector3(frame, frame, frame),
                     new Quaternion(frame, frame, frame, frame),
-                    _players[id].JumpDirection);
+                    _players[id].JumpDirection,
+                    _players[id].DissolveOutTimer == _dissolveTime);
                 _timeLord.RecordState(ps);
 
                 // Time travel and progress dissolve animations.

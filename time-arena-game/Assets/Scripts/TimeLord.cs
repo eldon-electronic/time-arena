@@ -48,35 +48,31 @@ public class TimeLord
 
     // ------------ PUBLIC METHODS FOR TAIL MANAGER ------------
 
-    // Returns a list of states for all tails created on your perceived frame.
-    public List<PlayerState> GetCreatedTails()
-    {
-        List<PlayerState> result = new List<PlayerState>();
+	// // Returns a collection of tailIDs for the states stored at your current perceived frame.
+	// public Dictionary<int, PlayerState>.KeyCollection GetTails()
+	// {
+	// 	int frame = _realities.GetPerceivedFrame(_myID);
+	// 	if (_playerStates[frame] != null)
+	// 	{
+	// 		return _playerStates[frame].Keys;
+	// 	}
+	// 	return new Dictionary<int, PlayerState>.KeyCollection(new Dictionary<int, PlayerState>());
+	// }
 
-        int frame = _realities.GetPerceivedFrame(_myID);
-        if (_tailCreations.ContainsKey(frame))
-        {
-            List<int> tailIDs = _tailCreations[frame];
-            foreach (var id in tailIDs)
-            {
-                result.Add(_playerStates[frame][id]);
-            }
-        }
-
-        return result;
-    }
-
-    // Returns the states of all tails that exist on your perceived frame.
-    public Dictionary<int, PlayerState> GetAllTails()
-    {
-        int frame = _realities.GetPerceivedFrame(_myID);
-        if (_playerStates[frame] != null) return _playerStates[frame];
-        else return new Dictionary<int, PlayerState>();
-    }
+	public Dictionary<int, PlayerState> GetTails()
+	{
+		int frame = _realities.GetPerceivedFrame(_myID);
+		if (_playerStates[frame] != null)
+		{
+			return _playerStates[frame];
+		}
+		return new Dictionary<int, PlayerState>();
+	}
 
 
     // ------------ PUBLIC METHODS FOR THE TAIL CONTROLLER ------------
 
+	// Returns the state for the given tail at your current perceived frame.
     public PlayerState GetState(int tailID)
     {
         int frame = _realities.GetPerceivedFrame(_myID);

@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	// Time control variables.
 	private bool _isJumping;
 	private Constants.JumpDirection _jumpDirection;
-	private bool _dissolvedOut;
+	private bool _setJumpState;
 
     // Variables corresponding to the gamestate.
 	private PreGameController _preGame;
@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
+		_setJumpState = false;
 	}
 
 
@@ -120,7 +121,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			{
 				_preGame.Kill();
 				_tailManager.DestroyTails();
-				_tailManager.Deactivate();
+				_tailManager.SetActive(false);
 			}
 
 			_game = FindObjectOfType<GameController>();
@@ -152,6 +153,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Debug.Log($"{View.ViewID} jump back out");
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Backward;
+		_setJumpState = true;
 		_timelord.LeaveReality(View.ViewID);
 		_backJumpCooldown = 15;
 
@@ -169,6 +171,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Debug.Log($"{View.ViewID} jump forward out");
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Forward;
+		_setJumpState = true;
 		_timelord.LeaveReality(View.ViewID);
 		_forwardsJumpCooldown = 15;
 
@@ -274,7 +277,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 						View.RPC("RPC_jumpBackOut", RpcTarget.All);
 					}
 					else View.RPC("RPC_jumpForwardOut", RpcTarget.All);
-					_tailManager.DestroyTails();
+					_tailManager.SetActive(true);
+					_tailManager.EnableParticles(false);
 				}
 			}
 			else if (_isJumping)
@@ -286,7 +290,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 					View.RPC("RPC_jumpBackIn", RpcTarget.All, View.ViewID, frame);
 				}
 				else View.RPC("RPC_jumpForwardIn", RpcTarget.All, View.ViewID, frame);
-				_tailManager.BirthTails();
+				_tailManager.EnableParticles(true);
 			}
 		}
 	}
@@ -459,7 +463,16 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		// Record your state in all realities you exist in.
 		Vector3 pos = Movement.GetPosition();
 		Quaternion rot = Movement.GetRotation();
-		PlayerState ps = new PlayerState(View.ViewID, pos, rot, _jumpDirection);
+		Constants.JumpDirection dir = Constants.JumpDirection.Static;
+
+		// Only set the jump direction once, when the _setJumpState flag is active.
+		if (_setJumpState)
+		{
+			dir = _jumpDirection;
+			_setJumpState = false;
+		}
+
+		PlayerState ps = new PlayerState(View.ViewID, pos, rot, dir, _isJumping);
 		_timelord.RecordState(ps);
 
 		if (_isJumping)

@@ -20,8 +20,6 @@ public class TailController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log($"pos: {transform.position}");
-
         PlayerState state = _timeLord.GetState(_tailID);
         if (state == null) _manager.ReceiveResignation(_tailID);
         else
@@ -29,10 +27,9 @@ public class TailController : MonoBehaviour
             transform.position = state.Pos;
             transform.rotation = state.Rot;
 
-            if (_activated && !_amDying && state.JumpDirection != Constants.JumpDirection.Static)
+            if (state.JumpDirection != Constants.JumpDirection.Static && _manager.GetParticlesEnabled())
             {
-                _particles.StartDissolving(state.JumpDirection, true);
-                _amDying = true;
+                _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
             }
         }
     }

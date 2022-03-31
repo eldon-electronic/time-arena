@@ -8,37 +8,31 @@ public class TailManager : MonoBehaviour
     private Dictionary<int, TailController> _tails;
     private bool _activated;
     [SerializeField] private GameObject _tailPrefab;
+    private bool _particlesEnabled;
 
     void Start()
     {
         _tails = new Dictionary<int, TailController>();
         _activated = false;
+        _particlesEnabled = true;
     }
-
-    // Creates tail objects for any tails that come into existance on this frame. 
-    private void CreateNewTails()
-	{
-        // TODO: Remove this.
-        return;
-
-		List<PlayerState> states = _timeLord.GetCreatedTails();
-		foreach (var state in states)
-		{
-			GameObject tail = (GameObject) Resources.Load("rePlayer");
-			TailController tailController = tail.GetComponent<TailController>();
-			tailController.Initialise(state, _timeLord, this);
-			_tails.Add(state.TailID, tailController);
-		}
-	}
 
     void Update()
     {
-        // TODO: Remove this.
-        return;
-
+        // Create a new tail for any state on this frame that doesn't currently one.
         if (_activated && _timeLord != null)
         {
-            CreateNewTails();
+            Dictionary<int, PlayerState> tails = _timeLord.GetTails();
+            foreach (var tail in tails)
+            {
+                if (!_tails.ContainsKey(tail.Key))
+                {
+                    GameObject tailObject = Object.Instantiate(_tailPrefab);
+                    TailController tailController = tailObject.GetComponent<TailController>();
+                    tailController.Initialise(tail.Value, _timeLord, this);
+                    _tails.Add(tail.Key, tailController);
+                }
+            }
         }
     }
 
@@ -49,11 +43,6 @@ public class TailManager : MonoBehaviour
 
     public void DestroyTails()
     {
-        // TODO: Remove this.
-        return;
-
-        if (!_activated) _activated = true;
-
         foreach (var tail in _tails)
 		{
 			tail.Value.Kill();
@@ -61,31 +50,22 @@ public class TailManager : MonoBehaviour
 		_tails = new Dictionary<int, TailController>();
     }
 
-    public void BirthTails()
-    {
-        // TODO: Remove this.
-        return;
+    public void SetActive(bool value) { _activated = value; }
 
-        Dictionary<int, PlayerState> tails = _timeLord.GetAllTails();
-
-		foreach (var tail in tails)
-		{
-            GameObject tailObject = Object.Instantiate(_tailPrefab);
-			TailController tailController = tailObject.GetComponent<TailController>();
-			tailController.Initialise(tail.Value, _timeLord, this);
-			_tails.Add(tail.Key, tailController);
-		}
-    }
-
-    public void Deactivate() { _activated = false; }
+    public void EnableParticles(bool value) { _particlesEnabled = value; }
 
 
     // ------------ PUBLIC FUNCTIONS FOR TAIL CONTROLLER ------------
 
     public void ReceiveResignation(int tailID)
     {
-        
-        _tails[tailID].Kill();
-        _tails.Remove(tailID);
+        // TODO: Remove this check, it shouldn't be necessary.
+        if (_tails.ContainsKey(tailID))
+        {
+            _tails[tailID].Kill();
+            _tails.Remove(tailID);
+        }
     }
+
+    public bool GetParticlesEnabled() { return _particlesEnabled; }
 }
