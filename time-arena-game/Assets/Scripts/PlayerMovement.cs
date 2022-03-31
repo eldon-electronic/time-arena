@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded;
     private bool _isCeiling;
     private float _xRot;
-    private float _mouseSensitivity;
+    public static float _mouseSensitivity;
 
     void Start()
     {
@@ -46,6 +46,10 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 	}
+
+    public void OnMouseSensChange(float a){
+      _mouseSensitivity = PauseUI.mouseSens;
+    }
 
     private void UpdatePosition()
     {

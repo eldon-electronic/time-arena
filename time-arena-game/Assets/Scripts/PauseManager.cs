@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviourPunCallbacks {
 
@@ -11,9 +12,12 @@ public class PauseManager : MonoBehaviourPunCallbacks {
     private bool _paused = false;
 	public GameObject PauseMenuUI;
 	public PhotonView View;
+  public Slider mouseSensSlider;
+  public float mouseSens;
 
 	// Update is called once per frame
 	void Update() {
+    mouseSens = mouseSensSlider.value;
 		if (!View.IsMine) return;
 
 		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;
