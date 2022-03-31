@@ -137,6 +137,9 @@ public class PlayerHud : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
+            if(Game == null){
+              Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
+            }
             StartTimeDispl.transform.parent.gameObject.SetActive(!Game.GameStarted);
             if (!Game.GameStarted && !Game.GameEnded)
             {

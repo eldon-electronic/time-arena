@@ -17,7 +17,7 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 		if (!View.IsMine) return;
 
 		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;
-		
+
 		PauseMenuUI.SetActive(_paused);
 		Cursor.lockState = _paused ? CursorLockMode.None : CursorLockMode.Locked;
 	}
@@ -28,18 +28,23 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 
 	public bool IsPaused() { return _paused; }
 
-	public void Leave() { Application.Quit(); }
+	public void Leave() { disconnectPlayer(); }
 
-	/* Work on this in the future. Pressing "Leave" should take the user back to main screen.
+	// Work on this in the future. Pressing "Leave" should take the user back to main screen.
 	private void disconnectPlayer() {
-		StartCoroutine(DisconnectAndLoad());
+    PhotonNetwork.LeaveRoom();
+    SceneManager.LoadScene("MenuScene");
+    Destroy(gameObject);
+  }
+
+  /*	StartCoroutine(DisconnectAndLoad());
 	}
 
 	IEnumerator DisconnectAndLoad() {
 		PhotonNetwork.LeaveRoom();
 		while (PhotonNetwork.InRoom) { // Busy waiting
 			Debug.Log("Busy waiting");
-			yield return null; 
+			yield return null;
 		}
 		SceneManager.LoadScene("MenuScene");
 		Destroy(gameObject);
