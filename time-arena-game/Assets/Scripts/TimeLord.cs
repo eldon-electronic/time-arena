@@ -231,6 +231,7 @@ public class TimeLord
 		return _realities.GetHeadsInFrame(frame);
 	}
 
+	// Returns a list of the other player's playerIDs.
 	public List<int> GetAllPlayerIDs()
 	{
 		return _realities.GetAllHeads(_myID);

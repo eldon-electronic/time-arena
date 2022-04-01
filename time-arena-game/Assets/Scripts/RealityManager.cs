@@ -161,6 +161,7 @@ public class RealityManager
         return heads;
     }
 
+    // Returns a list of all other player's playerIDs.
     public List<int> GetAllHeads(int playerID)
     {
         List<int> heads = new List<int>();

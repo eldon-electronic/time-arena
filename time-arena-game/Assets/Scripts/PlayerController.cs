@@ -95,6 +95,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
+		List<int> playerIDs = _timelord.GetAllPlayerIDs();
+		foreach (var id in playerIDs)
+		{
+			PhotonView.Find(id).gameObject.layer = Constants.LayerPlayer;
+		}
 	}
 
 
