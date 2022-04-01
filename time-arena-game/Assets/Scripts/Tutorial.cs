@@ -166,13 +166,7 @@ public class Tutorial : MonoBehaviour
         }
         
    }
-    public void NeedClick(bool ClickNeeded){
-
-        if(ClickNeeded == true && Input.GetMouseButtonDown(1)){
-
-            MoveToNextState();
-        }
-     }
+  
 
     private void MoveToNextState(){
 
