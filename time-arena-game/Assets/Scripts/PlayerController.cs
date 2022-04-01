@@ -51,12 +51,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 
 	void Start() {
+		
 		DontDestroyOnLoad(this.gameObject);
 		Team = Constants.Team.Miner;
 		Material.SetMaterialMiner();
 		Hud.SetTeam("MINER");
 		gameObject.layer = Constants.LayerPlayer;
-		Tutorial.SetTeam(Constants.Team.Miner);
+		Tutorial.SetTeam(Team);
 		Tutorial.StartTutorial();
 		Particles.Subscribe(this);
 

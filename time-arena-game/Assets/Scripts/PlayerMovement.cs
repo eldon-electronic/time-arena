@@ -40,6 +40,10 @@ public class PlayerMovement : MonoBehaviour
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
     }
+    
+    public void OnMouseSensChange(float a){
+      _mouseSensitivity = PauseUI.mouseSens;
+    }
 
     private void UpdatePosition()
     {
@@ -69,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         {
             movement /= movement.magnitude;
         }
-        
+
         // Transform according to movement vector.
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
@@ -105,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
 		// Invert vertical rotation and restrict up/down.
 		_xRot -= mouseY;
 		_xRot = Mathf.Clamp(_xRot, -90f, 90f);
-		
+
 		// Apply rotation.
 		CameraHolder.transform.localRotation = Quaternion.Euler(_xRot, 0f, 0f);
 

@@ -19,7 +19,8 @@ public class PlayerHud : MonoBehaviour
 	public Slider BackCooldownSlider;
 	public Text TimeDispl;
 	public Text StartTimeDispl;
-	public Text WinningDispl;
+  public Text WinningDispl;
+  public Text ScoreDispl;
     public CanvasGroup TimelineCanvasGroup;
     public Slider ElapsedTimeSlider;
     public Slider PlayerIcon0;
@@ -33,8 +34,9 @@ public class PlayerHud : MonoBehaviour
     public Sprite GreenPressedSprite;
     public Sprite GreenUnpressedSprite;
     public GameObject ArrowImage;
+    public GameObject Tutorial;
     public GameObject PopUpText;
-    public GameObject PopUp;
+    public GameObject OptionsPopUpText;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
     private int _time;
@@ -49,18 +51,18 @@ public class PlayerHud : MonoBehaviour
     private bool _canJumpForward;
     private bool _canJumpBack;
     private string _message;
-   
+    private int score;
+    private string _optionsMessage;
+
+
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
+    
 
 
     void Start()
     {
-       
 
-        //vector2 forwardJumpPos = new vector2(-400f,-125f);
-        //vector2 backJumpPos = new vector2{-400f,-125f};
-       // vector2 forwardJumpPos = new vector2{-400f,-125f};
 
         _uiPositions = new Dictionary<string, Vector2>();
         _uiPositions.Add("forwardJump",new Vector2(381f,-76f));
@@ -68,7 +70,7 @@ public class PlayerHud : MonoBehaviour
         _uiPositions.Add("timebar",new Vector2(-342f,-122f));
         _uiPositions.Add("timer",new Vector2(-290f,105f));
         _uiPositions.Add("team",new Vector2(284f,104f));
-        
+
 
         _uiRotations = new Dictionary<string, Vector3>();
         _uiRotations.Add("forwardJump",new Vector3(-10.1f,-720.2f,18.5f));
@@ -76,8 +78,6 @@ public class PlayerHud : MonoBehaviour
         _uiRotations.Add("timebar",new Vector3(-10.1f,-535.5f,4.7f));
         _uiRotations.Add("timer",new Vector3(-10.1f,-535.5f,-150f));
         _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
-       
-        
 
 
         if (View.IsMine)
@@ -95,7 +95,7 @@ public class PlayerHud : MonoBehaviour
         _canJumpForward = false;
         _canJumpBack = false;
 
-        
+
     }
 
 
@@ -116,6 +116,9 @@ public class PlayerHud : MonoBehaviour
             {
                 MasterClientOpt.text = "Loading...";
             }
+        } else {
+          MasterClientOpt.text = "Press F to Start";
+
         }
     }
 
@@ -161,9 +164,9 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeline()
     {
-        // Set visibility of timeline, player icons and jump cooldowns.
-       // TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
-      //  ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
+        //Set visibility of timeline, player icons and jump cooldowns.
+        //TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
+       // ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
        // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
         // for (int i=0; i < _playerPositions.Count; i++)
         // {
@@ -223,11 +226,23 @@ public class PlayerHud : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name != "PreGameScene")
         {
-            PopUp.gameObject.SetActive(false);
+
+            Tutorial.gameObject.SetActive(false);
             
+
         }
     }
 
+    private void LateUpdateScore(){
+      if (SceneManager.GetActiveScene().name == "GameScene")
+      {
+        ScoreDispl.transform.parent.gameObject.SetActive(true);
+
+          ScoreDispl.text = score + "";
+      } else if(SceneManager.GetActiveScene().name == "PreGameScene") {
+        ScoreDispl.transform.parent.gameObject.SetActive(false);
+      }
+    }
 
 
     // ------------ UPDATE METHODS ------------
@@ -257,12 +272,19 @@ public class PlayerHud : MonoBehaviour
         LateUpdateCooldowns();
         LateUpdateWinningDisplay();
         LateUpdateTutorial();
-        
+        LateUpdateScore();
+
     }
 
 
     // ------------ PUBLIC METHODS ------------
 
+    public void setScore(int a){
+      score = a;
+    }
+    public int getScore(){
+      return score;
+    }
 
     public void SetTeam(System.String teamName)
     {
@@ -338,25 +360,44 @@ public class PlayerHud : MonoBehaviour
 
         if (!View.IsMine) return;
 
+        Debug.Log(ArrowImage);
+        Debug.Log(_uiPositions);
+
         ArrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         ArrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
     }
 
     public void SetMessage(string tutorialMessage){
-        
+
         if (!View.IsMine) return;
 
         _message = tutorialMessage;
         PopUpText.GetComponent<TextMeshProUGUI>().text = _message;
-          
+
     }
 
     public void SetArrowVisibility(bool arrowVisibility){
 
         if (!View.IsMine) return;
-        
+
         ArrowImage.gameObject.SetActive(arrowVisibility);
     }
+    public void SetTutorialVisibility(bool tutorialVisibility){
+
+        if (!View.IsMine) return;
+        
+        Tutorial.gameObject.SetActive(tutorialVisibility);
+
+    }
+    public void SetOptionsText(string optionsMessage){
+
+        if (!View.IsMine) return;
+
+        _optionsMessage = optionsMessage;
+        OptionsPopUpText.GetComponent<TextMeshProUGUI>().text = _optionsMessage;
+
+    }
+    
 
     public void SetGame(GameController game) { _game = game; }
 }
