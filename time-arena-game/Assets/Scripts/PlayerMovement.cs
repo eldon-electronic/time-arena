@@ -104,10 +104,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!View.IsMine && !_activated) return;
-        
-        UpdatePosition();
-        UpdateRotation();
+        if (View.IsMine && _activated)
+        {
+            UpdatePosition();
+            UpdateRotation();
+        }
     }
 
     public Hashtable GetState()
