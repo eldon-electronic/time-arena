@@ -172,11 +172,11 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				PhotonView.Find(id).gameObject.layer = Constants.LayerOutsideReality;
 			}
 		}
-		else 
+		else if(!View.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
 			Particles.StartDissolving(_jumpDirection, true);
-			gameObject.layer = Constants.LayerOutsideReality;
 		}
+		gameObject.layer = Constants.LayerOutsideReality;
 	}
 
 	[PunRPC]
@@ -198,7 +198,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				PhotonView.Find(id).gameObject.layer = Constants.LayerOutsideReality;
 			}			
 		}
-		else Particles.StartDissolving(_jumpDirection, true);
+		else if(!View.IsMine && gameObject.layer == Constants.LayerPlayer)
+		{
+			Particles.StartDissolving(_jumpDirection, true);
+		}
 		gameObject.layer = Constants.LayerOutsideReality;
 	}
 
@@ -224,8 +227,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			if (_timelord.InYourReality(View.ViewID))
 			{
 				gameObject.layer = Constants.LayerPlayer;
+				Particles.StartDissolving(_jumpDirection, false);
 			}
-			Particles.StartDissolving(_jumpDirection, false);
 		}
 	}
 
@@ -251,8 +254,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			if (_timelord.InYourReality(View.ViewID))
 			{
 				gameObject.layer = Constants.LayerPlayer;
+				Particles.StartDissolving(_jumpDirection, false);
 			}
-			Particles.StartDissolving(_jumpDirection, false);
 		}
 	}
 
@@ -528,6 +531,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		else _jumpDirection = Constants.JumpDirection.Static;
 	}
 
+	private void UpdateNameTag()
+	{
+		if(gameObject.layer == Constants.LayerOutsideReality)
+		{
+			Nametag.SetActive(false);
+		}
+		else Nametag.SetActive(true);
+	} 
+
 
 	void Update() {
 		// Local keys only affect client's player.
@@ -549,7 +561,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				PauseUI.Pause();
 			}
 		}
-
+		// Comment the following line to show player name tags for testing interaction.
+		else UpdateNameTag();
 		if (TimeTravelEnabled()) UpdateTimeTravel();		
 	}
 
