@@ -48,11 +48,12 @@ public class PlayerController : MonoBehaviour {
 
 
 	void Start() {
+		
 		DontDestroyOnLoad(this.gameObject);
 		Team = Constants.Team.Miner;
 		Material.SetMaterialMiner();
 		Hud.SetTeam("HIDER");
-		Tutorial.SetTeam(Constants.Team.Miner);
+		Tutorial.SetTeam(Team);
 		Tutorial.StartTutorial();
 		if (!View.IsMine)
 		{
