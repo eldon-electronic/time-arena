@@ -9,7 +9,7 @@ using TMPro;
 
 public class PlayerHud : MonoBehaviour
 {
-    public GameController Game;
+    private GameController _game;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
@@ -86,9 +86,6 @@ public class PlayerHud : MonoBehaviour
             _playerPositions = new List<float>();
             _yourIcon = PlayerIcon0;
             _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
-
-            // Link SceneChange event to OnSceneChange.
-            SceneManager.activeSceneChanged += OnSceneChange;
         }
 
         _debugItems = new Hashtable();
@@ -99,14 +96,6 @@ public class PlayerHud : MonoBehaviour
         _canJumpBack = false;
 
         
-    }
-
-    void OnSceneChange(Scene current, Scene next)
-    {
-        if (next.name == "GameScene")
-        {
-            Game = FindObjectOfType<GameController>();
-        }
     }
 
 
@@ -139,8 +128,8 @@ public class PlayerHud : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            StartTimeDispl.transform.parent.gameObject.SetActive(!Game.GameStarted);
-            if (!Game.GameStarted && !Game.GameEnded)
+            StartTimeDispl.transform.parent.gameObject.SetActive(!_game.GameStarted);
+            if (!_game.GameStarted && !_game.GameEnded)
             {
                 int elapsed = 5 - _time;
                 StartTimeDispl.text = $"{elapsed}";
@@ -155,9 +144,9 @@ public class PlayerHud : MonoBehaviour
            // SceneManager.GetActiveScene().name != "PreGameScene"
         //);
 
-        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
         {
-            if (Game.GameStarted)
+            if (_game.GameStarted)
             {
                 float t = Constants.GameLength - _time;
                 int minutes = (int) (t / 60);
@@ -223,10 +212,10 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateWinningDisplay()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
         {
             WinningDispl.transform.parent.gameObject.SetActive(true);
-            WinningDispl.text = (Game.WinningTeam == Constants.Team.Miner) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            WinningDispl.text = (_game.WinningTeam == Constants.Team.Miner) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 
@@ -369,5 +358,5 @@ public class PlayerHud : MonoBehaviour
         ArrowImage.gameObject.SetActive(arrowVisibility);
     }
 
-
+    public void SetGame(GameController game) { _game = game; }
 }

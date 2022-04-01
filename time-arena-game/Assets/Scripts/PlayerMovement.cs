@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameController Game;
+    private GameController _game;
     public PhotonView View;
     public CharacterController CharacterBody;
     public PauseManager PauseUI;
@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded;
     private float _xRot;
     private float _mouseSensitivity;
+    private bool _activated;
 
     void Start()
     {
@@ -32,25 +33,15 @@ public class PlayerMovement : MonoBehaviour
         _isGrounded = true;
         _xRot = 0f;
         _mouseSensitivity = 100f;
-
-        SceneManager.activeSceneChanged += onSceneChange;
+        _activated = true;
 
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
     }
 
-    void onSceneChange(Scene current, Scene next) {
-		if (next.name == "GameScene") {
-			Game = FindObjectOfType<GameController>();
-			if (Game == null) {
-				Debug.Log("Scene change error: GameController is null");
-			}
-		}
-	}
-
     private void UpdatePosition()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.GameStarted) return;
+        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameStarted) return;
 
         // Sprint speed.
         if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
@@ -113,14 +104,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!View.IsMine) return;
-
-        if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded))
-        {
-            UpdatePosition();
-            UpdateRotation();
-        }
+        if (!View.IsMine && !_activated) return;
+        
+        UpdatePosition();
+        UpdateRotation();
     }
 
     public Hashtable GetState()
@@ -138,4 +125,8 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 GetPosition() { return PlayerTransform.position; }
 
     public Quaternion GetRotation() { return PlayerTransform.rotation; }
+
+    public void SetActive(bool value) { _activated = value; }
+
+    public void SetGame(GameController game) { _game = game; }
 }

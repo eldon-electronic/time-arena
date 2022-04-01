@@ -24,10 +24,4 @@ public class PreGameController : MonoBehaviour
     {
         pc.SetTimeLord(_timeLord);
     }
-
-    public void Kill()
-    {
-        _timeLord = null;
-        Destroy(this);
-    }
 }

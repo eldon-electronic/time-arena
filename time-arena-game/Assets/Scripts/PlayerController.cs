@@ -95,6 +95,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
+
+		// TODO: Let each player do this themselves.
 		List<int> playerIDs = _timelord.GetAllPlayerIDs();
 		foreach (var id in playerIDs)
 		{
@@ -125,14 +127,9 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			if (View.IsMine)
 			{
-				_preGame.Kill();
 				_tailManager.DestroyTails();
 				_tailManager.SetActive(false);
 			}
-
-			_game = FindObjectOfType<GameController>();
-			if (_game == null) Debug.LogError("GameController not found");
-			else _game.Register(View.ViewID, this, Team);
 
 			if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
 			{
@@ -554,6 +551,10 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				UpdateDebugDisplay();
 				KeyControl();
 			}
+			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
+			{
+				Movement.SetActive(false);
+			}
 
 			// Update pauseUI and cursor lock if game is ended.
 			if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
@@ -587,4 +588,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			_tailManager.SetTimeLord(_timelord);
 		}
 	}
+
+	public void SetGame(GameController game)
+	{
+		_game = game;
+		Movement.SetGame(game);
+		Hud.SetGame(game);
+	}
+
+	public int GetID() { return View.ViewID; }
 }

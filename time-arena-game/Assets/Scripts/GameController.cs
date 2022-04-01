@@ -26,6 +26,26 @@ public class GameController : MonoBehaviour
 		_tails = new Dictionary<int, TailController>();
 
 		_timer = 0f;
+
+		int totalFrames = Constants.GameLength * Constants.FrameRate;
+		_timeLord = new TimeLord(totalFrames);
+
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		GameObject client = GameObject.FindWithTag("Client");
+
+		List<GameObject> allPlayers = new List<GameObject>(players);
+		allPlayers.Add(client);
+
+		foreach (var player in allPlayers)
+		{
+			PlayerController pc = player.GetComponent<PlayerController>();
+			pc.SetGame(this);
+			pc.SetTimeLord(_timeLord);
+
+			int id = pc.GetID();
+			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
+			else _miners.Add(id, pc);
+		}
 	}
 
 
@@ -48,20 +68,6 @@ public class GameController : MonoBehaviour
 			}
 	}
 
-	private void SetupTimeLord()
-	{
-		int totalFrames = Constants.GameLength * Constants.FrameRate;
-		_timeLord = new TimeLord(totalFrames);
-		foreach (var miner in _miners)
-		{
-			miner.Value.SetTimeLord(_timeLord);
-		}
-		foreach (var guardian in _guardians)
-		{
-			guardian.Value.SetTimeLord(_timeLord);
-		}
-	}
-
 	void Update()
 	{
 		if (!GameStarted)
@@ -69,11 +75,7 @@ public class GameController : MonoBehaviour
 			// Pregame timer is counting.
 			if (_timer >= 5f)
 			{
-				if (!GameStarted)
-				{
-					GameStarted = true;
-					SetupTimeLord();
-				}
+				if (!GameStarted) GameStarted = true;
 			}
 			else _timer += Time.deltaTime;
 		}
@@ -87,12 +89,6 @@ public class GameController : MonoBehaviour
 
 
 	// ------------ PUBLIC FUNCTIONS ------------
-
-	public void Register(int id, PlayerController pc, Constants.Team team)
-	{
-		if (team == Constants.Team.Guardian) _guardians.Add(id, pc);
-		else _miners.Add(id, pc);
-	}
 
 	public void SetTeam(int playerID, Constants.Team team)
 	{
