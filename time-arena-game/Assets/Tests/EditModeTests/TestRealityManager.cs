@@ -62,9 +62,10 @@ public class TestRealityManager
         Assert.AreEqual(2, writeFrames0.Count, "AddWriter has not added correct amount of writers");
         Assert.AreEqual(10000, writeFrames1[0], "AddWriter has not added the corrent frame value");
 
+        // TODO: Change this - writers aren't removed straight away.
         realityManager.RemoveWriter(0);
-        Assert.AreEqual(20, realityManager.GetWriteFrames(0)[0], "RemoveWriter has removed the wrong writer.");
-        Assert.AreEqual(1, realityManager.GetWriteFrames(0).Count, "RemoveWriter has removed wrong amount of writers");
+        Assert.AreEqual(40, realityManager.GetWriteFrames(0)[0], "RemoveWriter has removed the wrong writer.");
+        Assert.AreEqual(2, realityManager.GetWriteFrames(0).Count, "RemoveWriter has removed wrong amount of writers");
 
         realityManager.Tick();
         Assert.AreEqual(6001, realityManager.GetWriteFrames(1)[1], "Increment has not incremented the value of writeframes");
@@ -78,8 +79,8 @@ public class TestRealityManager
         Assert.AreEqual(10, realityManager.GetClosestFrame(3,12), "GetClosestFrame has not returned the closest frame");
         
         // Tests for GetLastTailID and GetNextTailID.
-        Assert.AreEqual(0, realityManager.GetLastTailID(1), "GetLastTailID has not returned the correct value"); 
-        Assert.AreEqual(1, realityManager.GetNextTailID(1), "GetNextTailID has not returned the correct value");
+        Assert.AreEqual(100, realityManager.GetLastTailID(1), "GetLastTailID has not returned the correct value"); 
+        Assert.AreEqual(101, realityManager.GetNextTailID(1), "GetNextTailID has not returned the correct value");
 
     }
 }
