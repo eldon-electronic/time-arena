@@ -594,6 +594,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_game = game;
 		Movement.SetGame(game);
 		Hud.SetGame(game);
+		gameObject.layer = Constants.LayerPlayer;
 	}
 
 	public int GetID() { return View.ViewID; }
