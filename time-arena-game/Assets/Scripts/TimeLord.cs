@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
+using System;
 
 public class TimeLord
 {
@@ -126,7 +126,7 @@ public class TimeLord
 	{
 		int frame = _realities.GetPerceivedFrame(playerID);
 		int closestFrame = _realities.GetClosestFrame(playerID, frame);
-		if (Mathf.Abs(closestFrame - frame) < Constants.MinTimeSnapDistance)
+		if (Math.Abs(closestFrame - frame) < Constants.MinTimeSnapDistance)
 		{
 			frame = closestFrame;
 		}
@@ -191,7 +191,7 @@ public class TimeLord
 		return _realities.InSameFrame(playerID, _myID);
 	}
 
-    // Returns your position in time as a fraction through the game time. 
+    // Returns your position in time as a fraction through the game time.
 	public float GetYourPosition()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
