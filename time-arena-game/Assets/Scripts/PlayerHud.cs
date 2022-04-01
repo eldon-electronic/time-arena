@@ -44,14 +44,14 @@ public class PlayerHud : MonoBehaviour
     private bool _canJumpForward;
     private bool _canJumpBack;
     private string _message;
-   
+
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
 
 
     void Start()
     {
-       
+
 
         //vector2 forwardJumpPos = new vector2(-400f,-125f);
         //vector2 backJumpPos = new vector2{-400f,-125f};
@@ -63,7 +63,7 @@ public class PlayerHud : MonoBehaviour
         _uiPositions.Add("timebar",new Vector2(-342f,-122f));
         _uiPositions.Add("timer",new Vector2(-290f,105f));
         _uiPositions.Add("team",new Vector2(284f,104f));
-        
+
 
         _uiRotations = new Dictionary<string, Vector3>();
         _uiRotations.Add("forwardJump",new Vector3(-10.1f,-720.2f,18.5f));
@@ -71,8 +71,8 @@ public class PlayerHud : MonoBehaviour
         _uiRotations.Add("timebar",new Vector3(-10.1f,-535.5f,4.7f));
         _uiRotations.Add("timer",new Vector3(-10.1f,-535.5f,-150f));
         _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
-       
-        
+
+
 
 
         if (View.IsMine)
@@ -92,7 +92,7 @@ public class PlayerHud : MonoBehaviour
         _canJumpForward = false;
         _canJumpBack = false;
 
-        
+
     }
 
     void OnSceneChange(Scene current, Scene next)
@@ -120,6 +120,9 @@ public class PlayerHud : MonoBehaviour
             {
                 MasterClientOpt.text = "Loading...";
             }
+        } else {
+          MasterClientOpt.text = "Press F to Start";
+
         }
     }
 
@@ -134,6 +137,9 @@ public class PlayerHud : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
+            if(Game == null){
+              Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
+            }
             StartTimeDispl.transform.parent.gameObject.SetActive(!Game.GameStarted);
             if (!Game.GameStarted && !Game.GameEnded)
             {
@@ -174,7 +180,7 @@ public class PlayerHud : MonoBehaviour
         for (int i=1; i < 5; i++)
         {
             _playerIcons[i].gameObject.SetActive(
-                SceneManager.GetActiveScene().name != "PreGameScene" && 
+                SceneManager.GetActiveScene().name != "PreGameScene" &&
                 Game.OtherPlayersElapsedTime.Count >= i + 1
             );
         }
@@ -249,7 +255,7 @@ public class PlayerHud : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "PreGameScene")
         {
             PopUp.gameObject.SetActive(false);
-            
+
         }
     }
 
@@ -282,7 +288,7 @@ public class PlayerHud : MonoBehaviour
         LateUpdateCooldowns();
         LateUpdateWinningDisplay();
         LateUpdateTutorial();
-        
+
     }
 
 
@@ -355,18 +361,18 @@ public class PlayerHud : MonoBehaviour
     }
 
     public void SetMessage(string tutorialMessage){
-        
+
         if (!View.IsMine) return;
 
         _message = tutorialMessage;
         PopUpText.GetComponent<TextMeshProUGUI>().text = _message;
-          
+
     }
 
     public void SetArrowVisibility(bool arrowVisibility){
 
         if (!View.IsMine) return;
-        
+
         ArrowImage.gameObject.SetActive(arrowVisibility);
     }
 
