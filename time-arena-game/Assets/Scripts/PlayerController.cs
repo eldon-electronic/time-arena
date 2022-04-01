@@ -463,29 +463,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 	void KeyControl()
 	{
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			// Debug.Log("Key down 1");
-			TimeJump(Constants.JumpDirection.Backward, true);
-		}
+		if (Input.GetKeyDown(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, true);
 
-		if (Input.GetKeyDown(KeyCode.Alpha2)) {
-			// Debug.Log("Key down 2");
-			TimeJump(Constants.JumpDirection.Forward, true);
-		}
+		if (Input.GetKeyDown(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, true);
 
-		if (Input.GetKeyUp(KeyCode.Alpha1)) {
-			// Debug.Log("Key up 1");
-			TimeJump(Constants.JumpDirection.Backward, false);
-		}
+		if (Input.GetKeyUp(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, false);
 
-		if (Input.GetKeyUp(KeyCode.Alpha2)) {
-			// Debug.Log("Key up 2");
-			TimeJump(Constants.JumpDirection.Forward, false);
-		}
+		if (Input.GetKeyUp(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, false);
 
 		if (Input.GetMouseButtonDown(0)) Grab();
 
-		if (Input.GetKeyDown(KeyCode.E)) StartGame();
+		if (Input.GetKeyDown(KeyCode.F)) StartGame();
 
 		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
 
