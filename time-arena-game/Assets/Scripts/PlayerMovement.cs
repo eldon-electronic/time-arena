@@ -20,8 +20,9 @@ public class PlayerMovement : MonoBehaviour
     private float _jumpPower;
     private float _gravity;
     private bool _isGrounded;
+    private bool _isCeiling;
     private float _xRot;
-    private float _mouseSensitivity;
+    public static float _mouseSensitivity;
 
     void Start()
     {
@@ -30,20 +31,25 @@ public class PlayerMovement : MonoBehaviour
         _jumpPower = 3f;
         _gravity = 40f;
         _isGrounded = true;
+        _isCeiling = false;
         _xRot = 0f;
         _mouseSensitivity = 100f;
 
         SceneManager.activeSceneChanged += onSceneChange;
     }
 
-    void onSceneChange(Scene current, Scene next) {
+    public void onSceneChange(Scene current, Scene next) {
 		if (next.name == "GameScene") {
-			Game = FindObjectOfType<GameController>();
+			Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
 			if (Game == null) {
 				Debug.Log("Scene change error: GameController is null");
 			}
 		}
 	}
+
+    public void OnMouseSensChange(float a){
+      _mouseSensitivity = PauseUI.mouseSens;
+    }
 
     private void UpdatePosition()
     {
@@ -62,13 +68,18 @@ public class PlayerMovement : MonoBehaviour
         groundCheck.y -= 1f;
         _isGrounded = Physics.CheckSphere(groundCheck, _groundCheckRadius, GroundMask);
 
+        //Check if player's head intersects with any environment object.
+        Vector3 ceilingCheck = PlayerTransform.position;
+        ceilingCheck.y += 0.6f;
+        _isCeiling = Physics.CheckSphere(ceilingCheck, _groundCheckRadius, GroundMask);
+
         // Set and normalise movement vector.
         Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
         if (movement.magnitude != 1 && movement.magnitude != 0)
         {
             movement /= movement.magnitude;
         }
-        
+
         // Transform according to movement vector.
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
@@ -78,15 +89,19 @@ public class PlayerMovement : MonoBehaviour
 			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
 		}
 
-		// Gravity effect.
-		_velocity.y -= _gravity * Time.deltaTime;
+
+        // Gravity effect.
+        _velocity.y -= _gravity * Time.deltaTime;
 		if (_velocity.y <= -100f) _velocity.y = -100f;
 
 		// Reset vertical velocity value when grounded.
 		if (_isGrounded && _velocity.y < 0) _velocity.y = 0f;
 
-		// Move player according to gravity.
-		CharacterBody.Move(_velocity * Time.deltaTime);
+        // Reset vertical velocity when head it hitting ceiling.
+        if (_isCeiling && _velocity.y > 0) _velocity.y = 0f;
+
+        // Move player according to gravity.
+        CharacterBody.Move(_velocity * Time.deltaTime);
     }
 
     private void UpdateRotation()
@@ -100,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 		// Invert vertical rotation and restrict up/down.
 		_xRot -= mouseY;
 		_xRot = Mathf.Clamp(_xRot, -90f, 90f);
-		
+
 		// Apply rotation.
 		CameraHolder.transform.localRotation = Quaternion.Euler(_xRot, 0f, 0f);
 
@@ -112,8 +127,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!View.IsMine) return;
 
-        if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-		(SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded))
+        string sceneName = SceneManager.GetActiveScene().name;
+        if(sceneName == "GameScene" && Game == null){
+          Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
+        }
+        if (sceneName == "PreGameScene" || (sceneName == "GameScene" && !Game.GameEnded))
         {
             UpdatePosition();
             UpdateRotation();
