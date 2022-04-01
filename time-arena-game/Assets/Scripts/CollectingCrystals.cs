@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class CollectingCrystals : MonoBehaviour
 {
-        public int crystals;
+    public PlayerHud hud;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public void OnTriggerEnter(Collider Col)
     {
-        if(Col.gameObject.tag == "Coin")
+        if(Col.gameObject.tag == "Collectable" && hud.TeamDispl.text == "HIDER")
         {
             Debug.Log("Crystal collected!");
-            crystals = crystals + 1;
+            hud.setScore(hud.getScore()+1);
             //Col.gameObject.SetActive(false);
             Destroy(Col.gameObject);
         }
@@ -24,6 +24,6 @@ public class CollectingCrystals : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
