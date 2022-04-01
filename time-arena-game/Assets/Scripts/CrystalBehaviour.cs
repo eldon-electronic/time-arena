@@ -14,9 +14,10 @@ public class CrystalBehaviour : MonoBehaviour
     void Update()
     {
       t += Time.deltaTime;
-      offsetY = (float)(0.5 * Math.Sin(t))-1;
-      gameObject.transform.position = (new Vector3(0.0f, offsetY, 0.0f));
-      transform.Rotate(0.0f, 10f*Time.deltaTime, 0.0f, Space.Self);
-      overlay.SetFloat("Wave_Incr", 10f*t);
+      offsetY = (float)(0.01 * Math.Sin(t));
+      gameObject.transform.Translate(new Vector3(0.0f, offsetY, 0.0f));
+      transform.Rotate(0.0f, 30f*Time.deltaTime, 0.0f, Space.Self);
+
+      overlay.SetFloat("Wave_Incr", t);
     }
 }
