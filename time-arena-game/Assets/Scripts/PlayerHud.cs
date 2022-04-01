@@ -19,7 +19,8 @@ public class PlayerHud : MonoBehaviour
 	public Slider BackCooldownSlider;
 	public Text TimeDispl;
 	public Text StartTimeDispl;
-	public Text WinningDispl;
+  public Text WinningDispl;
+  public Text ScoreDispl;
     public CanvasGroup TimelineCanvasGroup;
     public Slider ElapsedTimeSlider;
     public Slider PlayerIcon0;
@@ -44,6 +45,7 @@ public class PlayerHud : MonoBehaviour
     private bool _canJumpForward;
     private bool _canJumpBack;
     private string _message;
+    private int score;
 
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
@@ -259,6 +261,16 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
+    private void LateUpdateScore(){
+      if (SceneManager.GetActiveScene().name == "GameScene")
+      {
+        ScoreDispl.transform.parent.gameObject.SetActive(true);
+
+          ScoreDispl.text = score + "";
+      } else if(SceneManager.GetActiveScene().name == "PreGameScene") {
+        ScoreDispl.transform.parent.gameObject.SetActive(false);
+      }
+    }
 
 
     // ------------ UPDATE METHODS ------------
@@ -288,12 +300,19 @@ public class PlayerHud : MonoBehaviour
         LateUpdateCooldowns();
         LateUpdateWinningDisplay();
         LateUpdateTutorial();
+        LateUpdateScore();
 
     }
 
 
     // ------------ PUBLIC METHODS ------------
 
+    public void setScore(int a){
+      score = a;
+    }
+    public int getScore(){
+      return score;
+    }
 
     public void SetTeam(System.String teamName)
     {
