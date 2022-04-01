@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 
 
 	void Start() {
+		
 		DontDestroyOnLoad(this.gameObject);
 		Team = Constants.Team.Miner;
 		Material.SetMaterialMiner();

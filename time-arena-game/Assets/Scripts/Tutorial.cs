@@ -92,12 +92,9 @@ public class Tutorial : MonoBehaviour
             _states.Add(state19);
             State state20 = new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
             _states.Add(state20);
-            State state21 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\n\nYou can go back to tutorial by pressing <sprite=8>.", "forwardJump",KeyCode.Return,false,true);
+            State state21 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.Return,false,true);
             _states.Add(state21);
-            State state22 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\n\nYou can go back to tutorial by pressing <sprite=25>.", "forwardJump",KeyCode.Return,false,false);
-            _states.Add(state22);
-            State state23 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\n\nYou can go back to tutorial by pressing <sprite=25>.", "forwardJump",KeyCode.Return,false,true);
-            _states.Add(state23);
+     
     
     }
     private void CreateStatesMiner()
@@ -139,12 +136,9 @@ public class Tutorial : MonoBehaviour
         _states.Add(state17);
         State state18 = new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
         _states.Add(state18);
-        State state19 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\n\nYou can go back to tutorial by pressing <sprite=8>.", "forwardJump",KeyCode.Return,false,true);
+        State state19 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.Return,false,true);
         _states.Add(state19);
-        State state20 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\n\nYou can go back to tutorial by pressing <sprite=25>.", "forwardJump",KeyCode.Return,false,false);
-        _states.Add(state20);
-        State state21 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!\n\nYou can go back to tutorial by pressing <sprite=25>.", "forwardJump",KeyCode.Return,false,true);
-        _states.Add(state21); 
+ 
     }
 
     IEnumerator DelayPopup() {
