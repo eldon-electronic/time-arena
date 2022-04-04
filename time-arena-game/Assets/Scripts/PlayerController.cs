@@ -164,17 +164,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (View.IsMine) 
 		{
 			Hud.PressForwardJumpButton();
-			List<int> playerIDs = _timelord.GetAllPlayerIDs();
-			foreach (var id in playerIDs)
-			{
-				PhotonView.Find(id).gameObject.layer = Constants.LayerOutsideReality;
-			}
+			if (_game == null) _preGame.HideAllPlayers();
+			else _game.HideAllPlayers();
 		}
 		else if(!View.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
 			Particles.StartDissolving(_jumpDirection, true);
 		}
-		gameObject.layer = Constants.LayerOutsideReality;
 	}
 
 	[PunRPC]
@@ -190,17 +186,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (View.IsMine) 
 		{
 			Hud.PressBackJumpButton();
-			List<int> playerIDs = _timelord.GetAllPlayerIDs();
-			foreach (var id in playerIDs)
-			{
-				PhotonView.Find(id).gameObject.layer = Constants.LayerOutsideReality;
-			}			
+			if (_game == null) _preGame.HideAllPlayers();
+			else _game.HideAllPlayers();	
 		}
 		else if(!View.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
 			Particles.StartDissolving(_jumpDirection, true);
 		}
-		gameObject.layer = Constants.LayerOutsideReality;
 	}
 
 	[PunRPC]
@@ -213,18 +205,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		
 		if (View.IsMine)
 		{
+			// TODO: The following line might be redundant?
 			gameObject.layer = Constants.LayerPlayer;
-			List<int> playerIDs = _timelord.GetPlayersInReality();
-			foreach (var id in playerIDs)
-			{
-				PhotonView.Find(id).gameObject.layer = Constants.LayerPlayer;
-			}
+			if (_game == null) _preGame.ShowPlayersInReality();
+			else _game.ShowPlayersInReality();
 		}
 		else
 		{
 			if (_timelord.InYourReality(View.ViewID))
 			{
-				gameObject.layer = Constants.LayerPlayer;
 				Particles.StartDissolving(_jumpDirection, false);
 			}
 		}
@@ -240,18 +229,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (View.IsMine)
 		{
+			// TODO: The following line might be redundant?
 			gameObject.layer = Constants.LayerPlayer;
-			List<int> playerIDs = _timelord.GetPlayersInReality();
-			foreach (var id in playerIDs)
-			{
-				PhotonView.Find(id).gameObject.layer = Constants.LayerPlayer;
-			}
+			if (_game == null) _preGame.ShowPlayersInReality();
+			else _game.ShowPlayersInReality();
 		}
 		else
 		{
 			if (_timelord.InYourReality(View.ViewID))
 			{
-				gameObject.layer = Constants.LayerPlayer;
 				Particles.StartDissolving(_jumpDirection, false);
 			}
 		}
@@ -563,8 +549,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (!View.IsMine && dissolvedOut)
 		{
-			// TODO: Hide this player and set them inactive.
+			gameObject.layer = Constants.LayerOutsideReality;
 		}
+	}
+
+	public void NotifyStartedDissolving()
+	{
+		gameObject.layer = Constants.LayerPlayer;
 	}
 
 	public void SetTimeLord(TimeLord timelord)
@@ -587,4 +578,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	}
 
 	public int GetID() { return View.ViewID; }
+
+	public void Show() { gameObject.layer = Constants.LayerPlayer; }
+
+	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
 }

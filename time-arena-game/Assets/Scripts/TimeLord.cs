@@ -18,7 +18,7 @@ public class TimeLord
     // Each item stores a dictionary that maps tailIDs to their state.
     private Dictionary<int, PlayerState>[] _playerStates;
 
-    // TODO: Improve this to be neater; at the moment it doesn't help when time travelling, only when moving normally.
+    // TODO: Refactor to remove this; it's obsolete.
     // A dictionary that maps frames to a list of tailIDs for those tails that were created on this frame.
     private Dictionary<int, List<int>> _tailCreations;
 

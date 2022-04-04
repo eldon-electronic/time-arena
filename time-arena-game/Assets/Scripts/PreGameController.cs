@@ -5,6 +5,7 @@ using UnityEngine;
 public class PreGameController : MonoBehaviour
 {
     private TimeLord _timeLord;
+    private Dictionary<int, PlayerController> _players;
 
     void Start()
     {
@@ -13,6 +14,8 @@ public class PreGameController : MonoBehaviour
 
         int totalFrames = Constants.FrameRate * 60 * 2;
         _timeLord = new TimeLord(totalFrames);
+
+        _players = new Dictionary<int, PlayerController>();
     }
 
     void Update()
@@ -23,5 +26,25 @@ public class PreGameController : MonoBehaviour
     public void Register(PlayerController pc)
     {
         pc.SetTimeLord(_timeLord);
+
+        int id = pc.GetID();
+        _players.Add(id, pc);
+    }
+
+    public void HideAllPlayers()
+    {
+        foreach (var player in _players)
+        {
+            player.Value.Hide();
+        }
+    }
+
+    public void ShowPlayersInReality()
+    {
+        List<int> ids = _timeLord.GetPlayersInReality();
+        foreach (var id in ids)
+        {
+            if (_players.ContainsKey(id)) _players[id].Show();
+        }
     }
 }

@@ -105,4 +105,26 @@ public class GameController : MonoBehaviour
 			_miners.Add(playerID, player);
 		}
 	}
+
+	public void HideAllPlayers()
+	{
+		foreach (var guardian in _guardians)
+		{
+			guardian.Value.Hide();
+		}
+		foreach (var miner in _miners)
+		{
+			miner.Value.Hide();
+		}
+	}
+
+	public void ShowPlayersInReality()
+	{
+		List<int> playerIDs = _timeLord.GetPlayersInReality();
+		foreach (var id in playerIDs)
+		{
+			if (_guardians.ContainsKey(id)) _guardians[id].Show();
+			else if (_miners.ContainsKey(id)) _miners[id].Show();
+		}
+	}
 }

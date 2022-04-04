@@ -123,4 +123,6 @@ public class ParticleController : MonoBehaviour
     void StopDissolvingForwardOut() { StopDissolving(Constants.JumpDirection.Forward, true); }
 
     void StopDissolvingForwardIn() { StopDissolving(Constants.JumpDirection.Forward, false); }
+
+    void StartedDissolving() { _subscriber.NotifyStartedDissolving(); }
 }

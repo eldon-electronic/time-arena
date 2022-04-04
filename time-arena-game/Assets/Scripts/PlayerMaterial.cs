@@ -85,6 +85,16 @@ public class PlayerMaterial : MonoBehaviour
         {
             armPart.SetActive(on);
         }
+    }
 
+    public void SetVisible(bool on)
+    {
+        float value = (on) ? 4.0f : -4.0f;
+
+        _playerBody.GetComponent<Renderer>().material.SetFloat("_CutoffHeight", value);
+        foreach (GameObject armPart in _armParts)
+        {
+            armPart.GetComponent<Renderer>().material.SetFloat("_CutoffHeight", value);
+        }
     }
 }
