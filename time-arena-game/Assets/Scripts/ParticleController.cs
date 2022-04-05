@@ -56,17 +56,15 @@ public class ParticleController : MonoBehaviour
     private void StopDissolving(Constants.JumpDirection jd, bool dissolveOut)
     {
         SetDissolveAnimationVariable(jd, dissolveOut, false);
-        _subscriber.NotifyStoppedDissolving(dissolveOut);
+        if (_subscriber != null) _subscriber.NotifyStoppedDissolving(dissolveOut);
         _isDissolving = false;
     }
 
 
     // ------------ PUBLIC METHODS ------------
 
-    // TODO: Establish the difference between jumping out and in w.r.t. animation.
     public void StartDissolving(Constants.JumpDirection jd, bool dissolveOut)
     {
-        Debug.Log("Called Particles.StartDissolving()");
         SetDissolveAnimationVariable(jd, dissolveOut, true);
         _isDissolving = true;
     }
@@ -124,5 +122,8 @@ public class ParticleController : MonoBehaviour
 
     void StopDissolvingForwardIn() { StopDissolving(Constants.JumpDirection.Forward, false); }
 
-    void StartedDissolving() { _subscriber.NotifyStartedDissolving(); }
+    void StartedDissolving()
+    {
+        if (_subscriber != null) _subscriber.NotifyStartedDissolving();
+    }
 }
