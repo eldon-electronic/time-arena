@@ -19,7 +19,7 @@ public class TailManager : MonoBehaviour
 
     void Update()
     {
-        // Create a new tail for any state on this frame that doesn't currently one.
+        // Create a new tail for any state on this frame that doesn't currently have one.
         if (_activated && _timeLord != null)
         {
             Dictionary<int, PlayerState> tails = _timeLord.GetTails();

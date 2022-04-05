@@ -48,17 +48,6 @@ public class TimeLord
 
     // ------------ PUBLIC METHODS FOR TAIL MANAGER ------------
 
-	// // Returns a collection of tailIDs for the states stored at your current perceived frame.
-	// public Dictionary<int, PlayerState>.KeyCollection GetTails()
-	// {
-	// 	int frame = _realities.GetPerceivedFrame(_myID);
-	// 	if (_playerStates[frame] != null)
-	// 	{
-	// 		return _playerStates[frame].Keys;
-	// 	}
-	// 	return new Dictionary<int, PlayerState>.KeyCollection(new Dictionary<int, PlayerState>());
-	// }
-
 	public Dictionary<int, PlayerState> GetTails()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
@@ -78,7 +67,7 @@ public class TimeLord
         int frame = _realities.GetPerceivedFrame(_myID);
         if (_playerStates[frame] != null)
         {
-            if (_playerStates[frame].ContainsKey(_myID)) return _playerStates[frame][_myID];
+            if (_playerStates[frame].ContainsKey(tailID)) return _playerStates[frame][tailID];
         }
         return null;
     }

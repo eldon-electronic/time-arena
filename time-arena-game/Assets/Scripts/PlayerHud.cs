@@ -360,9 +360,6 @@ public class PlayerHud : MonoBehaviour
 
         if (!View.IsMine) return;
 
-        Debug.Log(ArrowImage);
-        Debug.Log(_uiPositions);
-
         ArrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         ArrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
     }

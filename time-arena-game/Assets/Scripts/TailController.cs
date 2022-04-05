@@ -9,14 +9,7 @@ public class TailController : MonoBehaviour
     private int _tailID;
     private TimeLord _timeLord;
     private TailManager _manager;
-    private bool _activated;
-    private bool _amDying;
-    
-    void Start()
-    {
-        _activated = false;
-        _amDying = false;
-    }
+
 
     void Update()
     {
@@ -24,8 +17,8 @@ public class TailController : MonoBehaviour
         if (state == null) _manager.ReceiveResignation(_tailID);
         else
         {
-            transform.position = state.Pos;
-            transform.rotation = state.Rot;
+            if (state.Pos != transform.position) transform.position = state.Pos;
+            if (state.Rot != transform.rotation) transform.rotation = state.Rot;
 
             if (state.JumpDirection != Constants.JumpDirection.Static && _manager.GetParticlesEnabled())
             {
@@ -50,10 +43,9 @@ public class TailController : MonoBehaviour
         {
             _particles.StartDissolving(ps.JumpDirection, false);
         }
-
-        _activated = true;
     }
 
+    // Tails must be ordered to commit suicide; they should not be able to take the initiative themselves.
     public void Kill()
     {
         UnityEngine.Object.Destroy(gameObject);

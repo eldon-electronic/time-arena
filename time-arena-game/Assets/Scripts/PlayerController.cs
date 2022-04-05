@@ -154,7 +154,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackOut()
 	{
-		Debug.Log($"{View.ViewID} jump back out");
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Backward;
 		_setJumpState = true;
@@ -176,7 +175,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardOut()
 	{
-		Debug.Log($"{View.ViewID} jump forward out");
 		_isJumping = true;
 		_jumpDirection = Constants.JumpDirection.Forward;
 		_setJumpState = true;
@@ -198,7 +196,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpBackIn(int playerID, int frame)
 	{
-		Debug.Log($"{View.ViewID} jump back in");
 		_isJumping = false;
 		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
@@ -222,7 +219,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	[PunRPC]
 	void RPC_jumpForwardIn(int playerID, int frame)
 	{
-		Debug.Log($"{View.ViewID} jump forward in");
 		_isJumping = false;
 		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
