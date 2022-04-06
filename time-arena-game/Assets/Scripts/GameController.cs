@@ -120,7 +120,7 @@ public class GameController : MonoBehaviour
 
 	public void ShowPlayersInReality()
 	{
-		List<int> playerIDs = _timeLord.GetPlayersInReality();
+		HashSet<int> playerIDs = _timeLord.GetPlayersInReality();
 		foreach (var id in playerIDs)
 		{
 			if (_guardians.ContainsKey(id)) _guardians[id].Show();

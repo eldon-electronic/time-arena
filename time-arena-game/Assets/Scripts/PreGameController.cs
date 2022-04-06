@@ -41,7 +41,7 @@ public class PreGameController : MonoBehaviour
 
     public void ShowPlayersInReality()
     {
-        List<int> ids = _timeLord.GetPlayersInReality();
+        HashSet<int> ids = _timeLord.GetPlayersInReality();
         foreach (var id in ids)
         {
             if (_players.ContainsKey(id)) _players[id].Show();

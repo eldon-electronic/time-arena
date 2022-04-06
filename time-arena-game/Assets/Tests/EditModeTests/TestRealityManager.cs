@@ -179,14 +179,14 @@ public class TestRealityManager
         manager.AddHead(1001);
 
         // No writer => in the void, not in a reality => returns nothing.
-        List<int> heads = manager.GetHeadsInFrame(0);
+        HashSet<int> heads = manager.GetHeadsInFrame(0);
         Assert.AreEqual(0, heads.Count);
 
         // One writer at frame 50.
         manager.AddWriter(1001, 50);
         heads = manager.GetHeadsInFrame(50);
         Assert.AreEqual(1, heads.Count);
-        Assert.AreEqual(1001, heads[0]);
+        Assert.IsTrue(heads.Contains(1001));
 
         heads = manager.GetHeadsInFrame(0);
         Assert.AreEqual(0, heads.Count);
@@ -195,7 +195,7 @@ public class TestRealityManager
         manager.AddWriter(1001, 50);
         heads = manager.GetHeadsInFrame(50);
         Assert.AreEqual(1, heads.Count);
-        Assert.AreEqual(1001, heads[0]);
+        Assert.IsTrue(heads.Contains(1001));
 
         // Multiple players with writers at frame 50.
         manager.AddHead(1002);

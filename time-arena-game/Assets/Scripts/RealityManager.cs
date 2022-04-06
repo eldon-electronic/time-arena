@@ -148,9 +148,9 @@ public class RealityManager
 
     // Return a list of player IDs for those players who exist in the same reality
     // as the given frame. i.e. either of their write frames = the given frame.
-    public List<int> GetHeadsInFrame(int frame)
+    public HashSet<int> GetHeadsInFrame(int frame)
     {
-        List<int> heads = new List<int>();
+        HashSet<int> heads = new HashSet<int>();
         foreach (var reality in _realities)
         {
             foreach (var f in reality.Value.WriteFrames)

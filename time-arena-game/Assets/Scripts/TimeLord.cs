@@ -229,7 +229,7 @@ public class TimeLord
 		}
 	}
 
-	public List<int> GetPlayersInReality()
+	public HashSet<int> GetPlayersInReality()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
 		return _realities.GetHeadsInFrame(frame);
