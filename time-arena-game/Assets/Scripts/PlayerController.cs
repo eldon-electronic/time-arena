@@ -53,7 +53,14 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	void Start() {
 		
 		DontDestroyOnLoad(this.gameObject);
+
+		// TODO: Set the team in the menu before loading the pregame scene.
 		Team = Constants.Team.Miner;
+		if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
+		{
+			Team = Constants.Team.Guardian;
+		}
+
 		Material.SetMaterialMiner();
 		Hud.SetTeam("MINER");
 		gameObject.layer = Constants.LayerPlayer;
@@ -126,16 +133,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (next.name == "GameScene")
 		{
-			if (View.IsMine)
-			{
-				_tailManager.SetActive(false);
-			}
-
-			if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
-			{
-				// Become the Guardian.
-				GetFound();
-			}
+			if (View.IsMine) _tailManager.SetActive(false);
 
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
