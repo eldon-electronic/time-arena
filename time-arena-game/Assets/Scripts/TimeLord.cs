@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System;
+using UnityEngine;
 
 public class TimeLord
 {
@@ -106,7 +107,14 @@ public class TimeLord
     // Stops recording in your previous reality.
 	public void LeaveReality(int playerID)
 	{
-		_realities.RemoveWriter(playerID);
+		try
+		{
+			_realities.RemoveWriter(playerID);
+		}
+		catch (InvalidOperationException e)
+		{
+			Debug.LogError($"{e}");
+		}
 	}
 
 	// Finds the closest reality within range of the given player.
@@ -114,7 +122,7 @@ public class TimeLord
 	public int GetNearestReality(int playerID)
 	{
 		int frame = _realities.GetPerceivedFrame(playerID);
-		int closestFrame = _realities.GetClosestFrame(playerID, frame);
+		int closestFrame = _realities.GetClosestFrame(playerID);
 		if (Math.Abs(closestFrame - frame) < Constants.MinTimeSnapDistance)
 		{
 			frame = closestFrame;
@@ -139,7 +147,14 @@ public class TimeLord
 
         // Set your perceived frame and start recording in the new reality.
         _realities.SetPerceivedFrame(playerID, frame);
-		_realities.AddWriter(playerID, frame);
+		try
+		{
+			_realities.AddWriter(playerID, frame);
+		}
+		catch (InvalidOperationException e)
+		{
+			Debug.LogError($"{e}");
+		}
 
         // Record the frame at which this tail was created.
         int tailID = _realities.GetNextTailID(playerID);

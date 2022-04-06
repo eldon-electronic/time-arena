@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -5,82 +6,297 @@ using UnityEngine;
 using UnityEngine.TestTools;
 
 public class TestRealityManager
-{
+{   
     [Test]
-    public void RealityTests()
+    public void TestAddHead()
     {
-        Reality reality = new Reality(0);
-        reality.Increment();
-        Assert.AreEqual(1, reality.PerceivedFrame, "increment() not working");
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Assert.AreEqual(1, heads.Count);
+        Assert.IsTrue(heads.ContainsKey(1001));
+        Assert.IsTrue(heads[1001] != null);
     }
-    
+
     [Test]
-    public void RealityManagerTests()
+    public void TestGetPerceivedFrame()
     {
-        RealityManager realityManager = new RealityManager();
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+        int percievedframe = manager.GetPerceivedFrame(1001);
+        Assert.AreEqual(0, percievedframe);
+    }
+
+    [Test]
+    public void TestGetPerceivedFrames()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+        manager.AddHead(1002);
+        List<(int, int)> percievedFrames = manager.GetPerceivedFrames();
         
-        // Test that reality manager created correct structure. 
-        Dictionary<int, Reality> _realities = realityManager.RevealHeads();
-        Assert.AreEqual(0, _realities.Count, "_realities has not been created to the correct size");
+        Assert.AreEqual(2, percievedFrames.Count);
+        Assert.IsTrue(percievedFrames.Contains((1001, 0)));
+        Assert.IsTrue(percievedFrames.Contains((1002, 0)));
+    }
 
-        // Test adding players to the dictionary.
-        realityManager.AddHead(0);
-        realityManager.AddHead(1);
-        _realities = realityManager.RevealHeads();
-        Assert.IsTrue(_realities.ContainsKey(0), "_realities does not contain an entry for playerID 0");
-        Assert.IsTrue(_realities.ContainsKey(1), "_realities does not contain an entry for playerID 1");
-        Assert.AreEqual(2, _realities.Count, 2, "_realities is not the correct size");
-        
+    [Test]
+    public void TestSetPerceivedFrame()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+        manager.SetPerceivedFrame(1001, 50);
 
-        // Test the GetPercievedFrames and GetPercievedFrame methods
-        int percievedframe = realityManager.GetPerceivedFrame(0);
-        List<(int, int)> percievedFrames = realityManager.GetPerceivedFrames(); 
-        Assert.AreEqual(0, percievedframe, "GetPercievedFrame not working");
-        Assert.AreEqual(1, percievedFrames[1].Item1, "GetPercievedFrames not returning correct key");
-        Assert.AreEqual(0, percievedFrames[1].Item2, "GetPercievedFrames not returning correct value");
+        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Assert.AreEqual(50, heads[1001].PerceivedFrame);
+    }
 
-        // Test realityManager Increment. 
-        realityManager.Tick();
-        percievedframe = realityManager.GetPerceivedFrame(1);
-        Assert.AreEqual(1, percievedframe, "increment has not incremented the percieved frame by 1");
+    [Test]
+    public void TestOffsetPerceivedFrame()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
 
-        // Test that OffsetPerceivedFrame adds the correct offset to the percieved frame.
-        realityManager.OffsetPerceivedFrame(1, -20);
-        realityManager.OffsetPerceivedFrame(0, 10);
-        int percievedframe1 = realityManager.GetPerceivedFrame(1);
-        int percievedframe0 = realityManager.GetPerceivedFrame(0);
-        Assert.AreEqual(-19, percievedframe1, "offsetPercievedFrame has not worked with a negative offset");
-        Assert.AreEqual(11, percievedframe0, "offsetPercievedFrame has not worked with a positive offset");
+        manager.OffsetPerceivedFrame(1001, 50);
+        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Assert.AreEqual(50, heads[1001].PerceivedFrame);
 
-        // Test that the WriteFrames functions all work as intended.
-        realityManager.AddWriter(0, 40);
-        realityManager.AddWriter(0, 20);
-        realityManager.AddWriter(1, 10000);
-        realityManager.AddWriter(1, 6000);
-        List<int> writeFrames0 = realityManager.GetWriteFrames(0);
-        List<int> writeFrames1 = realityManager.GetWriteFrames(1);
-        Assert.AreEqual(2, writeFrames0.Count, "AddWriter has not added correct amount of writers");
-        Assert.AreEqual(10000, writeFrames1[0], "AddWriter has not added the corrent frame value");
+        manager.OffsetPerceivedFrame(1001, -10);
+        heads = manager.RevealHeads();
+        Assert.AreEqual(40, heads[1001].PerceivedFrame);
+    }
 
-        // TODO: Change this - writers aren't removed straight away.
-        realityManager.RemoveWriter(0);
-        Assert.AreEqual(40, realityManager.GetWriteFrames(0)[0], "RemoveWriter has removed the wrong writer.");
-        Assert.AreEqual(2, realityManager.GetWriteFrames(0).Count, "RemoveWriter has removed wrong amount of writers");
+    [Test]
+    public void TestAddWriter()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
 
-        realityManager.Tick();
-        Assert.AreEqual(6001, realityManager.GetWriteFrames(1)[1], "Increment has not incremented the value of writeframes");
+        manager.AddWriter(1001, 50);
+        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Assert.AreEqual(1, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(50, heads[1001].WriteFrames[0]);
 
-        // Test that GetClosestFrames returns the closest player.
-        realityManager.AddHead(2);
-        realityManager.AddHead(3);
-        realityManager.AddWriter(2, 17);
-        realityManager.AddWriter(2, 10);
-        realityManager.AddWriter(3, 11);
-        Assert.AreEqual(10, realityManager.GetClosestFrame(3,12), "GetClosestFrame has not returned the closest frame");
-        
-        // Tests for GetLastTailID and GetNextTailID.
-        Assert.AreEqual(100, realityManager.GetLastTailID(1), "GetLastTailID has not returned the correct value"); 
-        Assert.AreEqual(101, realityManager.GetNextTailID(1), "GetNextTailID has not returned the correct value");
+        manager.AddWriter(1001, 100);
+        heads = manager.RevealHeads();
+        Assert.AreEqual(2, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(50, heads[1001].WriteFrames[0]);
+        Assert.AreEqual(100, heads[1001].WriteFrames[1]);
 
+        try
+        {
+            manager.AddWriter(1001, 150);
+            Assert.IsTrue(false);
+        }
+        catch (InvalidOperationException e)
+        {
+            Assert.IsTrue(true);
+        }
+    }
+
+    [Test]
+    public void TestGetWriteFrames()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        List<int> frames = manager.GetWriteFrames(1001);
+        Assert.AreEqual(0, frames.Count);
+
+        manager.AddWriter(1001, 50);
+        frames = manager.GetWriteFrames(1001);
+        Assert.AreEqual(1, frames.Count);
+        Assert.AreEqual(50, frames[0]);
+
+        manager.AddWriter(1001, 100);
+        frames = manager.GetWriteFrames(1001);
+        Assert.AreEqual(2, frames.Count);
+        Assert.IsTrue(frames.Contains(50));
+        Assert.IsTrue(frames.Contains(100));
+    }
+
+    [Test]
+    public void TestRemoveWriter()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        try
+        {
+            manager.RemoveWriter(1001);
+            Assert.IsTrue(false);
+        }
+        catch (InvalidOperationException e)
+        {
+            Assert.IsTrue(true);
+        }
+
+        manager.AddWriter(1001, 50);
+        manager.AddWriter(1001, 100);
+
+        manager.RemoveWriter(1001);
+        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Assert.AreEqual(1, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(100, heads[1001].WriteFrames[0]);
+
+        manager.RemoveWriter(1001);
+        heads = manager.RevealHeads();
+        Assert.AreEqual(0, heads[1001].WriteFrames.Count);
+    }
+
+    [Test]
+    public void TestGetClosestFrame()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+        manager.SetPerceivedFrame(1001, 50);
+
+        // No other players => returns max int value.
+        int frame = manager.GetClosestFrame(1001);
+        Assert.AreEqual(int.MaxValue, frame);
+
+        // One other player => returns the value of their last writer.
+        manager.AddHead(1002);
+        manager.AddWriter(1002, 49);
+        manager.AddWriter(1002, 10);
+
+        frame = manager.GetClosestFrame(1001);
+        Assert.AreEqual(10, frame);
+
+        // Multiple other players => returns the closest.
+        manager.AddHead(1003);
+        manager.AddWriter(1003, 60);
+
+        frame = manager.GetClosestFrame(1001);
+        Assert.AreEqual(60, frame);
+    }
+
+    [Test]
+    public void TestGetHeadsInFrame()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        // No writer => in the void, not in a reality => returns nothing.
+        List<int> heads = manager.GetHeadsInFrame(0);
+        Assert.AreEqual(0, heads.Count);
+
+        // One writer at frame 50.
+        manager.AddWriter(1001, 50);
+        heads = manager.GetHeadsInFrame(50);
+        Assert.AreEqual(1, heads.Count);
+        Assert.AreEqual(1001, heads[0]);
+
+        heads = manager.GetHeadsInFrame(0);
+        Assert.AreEqual(0, heads.Count);
+
+        // One player with multiple writers at frame 50.
+        manager.AddWriter(1001, 50);
+        heads = manager.GetHeadsInFrame(50);
+        Assert.AreEqual(1, heads.Count);
+        Assert.AreEqual(1001, heads[0]);
+
+        // Multiple players with writers at frame 50.
+        manager.AddHead(1002);
+        manager.AddWriter(1002, 50);
+        heads = manager.GetHeadsInFrame(50);
+        Assert.AreEqual(2, heads.Count);
+        Assert.IsTrue(heads.Contains(1001));
+        Assert.IsTrue(heads.Contains(1002));
+    }
+
+    [Test]
+    public void TestGetAllHeads()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        // One player.
+        List<int> heads = manager.GetAllHeads(1001);
+        Assert.AreEqual(0, heads.Count);
+
+        // Multiple players.
+        manager.AddHead(1002);
+        manager.AddHead(1003);
+        heads = manager.GetAllHeads(1001);
+        Assert.AreEqual(2, heads.Count);
+        Assert.IsTrue(heads.Contains(1002));
+        Assert.IsTrue(heads.Contains(1003));
+    }
+
+    [Test]
+    public void TestInSameFrame()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+        manager.AddHead(1002);
+
+        // Same frame.
+        Assert.IsTrue(manager.InSameFrame(1001, 1002));
+
+        // Different frame.
+        manager.SetPerceivedFrame(1002, 50);
+        Assert.IsFalse(manager.InSameFrame(1001, 1002));
+    }
+
+    [Test]
+    public void TestGetLastTailID()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        int tailID = manager.GetLastTailID(1001);
+        Assert.AreEqual(100100, tailID);
+    }
+
+    [Test]
+    public void TestGetNextTailID()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+
+        // No write frames.
+        int tailID = manager.GetNextTailID(1001);
+        Assert.AreEqual(100100, tailID);
+
+        // One write frame.
+        manager.AddWriter(1001, 50);
+        tailID = manager.GetNextTailID(1001);
+        Assert.AreEqual(100100, tailID);
+
+        // Two write frames.
+        manager.AddWriter(1001, 100);
+        tailID = manager.GetNextTailID(1001);
+        Assert.AreEqual(100101, tailID);
+    }
+
+    [Test]
+    public void TestTick()
+    {
+        RealityManager manager = new RealityManager();
+        manager.AddHead(1001);
+        manager.AddHead(1002);
+        manager.Tick();
+
+        // Perceived frames are incremented.
+        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Assert.AreEqual(1, heads[1001].PerceivedFrame);
+        Assert.AreEqual(1, heads[1002].PerceivedFrame);
+
+        // Countdown reaches 0.
+        manager.AddWriter(1001, 50);
+        manager.RemoveWriter(1001);
+
+        for (int i=0; i < Constants.AnimationFrames; i++)
+        {
+            manager.Tick();
+        }
+
+        heads = manager.RevealHeads();
+        Assert.AreEqual(1 + Constants.AnimationFrames, heads[1001].PerceivedFrame);
+        Assert.AreEqual(1 + Constants.AnimationFrames, heads[1002].PerceivedFrame);
+        Assert.AreEqual(0, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(100101, heads[1001].LastTailID);
     }
 }

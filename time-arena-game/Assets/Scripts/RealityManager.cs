@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,7 +104,7 @@ public class RealityManager
     {
         if (_realities[playerID].WriteFrames.Count == 2)
         {
-            Debug.LogError("Cannot write to more than two frames simultaneously.");
+            throw new InvalidOperationException("Cannot write to more than two frames simultaneously.");
         }
         else _realities[playerID].WriteFrames.Add(frame);
     }
@@ -114,7 +115,7 @@ public class RealityManager
     {
         if (_realities[playerID].WriteFrames.Count == 0)
         {
-            Debug.LogError("No tracked writers to remove.");
+            throw new InvalidOperationException("No tracked writers to remove.");
         }
         else
         {
@@ -122,11 +123,11 @@ public class RealityManager
         }
     }
 
-    // TODO: You could refactor this to just take in playerID and lookup their perceived frame yourself.
-    // Given a player and their frame, return the closest frame of a different player.
+    // Given a player, return the closest frame of a different player.
     // This should be from the last reality they were writing to.
-    public int GetClosestFrame(int playerID, int frame)
+    public int GetClosestFrame(int playerID)
     {
+        int frame = _realities[playerID].PerceivedFrame;
         int closest = int.MaxValue;
         foreach(var reality in _realities)
         {
@@ -145,9 +146,8 @@ public class RealityManager
         return closest;
     }
 
-    // TODO: Use this function for finding out which heads (actual players) you need to render.
     // Return a list of player IDs for those players who exist in the same reality
-    // as the given frame.
+    // as the given frame. i.e. either of their write frames = the given frame.
     public List<int> GetHeadsInFrame(int frame)
     {
         List<int> heads = new List<int>();
@@ -175,6 +175,7 @@ public class RealityManager
         return heads;
     }
 
+    // Returns true if the given players have the same perceived frame.
     public bool InSameFrame(int id1, int id2)
     {
         return (_realities[id1].PerceivedFrame == _realities[id2].PerceivedFrame);
