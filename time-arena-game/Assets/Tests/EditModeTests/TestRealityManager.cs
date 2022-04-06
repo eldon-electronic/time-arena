@@ -122,6 +122,7 @@ public class TestRealityManager
         RealityManager manager = new RealityManager();
         manager.AddHead(1001);
 
+        // No writers.
         try
         {
             manager.RemoveWriter(1001);
@@ -132,17 +133,14 @@ public class TestRealityManager
             Assert.IsTrue(true);
         }
 
+        // Two writers.
         manager.AddWriter(1001, 50);
         manager.AddWriter(1001, 100);
 
         manager.RemoveWriter(1001);
         Dictionary<int, Reality> heads = manager.RevealHeads();
-        Assert.AreEqual(1, heads[1001].WriteFrames.Count);
-        Assert.AreEqual(100, heads[1001].WriteFrames[0]);
-
-        manager.RemoveWriter(1001);
-        heads = manager.RevealHeads();
-        Assert.AreEqual(0, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(2, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(Constants.AnimationFrames, heads[1001].Countdown);
     }
 
     [Test]
@@ -284,8 +282,9 @@ public class TestRealityManager
         Assert.AreEqual(1, heads[1001].PerceivedFrame);
         Assert.AreEqual(1, heads[1002].PerceivedFrame);
 
-        // Countdown reaches 0.
+        // Countdown reaches 0 => first writer should be removed and the last tail ID should be incremented.
         manager.AddWriter(1001, 50);
+        manager.AddWriter(1001, 100);
         manager.RemoveWriter(1001);
 
         for (int i=0; i < Constants.AnimationFrames; i++)
@@ -296,7 +295,8 @@ public class TestRealityManager
         heads = manager.RevealHeads();
         Assert.AreEqual(1 + Constants.AnimationFrames, heads[1001].PerceivedFrame);
         Assert.AreEqual(1 + Constants.AnimationFrames, heads[1002].PerceivedFrame);
-        Assert.AreEqual(0, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(1, heads[1001].WriteFrames.Count);
+        Assert.AreEqual(100 + Constants.AnimationFrames, heads[1001].WriteFrames[0]);
         Assert.AreEqual(100101, heads[1001].LastTailID);
     }
 }
