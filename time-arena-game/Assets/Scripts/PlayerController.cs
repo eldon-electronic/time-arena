@@ -128,7 +128,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			if (View.IsMine)
 			{
-				_tailManager.DestroyTails();
 				_tailManager.SetActive(false);
 			}
 

@@ -41,15 +41,6 @@ public class TailManager : MonoBehaviour
 
     public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
 
-    public void DestroyTails()
-    {
-        foreach (var tail in _tails)
-		{
-			tail.Value.Kill();
-		}
-		_tails = new Dictionary<int, TailController>();
-    }
-
     public void SetActive(bool value) { _activated = value; }
 
     public void EnableParticles(bool value) { _particlesEnabled = value; }
