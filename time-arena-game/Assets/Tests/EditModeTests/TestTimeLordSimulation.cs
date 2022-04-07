@@ -4,8 +4,9 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class TestTimeLordSimulation
+public class TestTimeLordSimulation: Tester
 {
+    public bool Authenticate() { return true; }
 
     [Test]
     public void TestSinglePlayerNoTimeTravel()
@@ -31,9 +32,9 @@ public class TestTimeLordSimulation
         }
 
         // Access the final resulting structures from TimeLord.
-        Dictionary<int, PlayerState>[] states = timeLord.RevealPlayerStates();
-        RealityManager realityManager = timeLord.RevealRealityManager();
-        Dictionary<int, List<int>> tailCreations = timeLord.RevealTailCreations();
+        Dictionary<int, PlayerState>[] states = timeLord.RevealPlayerStates(this);
+        RealityManager realityManager = timeLord.RevealRealityManager(this);
+        Dictionary<int, List<int>> tailCreations = timeLord.RevealTailCreations(this);
 
         // Perform assertions on Player States.
         Assert.AreEqual(20, states.Length, "PlayerStates array does not have the correct length.");
@@ -52,7 +53,7 @@ public class TestTimeLordSimulation
         }
 
         // Perform assertions on Reality Manager.
-        Dictionary<int, Reality> heads = realityManager.RevealHeads();
+        Dictionary<int, Reality> heads = realityManager.RevealHeads(this);
         Assert.AreEqual(1, heads.Count, "Incorrect number of realities.");
         Assert.IsTrue(heads.ContainsKey(0), "Reality Manager does not contain a reality for player 0.");
         
@@ -81,9 +82,9 @@ public class TestTimeLordSimulation
         sim.Run();
 
         // Access the final resulting structures from the Simulator.
-        Dictionary<int, PlayerState>[] states = sim.RevealPlayerStates();
-        RealityManager realityManager = sim.RevealRealityManager();
-        Dictionary<int, List<int>> tailCreations = sim.RevealTailCreations();
+        Dictionary<int, PlayerState>[] states = sim.RevealPlayerStates(this);
+        RealityManager realityManager = sim.RevealRealityManager(this);
+        Dictionary<int, List<int>> tailCreations = sim.RevealTailCreations(this);
 
         // Perform assertions on Player States.
         Assert.AreEqual(20, states.Length, "PlayerStates array does not have the correct length.");
@@ -102,7 +103,7 @@ public class TestTimeLordSimulation
         }
 
         // Perform assertions on Reality Manager.
-        Dictionary<int, Reality> heads = realityManager.RevealHeads();
+        Dictionary<int, Reality> heads = realityManager.RevealHeads(this);
         Assert.AreEqual(1, heads.Count, "Incorrect number of realities.");
         Assert.IsTrue(heads.ContainsKey(0), "Reality Manager does not contain a reality for player 0.");
         
@@ -124,12 +125,34 @@ public class TestTimeLordSimulation
     }
 
     [Test]
-    public void TestSinglePlayerNoTimeTravelOutput()
+    public void TestSinglePlayerJumpBackOnce()
     {
         // Build and run the simulation.
-        TimeSimulator sim = new TimeSimulator(20, 1, 120, true);
+        TimeSimulator sim = new TimeSimulator(50, 1, 5, false);
+        sim.AddJump(0, 30, Constants.JumpDirection.Backward, 3);
         sim.Run();
 
-        Debug.Log("Wrote to file.");
+        // Access the final resulting structures from the Simulator.
+        Dictionary<int, PlayerState>[] states = sim.RevealPlayerStates(this);
+        RealityManager realityManager = sim.RevealRealityManager(this);
+        Dictionary<int, List<int>> tailCreations = sim.RevealTailCreations(this);
+
+        // Perform assertions on Player States.
+        Assert.AreEqual(50, states.Length, "50 states should be stored.");
+        
+        // Check frame 0.
+        Assert.AreEqual(2, states[0].Count);
+        Assert.IsTrue(states[0].ContainsKey(0));
+        Assert.IsTrue(states[0].ContainsKey(1));
+
+        // Check frames 1 to 16.
+
+        // Check frames 17 to 29.
+
+        // Check frame 30.
+
+        // Check frames 31 to 35.
+
+        // Check frames 36 to 50.
     }
 }

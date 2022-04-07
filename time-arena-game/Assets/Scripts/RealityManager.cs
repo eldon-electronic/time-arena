@@ -193,5 +193,9 @@ public class RealityManager
 
 
     // WARNING: The following function is to be used by test framework only.
-    public Dictionary<int, Reality> RevealHeads() { return _realities; }
+    public Dictionary<int, Reality> RevealHeads(Tester tester)
+    {
+        if (tester.Authenticate()) return _realities;
+        else throw new InvalidOperationException("Must be a Tester to call this method.");
+    }
 }
