@@ -4,35 +4,44 @@ using UnityEngine;
 
 public class postTestScript : MonoBehaviour
 {
-    public Animator PPanim;
+    //public Animator PPanim;
+    //public GameObject ppCont;
+    PostProcessingControl controller;
+    bool found = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        //thisScene = gameObject.scene;
+        //controller = GameObject.FindGameObjectsWithTag("VolumeControl")[0].PostProcessingControl;
+        GameObject temp = GameObject.Find("/PPControl");
+        if(temp != null) {            
+            controller = temp.GetComponent<PostProcessingControl>();
+            found = true;
+            Debug.LogError("Found compt");
+        }
+        else {
+            Debug.LogError("not found compt");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) {
-            Debug.LogError("Test E Keydown");
-            PPanim.SetBool("isWarpingForward", true);
-            Debug.LogError(PPanim.GetBool("isWarpingForward"));
-        }
-        if (Input.GetKeyUp(KeyCode.E)) {
-            Debug.LogError("Test E Keyup");
-            PPanim.SetBool("isWarpingForward", false);
-            Debug.LogError(PPanim.GetBool("isWarpingForward"));
-        }
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            Debug.LogError("Test Q Keydown");
-            PPanim.SetBool("isWarpingBackward", true);
-            Debug.LogError(PPanim.GetBool("isWarpingBackward"));
-        }
-        if (Input.GetKeyUp(KeyCode.Q)) {
-           Debug.LogError("Test Q Key up");
-            PPanim.SetBool("isWarpingBackward", false);
-            Debug.LogError(PPanim.GetBool("isWarpingBackward"));
+        if(found)
+        {
+            if (Input.GetKeyDown(KeyCode.T)) {
+                controller.StartAnim();
+                Debug.LogError("just played anim");
+            }
+            if (Input.GetKeyUp(KeyCode.T)) {
+            
+            }
+            if (Input.GetKeyDown(KeyCode.T)) {
+            
+            }
+            if (Input.GetKeyUp(KeyCode.T)) {
+
+            }
         }
     }
 
