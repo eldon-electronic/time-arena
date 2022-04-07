@@ -12,12 +12,18 @@ public class PauseManager : MonoBehaviourPunCallbacks {
     private bool _paused = false;
 	public GameObject PauseMenuUI;
 	public PhotonView View;
-  public Slider mouseSensSlider;
-  public float mouseSens;
+	public Slider MouseSensSlider;
+  	public float MouseSens;
 
 	// Update is called once per frame
-	void Update() {
-    mouseSens = mouseSensSlider.value;
+	void Update()
+	{
+		// TODO: remove this
+		if (MouseSensSlider == null) Debug.LogError("MouseSnesSlider is null");
+		if (View == null) Debug.LogError("View is null");
+		if (PauseMenuUI == null) Debug.LogError("PauseMenuUI is null");
+
+    	MouseSens = MouseSensSlider.value;
 		if (!View.IsMine) return;
 
 		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;

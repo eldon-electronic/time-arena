@@ -15,6 +15,7 @@ public class Billboard : MonoBehaviour
     void LateUpdate()
     {
         if (transform != null) {
+            if (mainCameraTransform == null) Debug.LogError("mainCameraTransform is null");
             transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward, mainCameraTransform.rotation * Vector3.up);
         }
     }
