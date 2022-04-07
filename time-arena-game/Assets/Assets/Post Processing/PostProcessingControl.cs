@@ -8,6 +8,7 @@ public class PostProcessingControl : MonoBehaviour
 {
     //[SerializeField] Volume volume;
     public Volume volume;
+    public AnimationCurve curve;
     Vignette vignette;
     ChromaticAberration chromaticAbberation;
     LensDistortion lensDistortion;
