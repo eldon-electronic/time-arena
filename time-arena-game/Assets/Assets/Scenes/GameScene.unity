@@ -895,7 +895,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1944367506}
   - component: {fileID: 1944367505}
-  - component: {fileID: 1944367507}
   m_Layer: 0
   m_Name: GameController
   m_TagString: TimeLord
@@ -915,9 +914,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b8f223c584f49dca13d854546d6dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameLength: 300
-  TimeElapsedInGame: 0
-  _players: []
   GameStarted: 0
   GameEnded: 0
   WinningTeam: 1
@@ -935,21 +931,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1944367507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1944367504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a4e35cd46c564640ab93072e5b5a387, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxTicks: 9600
-  Replayer: {fileID: 536907935286074014, guid: 343f79f26ef7d46038deaec8de340068, type: 3}
-  Active: 1
 --- !u!1001 &1957101240
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,7 +13,8 @@ public class CollectingCrystals : MonoBehaviour
 
     public void OnTriggerEnter(Collider Col)
     {
-        if(Col.gameObject.tag == "Collectable" && hud.TeamDispl.text == "HIDER")
+        // TODO: Get team from PlayerController.
+        if(Col.gameObject.tag == "Collectable" && hud.TeamDispl.text == "MINER")
         {
             Debug.Log("Crystal collected!");
             hud.setScore(hud.getScore()+1);
