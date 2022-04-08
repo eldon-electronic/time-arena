@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4176298414968629901
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 4
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -20,12 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CrystalGrow
-  m_Shader: {fileID: -6465566751694194690, guid: 3c5010cb7611e4626886f9389d395135, type: 3}
+  m_Name: Sand
+  m_Shader: {fileID: -6465566751694194690, guid: 41cc16ad87632439cb8160f2ec54fe3d, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
@@ -89,20 +76,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Ambient_Occlusion: 1.7
-    - Contract: -0.01
-    - CutOff: 0.65
-    - Grow: 7.47
-    - Metalic: 6.26
-    - Vector1_0d60725dd317466db756e4bc828e9cab: 0.2
-    - Vector1_2c719f07c8784302ba0b367b7bd834f8: 0.7
-    - Vector1_5910fa0291b0425880da9a7c7afd1bee: 0.5
-    - Vector1_6b35304495814cc7ace73d23c8e9f5b3: 1
-    - Vector1_c26adf3d6f174fc49a4f8c68c8add588: 3
-    - Vector1_f20f7f538558464fa182e984258f05dc: 0.4
-    - Wave_Freq: 12.53
-    - Wave_Incr: 0
-    - Wave_Width: 2
+    - Vector1bb09d53c27254645bc30b3d3f023500a: 0.27
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -130,13 +104,28 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_17b8ff9a4cfb4266ab54feb0f8679eb0: {r: 0, g: 0.023924628, b: 0.57119936, a: 0}
-    - Color_b8b04537127344928fb8ef6873bcfb71: {r: 0.0007314645, g: 0.0007314645, b: 0.0007314645, a: 1}
-    - Color_dc30dc9ffb8147e0bf22862a53384c55: {r: 1024, g: 0, b: 0, a: 0}
-    - Color_eab1ab842b8f48d28e5fd56e1d861d9d: {r: 1, g: 1, b: 1, a: 0.07843138}
-    - Specular_Colour: {r: 0.24158953, g: 0.29795915, b: 0.5754717, a: 0}
+    - Color_0a0718940d864acf8cc7d255bcf73dd8: {r: 0.5377358, g: 0.029059654, b: 0.0076094554, a: 0}
+    - NoiseDirection: {r: 0, g: 1, b: 0, a: 0}
+    - Noise_Direction: {r: 0, g: 0.2, b: 0, a: 0}
+    - SandDirection: {r: 0, g: 0.2, b: 0, a: 0}
+    - Sand_Direction: {r: 0, g: 0.2, b: 0, a: 0}
+    - Vector2_29056625a5004dd78adb8c79358c3267: {r: -0.39, g: -5.1, b: 0, a: 1.12}
+    - Voronoi_Direction: {r: 0, g: 0.2, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &6015887681048432403
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
