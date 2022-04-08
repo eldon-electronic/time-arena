@@ -10,6 +10,7 @@ using TMPro;
 public class PlayerHud : MonoBehaviour
 {
     private GameController _game;
+    [SerializeField] HudStartTimer _startTimer;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
@@ -18,9 +19,8 @@ public class PlayerHud : MonoBehaviour
 	public Slider ForwardCooldownSlider;
 	public Slider BackCooldownSlider;
 	public Text TimeDispl;
-	public Text StartTimeDispl;
-  public Text WinningDispl;
-  public Text ScoreDispl;
+    public Text WinningDispl;
+    public Text ScoreDispl;
     public CanvasGroup TimelineCanvasGroup;
     public Slider ElapsedTimeSlider;
     public Slider PlayerIcon0;
@@ -81,11 +81,15 @@ public class PlayerHud : MonoBehaviour
 
 
         if (View.IsMine)
-
         {
             _playerPositions = new List<float>();
             _yourIcon = PlayerIcon0;
             _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
+        }
+        else
+        {
+            // TODO: After refactoring, remove this with a single command that kills the UI parent object.
+            _startTimer.Kill();
         }
 
         _debugItems = new Hashtable();
@@ -121,25 +125,6 @@ public class PlayerHud : MonoBehaviour
 
         }
     }
-
-
-    private void LateUpdateStartTimeDisplay()
-    {
-        StartTimeDispl.transform.parent.gameObject.SetActive(
-            SceneManager.GetActiveScene().name != "PreGameScene"
-        );
-
-        if (SceneManager.GetActiveScene().name == "GameScene")
-        {
-            StartTimeDispl.transform.parent.gameObject.SetActive(!_game.GameStarted);
-            if (!_game.GameStarted && !_game.GameEnded)
-            {
-                int timer = (int) _game.Timer;
-                StartTimeDispl.text = $"{timer}";
-            }
-        }
-    }
-
 
     private void LateUpdateTimeDisplay()
     {
@@ -262,7 +247,6 @@ public class PlayerHud : MonoBehaviour
         if (!View.IsMine) return;
 
         LateUpdateMasterClientOptions();
-        LateUpdateStartTimeDisplay();
         LateUpdateTimeDisplay();
         LateUpdateTimeline();
         LateUpdateDebugPanel();
@@ -393,5 +377,9 @@ public class PlayerHud : MonoBehaviour
     }
     
 
-    public void SetGame(GameController game) { _game = game; }
+    public void SetGame(GameController game)
+    {
+        _game = game;
+        if (_startTimer != null) _startTimer.SetGame(game);
+    }
 }
