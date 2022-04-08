@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameController Game;
+    private GameController _game;
     public PhotonView View;
     public CharacterController CharacterBody;
     public PauseManager PauseUI;
@@ -22,7 +22,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded;
     private bool _isCeiling;
     private float _xRot;
-    public static float _mouseSensitivity;
+    private float _mouseSensitivity;
+    private bool _activated;
 
     void Start()
     {
@@ -34,26 +35,19 @@ public class PlayerMovement : MonoBehaviour
         _isCeiling = false;
         _xRot = 0f;
         _mouseSensitivity = 100f;
+        _activated = true;
 
-        SceneManager.activeSceneChanged += onSceneChange;
+        Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
+        Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
     }
-
-    public void onSceneChange(Scene current, Scene next) {
-		if (next.name == "GameScene") {
-			Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
-			if (Game == null) {
-				Debug.Log("Scene change error: GameController is null");
-			}
-		}
-	}
-
+    
     public void OnMouseSensChange(float a){
-      _mouseSensitivity = PauseUI.mouseSens;
+      _mouseSensitivity = PauseUI.MouseSens;
     }
 
     private void UpdatePosition()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.GameStarted) return;
+        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameStarted) return;
 
         // Sprint speed.
         if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
@@ -125,13 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!View.IsMine) return;
-
-        string sceneName = SceneManager.GetActiveScene().name;
-        if(sceneName == "GameScene" && Game == null){
-          Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
-        }
-        if (sceneName == "PreGameScene" || (sceneName == "GameScene" && !Game.GameEnded))
+        if (View.IsMine && _activated)
         {
             UpdatePosition();
             UpdateRotation();
@@ -149,4 +137,12 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerTransform.position = position;
     }
+
+    public Vector3 GetPosition() { return PlayerTransform.position; }
+
+    public Quaternion GetRotation() { return PlayerTransform.rotation; }
+
+    public void SetActive(bool value) { _activated = value; }
+
+    public void SetGame(GameController game) { _game = game; }
 }

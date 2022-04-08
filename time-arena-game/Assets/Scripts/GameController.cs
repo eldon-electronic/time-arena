@@ -5,127 +5,120 @@ using Photon.Pun;
 
 public class GameController : MonoBehaviour
 {
+	private Dictionary<int, PlayerController> _miners;
+	private Dictionary<int, PlayerController> _guardians;
+	private TimeLord _timeLord;
+	private Dictionary<int, TailController> _tails;
 
-    // Variables referring to the game state.
-	// 5 minute rounds * sixty seconds.
-    public float GameLength = 5f * 60f;
-    public float TimeElapsedInGame = 0f;
-
-	private PlayerController _client;
-	public List<PlayerController> _players;
-
-	// List to keep track of elapsed time for all players.
-  	public Dictionary<int, float> OtherPlayersElapsedTime = new Dictionary<int, float>();
-
+	public float Timer;
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
 
 
-	void Start() {
+	void Start()
+	{
 		// Prevent anyone else from joining room.
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 
-		AddClient();
-		AddPlayers();
-		
-		if (PhotonNetwork.IsMasterClient) SetupNewGame();
-	}
+		_miners = new Dictionary<int, PlayerController>();
+		_guardians = new Dictionary<int, PlayerController>();
+		_tails = new Dictionary<int, TailController>();
 
+		Timer = 5f;
 
-	// ------------ START HELPER FUNCTIONS ------------
+		int totalFrames = Constants.GameLength * Constants.FrameRate;
+		_timeLord = new TimeLord(totalFrames);
 
-	private void AddClient()
-	{
-		GameObject[] clients = GameObject.FindGameObjectsWithTag("Client");
-		if (clients.Length == 1)
-		{
-			_client = clients[0].GetComponent<PlayerController>();
-			_players.Add(_client);
-			OtherPlayersElapsedTime.Add(_client.View.ViewID, 0f);
-			_client.Game = this;
-		}
-		else Debug.LogError("Number of clients is not 1");
-	}
-
-	private void AddPlayers()
-	{
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		foreach (GameObject player in players)
+		GameObject client = GameObject.FindWithTag("Client");
+
+		List<GameObject> allPlayers = new List<GameObject>(players);
+		allPlayers.Add(client);
+
+		foreach (var player in allPlayers)
 		{
-			PlayerController playerComponent = player.GetComponent<PlayerController>();
-			_players.Add(playerComponent);
-			OtherPlayersElapsedTime.Add(playerComponent.View.ViewID, 0f);
+			PlayerController pc = player.GetComponent<PlayerController>();
+			pc.SetGame(this);
+			pc.SetTimeLord(_timeLord);
+
+			int id = pc.GetID();
+			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
+			else _miners.Add(id, pc);
 		}
 	}
 
-    // Initialise teams and spawn locations for the new game.
-	private void SetupNewGame()
-	{
-		// If testing with one player, they are hider, otherwise one player will randomly be seeker.
-		if (_players.Count > 1)
-		{
-			int randomIndex = Random.Range(0, _players.Count - 1); 
-			_players[randomIndex].GetFound();
-		}
-	}
 
-
-	// ------------ UPDATE METHODS ------------
-
-	void Update() {
-		// Increment global timer and individual player timers.
-		if (!GameEnded)
-		{
-			TimeElapsedInGame += Time.deltaTime;
-			List<int> keys = new List<int>(OtherPlayersElapsedTime.Keys);
-			foreach (int key in keys)
-			{
-				OtherPlayersElapsedTime[key] += Time.deltaTime / GameLength;
-			}
-		}
-
-		// If pregame timer is counting.
-		if (!GameStarted)
-		{
-			if (TimeElapsedInGame >= 5f)
-			{
-				GameStarted = true;
-				TimeElapsedInGame = 0f;
-				List<int> keys = new List<int>(OtherPlayersElapsedTime.Keys);
-				foreach (int key in keys)
-				{
-					OtherPlayersElapsedTime[key] = 0f;
-				}
-			}
-		}
-		// Else game is in play.
-		else
-		{
-			CheckHidersLeft();
-			if (TimeElapsedInGame >= GameLength && !GameEnded)
-			{
-				GameEnded = true;
-				WinningTeam = Constants.Team.Miner;
-				_client.OnGameEnded();
-			}
-		}
-	}
+	// ------------ UPDATE HELPER FUNCTIONS ------------
 
 	// Checks to see if there are no hiders left.
-	public void CheckHidersLeft()
-	{
-		bool isHidersRemaining = false;
-		for (int i = 0; i < _players.Count; i++)
+	private void CheckWon()
+	{	
+		if (_timeLord.TimeEnded() && !GameEnded)
 		{
-			isHidersRemaining |= (_players[i].Team == Constants.Team.Miner);
-		}
-		if (!isHidersRemaining)
-		{
-			// Code reaches here even though hiders are remaining.
 			GameEnded = true;
-			WinningTeam = Constants.Team.Guardian;
-			_client.OnGameEnded();
+			// TODO: Add a check to see who actually won based on whether the miners reached their target.
+			WinningTeam = Constants.Team.Miner;
+		}
+	}
+
+	void Update()
+	{
+		if (!GameStarted)
+		{
+			// Pregame timer is counting.
+			if (Timer <= 0f)
+			{
+				if (!GameStarted) GameStarted = true;
+			}
+			else Timer -= Time.deltaTime;
+		}
+		else
+		{
+			// Increment global frame and individual player frames.
+			if (!GameEnded) _timeLord.Tick();
+			CheckWon();
+		}
+	}
+
+
+	// ------------ PUBLIC FUNCTIONS ------------
+
+	public void SetTeam(int playerID, Constants.Team team)
+	{
+		if (team == Constants.Team.Guardian)
+		{
+			PlayerController player = _miners[playerID];
+			_miners.Remove(playerID);
+			_guardians.Add(playerID, player);
+		}
+		else if (team == Constants.Team.Miner)
+		{
+			PlayerController player = _guardians[playerID];
+			_guardians.Remove(playerID);
+			_miners.Add(playerID, player);
+		}
+	}
+
+	public void HideAllPlayers()
+	{
+		foreach (var guardian in _guardians)
+		{
+			guardian.Value.Hide();
+		}
+		foreach (var miner in _miners)
+		{
+			miner.Value.Hide();
+		}
+	}
+
+	public void ShowPlayersInReality()
+	{
+		HashSet<int> playerIDs = _timeLord.GetPlayersInReality();
+		foreach (var id in playerIDs)
+		{
+			if (_guardians.ContainsKey(id)) _guardians[id].Show();
+			else if (_miners.ContainsKey(id)) _miners[id].Show();
 		}
 	}
 }

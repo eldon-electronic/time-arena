@@ -9,7 +9,7 @@ using TMPro;
 
 public class PlayerHud : MonoBehaviour
 {
-    public GameController Game;
+    private GameController _game;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
@@ -39,9 +39,14 @@ public class PlayerHud : MonoBehaviour
     public GameObject OptionsPopUpText;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
+    private int _time;
+    private Slider _yourIcon;
     private Slider[] _playerIcons;
     private Hashtable _debugItems;
     private float[] _cooldowns;
+    private float _yourPosition;
+    private List<float> _playerPositions;
+    private float _timeBarPosition;
     private bool _debug;
     private bool _canJumpForward;
     private bool _canJumpBack;
@@ -78,11 +83,9 @@ public class PlayerHud : MonoBehaviour
         if (View.IsMine)
 
         {
-            // The first Slider in the array corresponds to this player.
-            _playerIcons = new Slider[]{PlayerIcon0, PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
-
-            // Link SceneChange event to OnSceneChange.
-            SceneManager.activeSceneChanged += OnSceneChange;
+            _playerPositions = new List<float>();
+            _yourIcon = PlayerIcon0;
+            _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
         }
 
         _debugItems = new Hashtable();
@@ -95,13 +98,6 @@ public class PlayerHud : MonoBehaviour
 
     }
 
-    void OnSceneChange(Scene current, Scene next)
-    {
-        if (next.name == "GameScene")
-        {
-            Game = FindObjectOfType<GameController>();
-        }
-    }
 
     // ------------ LATE UPDATE HELPER FUNCTIONS ------------
 
@@ -133,18 +129,13 @@ public class PlayerHud : MonoBehaviour
             SceneManager.GetActiveScene().name != "PreGameScene"
         );
 
-
-
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            if(Game == null){
-              Game = FindObjectOfType<TimeLord>().GetComponent<GameController>();
-            }
-            StartTimeDispl.transform.parent.gameObject.SetActive(!Game.GameStarted);
-            if (!Game.GameStarted && !Game.GameEnded)
+            StartTimeDispl.transform.parent.gameObject.SetActive(!_game.GameStarted);
+            if (!_game.GameStarted && !_game.GameEnded)
             {
-                var elapsed = 5 - (int) (Game.TimeElapsedInGame + 0.9f);
-                StartTimeDispl.text = $"{elapsed}";
+                int timer = (int) _game.Timer;
+                StartTimeDispl.text = $"{timer}";
             }
         }
     }
@@ -152,20 +143,16 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeDisplay()
     {
-       // TimeDispl.transform.parent.gameObject.SetActive(
-           // SceneManager.GetActiveScene().name != "PreGameScene"
-        //);
-
-        if (SceneManager.GetActiveScene().name == "GameScene" && !Game.GameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
         {
-            if (Game.GameStarted)
+            if (_game.GameStarted)
             {
-                float t = Game.GameLength - Game.TimeElapsedInGame;
+                float t = Constants.GameLength - _time;
                 int minutes = (int) (t / 60);
                 int seconds = (int) (t % 60);
                 TimeDispl.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
             } else {
-                TimeDispl.text = "0:00:00";
+                TimeDispl.text = "0:00";
             }
         }
     }
@@ -177,41 +164,17 @@ public class PlayerHud : MonoBehaviour
         //TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
        // ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
        // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        for (int i=1; i < 5; i++)
-        {
-            _playerIcons[i].gameObject.SetActive(
-
-                SceneManager.GetActiveScene().name != "PreGameScene" &&
-
-                Game.OtherPlayersElapsedTime.Count >= i + 1
-
-            );
-        }
+        // for (int i=0; i < _playerPositions.Count; i++)
+        // {
+        //     _playerIcons[i].gameObject.SetActive(true);
+        // }
 
         // Set player icon positions.
-       if (SceneManager.GetActiveScene().name == "GameScene" || SceneManager.GetActiveScene().name == "PreGameScene")
+        ElapsedTimeSlider.value = _timeBarPosition;
+        _yourIcon.value = _yourPosition;
+        for (int i=0; i < _playerPositions.Count; i++)
         {
-
-            if (Game.GameStarted && !Game.GameEnded)
-
-            {
-                ElapsedTimeSlider.value = Game.TimeElapsedInGame / Game.GameLength;
-                int n = 0;
-                List<int> keys = new List<int>(Game.OtherPlayersElapsedTime.Keys);
-                foreach(int key in keys)
-                {
-                    _playerIcons[n].value = Game.OtherPlayersElapsedTime[key];
-                    n++;
-                }
-            } else if (!Game.GameStarted && !Game.GameEnded) {
-                _playerIcons[0].value = 0;
-                int n = 0;
-                List<int> keys = new List<int>(Game.OtherPlayersElapsedTime.Keys);
-                foreach(int key in keys){
-                    _playerIcons[n].value = 0;
-                    n++;
-                }
-            }
+            _playerIcons[i].value = _playerPositions[i];
         }
     }
 
@@ -248,10 +211,10 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateWinningDisplay()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && Game.GameEnded)
+        if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
         {
             WinningDispl.transform.parent.gameObject.SetActive(true);
-            WinningDispl.text = (Game.WinningTeam == Constants.Team.Miner) ? "HIDERS WIN!" : "SEEKERS WIN!";
+            WinningDispl.text = (_game.WinningTeam == Constants.Team.Miner) ? "HIDERS WIN!" : "SEEKERS WIN!";
         }
     }
 
@@ -282,6 +245,7 @@ public class PlayerHud : MonoBehaviour
 
     void Update()
     {
+        // TODO: Get this out of here!!! This kind of power belongs in GameController or PlayerController at the very least!
         // If counting, reduce timer.
         if (PhotonNetwork.IsMasterClient && _isCountingTillGameStart && View.IsMine) {
             _secondsTillGame -= Time.deltaTime;
@@ -346,11 +310,24 @@ public class PlayerHud : MonoBehaviour
         _debugItems = items;
     }
 
+    public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
+    {
+        _yourPosition = clientPosition;
+        _playerPositions = playerPositions;
+    }
+
+    public void SetTimeBarPosition(float position)
+    {
+        _timeBarPosition = position;
+    }
+
     public void SetCooldownValues(float[] items)
     {
         // Each item should be a float between 0.0f (empty) and 1.0f (full).
         _cooldowns = items;
     }
+
+    public void SetTime(int second) { _time = second; }
 
     public void ToggleDebug()
     {
@@ -379,9 +356,6 @@ public class PlayerHud : MonoBehaviour
     public void SetArrowPosition(string uiElement){
 
         if (!View.IsMine) return;
-
-        Debug.Log(ArrowImage);
-        Debug.Log(_uiPositions);
 
         ArrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         ArrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
@@ -419,5 +393,5 @@ public class PlayerHud : MonoBehaviour
     }
     
 
-
+    public void SetGame(GameController game) { _game = game; }
 }

@@ -6,10 +6,10 @@ using Photon.Pun;
 public class SpawnPlayers : MonoBehaviour
 {
 
-    // prefab defining a player object
+    // Prefab defining a player object.
     public GameObject playerPrefab;
 
-	//spawn point array
+	// Spawn point array.
 	public Vector3[] spawningPoint = {
 		new Vector3(-62f, -2f, 20f),
 		new Vector3(2f, 5f, 0f),
@@ -18,10 +18,11 @@ public class SpawnPlayers : MonoBehaviour
 		new Vector3(30f, 5f, 0f)
 	};
 
-    // Start is called before the first frame update
+    private TimeLord _timeLord;
+
     void Start()
     {
-        // spawn a new player into the scene
+        // Spawn a new player into the scene.
         int n = (int)((spawningPoint.Length) * Random.value);
         PhotonNetwork.Instantiate(playerPrefab.name, spawningPoint[0], Quaternion.identity);
     }

@@ -5,17 +5,18 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
 
-    private Transform mainCameraTransform;
+    private Transform _mainCameraTransform;
 
     void Start()
     {
-        mainCameraTransform = Camera.main.transform;
+        _mainCameraTransform = Camera.main.transform;
     }
 
     void LateUpdate()
     {
         if (transform != null) {
-            transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward, mainCameraTransform.rotation * Vector3.up);
+            if (_mainCameraTransform == null) Debug.LogError("mainCameraTransform is null");
+            transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
         }
     }
 }
