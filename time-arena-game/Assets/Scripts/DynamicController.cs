@@ -31,9 +31,9 @@ public class DynamicController : MonoBehaviour
             temp.z += 1f * speed * Time.deltaTime;
             crystal.transform.localScale = temp;
 
-            sandMat.SetVector("Sand_Direction", new Vector2(0f,2f));
-            sandMat.SetVector("Noise_Direction",new Vector2(0f,2f));
-            sandMat.SetVector("Voronoi_Direction",new Vector2(0f,2f));
+            sandMat.SetVector("Sand_Direction", new Vector2(0f,3f));
+            sandMat.SetVector("Noise_Direction",new Vector2(0f,3f));
+            sandMat.SetVector("Voronoi_Direction",new Vector2(0f,3f));
 
 
         }
@@ -46,9 +46,9 @@ public class DynamicController : MonoBehaviour
             temp.z -= 1f * speed * Time.deltaTime;
             crystal.transform.localScale = temp;
 
-            sandMat.SetVector("Sand_Direction", new Vector2(0f, -2f));
-            sandMat.SetVector("Noise_Direction",new Vector2(0f, -2f));
-            sandMat.SetVector("Voronoi_Direction",new Vector2(0f,-2f));
+            sandMat.SetVector("Sand_Direction", new Vector2(0f, -3f));
+            sandMat.SetVector("Noise_Direction",new Vector2(0f, -3f));
+            sandMat.SetVector("Voronoi_Direction",new Vector2(0f,-3f));
         }
         else{
 

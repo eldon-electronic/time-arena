@@ -152,9 +152,6 @@
         },
         {
             "m_Id": "b90707ee34f44d288dd9160924b4fd2f"
-        },
-        {
-            "m_Id": "a6721972b00248c18ec399687574e9d6"
         }
     ],
     "m_GroupDatas": [],
@@ -700,9 +697,6 @@
             },
             {
                 "m_Id": "b90707ee34f44d288dd9160924b4fd2f"
-            },
-            {
-                "m_Id": "a6721972b00248c18ec399687574e9d6"
             }
         ]
     },
@@ -1157,10 +1151,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1033.0001220703125,
+            "x": 1033.0,
             "y": 1376.0,
-            "width": 128.0,
-            "height": 101.00000762939453
+            "width": 155.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -1467,7 +1461,7 @@
     },
     "m_Name": "SandDirection",
     "m_DefaultReferenceName": "Vector2_29056625a5004dd78adb8c79358c3267",
-    "m_OverrideReferenceName": "SandDirection",
+    "m_OverrideReferenceName": "Sand_Direction",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -1876,7 +1870,7 @@
     },
     "m_Name": "NoiseDirection",
     "m_DefaultReferenceName": "Vector2_35d63fd129c24dc58a2b0a680a42d5e1",
-    "m_OverrideReferenceName": "NoiseDirection",
+    "m_OverrideReferenceName": "Noise_Direction",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -1884,7 +1878,7 @@
     "m_Hidden": false,
     "m_Value": {
         "x": 0.0,
-        "y": 1.0,
+        "y": 0.20000000298023225,
         "z": 0.0,
         "w": 0.0
     }
@@ -2289,21 +2283,6 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "4b4f6a5a17a74902b11aaf13dcbd8a60",
-    "m_Id": 0,
-    "m_DisplayName": "Metallic",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Metallic",
-    "m_StageCapability": 2,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "4b85dd3375cc4ac4baa07eb4d73690a7",
     "m_Id": 2,
     "m_DisplayName": "Out",
@@ -2643,7 +2622,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalLitSubTarget",
     "m_ObjectId": "63cd0a2786c14ae786f14bcbb4137630",
-    "m_WorkflowMode": 1,
+    "m_WorkflowMode": 0,
     "m_NormalDropOffSpace": 0,
     "m_ClearCoat": false
 }
@@ -3846,39 +3825,6 @@
         "w": 0.0
     },
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "a6721972b00248c18ec399687574e9d6",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "SurfaceDescription.Metallic",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 0.0,
-            "height": 0.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "4b4f6a5a17a74902b11aaf13dcbd8a60"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedDescriptor": "SurfaceDescription.Metallic"
 }
 
 {
