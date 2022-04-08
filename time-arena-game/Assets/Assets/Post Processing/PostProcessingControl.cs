@@ -22,13 +22,16 @@ public class PostProcessingControl : MonoBehaviour
     void Start()
     {
         if(volume.profile.TryGet<Vignette>(out vignette)) {
+            Debug.Log("Got Vignette");
             //vignette.intensity.value = vingetteIntensity; 
             //vignette.color.value = vingetteColor;
         }
         if(volume.profile.TryGet<ChromaticAberration>(out chromaticAbberation)) {
+            Debug.Log("Got Chrome Ab");
             //chromaticAbberation.intensity.value = chromaticAberrationIntensity;
         }
         if(volume.profile.TryGet<LensDistortion>(out lensDistortion)) {
+            Debug.Log("Got Distort");
             //lensDistortion.intensity.value = lensDistortionIntensity;
         }
     }
@@ -36,16 +39,13 @@ public class PostProcessingControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //lensDistortion.intensity.value = lensDistortionIntensity;
-        ///chromaticAbberation.intensity.value = chromaticAberrationIntensity;
-        //vignette.intensity.value = vingetteIntensity;
-       //vignette.color.value = vingetteColor;
+        
     }
 
     public void StartAnim() 
     {
         StartCoroutine(Animate());
-        Debug.LogError("playing Anim");
+        Debug.Log("playing Anim in cont");
     }
 
     //animation coroutine
