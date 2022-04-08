@@ -17,15 +17,14 @@ public class PauseManager : MonoBehaviourPunCallbacks {
 
 	// Update is called once per frame
 	void Update()
-	{
-		// TODO: remove this
-		if (MouseSensSlider == null) Debug.LogError("MouseSnesSlider is null");
-		if (View == null) Debug.LogError("View is null");
-		if (PauseMenuUI == null) Debug.LogError("PauseMenuUI is null");
-
-    	MouseSens = MouseSensSlider.value;
+	{	
 		if (!View.IsMine) return;
 
+		// TODO: remove this
+		if (MouseSensSlider == null) Debug.LogError("MouseSensSlider is null");
+		if (PauseMenuUI == null) Debug.LogError("PauseMenuUI is null");
+
+		MouseSens = MouseSensSlider.value;
 		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;
 
 		PauseMenuUI.SetActive(_paused);

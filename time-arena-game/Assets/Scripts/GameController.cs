@@ -53,19 +53,13 @@ public class GameController : MonoBehaviour
 
 	// Checks to see if there are no hiders left.
 	private void CheckWon()
-	{
-		if (_miners.Count == 0)
-		{
-			// Code reaches here even though hiders are remaining.
-			GameEnded = true;
-			WinningTeam = Constants.Team.Guardian;
-		}
-		
+	{	
 		if (_timeLord.TimeEnded() && !GameEnded)
-			{
-				GameEnded = true;
-				WinningTeam = Constants.Team.Miner;
-			}
+		{
+			GameEnded = true;
+			// TODO: Add a check to see who actually won based on whether the miners reached their target.
+			WinningTeam = Constants.Team.Miner;
+		}
 	}
 
 	void Update()
