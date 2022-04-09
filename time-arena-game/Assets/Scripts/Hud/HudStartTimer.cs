@@ -30,5 +30,5 @@ public class HudStartTimer : MonoBehaviour
 
     public void SetGame(GameController game) { _game = game; }
 
-    public void Kill() { UnityEngine.Object.Destroy(_startTimer); }
+    public void SetActive(bool value) { _startTimer.SetActive(value); }
 }

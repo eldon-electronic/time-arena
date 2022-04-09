@@ -12,16 +12,15 @@ public class PlayerHud : MonoBehaviour
     private GameController _game;
     [SerializeField] HudStartTimer _startTimer;
     [SerializeField] HudTimeDisplay _timeDisplay;
+    [SerializeField] HudMasterClientOptions _masterClientOptions;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
 	public Text DebugPanelText;
-	public Text MasterClientOpt;
 	public Slider ForwardCooldownSlider;
 	public Slider BackCooldownSlider;
     public Text WinningDispl;
     public Text ScoreDispl;
-    public CanvasGroup TimelineCanvasGroup;
     public Slider ElapsedTimeSlider;
     public Slider PlayerIcon0;
     public Slider PlayerIcon1;
@@ -39,7 +38,6 @@ public class PlayerHud : MonoBehaviour
     public GameObject OptionsPopUpText;
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
-    private int _time;
     private Slider _yourIcon;
     private Slider[] _playerIcons;
     private Hashtable _debugItems;
@@ -85,12 +83,17 @@ public class PlayerHud : MonoBehaviour
             _playerPositions = new List<float>();
             _yourIcon = PlayerIcon0;
             _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                _masterClientOptions.SetActive(false);
+            }
         }
         else
         {
             // TODO: After refactoring, remove this with a single command that kills the UI parent object.
-            _startTimer.Kill();
-            _timeDisplay.Kill();
+            _startTimer.SetActive(false);
+            _timeDisplay.SetActive(false);
+            _masterClientOptions.SetActive(false);
         }
 
         _debugItems = new Hashtable();
@@ -99,34 +102,10 @@ public class PlayerHud : MonoBehaviour
         DebugCanvasGroup.alpha = 0.0f;
         _canJumpForward = false;
         _canJumpBack = false;
-
-
     }
 
 
     // ------------ LATE UPDATE HELPER FUNCTIONS ------------
-
-    private void LateUpdateMasterClientOptions()
-    {
-        // If master client, show 'press e to start' text or 'starting in' text.
-        MasterClientOpt.transform.parent.gameObject.SetActive(
-            SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient
-        );
-
-        if (_isCountingTillGameStart)
-        {
-            var timeLeft = System.Math.Round(_secondsTillGame, 0);
-            MasterClientOpt.text = $"Starting in {timeLeft}s";
-            if (System.Math.Round (_secondsTillGame, 0) <= 0.0f)
-            {
-                MasterClientOpt.text = "Loading...";
-            }
-        } else {
-          MasterClientOpt.text = "Press F to Start";
-
-        }
-    }
-
 
     private void LateUpdateTimeline()
     {
@@ -218,9 +197,11 @@ public class PlayerHud : MonoBehaviour
         // If counting, reduce timer.
         if (PhotonNetwork.IsMasterClient && _isCountingTillGameStart && View.IsMine) {
             _secondsTillGame -= Time.deltaTime;
+            _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
             if (_secondsTillGame <= 0) {
                 PhotonNetwork.LoadLevel("GameScene");
                 _isCountingTillGameStart = false;
+                _masterClientOptions.SetIsCountingTillStart(_isCountingTillGameStart);
             }
         }
     }
@@ -230,7 +211,6 @@ public class PlayerHud : MonoBehaviour
     {
         if (!View.IsMine) return;
 
-        LateUpdateMasterClientOptions();
         LateUpdateTimeline();
         LateUpdateDebugPanel();
         LateUpdateCooldowns();
@@ -261,14 +241,18 @@ public class PlayerHud : MonoBehaviour
         if (_isCountingTillGameStart) return;
 
         _isCountingTillGameStart = true;
+        _masterClientOptions.SetIsCountingTillStart(_isCountingTillGameStart);
         _secondsTillGame = 5.0f;
+        _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
     }
 
 
     public void StopCountingDown()
     {
         _isCountingTillGameStart = false;
+        _masterClientOptions.SetIsCountingTillStart(_isCountingTillGameStart);
         _secondsTillGame = 0.0f;
+        _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
     }
 
 

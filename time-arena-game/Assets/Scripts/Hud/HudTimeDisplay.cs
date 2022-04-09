@@ -29,7 +29,7 @@ public class HudTimeDisplay : MonoBehaviour
 
     public void SetGame(GameController game) { _game = game; }
 
-    public void Kill() { UnityEngine.Object.Destroy(_timeDisplay); }
+    public void SetActive(bool value) { _timeDisplay.SetActive(value); }
 
     public void SetTime(int second) { _time = second; }
 }
