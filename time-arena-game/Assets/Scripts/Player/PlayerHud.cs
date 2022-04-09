@@ -17,10 +17,9 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudCooldowns _cooldowns;
     [SerializeField] HudWinningDisplay _winningDisplay;
     [SerializeField] HudScore _score;
+    [SerializeField] HudDebugPanel _debugPanel;
 	public PhotonView View;
     public Text TeamDispl;
-    public CanvasGroup DebugCanvasGroup;
-	public Text DebugPanelText;
     public GameObject ArrowImage;
     public GameObject Tutorial;
     public GameObject PopUpText;
@@ -28,8 +27,6 @@ public class PlayerHud : MonoBehaviour
 
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
-    private Hashtable _debugItems;
-    private bool _debug;
     private string _message;
     private string _optionsMessage;
 
@@ -76,32 +73,10 @@ public class PlayerHud : MonoBehaviour
             _masterClientOptions.SetActive(false);
             _timeline.SetActive(false);
         }
-
-        _debugItems = new Hashtable();
-        _debug = false;
-        DebugCanvasGroup.alpha = 0.0f;
     }
 
 
     // ------------ LATE UPDATE HELPER FUNCTIONS ------------
-
-    private void LateUpdateDebugPanel()
-    {
-        if (_debug)
-        {
-            System.String debugText = "";
-            foreach (DictionaryEntry de in _debugItems)
-            {
-                debugText += $"{de.Key}: {de.Value}\n";
-            }
-            DebugPanelText.text = debugText;
-            DebugCanvasGroup.alpha = 1.0f;
-        }
-        else
-        {
-            DebugCanvasGroup.alpha = 0.0f;
-        }
-    }
 
     private void LateUpdateTutorial()
     {
@@ -133,8 +108,6 @@ public class PlayerHud : MonoBehaviour
     void LateUpdate()
     {
         if (!View.IsMine) return;
-
-        LateUpdateDebugPanel();
         LateUpdateTutorial();
 
     }
@@ -174,7 +147,7 @@ public class PlayerHud : MonoBehaviour
 
     public void SetDebugValues(Hashtable items)
     {
-        _debugItems = items;
+        _debugPanel.SetDebugValues(items);
     }
 
     public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
@@ -194,10 +167,7 @@ public class PlayerHud : MonoBehaviour
 
     public void SetTime(int second) { _timeDisplay.SetTime(second); }
 
-    public void ToggleDebug()
-    {
-        _debug = !_debug;
-    }
+    public void ToggleDebug() { _debugPanel.ToggleDebug(); }
 
     public void PressForwardJumpButton()
     {
