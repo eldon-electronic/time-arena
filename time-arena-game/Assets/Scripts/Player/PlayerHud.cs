@@ -16,12 +16,11 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudTimeline _timeline;
     [SerializeField] HudCooldowns _cooldowns;
     [SerializeField] HudWinningDisplay _winningDisplay;
+    [SerializeField] HudScore _score;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
 	public Text DebugPanelText;
-    public Text WinningDispl;
-    public Text ScoreDispl;
     public GameObject ArrowImage;
     public GameObject Tutorial;
     public GameObject PopUpText;
@@ -32,7 +31,6 @@ public class PlayerHud : MonoBehaviour
     private Hashtable _debugItems;
     private bool _debug;
     private string _message;
-    private int score;
     private string _optionsMessage;
 
 
@@ -113,17 +111,6 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-    private void LateUpdateScore(){
-      if (SceneManager.GetActiveScene().name == "GameScene")
-      {
-        ScoreDispl.transform.parent.gameObject.SetActive(true);
-
-          ScoreDispl.text = score + "";
-      } else if(SceneManager.GetActiveScene().name == "PreGameScene") {
-        ScoreDispl.transform.parent.gameObject.SetActive(false);
-      }
-    }
-
 
     // ------------ UPDATE METHODS ------------
 
@@ -149,19 +136,15 @@ public class PlayerHud : MonoBehaviour
 
         LateUpdateDebugPanel();
         LateUpdateTutorial();
-        LateUpdateScore();
 
     }
 
 
     // ------------ PUBLIC METHODS ------------
 
-    public void setScore(int a){
-      score = a;
-    }
-    public int getScore(){
-      return score;
-    }
+    public void setScore(int score) { _score.SetScore(score); }
+
+    public int getScore() { return _score.GetScore(); }
 
     public void SetTeam(System.String teamName)
     {

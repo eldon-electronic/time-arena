@@ -9195,6 +9195,7 @@ GameObject:
   - component: {fileID: 5091965875285780587}
   - component: {fileID: 5590288987897476469}
   - component: {fileID: 71524245628701223}
+  - component: {fileID: 4621444560055183819}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -9386,6 +9387,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _winningDisplay: {fileID: 4932960716178184168}
   _text: {fileID: 40610782557170930}
+--- !u!114 &4621444560055183819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6146106990117875522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74be163f92e924f889b6e39b513e6993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _container: {fileID: 8560333854563395425}
+  _text: {fileID: 8006470102416607322}
 --- !u!1 &6189879322987748197
 GameObject:
   m_ObjectHideFlags: 0
@@ -9993,12 +10008,11 @@ MonoBehaviour:
   _timeline: {fileID: 5091965875285780587}
   _cooldowns: {fileID: 5590288987897476469}
   _winningDisplay: {fileID: 71524245628701223}
+  _score: {fileID: 4621444560055183819}
   View: {fileID: 5690578699466181193}
   TeamDispl: {fileID: 8151362755639177340}
   DebugCanvasGroup: {fileID: 1999155244747893999}
   DebugPanelText: {fileID: 4281627418019176230}
-  WinningDispl: {fileID: 40610782557170930}
-  ScoreDispl: {fileID: 8006470102416607322}
   ArrowImage: {fileID: 5931293119998304570}
   Tutorial: {fileID: 6420919972992914706}
   PopUpText: {fileID: 931299746159129857}
@@ -16347,10 +16361,10 @@ RectTransform:
   m_Father: {fileID: 8749797133797185787}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -50, y: -100}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -25}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6042851447666957077
 CanvasRenderer:
