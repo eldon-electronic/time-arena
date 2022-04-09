@@ -9193,6 +9193,7 @@ GameObject:
   - component: {fileID: 5898631916957087412}
   - component: {fileID: 4316980016572007731}
   - component: {fileID: 5091965875285780587}
+  - component: {fileID: 5590288987897476469}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -9351,6 +9352,25 @@ MonoBehaviour:
   _playerIcon2: {fileID: 3197158859134598745}
   _playerIcon3: {fileID: 5000310441839666072}
   _playerIcon4: {fileID: 754585825459951039}
+--- !u!114 &5590288987897476469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6146106990117875522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd2ca29b03976488f9db09b2f1bdeeca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _forwardCooldownSlider: {fileID: 1826257176930382557}
+  _backCooldownSlider: {fileID: 7233313498024402106}
+  _forwardJumpIcon: {fileID: 4308238918351466877}
+  _backJumpIcon: {fileID: 3248866031582860552}
+  _greenPressedSprite: {fileID: 21300000, guid: 99a6940fc522545a6b07507373492a55, type: 3}
+  _greenUnpressedSprite: {fileID: 21300000, guid: 3ec36685211ee4ee083b95ca1dbd0264, type: 3}
+  _redPressedSprite: {fileID: 21300000, guid: 8c08b378297444559bac11d18a159fb0, type: 3}
 --- !u!1 &6189879322987748197
 GameObject:
   m_ObjectHideFlags: 0
@@ -9956,6 +9976,7 @@ MonoBehaviour:
   _timeDisplay: {fileID: 5898631916957087412}
   _masterClientOptions: {fileID: 4316980016572007731}
   _timeline: {fileID: 5091965875285780587}
+  _cooldowns: {fileID: 5590288987897476469}
   View: {fileID: 5690578699466181193}
   TeamDispl: {fileID: 8151362755639177340}
   DebugCanvasGroup: {fileID: 1999155244747893999}
@@ -9964,16 +9985,9 @@ MonoBehaviour:
   BackCooldownSlider: {fileID: 7233313498024402106}
   WinningDispl: {fileID: 40610782557170930}
   ScoreDispl: {fileID: 8006470102416607322}
-  ElapsedTimeSlider: {fileID: 6535443690733998534}
-  PlayerIcon0: {fileID: 8199051833866257435}
-  PlayerIcon1: {fileID: 2542373288866361406}
-  PlayerIcon2: {fileID: 3197158859134598745}
-  PlayerIcon3: {fileID: 5000310441839666072}
-  PlayerIcon4: {fileID: 754585825459951039}
   ForwardJumpIcon: {fileID: 4308238918351466877}
   BackJumpIcon: {fileID: 3248866031582860552}
   RedPressedSprite: {fileID: 21300000, guid: 8c08b378297444559bac11d18a159fb0, type: 3}
-  GreenPressedSprite: {fileID: 21300000, guid: 99a6940fc522545a6b07507373492a55, type: 3}
   GreenUnpressedSprite: {fileID: 21300000, guid: 3ec36685211ee4ee083b95ca1dbd0264, type: 3}
   ArrowImage: {fileID: 5931293119998304570}
   Tutorial: {fileID: 6420919972992914706}
