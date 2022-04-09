@@ -13,6 +13,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudStartTimer _startTimer;
     [SerializeField] HudTimeDisplay _timeDisplay;
     [SerializeField] HudMasterClientOptions _masterClientOptions;
+    [SerializeField] HudTimeline _timeline;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
@@ -21,12 +22,6 @@ public class PlayerHud : MonoBehaviour
 	public Slider BackCooldownSlider;
     public Text WinningDispl;
     public Text ScoreDispl;
-    public Slider ElapsedTimeSlider;
-    public Slider PlayerIcon0;
-    public Slider PlayerIcon1;
-    public Slider PlayerIcon2;
-    public Slider PlayerIcon3;
-    public Slider PlayerIcon4;
 	public Image ForwardJumpIcon;
     public Image BackJumpIcon;
     public Sprite RedPressedSprite;
@@ -36,15 +31,11 @@ public class PlayerHud : MonoBehaviour
     public GameObject Tutorial;
     public GameObject PopUpText;
     public GameObject OptionsPopUpText;
+    
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
-    private Slider _yourIcon;
-    private Slider[] _playerIcons;
     private Hashtable _debugItems;
     private float[] _cooldowns;
-    private float _yourPosition;
-    private List<float> _playerPositions;
-    private float _timeBarPosition;
     private bool _debug;
     private bool _canJumpForward;
     private bool _canJumpBack;
@@ -80,9 +71,6 @@ public class PlayerHud : MonoBehaviour
 
         if (View.IsMine)
         {
-            _playerPositions = new List<float>();
-            _yourIcon = PlayerIcon0;
-            _playerIcons = new Slider[] {PlayerIcon1, PlayerIcon2, PlayerIcon3, PlayerIcon4};
             if (!PhotonNetwork.IsMasterClient)
             {
                 _masterClientOptions.SetActive(false);
@@ -90,10 +78,13 @@ public class PlayerHud : MonoBehaviour
         }
         else
         {
-            // TODO: After refactoring, remove this with a single command that kills the UI parent object.
+            // TODO: After refactoring, remove this with a single command that sets the UI parent object inactive.
+            // TODO: Actually, thinking about it, I'm pretty sure we already take care of this in PlayerController...
+            // TODO: So the following lines are already redundant...?
             _startTimer.SetActive(false);
             _timeDisplay.SetActive(false);
             _masterClientOptions.SetActive(false);
+            _timeline.SetActive(false);
         }
 
         _debugItems = new Hashtable();
@@ -106,27 +97,6 @@ public class PlayerHud : MonoBehaviour
 
 
     // ------------ LATE UPDATE HELPER FUNCTIONS ------------
-
-    private void LateUpdateTimeline()
-    {
-        //Set visibility of timeline, player icons and jump cooldowns.
-        //TimelineCanvasGroup.alpha = (SceneManager.GetActiveScene().name != "PreGameScene") ? 1.0f: 0.0f;
-       // ElapsedTimeSlider.gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-       // _playerIcons[0].gameObject.SetActive(SceneManager.GetActiveScene().name != "PreGameScene");
-        // for (int i=0; i < _playerPositions.Count; i++)
-        // {
-        //     _playerIcons[i].gameObject.SetActive(true);
-        // }
-
-        // Set player icon positions.
-        ElapsedTimeSlider.value = _timeBarPosition;
-        _yourIcon.value = _yourPosition;
-        for (int i=0; i < _playerPositions.Count; i++)
-        {
-            _playerIcons[i].value = _playerPositions[i];
-        }
-    }
-
 
     private void LateUpdateDebugPanel()
     {
@@ -211,7 +181,6 @@ public class PlayerHud : MonoBehaviour
     {
         if (!View.IsMine) return;
 
-        LateUpdateTimeline();
         LateUpdateDebugPanel();
         LateUpdateCooldowns();
         LateUpdateWinningDisplay();
@@ -263,13 +232,12 @@ public class PlayerHud : MonoBehaviour
 
     public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
     {
-        _yourPosition = clientPosition;
-        _playerPositions = playerPositions;
+        _timeline.SetPlayerPositions(clientPosition, playerPositions);
     }
 
     public void SetTimeBarPosition(float position)
     {
-        _timeBarPosition = position;
+        _timeline.SetTimeBarPosition(position);
     }
 
     public void SetCooldownValues(float[] items)

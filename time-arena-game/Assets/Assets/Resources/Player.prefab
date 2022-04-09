@@ -9192,6 +9192,7 @@ GameObject:
   - component: {fileID: 6915254337900917103}
   - component: {fileID: 5898631916957087412}
   - component: {fileID: 4316980016572007731}
+  - component: {fileID: 5091965875285780587}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -9331,6 +9332,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _masterClientOptions: {fileID: 4392354346095817401}
   _text: {fileID: 659775664179981306}
+--- !u!114 &5091965875285780587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6146106990117875522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0fe16178ef6345de83c014d22117c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timeline: {fileID: 8954552116137901807}
+  _elapsedTimeSlider: {fileID: 6535443690733998534}
+  _yourIcon: {fileID: 8199051833866257435}
+  _playerIcon1: {fileID: 2542373288866361406}
+  _playerIcon2: {fileID: 3197158859134598745}
+  _playerIcon3: {fileID: 5000310441839666072}
+  _playerIcon4: {fileID: 754585825459951039}
 --- !u!1 &6189879322987748197
 GameObject:
   m_ObjectHideFlags: 0
@@ -9935,6 +9955,7 @@ MonoBehaviour:
   _startTimer: {fileID: 6915254337900917103}
   _timeDisplay: {fileID: 5898631916957087412}
   _masterClientOptions: {fileID: 4316980016572007731}
+  _timeline: {fileID: 5091965875285780587}
   View: {fileID: 5690578699466181193}
   TeamDispl: {fileID: 8151362755639177340}
   DebugCanvasGroup: {fileID: 1999155244747893999}
