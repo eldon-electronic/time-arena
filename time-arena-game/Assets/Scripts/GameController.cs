@@ -9,8 +9,8 @@ public class GameController : MonoBehaviour
 	private Dictionary<int, PlayerController> _guardians;
 	private TimeLord _timeLord;
 	private Dictionary<int, TailController> _tails;
-	private float _timer;
 
+	public float Timer;
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
 		_guardians = new Dictionary<int, PlayerController>();
 		_tails = new Dictionary<int, TailController>();
 
-		_timer = 0f;
+		Timer = 5f;
 
 		int totalFrames = Constants.GameLength * Constants.FrameRate;
 		_timeLord = new TimeLord(totalFrames);
@@ -53,19 +53,13 @@ public class GameController : MonoBehaviour
 
 	// Checks to see if there are no hiders left.
 	private void CheckWon()
-	{
-		if (_miners.Count == 0)
-		{
-			// Code reaches here even though hiders are remaining.
-			GameEnded = true;
-			WinningTeam = Constants.Team.Guardian;
-		}
-		
+	{	
 		if (_timeLord.TimeEnded() && !GameEnded)
-			{
-				GameEnded = true;
-				WinningTeam = Constants.Team.Miner;
-			}
+		{
+			GameEnded = true;
+			// TODO: Add a check to see who actually won based on whether the miners reached their target.
+			WinningTeam = Constants.Team.Miner;
+		}
 	}
 
 	void Update()
@@ -73,11 +67,11 @@ public class GameController : MonoBehaviour
 		if (!GameStarted)
 		{
 			// Pregame timer is counting.
-			if (_timer >= 5f)
+			if (Timer <= 0f)
 			{
 				if (!GameStarted) GameStarted = true;
 			}
-			else _timer += Time.deltaTime;
+			else Timer -= Time.deltaTime;
 		}
 		else
 		{

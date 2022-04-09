@@ -134,8 +134,8 @@ public class PlayerHud : MonoBehaviour
             StartTimeDispl.transform.parent.gameObject.SetActive(!_game.GameStarted);
             if (!_game.GameStarted && !_game.GameEnded)
             {
-                int elapsed = 5 - _time;
-                StartTimeDispl.text = $"{elapsed}";
+                int timer = (int) _game.Timer;
+                StartTimeDispl.text = $"{timer}";
             }
         }
     }
@@ -143,10 +143,6 @@ public class PlayerHud : MonoBehaviour
 
     private void LateUpdateTimeDisplay()
     {
-       // TimeDispl.transform.parent.gameObject.SetActive(
-           // SceneManager.GetActiveScene().name != "PreGameScene"
-        //);
-
         if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
         {
             if (_game.GameStarted)
@@ -249,6 +245,7 @@ public class PlayerHud : MonoBehaviour
 
     void Update()
     {
+        // TODO: Get this out of here!!! This kind of power belongs in GameController or PlayerController at the very least!
         // If counting, reduce timer.
         if (PhotonNetwork.IsMasterClient && _isCountingTillGameStart && View.IsMine) {
             _secondsTillGame -= Time.deltaTime;

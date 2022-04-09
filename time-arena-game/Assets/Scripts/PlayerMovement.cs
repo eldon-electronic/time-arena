@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     }
     
     public void OnMouseSensChange(float a){
-      _mouseSensitivity = PauseUI.mouseSens;
+      _mouseSensitivity = PauseUI.MouseSens;
     }
 
     private void UpdatePosition()

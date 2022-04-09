@@ -5,15 +5,17 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class TestRealityManager
+public class TestRealityManager: Tester
 {   
+    public bool Authenticate() { return true; }
+
     [Test]
     public void TestAddHead()
     {
         RealityManager manager = new RealityManager();
         manager.AddHead(1001);
 
-        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Dictionary<int, Reality> heads = manager.RevealHeads(this);
         Assert.AreEqual(1, heads.Count);
         Assert.IsTrue(heads.ContainsKey(1001));
         Assert.IsTrue(heads[1001] != null);
@@ -48,7 +50,7 @@ public class TestRealityManager
         manager.AddHead(1001);
         manager.SetPerceivedFrame(1001, 50);
 
-        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Dictionary<int, Reality> heads = manager.RevealHeads(this);
         Assert.AreEqual(50, heads[1001].PerceivedFrame);
     }
 
@@ -59,11 +61,11 @@ public class TestRealityManager
         manager.AddHead(1001);
 
         manager.OffsetPerceivedFrame(1001, 50);
-        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Dictionary<int, Reality> heads = manager.RevealHeads(this);
         Assert.AreEqual(50, heads[1001].PerceivedFrame);
 
         manager.OffsetPerceivedFrame(1001, -10);
-        heads = manager.RevealHeads();
+        heads = manager.RevealHeads(this);
         Assert.AreEqual(40, heads[1001].PerceivedFrame);
     }
 
@@ -74,12 +76,12 @@ public class TestRealityManager
         manager.AddHead(1001);
 
         manager.AddWriter(1001, 50);
-        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Dictionary<int, Reality> heads = manager.RevealHeads(this);
         Assert.AreEqual(1, heads[1001].WriteFrames.Count);
         Assert.AreEqual(50, heads[1001].WriteFrames[0]);
 
         manager.AddWriter(1001, 100);
-        heads = manager.RevealHeads();
+        heads = manager.RevealHeads(this);
         Assert.AreEqual(2, heads[1001].WriteFrames.Count);
         Assert.AreEqual(50, heads[1001].WriteFrames[0]);
         Assert.AreEqual(100, heads[1001].WriteFrames[1]);
@@ -138,7 +140,7 @@ public class TestRealityManager
         manager.AddWriter(1001, 100);
 
         manager.RemoveWriter(1001);
-        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Dictionary<int, Reality> heads = manager.RevealHeads(this);
         Assert.AreEqual(2, heads[1001].WriteFrames.Count);
         Assert.AreEqual(Constants.AnimationFrames, heads[1001].Countdown);
     }
@@ -278,7 +280,7 @@ public class TestRealityManager
         manager.Tick();
 
         // Perceived frames are incremented.
-        Dictionary<int, Reality> heads = manager.RevealHeads();
+        Dictionary<int, Reality> heads = manager.RevealHeads(this);
         Assert.AreEqual(1, heads[1001].PerceivedFrame);
         Assert.AreEqual(1, heads[1002].PerceivedFrame);
 
@@ -292,7 +294,7 @@ public class TestRealityManager
             manager.Tick();
         }
 
-        heads = manager.RevealHeads();
+        heads = manager.RevealHeads(this);
         Assert.AreEqual(1 + Constants.AnimationFrames, heads[1001].PerceivedFrame);
         Assert.AreEqual(1 + Constants.AnimationFrames, heads[1002].PerceivedFrame);
         Assert.AreEqual(1, heads[1001].WriteFrames.Count);

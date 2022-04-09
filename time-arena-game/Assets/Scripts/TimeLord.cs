@@ -6,6 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public interface Tester
+{
+	public bool Authenticate();
+}
+
 public class TimeLord
 {
     private int _totalFrames;
@@ -241,21 +246,8 @@ public class TimeLord
 		return _realities.GetAllHeads(_myID);
 	}
 
-
-    // WARNING: The following functions are to be used by test framework and debugging only.
-    public Dictionary<int, PlayerState>[] RevealPlayerStates() { return _playerStates; }
-
-    public RealityManager RevealRealityManager() { return _realities; }
-
-    public Dictionary<int, List<int>> RevealTailCreations() { return _tailCreations; }
-
-	public List<(int, int)> GetDebugValue()
-	{
-		return _realities.GetPerceivedFrames();
-	}
-
 	// Writes a representation of _playerStates to a text file.
-	// Not sure, but might cause lag if trying to call this during the game.
+	// Might cause lag if trying to call this during the game.
 	public void SnapshotStates(string filename)
 	{
 		using StreamWriter file = new StreamWriter(filename);
@@ -277,5 +269,31 @@ public class TimeLord
 
 			file.WriteLine(sb.ToString());
 		}
+	}
+
+	// For use in debugging.
+	public List<(int, int)> GetDebugValue()
+	{
+		return _realities.GetPerceivedFrames();
+	}
+
+
+    // WARNING: The following functions are to be used by test framework and debugging only.
+    public Dictionary<int, PlayerState>[] RevealPlayerStates(Tester tester)
+	{
+		if (tester.Authenticate()) return _playerStates;
+		else throw new InvalidOperationException("Must be a Tester to call this method.");
+	}
+
+    public RealityManager RevealRealityManager(Tester tester)
+	{
+		if (tester.Authenticate()) return _realities;
+		else throw new InvalidOperationException("Must be a Tester to call this method.");
+	}
+
+    public Dictionary<int, List<int>> RevealTailCreations(Tester tester)
+	{
+		if (tester.Authenticate()) return _tailCreations;
+		else throw new InvalidOperationException("Must be a Tester to call this method.");
 	}
 }
