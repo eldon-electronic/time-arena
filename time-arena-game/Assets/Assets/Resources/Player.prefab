@@ -9190,6 +9190,7 @@ GameObject:
   - component: {fileID: 5245344623941442886}
   - component: {fileID: 1079869242382594497}
   - component: {fileID: 6915254337900917103}
+  - component: {fileID: 5898631916957087412}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -9301,6 +9302,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startTimer: {fileID: 7891584939557204464}
   _text: {fileID: 1753261365491032404}
+--- !u!114 &5898631916957087412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6146106990117875522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f9f15ebb85a49d3ad89170742fde5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timeDisplay: {fileID: 1548863421758307598}
+  _text: {fileID: 5106751792342918263}
 --- !u!1 &6189879322987748197
 GameObject:
   m_ObjectHideFlags: 0
@@ -9903,6 +9918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startTimer: {fileID: 6915254337900917103}
+  _timeDisplay: {fileID: 5898631916957087412}
   View: {fileID: 5690578699466181193}
   TeamDispl: {fileID: 8151362755639177340}
   DebugCanvasGroup: {fileID: 1999155244747893999}

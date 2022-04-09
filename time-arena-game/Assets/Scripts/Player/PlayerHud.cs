@@ -11,6 +11,7 @@ public class PlayerHud : MonoBehaviour
 {
     private GameController _game;
     [SerializeField] HudStartTimer _startTimer;
+    [SerializeField] HudTimeDisplay _timeDisplay;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
@@ -18,7 +19,6 @@ public class PlayerHud : MonoBehaviour
 	public Text MasterClientOpt;
 	public Slider ForwardCooldownSlider;
 	public Slider BackCooldownSlider;
-	public Text TimeDispl;
     public Text WinningDispl;
     public Text ScoreDispl;
     public CanvasGroup TimelineCanvasGroup;
@@ -90,6 +90,7 @@ public class PlayerHud : MonoBehaviour
         {
             // TODO: After refactoring, remove this with a single command that kills the UI parent object.
             _startTimer.Kill();
+            _timeDisplay.Kill();
         }
 
         _debugItems = new Hashtable();
@@ -126,22 +127,6 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-    private void LateUpdateTimeDisplay()
-    {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
-        {
-            if (_game.GameStarted)
-            {
-                float t = Constants.GameLength - _time;
-                int minutes = (int) (t / 60);
-                int seconds = (int) (t % 60);
-                TimeDispl.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
-            } else {
-                TimeDispl.text = "0:00";
-            }
-        }
-    }
-
 
     private void LateUpdateTimeline()
     {
@@ -162,7 +147,6 @@ public class PlayerHud : MonoBehaviour
             _playerIcons[i].value = _playerPositions[i];
         }
     }
-
 
 
     private void LateUpdateDebugPanel()
@@ -247,7 +231,6 @@ public class PlayerHud : MonoBehaviour
         if (!View.IsMine) return;
 
         LateUpdateMasterClientOptions();
-        LateUpdateTimeDisplay();
         LateUpdateTimeline();
         LateUpdateDebugPanel();
         LateUpdateCooldowns();
@@ -311,7 +294,7 @@ public class PlayerHud : MonoBehaviour
         _cooldowns = items;
     }
 
-    public void SetTime(int second) { _time = second; }
+    public void SetTime(int second) { _timeDisplay.SetTime(second); }
 
     public void ToggleDebug()
     {
@@ -381,5 +364,6 @@ public class PlayerHud : MonoBehaviour
     {
         _game = game;
         if (_startTimer != null) _startTimer.SetGame(game);
+        _timeDisplay.SetGame(game);
     }
 }
