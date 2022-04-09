@@ -5,16 +5,13 @@ using UnityEngine;
 public class CollectingCrystals : MonoBehaviour
 {
     public PlayerHud hud;
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField] private PlayerController player;
 
-    }
 
     public void OnTriggerEnter(Collider Col)
     {
         // TODO: Get team from PlayerController.
-        if(Col.gameObject.tag == "Collectable" && hud.TeamDispl.text == "MINER")
+        if (Col.gameObject.tag == "Collectable" && player.Team == Constants.Team.Miner)
         {
             Debug.Log("Crystal collected!");
             hud.setScore(hud.getScore()+1);

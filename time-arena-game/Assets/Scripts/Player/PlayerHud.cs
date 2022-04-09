@@ -19,8 +19,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudWinningDisplay _winningDisplay;
     [SerializeField] HudScore _score;
     [SerializeField] HudDebugPanel _debugPanel;
-    [SerializeField] HudTutorial _tutorial;
-    public Text TeamDispl;
+    [SerializeField] private Text _teamDisplay;
 
     private float _secondsTillGame;
 	private bool _isCountingTillGameStart;
@@ -73,7 +72,7 @@ public class PlayerHud : MonoBehaviour
 
     public void SetTeam(System.String teamName)
     {
-        if (_view.IsMine) TeamDispl.text = teamName;
+        if (_view.IsMine) _teamDisplay.text = teamName;
     }
 
     public void StartCountingDown()
@@ -135,36 +134,6 @@ public class PlayerHud : MonoBehaviour
         _cooldowns.SetCanJump(forward, back);
     }
 
-    public void SetArrowPosition(string uiElement)
-    {
-        if (!_view.IsMine) return;
-        _tutorial.SetArrowPosition(uiElement);
-    }
-
-    public void SetMessage(string tutorialMessage)
-    {
-        if (!_view.IsMine) return;
-        _tutorial.SetMessage(tutorialMessage);
-    }
-
-    public void SetArrowVisibility(bool arrowVisibility)
-    {
-        if (!_view.IsMine) return;
-        _tutorial.SetArrowVisibility(arrowVisibility);
-    }
-
-    public void SetTutorialVisibility(bool tutorialVisibility)
-    {
-        if (!_view.IsMine) return;
-        _tutorial.SetVisibility(tutorialVisibility);
-    }
-
-    public void SetOptionsText(string optionsMessage)
-    {
-        if (!_view.IsMine) return;
-        _tutorial.SetOptionsText(optionsMessage);
-    }
-    
     public void SetGame(GameController game)
     {
         _game = game;

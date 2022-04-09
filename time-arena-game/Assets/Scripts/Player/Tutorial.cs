@@ -1,10 +1,12 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Tutorial : MonoBehaviour
 {
-    class State{
+    class State
+    {
         public string Message;
         public string ElementToPointTo;
         public KeyCode InputTrigger;
@@ -22,33 +24,21 @@ public class Tutorial : MonoBehaviour
     }
     
     private bool _hasMovedOn = true;
-    public PlayerHud TutorialHud;
+    [SerializeField] private HudTutorial _tutorialHud;
+    [SerializeField] private PhotonView _view;
     private List<State> _states;
     private int _currentState;
   
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //_currentState = 0;
-        //TutorialHud.SetMessage(_states[_currentState].Message);
-        //TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        //TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
-        //TutorialHud.SetTutorialVisibility(true);
-        //NeedKeyPress(_states[_currentState].NeedKey);
-        
-       
-       
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-         
-        UpdateTutorialOptions();
-           
+        if (!_view.IsMine) return;
+        if ((_currentState == (_states.Count-1))) StartTutorialOver();
+        else if (_currentState < _states.Count-1) SkipTutorial();
+
+        NeedKeyPress(_states[_currentState].NeedKey);
     }
+
     private void CreateStatesGuardian(){
 
             _states = new List<State>();
@@ -148,33 +138,29 @@ public class Tutorial : MonoBehaviour
         _hasMovedOn = true;
     }
 
-    private void NeedKeyPress(bool KeyPressNeeded){
-
-        if(_currentState < _states.Count){
-            if((KeyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger))){
-               
+    private void NeedKeyPress(bool KeyPressNeeded)
+    {
+        if (_currentState < _states.Count)
+        {
+            if ((KeyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger)))
+            {
                 MoveToNextState();
-                
             }
-            else if((KeyPressNeeded == false) && _hasMovedOn){
-                
+            else if ((KeyPressNeeded == false) && _hasMovedOn)
+            {    
                 StartCoroutine(DelayPopup());
-                _hasMovedOn = false;
-                   
+                _hasMovedOn = false;      
             }
-            
-        }
-        
+        }    
    }
   
 
-    private void MoveToNextState(){
-
+    private void MoveToNextState()
+    {
             _currentState++;
-            TutorialHud.SetMessage(_states[_currentState].Message);
-            TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-            TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
-           
+            _tutorialHud.SetMessage(_states[_currentState].Message);
+            _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
+            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
     }
 
 
@@ -182,75 +168,39 @@ public class Tutorial : MonoBehaviour
 
     public void SetTeam(Constants.Team team)
     {
-        
-        if(team == Constants.Team.Guardian){
-            CreateStatesGuardian();
-        }
-        else if(team == Constants.Team.Miner){
-            CreateStatesMiner();
-        }
+        if (team == Constants.Team.Guardian) CreateStatesGuardian();
+        else if(team == Constants.Team.Miner) CreateStatesMiner();
     }
 
     public void StartTutorial()
     {
-        
         _currentState = 0;
-        TutorialHud.SetMessage(_states[_currentState].Message);
-        TutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        TutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        _tutorialHud.SetMessage(_states[_currentState].Message);
+        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
+        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
         NeedKeyPress(_states[_currentState].NeedKey);
-        TutorialHud.SetTutorialVisibility(true);
-        
+        _tutorialHud.SetVisibility(true);
     }
 
     public void StopTutorial()
     {
-        TutorialHud.SetTutorialVisibility(false);
+        _tutorialHud.SetVisibility(false);
     }
 
-    public void SkipTutorial(){
+    public void SkipTutorial()
+    {
+        _tutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
 
-        TutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
-
-        if(Input.GetKeyDown(KeyCode.Alpha2)){
-                
+        if(Input.GetKeyDown(KeyCode.Alpha2))
+        {        
             _currentState = _states.Count - 1;
-            TutorialHud.SetMessage(_states[_currentState].Message);
-
-        }        
-        
+            _tutorialHud.SetMessage(_states[_currentState].Message);
+        }
     }
 
-    public void StartTutorialOver(){
-        
-        TutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
-
-        if(Input.GetKeyDown(KeyCode.Alpha1)){
-                
-            StartTutorial();
- 
-        }
-        
+    public void StartTutorialOver()
+    {    
+        _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+        if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();
     }
-    public void UpdateTutorialOptions(){
-
-    
-        if ((_currentState == (_states.Count-1))){
-
-            StartTutorialOver();
-
-        }
-        else if(_currentState <_states.Count-1){
-
-            SkipTutorial();
-
-        }
-       
-        NeedKeyPress(_states[_currentState].NeedKey);
-        
-
-    }
-   
-    
 } 
-

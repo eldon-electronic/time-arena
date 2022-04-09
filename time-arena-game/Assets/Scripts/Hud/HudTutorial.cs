@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ using TMPro;
 
 public class HudTutorial : MonoBehaviour
 {
+    [SerializeField] private PhotonView _view;
     [SerializeField] private GameObject _tutorial;
     [SerializeField] private GameObject _arrowImage;
     [SerializeField] private GameObject _popUpText;
@@ -34,7 +36,7 @@ public class HudTutorial : MonoBehaviour
 
     void LateUpdate()
     {
-        if (SceneManager.GetActiveScene().name != "PreGameScene")
+        if (SceneManager.GetActiveScene().name != "PreGameScene" && _view.IsMine)
         {
             _tutorial.SetActive(false);
         }

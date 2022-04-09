@@ -9429,6 +9429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a7f077330bd424ba255500cea164ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _view: {fileID: 5690578699466181193}
   _tutorial: {fileID: 6420919972992914706}
   _arrowImage: {fileID: 5931293119998304570}
   _popUpText: {fileID: 931299746159129857}
@@ -9999,7 +10000,7 @@ MonoBehaviour:
   PauseUI: {fileID: 3792925184382037071}
   Nametag: {fileID: 2491143808538081395}
   Hud: {fileID: 3138509024607561696}
-  Tutorial: {fileID: 7995784166818512175}
+  _tutorial: {fileID: 7995784166818512175}
   PlayerAnim: {fileID: 9070032884028841073}
   GrabCheck: {fileID: 5427792942196514227}
   GrabMask:
@@ -10043,12 +10044,7 @@ MonoBehaviour:
   _winningDisplay: {fileID: 71524245628701223}
   _score: {fileID: 4621444560055183819}
   _debugPanel: {fileID: 2539957824911093140}
-  _tutorial: {fileID: 2588456402876655370}
-  TeamDispl: {fileID: 8151362755639177340}
-  ArrowImage: {fileID: 5931293119998304570}
-  Tutorial: {fileID: 6420919972992914706}
-  PopUpText: {fileID: 931299746159129857}
-  OptionsPopUpText: {fileID: 3655940851564926299}
+  _teamDisplay: {fileID: 8151362755639177340}
 --- !u!114 &228805100952192999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10116,7 +10112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d9a717a84d94ca1a1a06a077cd84fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TutorialHud: {fileID: 3138509024607561696}
+  _tutorialHud: {fileID: 2588456402876655370}
+  _view: {fileID: 5690578699466181193}
 --- !u!114 &561111332934807323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10163,6 +10160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hud: {fileID: 3138509024607561696}
+  player: {fileID: 6458975045518551228}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0

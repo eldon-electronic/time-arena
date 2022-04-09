@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public PauseManager PauseUI;
 	public GameObject Nametag;
 	public PlayerHud Hud;
-	public Tutorial Tutorial;
+	[SerializeField] private Tutorial _tutorial;
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
@@ -64,25 +64,26 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Material.SetMaterialMiner();
 		Hud.SetTeam("MINER");
 		gameObject.layer = Constants.LayerPlayer;
-		Tutorial.SetTeam(Team);
-		Tutorial.StartTutorial();
 		Particles.Subscribe(this);
 
 		_preGame = FindObjectOfType<PreGameController>();
 		if (_preGame == null) Debug.LogError("PreGameController not found");
 		else _preGame.Register(this);
 		
-		if (!View.IsMine)
+		if (View.IsMine)
+		{
+			Destroy(Nametag);
+			gameObject.tag = "Client";
+			_tutorial.SetTeam(Team);
+			_tutorial.StartTutorial();
+		}
+		else
 		{
 			Destroy(Cam.gameObject);
 			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 		}
-		else
-		{
-			Destroy(Nametag);
-			gameObject.tag = "Client";
-		}
+
 		// Allow master client to move players from one scene to another.
         PhotonNetwork.AutomaticallySyncScene = true;
 		// Lock players cursor to center screen.
@@ -133,15 +134,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (next.name == "GameScene")
 		{
-			if (View.IsMine) _tailManager.SetActive(false);
+			if (View.IsMine)
+			{
+				_tailManager.SetActive(false);
+				_tutorial.StopTutorial();
+			}
 
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
 
 			MoveToSpawnPoint();
 			Material.SetArmActive(Team == Constants.Team.Guardian);
-
-			Tutorial.StopTutorial();
 		}
 	}
 
