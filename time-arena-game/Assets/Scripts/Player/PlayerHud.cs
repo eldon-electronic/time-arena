@@ -15,18 +15,13 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudMasterClientOptions _masterClientOptions;
     [SerializeField] HudTimeline _timeline;
     [SerializeField] HudCooldowns _cooldowns;
+    [SerializeField] HudWinningDisplay _winningDisplay;
 	public PhotonView View;
     public Text TeamDispl;
     public CanvasGroup DebugCanvasGroup;
 	public Text DebugPanelText;
-	public Slider ForwardCooldownSlider;
-	public Slider BackCooldownSlider;
     public Text WinningDispl;
     public Text ScoreDispl;
-	public Image ForwardJumpIcon;
-    public Image BackJumpIcon;
-    public Sprite RedPressedSprite;
-    public Sprite GreenUnpressedSprite;
     public GameObject ArrowImage;
     public GameObject Tutorial;
     public GameObject PopUpText;
@@ -110,23 +105,11 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-    private void LateUpdateWinningDisplay()
-    {
-        if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
-        {
-            WinningDispl.transform.parent.gameObject.SetActive(true);
-            WinningDispl.text = (_game.WinningTeam == Constants.Team.Miner) ? "HIDERS WIN!" : "SEEKERS WIN!";
-        }
-    }
-
     private void LateUpdateTutorial()
     {
         if (SceneManager.GetActiveScene().name != "PreGameScene")
         {
-
             Tutorial.gameObject.SetActive(false);
-            
-
         }
     }
 
@@ -165,7 +148,6 @@ public class PlayerHud : MonoBehaviour
         if (!View.IsMine) return;
 
         LateUpdateDebugPanel();
-        LateUpdateWinningDisplay();
         LateUpdateTutorial();
         LateUpdateScore();
 
@@ -290,11 +272,11 @@ public class PlayerHud : MonoBehaviour
 
     }
     
-
     public void SetGame(GameController game)
     {
         _game = game;
         if (_startTimer != null) _startTimer.SetGame(game);
         _timeDisplay.SetGame(game);
+        _winningDisplay.SetGame(game);
     }
 }
