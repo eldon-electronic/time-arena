@@ -137,8 +137,11 @@ public class PlayerHud : MonoBehaviour
     public void SetGame(GameController game)
     {
         _game = game;
-        if (_startTimer != null) _startTimer.SetGame(game);
-        _timeDisplay.SetGame(game);
-        _winningDisplay.SetGame(game);
+        if (_view.IsMine)
+        {
+            if (_startTimer != null) _startTimer.SetGame(game);
+            _timeDisplay.SetGame(game);
+            _winningDisplay.SetGame(game);
+        }
     }
 }
