@@ -51,8 +51,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 	private Vector3 _seekerSpawnPoint;
 
 
-	void Start() {
-		
+	void Start()
+	{	
 		DontDestroyOnLoad(this.gameObject);
 
 		// TODO: Set the team in the menu before loading the pregame scene.
@@ -341,7 +341,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 	{
 		if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient)
 		{
-			Hud.StartCountingDown();
+			_preGame.StartCountingDown();
 		}
 	}
 
@@ -428,7 +428,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 
 		if (Input.GetKeyDown(KeyCode.F)) StartGame();
 
-		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
+		if (Input.GetKeyDown(KeyCode.Escape) && _preGame != null) _preGame.StopCountingDown();
 
 		if (Input.GetKeyDown(KeyCode.L)) _timelord.SnapshotStates("GameSnapshot.txt");
 	}

@@ -17,11 +17,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudCooldowns _cooldowns;
     [SerializeField] HudWinningDisplay _winningDisplay;
     [SerializeField] HudScore _score;
-    [SerializeField] HudDebugPanel _debugPanel;
     [SerializeField] private Text _teamDisplay;
-
-    private float _secondsTillGame;
-	private bool _isCountingTillGameStart;
 
     void Start()
     {
@@ -39,26 +35,7 @@ public class PlayerHud : MonoBehaviour
             // TODO: So the following lines are already redundant...?
             _startTimer.SetActive(false);
             _timeDisplay.SetActive(false);
-            _masterClientOptions.SetActive(false);
             _timeline.SetActive(false);
-        }
-    }
-
-
-    // ------------ UPDATE METHODS ------------
-
-    void Update()
-    {
-        // TODO: Get this out of here!!! This kind of power belongs in GameController or PlayerController at the very least!
-        // If counting, reduce timer.
-        if (PhotonNetwork.IsMasterClient && _isCountingTillGameStart && _view.IsMine) {
-            _secondsTillGame -= Time.deltaTime;
-            _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
-            if (_secondsTillGame <= 0) {
-                PhotonNetwork.LoadLevel("GameScene");
-                _isCountingTillGameStart = false;
-                _masterClientOptions.SetIsCountingTillStart(_isCountingTillGameStart);
-            }
         }
     }
 
@@ -72,24 +49,6 @@ public class PlayerHud : MonoBehaviour
     public void SetTeam(System.String teamName)
     {
         if (_view.IsMine) _teamDisplay.text = teamName;
-    }
-
-    public void StartCountingDown()
-    {
-        if (_isCountingTillGameStart) return;
-
-        _isCountingTillGameStart = true;
-        _masterClientOptions.SetIsCountingTillStart(_isCountingTillGameStart);
-        _secondsTillGame = 5.0f;
-        _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
-    }
-
-    public void StopCountingDown()
-    {
-        _isCountingTillGameStart = false;
-        _masterClientOptions.SetIsCountingTillStart(_isCountingTillGameStart);
-        _secondsTillGame = 0.0f;
-        _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
     }
 
     public void SetPlayerPositions(float clientPosition, List<float> playerPositions)

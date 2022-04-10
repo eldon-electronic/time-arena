@@ -56,7 +56,6 @@ public class HudDebugPanel : MonoBehaviour
 
     public void Register(Debugable subscriber)
     {
-        Debug.Log($"Registered {subscriber}");
         _subsribers.Add(subscriber);
     }
 }
