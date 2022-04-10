@@ -409,12 +409,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 		Hud.SetTimeBarPosition(time);
 	}
 
-	private void UpdateTimer()
-	{
-		int time = _timelord.GetElapsedTime();
-		Hud.SetTime(time);
-	}
-
 	void KeyControl()
 	{
 		if (Input.GetKeyDown(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, true);
@@ -487,7 +481,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 			{
 				UpdateCooldowns();
 				UpdateTimeline();
-				UpdateTimer();
 				KeyControl();
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
@@ -541,6 +534,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 		if (View.IsMine)
 		{
 			_tailManager.SetTimeLord(_timelord);
+			Hud.SetTimeLord(timelord);
 			_debugPanel.Register(_timelord);
 		}
 	}

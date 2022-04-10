@@ -61,8 +61,6 @@ public class PlayerHud : MonoBehaviour
         _timeline.SetTimeBarPosition(position);
     }
 
-    public void SetTime(int second) { _timeDisplay.SetTime(second); }
-
     public void SetGame(GameController game)
     {
         if (_view.IsMine)
@@ -72,6 +70,11 @@ public class PlayerHud : MonoBehaviour
             _timeDisplay.SetGame(game);
             _winningDisplay.SetGame(game);
         }
+    }
+
+    public void SetTimeLord(TimeLord timeLord)
+    {
+        _timeDisplay.SetTimeLord(timeLord);
     }
 
     public void SetPlayer(PlayerController player)

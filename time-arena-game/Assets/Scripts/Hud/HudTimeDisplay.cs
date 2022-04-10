@@ -9,7 +9,7 @@ public class HudTimeDisplay : MonoBehaviour
     [SerializeField] private GameObject _timeDisplay;
     [SerializeField] private Text _text;
     private GameController _game;
-    private int _time;
+    private TimeLord _timeLord;
 
     void LateUpdate()
     {
@@ -17,7 +17,8 @@ public class HudTimeDisplay : MonoBehaviour
         {
             if (_game.GameStarted)
             {
-                float t = Constants.GameLength - _time;
+                float time = _timeLord.GetElapsedTime();
+                float t = Constants.GameLength - time;
                 int minutes = (int) (t / 60);
                 int seconds = (int) (t % 60);
                 _text.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
@@ -29,7 +30,7 @@ public class HudTimeDisplay : MonoBehaviour
 
     public void SetGame(GameController game) { _game = game; }
 
-    public void SetActive(bool value) { _timeDisplay.SetActive(value); }
+    public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
 
-    public void SetTime(int second) { _time = second; }
+    public void SetActive(bool value) { _timeDisplay.SetActive(value); }
 }
