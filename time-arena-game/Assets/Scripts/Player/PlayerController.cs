@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		{
 			Destroy(Nametag);
 			gameObject.tag = "Client";
+			Hud.SetPlayer(this);
 			_tutorial.SetTeam(Team);
 			_tutorial.StartTutorial();
 		}
@@ -162,7 +163,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (View.IsMine) 
 		{
-			Hud.PressForwardJumpButton();
 			if (_game == null) _preGame.HideAllPlayers();
 			else _game.HideAllPlayers();
 		}
@@ -183,7 +183,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (View.IsMine) 
 		{
-			Hud.PressBackJumpButton();
 			if (_game == null) _preGame.HideAllPlayers();
 			else _game.HideAllPlayers();	
 		}
@@ -395,14 +394,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		_forwardsJumpCooldown = (_forwardsJumpCooldown > 0) ? (_forwardsJumpCooldown - Time.deltaTime) : 0;
 		_backJumpCooldown = (_backJumpCooldown > 0) ? (_backJumpCooldown - Time.deltaTime) : 0;
-		float forwardBarHeight = 1.0f - (_forwardsJumpCooldown / 15.0f);
-		float backBarHeight = 1.0f - (_backJumpCooldown / 15.0f);
-		float[] cooldownValues = new float[]{forwardBarHeight, backBarHeight};
-		Hud.SetCooldownValues(cooldownValues);
-
-		bool canJumpForward = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Forward);
-		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
-		Hud.SetCanJump(canJumpForward, canJumpBack);
 	}
 
 	private void UpdateTimeline()
@@ -578,4 +569,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+
+	public (float forward, float back) GetCooldowns() { return (_forwardsJumpCooldown, _backJumpCooldown); }
+
+	public (bool forward, bool back) GetCanJump()
+	{
+		bool canJumpForward = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Forward);
+		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
+		return (canJumpForward, canJumpBack);
+	}
 }

@@ -10,25 +10,38 @@ public class HudCooldowns : MonoBehaviour
     [SerializeField] private Slider _backCooldownSlider;
     [SerializeField] private Image _forwardJumpIcon;
     [SerializeField] private Image _backJumpIcon;
-    [SerializeField] private Sprite _greenPressedSprite;
     [SerializeField] private Sprite _greenUnpressedSprite;
     [SerializeField] private Sprite _redPressedSprite;
 
-    private float[] _cooldowns;
+    private PlayerController _player;
+    private float _forwardBarHeight;
+    private float _backBarHeight;
     private bool _canJumpForward;
     private bool _canJumpBack;
 
     void Start()
     {
-        _cooldowns = new float[2];
+        _forwardBarHeight = 0.0f;
+        _backBarHeight = 0.0f;
         _canJumpForward = false;
         _canJumpBack = false;
     }
 
+    void Update()
+    {
+        (float forward, float back) cooldowns = _player.GetCooldowns();
+        _forwardBarHeight = 1.0f - (cooldowns.forward / 15.0f);
+        _backBarHeight = 1.0f - (cooldowns.back / 15.0f);
+
+        (bool forward, bool back) canJump = _player.GetCanJump();
+        _canJumpForward = canJump.forward;
+        _canJumpBack = canJump.back;
+    }
+
     void LateUpdate()
     {
-        _forwardCooldownSlider.value = _cooldowns[0];
-        _backCooldownSlider.value = _cooldowns[1];
+        _forwardCooldownSlider.value = _forwardBarHeight;
+        _backCooldownSlider.value = _backBarHeight;
 
         if (_canJumpForward) _forwardJumpIcon.sprite = _greenUnpressedSprite;
         else _forwardJumpIcon.sprite = _redPressedSprite;
@@ -36,25 +49,5 @@ public class HudCooldowns : MonoBehaviour
         else _backJumpIcon.sprite = _redPressedSprite;
     }
 
-    public void SetCooldownValues(float[] items)
-    {
-        // Each item should be a float between 0.0f (empty) and 1.0f (full).
-        _cooldowns = items;
-    }
-
-    public void SetCanJump(bool forward, bool back)
-    {
-        _canJumpForward = forward;
-        _canJumpBack = back;
-    }
-
-    public void PressForwardJumpButton()
-    {
-        _forwardJumpIcon.sprite = _greenPressedSprite;
-    }
-
-    public void PressBackJumpButton()
-    {
-        _backJumpIcon.sprite = _greenPressedSprite;
-    }
+    public void SetPlayer(PlayerController pc) { _player = pc; }
 }

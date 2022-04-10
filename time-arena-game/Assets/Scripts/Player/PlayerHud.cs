@@ -9,7 +9,6 @@ using TMPro;
 
 public class PlayerHud : MonoBehaviour
 {
-    private GameController _game;
     [SerializeField] private PhotonView _view;
     [SerializeField] HudStartTimer _startTimer;
     [SerializeField] HudTimeDisplay _timeDisplay;
@@ -108,40 +107,22 @@ public class PlayerHud : MonoBehaviour
         _timeline.SetTimeBarPosition(position);
     }
 
-    public void SetCooldownValues(float[] items)
-    {
-        _cooldowns.SetCooldownValues(items);
-    }
-
     public void SetTime(int second) { _timeDisplay.SetTime(second); }
 
     public void ToggleDebug() { _debugPanel.ToggleDebug(); }
 
-    public void PressForwardJumpButton()
-    {
-        if (!_view.IsMine) return;
-        _cooldowns.PressForwardJumpButton();
-    }
-
-    public void PressBackJumpButton()
-    {
-        if (!_view.IsMine) return;
-        _cooldowns.PressBackJumpButton();
-    }
-
-    public void SetCanJump(bool forward, bool back)
-    {
-        _cooldowns.SetCanJump(forward, back);
-    }
-
     public void SetGame(GameController game)
     {
-        _game = game;
         if (_view.IsMine)
         {
             if (_startTimer != null) _startTimer.SetGame(game);
             _timeDisplay.SetGame(game);
             _winningDisplay.SetGame(game);
         }
+    }
+
+    public void SetPlayer(PlayerController player)
+    {
+        _cooldowns.SetPlayer(player);
     }
 }
