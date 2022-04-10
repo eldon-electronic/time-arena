@@ -10,10 +10,15 @@ public class GameController : MonoBehaviour
 	private TimeLord _timeLord;
 	private Dictionary<int, TailController> _tails;
 
+	public GameObject collectableCrystal;
+	public int crystalSpawnDelay = 10;
+	public float crystalSpawnCounter = 0;
 	public float Timer;
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
+
+
 
 
 	void Start()
@@ -51,9 +56,13 @@ public class GameController : MonoBehaviour
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
 
+	private void spawnCollectableCrystal(Vector3 spawnLoc){
+		PhotonNetwork.Instantiate(collectableCrystal.name, spawnLoc, Quaternion.identity);
+	}
+
 	// Checks to see if there are no hiders left.
 	private void CheckWon()
-	{	
+	{
 		if (_timeLord.TimeEnded() && !GameEnded)
 		{
 			GameEnded = true;
@@ -76,8 +85,15 @@ public class GameController : MonoBehaviour
 		else
 		{
 			// Increment global frame and individual player frames.
-			if (!GameEnded) _timeLord.Tick();
-			CheckWon();
+			if (!GameEnded) {
+				_timeLord.Tick();
+				crystalSpawnCounter+=Time.deltaTime;
+				if(crystalSpawnCounter > crystalSpawnDelay){
+					crystalSpawnCounter = 0;
+					spawnCollectableCrystal(new Vector3(Random.Range(-10f, 10f), -3, Random.Range(-10f, 10f)));
+				}
+				CheckWon();
+			}
 		}
 	}
 

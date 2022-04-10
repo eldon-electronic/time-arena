@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+
 
 public class CollectingCrystals : MonoBehaviour
 {
     public PlayerHud hud;
+    public PhotonView view;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,12 +19,11 @@ public class CollectingCrystals : MonoBehaviour
         // TODO: Get team from PlayerController.
         if(Col.gameObject.tag == "Collectable" && hud.TeamDispl.text == "MINER")
         {
-            Debug.Log("Crystal collected!");
-            hud.setScore(hud.getScore()+1);
-            //Col.gameObject.SetActive(false);
-            Destroy(Col.gameObject);
+            view.RPC("RPC_incrScore", RpcTarget.All);
+            PhotonNetwork.Destroy(Col.gameObject);
         }
     }
+
     // Update is called once per frame
     void Update()
     {

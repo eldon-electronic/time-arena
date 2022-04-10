@@ -57,7 +57,7 @@ public class PlayerHud : MonoBehaviour
 
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
-    
+
 
 
     void Start()
@@ -224,7 +224,7 @@ public class PlayerHud : MonoBehaviour
         {
 
             Tutorial.gameObject.SetActive(false);
-            
+
 
         }
     }
@@ -276,8 +276,11 @@ public class PlayerHud : MonoBehaviour
 
     // ------------ PUBLIC METHODS ------------
 
-    public void setScore(int a){
-      score = a;
+    public void resetScore(){
+      score = 0;
+    }
+    public void incrScore(){
+      score += 1;
     }
     public int getScore(){
       return score;
@@ -379,7 +382,7 @@ public class PlayerHud : MonoBehaviour
     public void SetTutorialVisibility(bool tutorialVisibility){
 
         if (!View.IsMine) return;
-        
+
         Tutorial.gameObject.SetActive(tutorialVisibility);
 
     }
@@ -391,7 +394,7 @@ public class PlayerHud : MonoBehaviour
         OptionsPopUpText.GetComponent<TextMeshProUGUI>().text = _optionsMessage;
 
     }
-    
+
 
     public void SetGame(GameController game) { _game = game; }
 }
