@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour, ParticleUser
+public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 {
 
 	// Variables defining player values.
@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public GameObject Nametag;
 	public PlayerHud Hud;
 	[SerializeField] private Tutorial _tutorial;
+	[SerializeField] private HudDebugPanel _debugPanel;
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
@@ -75,6 +76,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			Destroy(Nametag);
 			gameObject.tag = "Client";
 			Hud.SetPlayer(this);
+			_debugPanel.Register(this);
 			_tutorial.SetTeam(Team);
 			_tutorial.StartTutorial();
 		}
@@ -412,29 +414,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Hud.SetTime(time);
 	}
 
-	private void UpdateDebugDisplay()
-	{
-		Hashtable debugItems = new Hashtable();
-		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
-		debugItems.Add("Sprint", Input.GetKey("left shift"));
-		debugItems.Add("Grab", _damageWindow);
-
-		List<(int id, int frame)> frames = _timelord.GetDebugValue();
-		foreach (var f in frames)
-		{
-			if (f.id == View.ViewID)
-			{
-				debugItems.Add("Frame mine", f.frame);
-			}
-			else debugItems.Add($"Frame {f.id}", f.frame);
-		}
-
-		Hashtable movementState = Movement.GetState();
-		Utilities.Union(ref debugItems, movementState);
-		
-		Hud.SetDebugValues(debugItems);
-	}
-
 	void KeyControl()
 	{
 		if (Input.GetKeyDown(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, true);
@@ -450,8 +429,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (Input.GetKeyDown(KeyCode.F)) StartGame();
 
 		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
-
-		if (Input.GetKeyDown(KeyCode.P)) Hud.ToggleDebug();
 
 		if (Input.GetKeyDown(KeyCode.L)) _timelord.SnapshotStates("GameSnapshot.txt");
 	}
@@ -510,7 +487,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 				UpdateCooldowns();
 				UpdateTimeline();
 				UpdateTimer();
-				UpdateDebugDisplay();
 				KeyControl();
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
@@ -530,7 +506,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	}
 
 
-	// ------------ PUBLIC METHODS ------------
+	// ------------ IMPLEMENTED INTERFACE METHODS ------------
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
@@ -539,6 +515,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			gameObject.layer = Constants.LayerOutsideReality;
 		}
 	}
+
+	public Hashtable GetDebugValues()
+	{
+		Hashtable debugItems = new Hashtable();
+		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
+		debugItems.Add("Sprint", Input.GetKey("left shift"));
+		debugItems.Add("Grab", _damageWindow);		
+		return debugItems;
+	}
+
+	// ------------ PUBLIC METHODS ------------
 
 	public void NotifyStartedDissolving()
 	{
@@ -553,6 +540,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (View.IsMine)
 		{
 			_tailManager.SetTimeLord(_timelord);
+			_debugPanel.Register(_timelord);
 		}
 	}
 

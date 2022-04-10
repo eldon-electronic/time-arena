@@ -92,11 +92,6 @@ public class PlayerHud : MonoBehaviour
         _masterClientOptions.SetSecondsTillGame(_secondsTillGame);
     }
 
-    public void SetDebugValues(Hashtable items)
-    {
-        _debugPanel.SetDebugValues(items);
-    }
-
     public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
     {
         _timeline.SetPlayerPositions(clientPosition, playerPositions);
@@ -108,8 +103,6 @@ public class PlayerHud : MonoBehaviour
     }
 
     public void SetTime(int second) { _timeDisplay.SetTime(second); }
-
-    public void ToggleDebug() { _debugPanel.ToggleDebug(); }
 
     public void SetGame(GameController game)
     {

@@ -11,7 +11,7 @@ public interface Tester
 	public bool Authenticate();
 }
 
-public class TimeLord
+public class TimeLord: Debugable
 {
     private int _totalFrames;
 	private int _currentFrame;
@@ -38,6 +38,24 @@ public class TimeLord
 		_realities = new RealityManager();
         _tailCreations = new Dictionary<int, List<int>>();
     }
+
+
+	// ------------ IMPLEMENTED INTERFACE METHODS ------------
+
+	public Hashtable GetDebugValues()
+	{
+		Hashtable debugItems = new Hashtable();
+		List<(int id, int frame)> frames = _realities.GetPerceivedFrames();
+		foreach (var f in frames)
+		{
+			if (f.id == _myID)
+			{
+				debugItems.Add("My frame", f.frame);
+			}
+			else debugItems.Add($"{f.id}'s frame", f.frame);
+		}
+		return debugItems;
+	}
 
 
     // ------------ PUBLIC METHODS FOR THE GAME CONTROLLER ------------
@@ -269,12 +287,6 @@ public class TimeLord
 
 			file.WriteLine(sb.ToString());
 		}
-	}
-
-	// For use in debugging.
-	public List<(int, int)> GetDebugValue()
-	{
-		return _realities.GetPerceivedFrames();
 	}
 
 
