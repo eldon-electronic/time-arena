@@ -28,37 +28,14 @@ public class PlayerHud : MonoBehaviour
                 _masterClientOptions.SetActive(false);
             }
         }
-        else
-        {
-            // TODO: After refactoring, remove this with a single command that sets the UI parent object inactive.
-            // TODO: Actually, thinking about it, I'm pretty sure we already take care of this in PlayerController...
-            // TODO: So the following lines are already redundant...?
-            _startTimer.SetActive(false);
-            _timeDisplay.SetActive(false);
-            _timeline.SetActive(false);
-        }
     }
 
 
     // ------------ PUBLIC METHODS ------------
 
-    public void setScore(int score) { _score.SetScore(score); }
-
-    public int getScore() { return _score.GetScore(); }
-
     public void SetTeam(System.String teamName)
     {
         if (_view.IsMine) _teamDisplay.text = teamName;
-    }
-
-    public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
-    {
-        _timeline.SetPlayerPositions(clientPosition, playerPositions);
-    }
-
-    public void SetTimeBarPosition(float position)
-    {
-        _timeline.SetTimeBarPosition(position);
     }
 
     public void SetGame(GameController game)
@@ -75,6 +52,7 @@ public class PlayerHud : MonoBehaviour
     public void SetTimeLord(TimeLord timeLord)
     {
         _timeDisplay.SetTimeLord(timeLord);
+        _timeline.SetTimeLord(timeLord);
     }
 
     public void SetPlayer(PlayerController player)

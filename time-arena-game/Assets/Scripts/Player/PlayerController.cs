@@ -399,16 +399,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 		_backJumpCooldown = (_backJumpCooldown > 0) ? (_backJumpCooldown - Time.deltaTime) : 0;
 	}
 
-	private void UpdateTimeline()
-	{
-		float yourPos = _timelord.GetYourPosition();
-		List<float> players = _timelord.GetPlayerPositions();
-		Hud.SetPlayerPositions(yourPos, players);
-
-		float time = _timelord.GetTimeProportion();
-		Hud.SetTimeBarPosition(time);
-	}
-
 	void KeyControl()
 	{
 		if (Input.GetKeyDown(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, true);
@@ -480,7 +470,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 			(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded))
 			{
 				UpdateCooldowns();
-				UpdateTimeline();
 				KeyControl();
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)

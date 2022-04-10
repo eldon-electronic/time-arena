@@ -13,9 +13,8 @@ public class HudTimeline : MonoBehaviour
     [SerializeField] private Slider _playerIcon2;
     [SerializeField] private Slider _playerIcon3;
     [SerializeField] private Slider _playerIcon4;
+    private TimeLord _timeLord;
     private Slider[] _playerIcons;
-    private float _timeBarPosition;
-    private float _yourPosition;
     private List<float> _playerPositions;
 
     void Start()
@@ -36,21 +35,16 @@ public class HudTimeline : MonoBehaviour
         // }
 
         // Set player icon positions.
-        _elapsedTimeSlider.value = _timeBarPosition;
-        _yourIcon.value = _yourPosition;
-        for (int i=0; i < _playerPositions.Count; i++)
+        _elapsedTimeSlider.value = _timeLord.GetTimeProportion();
+        _yourIcon.value = _timeLord.GetYourPosition();
+        List<float> players = _timeLord.GetPlayerPositions();
+        for (int i=0; i < players.Count; i++)
         {
-            _playerIcons[i].value = _playerPositions[i];
+            _playerIcons[i].value = players[i];
         }
     }
 
+    public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
+
     public void SetActive(bool value) { _timeline.SetActive(value); }
-
-    public void SetTimeBarPosition(float value) { _timeBarPosition = value; }
-
-    public void SetPlayerPositions(float clientPosition, List<float> playerPositions)
-    {
-        _yourPosition = clientPosition;
-        _playerPositions = playerPositions;
-    }
 }
