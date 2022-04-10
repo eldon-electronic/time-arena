@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
+	private int _minerScore;
 
 
 	void Start()
@@ -26,6 +27,7 @@ public class GameController : MonoBehaviour
 		_tails = new Dictionary<int, TailController>();
 
 		Timer = 5f;
+		_minerScore = 0;
 
 		int totalFrames = Constants.GameLength * Constants.FrameRate;
 		_timeLord = new TimeLord(totalFrames);
@@ -121,4 +123,8 @@ public class GameController : MonoBehaviour
 			else if (_miners.ContainsKey(id)) _miners[id].Show();
 		}
 	}
+
+	public void IncrementMinerScore() { _minerScore++; }
+
+	public int GetMinerScore() { return _minerScore; }
 }

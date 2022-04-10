@@ -9995,6 +9995,7 @@ MonoBehaviour:
   CameraHolder: {fileID: 3168561785147484150}
   Material: {fileID: 1743376766255182593}
   Movement: {fileID: 561111332934807323}
+  _collectingCrystals: {fileID: 2163583655740837010}
   UI: {fileID: 1130251741066097712}
   PauseUI: {fileID: 3792925184382037071}
   Nametag: {fileID: 2491143808538081395}
@@ -10043,7 +10044,6 @@ MonoBehaviour:
   _cooldowns: {fileID: 5590288987897476469}
   _winningDisplay: {fileID: 71524245628701223}
   _score: {fileID: 4621444560055183819}
-  _debugPanel: {fileID: 2539957824911093140}
   _teamDisplay: {fileID: 8151362755639177340}
 --- !u!114 &228805100952192999
 MonoBehaviour:
@@ -10160,8 +10160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375f92b8143b2024b8c7015f6bdf247f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hud: {fileID: 3138509024607561696}
-  player: {fileID: 6458975045518551228}
+  _player: {fileID: 6458975045518551228}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0

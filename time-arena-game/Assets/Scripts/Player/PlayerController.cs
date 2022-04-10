@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 	public GameObject CameraHolder;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
+	[SerializeField] private CollectingCrystals _collectingCrystals;
 
 	// Variables corresponding to UI.
 	public Canvas UI;
@@ -549,6 +550,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debugable
 		_game = game;
 		Movement.SetGame(game);
 		Hud.SetGame(game);
+		_collectingCrystals.SetGame(game);
 		gameObject.layer = Constants.LayerPlayer;
 	}
 

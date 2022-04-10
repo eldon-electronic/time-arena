@@ -4,24 +4,18 @@ using UnityEngine;
 
 public class CollectingCrystals : MonoBehaviour
 {
-    public PlayerHud hud;
-    [SerializeField] private PlayerController player;
+    [SerializeField] private PlayerController _player;
+    private GameController _game;
 
 
     public void OnTriggerEnter(Collider Col)
     {
-        // TODO: Get team from PlayerController.
-        if (Col.gameObject.tag == "Collectable" && player.Team == Constants.Team.Miner)
+        if (Col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
         {
-            Debug.Log("Crystal collected!");
-            hud.setScore(hud.getScore()+1);
-            //Col.gameObject.SetActive(false);
+            if (_game != null) _game.IncrementMinerScore();
             Destroy(Col.gameObject);
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
+    public void SetGame(GameController game) { _game = game; }
 }
