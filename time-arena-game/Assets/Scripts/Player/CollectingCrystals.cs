@@ -8,12 +8,12 @@ public class CollectingCrystals : MonoBehaviour
     private GameController _game;
 
 
-    public void OnTriggerEnter(Collider Col)
+    public void OnTriggerEnter(Collider col)
     {
-        if (Col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
+        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
         {
             if (_game != null) _game.IncrementMinerScore();
-            Destroy(Col.gameObject);
+            Destroy(col.gameObject);
         }
     }
 

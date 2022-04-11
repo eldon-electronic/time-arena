@@ -138,15 +138,15 @@ public class Tutorial : MonoBehaviour
         _hasMovedOn = true;
     }
 
-    private void NeedKeyPress(bool KeyPressNeeded)
+    private void NeedKeyPress(bool keyPressNeeded)
     {
         if (_currentState < _states.Count)
         {
-            if ((KeyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger)))
+            if ((keyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger)))
             {
                 MoveToNextState();
             }
-            else if ((KeyPressNeeded == false) && _hasMovedOn)
+            else if ((keyPressNeeded == false) && _hasMovedOn)
             {    
                 StartCoroutine(DelayPopup());
                 _hasMovedOn = false;      
