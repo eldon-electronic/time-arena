@@ -411,7 +411,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 		if (Input.GetMouseButtonDown(0)) Grab();
 
-		if (Input.GetKeyDown(KeyCode.F)) StartGame();
+		if (Input.GetKeyDown(KeyCode.Return)) StartGame();
 
 		if (Input.GetKeyDown(KeyCode.Escape) && _preGame != null) _preGame.StopCountingDown();
 

@@ -17,6 +17,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudCooldowns _cooldowns;
     [SerializeField] HudWinningDisplay _winningDisplay;
     [SerializeField] HudScore _score;
+    //[SerializeField] HudTutorial _tutorial ;
     [SerializeField] private Text _teamDisplay;
 
     void Start()
@@ -26,6 +27,7 @@ public class PlayerHud : MonoBehaviour
             if (!PhotonNetwork.IsMasterClient)
             {
                 _masterClientOptions.SetActive(false);
+                //_tutorial.SetOptionsText("Go back to tutorial <sprite=1>");
             }
         }
     }

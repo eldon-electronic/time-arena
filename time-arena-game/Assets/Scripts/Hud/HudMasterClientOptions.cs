@@ -20,9 +20,9 @@ public class HudMasterClientOptions : MonoBehaviour
     private void LateUpdate()
     {
         // If master client, show options message.
-        if (SceneManager.GetActiveScene().name == "GameScene")
+        if (SceneManager.GetActiveScene().name == "PreGameScene" && Input.GetKeyDown(KeyCode.Return))
         {
-            _masterClientOptions.SetActive(false);
+            _masterClientOptions.SetActive(true);
         }
 
         if (_preGame != null && _preGame.IsCountingDown())
@@ -35,7 +35,8 @@ public class HudMasterClientOptions : MonoBehaviour
                 _text.text = "Loading...";
             }
         }
-        else _text.text = "Press F to Start";
+        //else _text.text = "Press F to Start";
+        else _masterClientOptions.SetActive(false);
     }
 
     public void SetActive(bool value) { _masterClientOptions.SetActive(value); }

@@ -82,7 +82,7 @@ public class Tutorial : MonoBehaviour
             _states.Add(state19);
             State state20 = new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
             _states.Add(state20);
-            State state21 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.Return,false,true);
+            State state21 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true);
             _states.Add(state21);
      
     
@@ -140,7 +140,7 @@ public class Tutorial : MonoBehaviour
 
     private void NeedKeyPress(bool keyPressNeeded)
     {
-        if (_currentState < _states.Count)
+        if (_currentState <= _states.Count)
         {
             if ((keyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger)))
             {
@@ -202,7 +202,17 @@ public class Tutorial : MonoBehaviour
 
     public void StartTutorialOver()
     {    
-        _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
-        if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();
+            if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();
+        
+            if (PhotonNetwork.IsMasterClient)
+            {
+                _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>\n\n Or start the game <sprite=8>");
+                //_tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+            }
+            
+            else {
+
+                _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+            }
     }
 } 
