@@ -20,7 +20,10 @@ public class HudMasterClientOptions : MonoBehaviour
     private void LateUpdate()
     {
         // If master client, show options message.
-        _masterClientOptions.SetActive(SceneManager.GetActiveScene().name == "PreGameScene");
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            _masterClientOptions.SetActive(false);
+        }
 
         if (_preGame != null && _preGame.IsCountingDown())
         {
