@@ -11,7 +11,7 @@ public interface Tester
 	public bool Authenticate();
 }
 
-public class TimeLord: Debugable
+public class TimeLord: Debuggable
 {
     private int _totalFrames;
 	private int _currentFrame;

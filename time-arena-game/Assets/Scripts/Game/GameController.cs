@@ -8,7 +8,6 @@ public class GameController : MonoBehaviour
 	private Dictionary<int, PlayerController> _miners;
 	private Dictionary<int, PlayerController> _guardians;
 	private TimeLord _timeLord;
-	private Dictionary<int, TailController> _tails;
 
 	public float Timer;
 	public bool GameStarted = false;
@@ -24,7 +23,6 @@ public class GameController : MonoBehaviour
 
 		_miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
-		_tails = new Dictionary<int, TailController>();
 
 		Timer = 5f;
 		_minerScore = 0;

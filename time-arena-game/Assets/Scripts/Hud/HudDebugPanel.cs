@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public interface Debugable
+public interface Debuggable
 {
     public Hashtable GetDebugValues();
 }
@@ -13,13 +13,13 @@ public class HudDebugPanel : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _debugCanvasGroup;
     [SerializeField] private Text _text;
-    private List<Debugable> _subsribers;
+    private List<Debuggable> _subsribers;
     private Hashtable _debugItems;
 
     void Start()
     {
         _debugCanvasGroup.alpha = 0.0f;
-        _subsribers = new List<Debugable>();
+        _subsribers = new List<Debuggable>();
         _debugItems = new Hashtable();
     }
 
@@ -54,7 +54,7 @@ public class HudDebugPanel : MonoBehaviour
         _text.text = debugText;
     }
 
-    public void Register(Debugable subscriber)
+    public void Register(Debuggable subscriber)
     {
         _subsribers.Add(subscriber);
     }

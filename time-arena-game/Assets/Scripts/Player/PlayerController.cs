@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour, ParticleUser, Debugable
+public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 {
 
 	// Variables defining player values.

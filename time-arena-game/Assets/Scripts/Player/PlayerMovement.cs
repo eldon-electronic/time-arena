@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour, Debugable
+public class PlayerMovement : MonoBehaviour, Debuggable
 {
     private GameController _game;
     [SerializeField] private HudDebugPanel _debugPanel;
