@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, Debuggable
 {
     private GameController _game;
+    [SerializeField] private HudDebugPanel _debugPanel;
     public PhotonView View;
     public CharacterController CharacterBody;
     public PauseManager PauseUI;
@@ -39,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
 
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
+
+        _debugPanel.Register(this);
     }
     
     public void OnMouseSensChange(float a){
@@ -126,13 +129,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public Hashtable GetState()
-    {
-        var values = new Hashtable();
-        values.Add("IsGrounded", _isGrounded);
-        return values;
-    }
-
     public void MoveTo(Vector3 position)
     {
         PlayerTransform.position = position;
@@ -145,4 +141,11 @@ public class PlayerMovement : MonoBehaviour
     public void SetActive(bool value) { _activated = value; }
 
     public void SetGame(GameController game) { _game = game; }
+
+    public Hashtable GetDebugValues()
+    {
+        Hashtable debugValues = new Hashtable();
+        debugValues.Add("IsGrounded", _isGrounded);
+        return debugValues;
+    }
 }
