@@ -143,4 +143,8 @@ public class GameController : MonoBehaviour
 	public void IncrementMinerScore() { _minerScore++; }
 
 	public int GetMinerScore() { return _minerScore; }
+
+	public int GetElapsedTime() { return _timeLord.GetElapsedTime();}
+
+	public int GetCurrentTime() { return _timeLord.GetYourElapsedTime();}
 }

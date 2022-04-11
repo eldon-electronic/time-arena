@@ -11,7 +11,7 @@ public class CollectingCrystals : MonoBehaviour
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
+        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner && col.gameObject.layer == 3)
         {
             if (_game != null) _player.incrScore();
             PhotonNetwork.Destroy(col.gameObject);
