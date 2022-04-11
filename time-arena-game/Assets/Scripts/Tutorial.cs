@@ -54,7 +54,7 @@ public class Tutorial : MonoBehaviour
             _states = new List<State>();
             State state1 = new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true);
             _states.Add(state1);
-            State state2 = new State("Welcome to tutorial Miner!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false);
+            State state2 = new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false);
             _states.Add(state2);
             State state3 = new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true);
             _states.Add(state3);
@@ -223,7 +223,7 @@ public class Tutorial : MonoBehaviour
 
     public void StartTutorialOver(){
         
-        TutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+        TutorialHud.SetOptionsText("Go back to tutorial <sprite=1>\n\n OR start the game <sprite=8>");
 
         if(Input.GetKeyDown(KeyCode.Alpha1)){
                 
