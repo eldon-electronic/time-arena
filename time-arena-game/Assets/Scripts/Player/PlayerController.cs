@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour, ParticleUser
+public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 {
 
 	// Variables defining player values.
@@ -13,13 +13,15 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public GameObject CameraHolder;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
+	[SerializeField] private CollectingCrystals _collectingCrystals;
 
 	// Variables corresponding to UI.
 	public Canvas UI;
 	public PauseManager PauseUI;
 	public GameObject Nametag;
 	public PlayerHud Hud;
-	public Tutorial Tutorial;
+	[SerializeField] private Tutorial _tutorial;
+	[SerializeField] private HudDebugPanel _debugPanel;
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
@@ -50,8 +52,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	private Vector3 _seekerSpawnPoint;
 
 
-	void Start() {
-
+	void Start()
+	{	
 		DontDestroyOnLoad(this.gameObject);
 
 		// TODO: Set the team in the menu before loading the pregame scene.
@@ -64,25 +66,28 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		Material.SetMaterialMiner();
 		Hud.SetTeam("MINER");
 		gameObject.layer = Constants.LayerPlayer;
-		Tutorial.SetTeam(Team);
-		Tutorial.StartTutorial();
 		Particles.Subscribe(this);
 
 		_preGame = FindObjectOfType<PreGameController>();
 		if (_preGame == null) Debug.LogError("PreGameController not found");
 		else _preGame.Register(this);
-
-		if (!View.IsMine)
+		
+		if (View.IsMine)
+		{
+			Destroy(Nametag);
+			gameObject.tag = "Client";
+			Hud.SetPlayer(this);
+			_debugPanel.Register(this);
+			_tutorial.SetTeam(Team);
+			_tutorial.StartTutorial();
+		}
+		else
 		{
 			Destroy(Cam.gameObject);
 			Destroy(UI.gameObject);
 			gameObject.layer = 7;
 		}
-		else
-		{
-			Destroy(Nametag);
-			gameObject.tag = "Client";
-		}
+
 		// Allow master client to move players from one scene to another.
         PhotonNetwork.AutomaticallySyncScene = true;
 		// Lock players cursor to center screen.
@@ -133,15 +138,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (next.name == "GameScene")
 		{
-			if (View.IsMine) _tailManager.SetActive(false);
+			if (View.IsMine)
+			{
+				_tailManager.SetActive(false);
+				_tutorial.StopTutorial();
+			}
 
 			_forwardsJumpCooldown = 15;
 			_backJumpCooldown = 15;
 
 			MoveToSpawnPoint();
 			Material.SetArmActive(Team == Constants.Team.Guardian);
-
-			Tutorial.StopTutorial();
 		}
 	}
 
@@ -171,7 +178,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (View.IsMine)
 		{
-			Hud.PressForwardJumpButton();
 			if (_game == null) _preGame.HideAllPlayers();
 			else _game.HideAllPlayers();
 		}
@@ -192,7 +198,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (View.IsMine)
 		{
-			Hud.PressBackJumpButton();
 			if (_game == null) _preGame.HideAllPlayers();
 			else _game.HideAllPlayers();
 		}
@@ -349,7 +354,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		if (SceneManager.GetActiveScene().name == "PreGameScene" && PhotonNetwork.IsMasterClient)
 		{
-			Hud.StartCountingDown();
+			_preGame.StartCountingDown();
 		}
 	}
 
@@ -404,53 +409,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	{
 		_forwardsJumpCooldown = (_forwardsJumpCooldown > 0) ? (_forwardsJumpCooldown - Time.deltaTime) : 0;
 		_backJumpCooldown = (_backJumpCooldown > 0) ? (_backJumpCooldown - Time.deltaTime) : 0;
-		float forwardBarHeight = 1.0f - (_forwardsJumpCooldown / 15.0f);
-		float backBarHeight = 1.0f - (_backJumpCooldown / 15.0f);
-		float[] cooldownValues = new float[]{forwardBarHeight, backBarHeight};
-		Hud.SetCooldownValues(cooldownValues);
-
-		bool canJumpForward = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Forward);
-		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
-		Hud.SetCanJump(canJumpForward, canJumpBack);
-	}
-
-	private void UpdateTimeline()
-	{
-		float yourPos = _timelord.GetYourPosition();
-		List<float> players = _timelord.GetPlayerPositions();
-		Hud.SetPlayerPositions(yourPos, players);
-
-		float time = _timelord.GetTimeProportion();
-		Hud.SetTimeBarPosition(time);
-	}
-
-	private void UpdateTimer()
-	{
-		int time = _timelord.GetElapsedTime();
-		Hud.SetTime(time);
-	}
-
-	private void UpdateDebugDisplay()
-	{
-		Hashtable debugItems = new Hashtable();
-		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
-		debugItems.Add("Sprint", Input.GetKey("left shift"));
-		debugItems.Add("Grab", _damageWindow);
-
-		List<(int id, int frame)> frames = _timelord.GetDebugValue();
-		foreach (var f in frames)
-		{
-			if (f.id == View.ViewID)
-			{
-				debugItems.Add("Frame mine", f.frame);
-			}
-			else debugItems.Add($"Frame {f.id}", f.frame);
-		}
-
-		Hashtable movementState = Movement.GetState();
-		Utilities.Union(ref debugItems, movementState);
-
-		Hud.SetDebugValues(debugItems);
 	}
 
 	void KeyControl()
@@ -467,9 +425,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 
 		if (Input.GetKeyDown(KeyCode.F)) StartGame();
 
-		if (Input.GetKeyDown(KeyCode.Escape)) Hud.StopCountingDown();
-
-		if (Input.GetKeyDown(KeyCode.P)) Hud.ToggleDebug();
+		if (Input.GetKeyDown(KeyCode.Escape) && _preGame != null) _preGame.StopCountingDown();
 
 		if (Input.GetKeyDown(KeyCode.L)) _timelord.SnapshotStates("GameSnapshot.txt");
 	}
@@ -526,9 +482,6 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded))
 			{
 				UpdateCooldowns();
-				UpdateTimeline();
-				UpdateTimer();
-				UpdateDebugDisplay();
 				KeyControl();
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
@@ -548,7 +501,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	}
 
 
-	// ------------ PUBLIC METHODS ------------
+	// ------------ IMPLEMENTED INTERFACE METHODS ------------
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
@@ -557,6 +510,17 @@ public class PlayerController : MonoBehaviour, ParticleUser
 			gameObject.layer = Constants.LayerOutsideReality;
 		}
 	}
+
+	public Hashtable GetDebugValues()
+	{
+		Hashtable debugItems = new Hashtable();
+		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
+		debugItems.Add("Sprint", Input.GetKey("left shift"));
+		debugItems.Add("Grab", _damageWindow);		
+		return debugItems;
+	}
+
+	// ------------ PUBLIC METHODS ------------
 
 	public void NotifyStartedDissolving()
 	{
@@ -571,6 +535,8 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		if (View.IsMine)
 		{
 			_tailManager.SetTimeLord(_timelord);
+			Hud.SetTimeLord(timelord);
+			_debugPanel.Register(_timelord);
 		}
 	}
 
@@ -579,6 +545,7 @@ public class PlayerController : MonoBehaviour, ParticleUser
 		_game = game;
 		Movement.SetGame(game);
 		Hud.SetGame(game);
+		_collectingCrystals.SetGame(game);
 		gameObject.layer = Constants.LayerPlayer;
 	}
 
@@ -587,4 +554,13 @@ public class PlayerController : MonoBehaviour, ParticleUser
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+
+	public (float forward, float back) GetCooldowns() { return (_forwardsJumpCooldown, _backJumpCooldown); }
+
+	public (bool forward, bool back) GetCanJump()
+	{
+		bool canJumpForward = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Forward);
+		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
+		return (canJumpForward, canJumpBack);
+	}
 }

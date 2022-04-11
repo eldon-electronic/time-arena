@@ -8,7 +8,6 @@ public class GameController : MonoBehaviour
 	private Dictionary<int, PlayerController> _miners;
 	private Dictionary<int, PlayerController> _guardians;
 	private TimeLord _timeLord;
-	private Dictionary<int, TailController> _tails;
 
 	public GameObject collectableCrystal;
 	public int crystalSpawnDelay = 10;
@@ -17,6 +16,7 @@ public class GameController : MonoBehaviour
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
+	private int _minerScore;
 
 
 
@@ -28,9 +28,9 @@ public class GameController : MonoBehaviour
 
 		_miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
-		_tails = new Dictionary<int, TailController>();
 
 		Timer = 5f;
+		_minerScore = 0;
 
 		int totalFrames = Constants.GameLength * Constants.FrameRate;
 		_timeLord = new TimeLord(totalFrames);
@@ -137,4 +137,8 @@ public class GameController : MonoBehaviour
 			else if (_miners.ContainsKey(id)) _miners[id].Show();
 		}
 	}
+
+	public void IncrementMinerScore() { _minerScore++; }
+
+	public int GetMinerScore() { return _minerScore; }
 }

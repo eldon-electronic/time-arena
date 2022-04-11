@@ -155,7 +155,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		} else {
 			MenuManager.Instance.OpenMenu("mainMenu");
 		}
-    }
+	}
+	public void ReturnToMain()
+	{
+		MenuManager.Instance.OpenMenu("mainMenu");
+	}
 
 	public override void OnDisconnected(DisconnectCause cause) {
 		Start();

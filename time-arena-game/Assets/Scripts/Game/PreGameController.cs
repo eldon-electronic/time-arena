@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ public class PreGameController : MonoBehaviour
 {
     private TimeLord _timeLord;
     private Dictionary<int, PlayerController> _players;
+    private bool _isCountingTillGameStart;
+    private float _secondsTillGame;
 
     void Start()
     {
@@ -20,6 +23,15 @@ public class PreGameController : MonoBehaviour
 
     void Update()
     {
+        if (_isCountingTillGameStart)
+        {
+            _secondsTillGame -= Time.deltaTime;
+            if (_secondsTillGame <= 0)
+            {
+                PhotonNetwork.LoadLevel("GameScene");
+                _isCountingTillGameStart = false;
+            }
+        }
         _timeLord.Tick();
     }
 
@@ -47,4 +59,21 @@ public class PreGameController : MonoBehaviour
             if (_players.ContainsKey(id)) _players[id].Show();
         }
     }
+
+    public void StartCountingDown()
+    {
+        if (_isCountingTillGameStart) return;
+        _isCountingTillGameStart = true;
+        _secondsTillGame = 5.0f;
+    }
+
+    public void StopCountingDown()
+    {
+        _isCountingTillGameStart = false;
+        _secondsTillGame = 0.0f;
+    }
+
+    public bool IsCountingDown() { return _isCountingTillGameStart; }
+
+    public float GetSecondsTillGame() { return _secondsTillGame; }
 }
