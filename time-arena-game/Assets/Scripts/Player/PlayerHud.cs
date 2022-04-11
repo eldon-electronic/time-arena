@@ -16,7 +16,7 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] HudTimeline _timeline;
     [SerializeField] HudCooldowns _cooldowns;
     [SerializeField] HudWinningDisplay _winningDisplay;
-    [SerializeField] HudScore _score;
+    [SerializeField] public HudScore _score;
     [SerializeField] private Text _teamDisplay;
 
     void Start()

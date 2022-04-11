@@ -87,10 +87,12 @@ public class GameController : MonoBehaviour
 			// Increment global frame and individual player frames.
 			if (!GameEnded) {
 				_timeLord.Tick();
-				crystalSpawnCounter+=Time.deltaTime;
-				if(crystalSpawnCounter > crystalSpawnDelay){
-					crystalSpawnCounter = 0;
-					spawnCollectableCrystal(new Vector3(Random.Range(-10f, 10f), -3, Random.Range(-10f, 10f)));
+				if(PhotonNetwork.IsMasterClient){
+					crystalSpawnCounter+=Time.deltaTime;
+					if(crystalSpawnCounter > crystalSpawnDelay){
+						crystalSpawnCounter = 0;
+						spawnCollectableCrystal(new Vector3(Random.Range(-10f, 10f), -3, Random.Range(-10f, 10f)));
+					}
 				}
 				CheckWon();
 			}

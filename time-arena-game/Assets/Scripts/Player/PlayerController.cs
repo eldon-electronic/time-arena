@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 
 	void Start()
-	{	
+	{
 		DontDestroyOnLoad(this.gameObject);
 
 		// TODO: Set the team in the menu before loading the pregame scene.
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_preGame = FindObjectOfType<PreGameController>();
 		if (_preGame == null) Debug.LogError("PreGameController not found");
 		else _preGame.Register(this);
-		
+
 		if (View.IsMine)
 		{
 			Destroy(Nametag);
@@ -156,15 +156,14 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	// ------------ RPC FUNCTIONS ------------
 
 	[PunRPC]
-	void RPC_incrScore()
-	{
-		Hud.incrScore();
+	void RPC_incrScore(){
+		Hud._score.SetScore(Hud._score.GetScore()+1);
+		_game.IncrementMinerScore();
 	}
 
 	[PunRPC]
-	void RPC_clearScore()
-	{
-		Hud.resetScore();
+	void RPC_resetScore(){
+		Hud._score.SetScore((int)(Hud._score.GetScore()/2));
 	}
 
 	[PunRPC]
@@ -255,7 +254,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	// RPC function to be called when another player finds this one.
 	[PunRPC]
-	void RPC_getFound() { /*ChangeTeam();*/ }
+	void RPC_getFound() { ChangeTeam(); }
 
 	// RPC function to be called by other machines to set this players transform.
 	[PunRPC]
@@ -402,6 +401,11 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		PlayerAnim.SetBool("isGrabbing", false);
 	}
 
+	public void incrScore()
+	{
+		View.RPC("RPC_incrScore", RpcTarget.All);
+	}
+
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
 
@@ -516,7 +520,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		Hashtable debugItems = new Hashtable();
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
-		debugItems.Add("Grab", _damageWindow);		
+		debugItems.Add("Grab", _damageWindow);
 		return debugItems;
 	}
 

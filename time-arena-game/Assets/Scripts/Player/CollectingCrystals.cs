@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CollectingCrystals : MonoBehaviour
 {
-    [SerializeField] private PlayerController _player;
+  [SerializeField] private PlayerController _player;
     private GameController _game;
 
 
@@ -12,8 +13,8 @@ public class CollectingCrystals : MonoBehaviour
     {
         if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
         {
-            if (_game != null) _game.IncrementMinerScore();
-            Destroy(col.gameObject);
+            if (_game != null) _player.incrScore();
+            PhotonNetwork.Destroy(col.gameObject);
         }
     }
 
