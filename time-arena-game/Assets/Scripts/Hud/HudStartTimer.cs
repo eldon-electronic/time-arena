@@ -29,6 +29,4 @@ public class HudStartTimer : MonoBehaviour
     }
 
     public void SetGame(GameController game) { _game = game; }
-
-    public void SetActive(bool value) { _startTimer.SetActive(value); }
 }

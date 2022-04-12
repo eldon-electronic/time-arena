@@ -16,7 +16,7 @@ public class HudTutorial : MonoBehaviour
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
 
-    void Start()
+    void Awake()
     {
         _uiPositions = new Dictionary<string, Vector2>();
         _uiPositions.Add("forwardJump",new Vector2(381f,-76f));
