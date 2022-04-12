@@ -46,6 +46,8 @@ public class HudTutorial : MonoBehaviour
 
     public void SetArrowPosition(string uiElement)
     {
+        Debug.Log($"_arrowImage: {_arrowImage}");
+        Debug.Log($"_uiPositions: {_uiPositions}");
         _arrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         _arrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
     }
