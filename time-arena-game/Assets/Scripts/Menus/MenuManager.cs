@@ -13,7 +13,6 @@ public class MenuManager : MonoBehaviour
     }
 
     public void OpenMenu(string name) { 
-        // Loop through all our Menu instances
         for (int i = 0; i < menus.Length; i++) {
             if (menus[i].MenuName == name) {
                 menus[i].Open();

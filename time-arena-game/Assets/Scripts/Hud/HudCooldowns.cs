@@ -12,12 +12,15 @@ public class HudCooldowns : MonoBehaviour
     [SerializeField] private Image _backJumpIcon;
     [SerializeField] private Sprite _greenUnpressedSprite;
     [SerializeField] private Sprite _redPressedSprite;
+    [SerializeField] private HotbarAnimator _hotbarAnim;
 
     private PlayerController _player;
     private float _forwardBarHeight;
     private float _backBarHeight;
     private bool _canJumpForward;
     private bool _canJumpBack;
+    private bool _isBackButtonSpinning;
+    private bool _isForwardButtonSpinning;
 
     void Start()
     {
@@ -25,6 +28,8 @@ public class HudCooldowns : MonoBehaviour
         _backBarHeight = 0.0f;
         _canJumpForward = false;
         _canJumpBack = false;
+        _isForwardButtonSpinning = false;
+        _isBackButtonSpinning = false;
     }
 
     void Update()
@@ -42,6 +47,22 @@ public class HudCooldowns : MonoBehaviour
     {
         _forwardCooldownSlider.value = _forwardBarHeight;
         _backCooldownSlider.value = _backBarHeight;
+
+        if (_canJumpBack && !_isBackButtonSpinning) { // Ready to jump after cooldown
+            _hotbarAnim.RotateBackButton();
+            _isBackButtonSpinning = true;
+        } else if (!_canJumpBack && _isBackButtonSpinning) { // Cooldown activated
+            _hotbarAnim.StopBackButton();
+            _isBackButtonSpinning = false;
+        }
+
+        if (_canJumpForward && !_isForwardButtonSpinning) {
+            _hotbarAnim.RotateForwardButton();
+            _isForwardButtonSpinning = true;
+        } else if (!_canJumpForward && _isForwardButtonSpinning) {
+            _hotbarAnim.StopForwardButton();
+            _isForwardButtonSpinning = false;
+        }
 
         if (_canJumpForward) _forwardJumpIcon.sprite = _greenUnpressedSprite;
         else _forwardJumpIcon.sprite = _redPressedSprite;

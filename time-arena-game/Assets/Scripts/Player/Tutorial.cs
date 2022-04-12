@@ -13,7 +13,7 @@ public class Tutorial : MonoBehaviour
         public bool VisibilityOfArrow;
         public bool NeedKey;
 
-        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress)
+        public State(string message, string elementToPointTo, KeyCode inputTrigger, bool visibilityOfArrow, bool needKeyPress)
         {
             Message = message;
             ElementToPointTo = elementToPointTo;
