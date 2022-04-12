@@ -70,17 +70,17 @@ public class Tutorial : MonoBehaviour
             _states.Add(state13);
             State state14 = new State("This icon shows the ability of time travelling backwards.\nOnce it turns to green you can travel back in time.", "backJump",KeyCode.Return,true,false);
             _states.Add(state14);
-            State state15 = new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=7>.", "backJump",KeyCode.Q,true,true);
+            State state15 = new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=7>.", "backJump",KeyCode.Q,true,true);
             _states.Add(state15);
-             State state16 = new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=24>.", "backJump",KeyCode.Q,true,false);
+             State state16 = new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=24>.", "backJump",KeyCode.Q,true,false);
             _states.Add(state16);
             State state17 = new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false);
             _states.Add(state17);
             State state18 = new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it turns to green you can travel forward in time.", "forwardJump",KeyCode.Return,true,false);
             _states.Add(state18);
-            State state19 = new State("Please press <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true);
+            State state19 = new State("Please hold <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true);
             _states.Add(state19);
-            State state20 = new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
+            State state20 = new State("Please hold <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
             _states.Add(state20);
             State state21 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true);
             _states.Add(state21);
@@ -114,19 +114,19 @@ public class Tutorial : MonoBehaviour
         _states.Add(state11);
         State state12 = new State("This icon shows the ability of time travelling backwards.\nOnce it turns to green you can travel back in time.", "backJump",KeyCode.Return,true,false);
         _states.Add(state12);
-        State state13 = new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=7>.", "backJump",KeyCode.Q,true,true);
+        State state13 = new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=7>.", "backJump",KeyCode.Q,true,true);
         _states.Add(state13);
-        State state14 = new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=24>.", "backJump",KeyCode.Q,true,false);
+        State state14 = new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=24>.", "backJump",KeyCode.Q,true,false);
         _states.Add(state14);
         State state15 = new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false);
         _states.Add(state15);
         State state16 = new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it turns to green you can travel forward in time.", "forwardJump",KeyCode.Return,true,false);
         _states.Add(state16);
-        State state17 = new State("Please press <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true);
+        State state17 = new State("Please hold <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true);
         _states.Add(state17);
-        State state18 = new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
+        State state18 = new State("Please hold <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false);
         _states.Add(state18);
-        State state19 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.Return,false,true);
+        State state19 = new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true);
         _states.Add(state19);
  
     }
@@ -160,7 +160,7 @@ public class Tutorial : MonoBehaviour
             _currentState++;
             _tutorialHud.SetMessage(_states[_currentState].Message);
             _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
+            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow); 
     }
 
 
