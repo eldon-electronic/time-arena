@@ -15,23 +15,24 @@ public class TeamSelectionManger : MonoBehaviour
     [SerializeField] private GameObject _minerUI;
     [SerializeField] private GameObject _guardianUI;
     private string _team;
-    public Constants.Team ChooseTeam;
+    public static Constants.Team ChooseTeam;
+    
 
-    void Awake()
+    void Start()
     {
+        
         _minerUI.gameObject.SetActive(true);
+        _guardianUI.gameObject.SetActive(false);
         _rightButton.gameObject.SetActive(true);
         _leftButton.gameObject.SetActive(false);
         _team = "Miner";
         _teamText.text = _team;
         ChooseTeam = Constants.Team.Miner;
     }
+    
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
     public void LeftClick(){
 
         _rightButton.gameObject.SetActive(true);
@@ -41,6 +42,7 @@ public class TeamSelectionManger : MonoBehaviour
         _team = "Miner";
         _teamText.text = _team;
         ChooseTeam = Constants.Team.Miner;
+        //Debug.Log(ChooseTeam);
 
     }
     public void RightClick(){
@@ -52,8 +54,12 @@ public class TeamSelectionManger : MonoBehaviour
         _team = "Guardian";
         _teamText.text = _team;
         ChooseTeam = Constants.Team.Guardian;
+        //Debug.Log(ChooseTeam);
 
     }
+    
+    
+  
    
 }
 

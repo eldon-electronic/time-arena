@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
     // Variables corresponding to the gamestate.
 	private PreGameController _preGame;
     private GameController _game;
-	private TeamSelectionManger _teamSelectionManager;
+	
 	private TimeLord _timelord;
 	[SerializeField] private TailManager _tailManager;
 
@@ -68,32 +68,32 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
+
+	
+		
 	}
 
 	void Start()
 	{	
-		Debug.Log("hey bitch!");
+	
 		DontDestroyOnLoad(this.gameObject);
+		//Debug.Log(_teamSelectionManager.ChooseTeam);
+
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		if(_teamSelectionManager.ChooseTeam == Constants.Team.Miner){
+		if(TeamSelectionManger.ChooseTeam == Constants.Team.Miner){
 			Team = Constants.Team.Miner;
-		    Hud.SetTeam("MINER");
+		    Hud.SetTeam("Miner");
 			Material.SetArmActive(false);
-			Debug.Log("I am here!");
+			//Debug.Log("I am here!");
 		}
-		else if(_teamSelectionManager.ChooseTeam == Constants.Team.Guardian){
+		else if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
 			Team = Constants.Team.Guardian;
-			Hud.SetTeam("GUARDIAN");
+			Hud.SetTeam("Guardian");
 			Material.SetArmActive(true);
 		}
 		Material.SetMaterial(Team);
 		
-		
-		//if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
-		//{
-			//Team = Constants.Team.Guardian;
-		//}
 
 		//Material.SetMaterialMiner();
 		//Hud.SetTeam("MINER");
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			_debugPanel.Register(this);
 			_tutorial.SetTeam(Team);
 			_tutorial.StartTutorial();
-			Debug.Log("helloooo!");
+			//Debug.Log("helloooo!");
 		}
 		else
 		{
