@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	private float _grabCheckRadius = 1f;
 	private bool _damageWindow = false;
 	public ParticleController Particles;
-	[SerializeField] PlayPPControlScript PPControl;
 
     // The photonView component that syncs with the network.
 	public PhotonView View;
@@ -294,7 +293,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			{
 				if (CanTimeTravel(direction) && !Particles.IsDissolving())
 				{
-					PPControl.TriggerPP(direction, jumpOut);
+					//PPControl.TriggerPP(direction, jumpOut);
 					if (direction == Constants.JumpDirection.Backward)
 					{
 						View.RPC("RPC_jumpBackOut", RpcTarget.All);
@@ -306,7 +305,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			}
 			else if (_isJumping)
 			{
-				PPControl.TriggerPP(direction, jumpOut);
+				//PPControl.TriggerPP(direction, jumpOut);
 				int frame = _timelord.GetNearestReality(View.ViewID);
 				if (direction == Constants.JumpDirection.Backward)
 				{

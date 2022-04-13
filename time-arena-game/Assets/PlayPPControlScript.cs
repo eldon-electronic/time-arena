@@ -29,6 +29,8 @@ public class PlayPPControlScript : MonoBehaviour
     float queuedlensDist = 0;
     bool queuedFadeIn = true;
     Color queuedvinColor = new Color(0, 0, 0, 0);
+    [SerializeField] PlayerController cont;
+    //public PlayerController cont;
 
 
 
