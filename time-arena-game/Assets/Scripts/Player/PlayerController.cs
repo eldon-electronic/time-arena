@@ -558,5 +558,9 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		return (canJumpForward, canJumpBack);
 	}
 
-	public void Subscribe(PPSubscriber subscriber) { _ppController = subscriber; }
+	public void Subscribe(PPSubscriber subscriber)
+	{ 
+		_ppController = subscriber;
+		Debug.Log("subscribed");
+	}
 }

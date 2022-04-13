@@ -56,6 +56,7 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
 
     public void TriggerPP(Constants.JumpDirection direction, bool jumpOut)
     {
+        Debug.Log("TriggeringPP");
         if (direction == Constants.JumpDirection.Backward)
         {
             StartAnim(lensDistortionIntensity, jumpOut, vingetteColorBackWard);
@@ -69,6 +70,7 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
     //launch animation
     public void StartAnim(float distort, bool fade, Color col) 
     {
+        Debug.Log("starting Animation");
         //check lock
         if(playLock)
         {
