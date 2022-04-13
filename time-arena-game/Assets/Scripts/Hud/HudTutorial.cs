@@ -18,7 +18,7 @@ public class HudTutorial : MonoBehaviour
     private GameObject _crystal;
     
 
-    void Start()
+    void Awake()
     {
         //_crystal = GameObject.FindWithTag("Collectable");
         _crystal = GameObject.Find("TutorialCrystal");
@@ -50,6 +50,8 @@ public class HudTutorial : MonoBehaviour
 
     public void SetArrowPosition(string uiElement)
     {
+        Debug.Log($"_arrowImage: {_arrowImage}");
+        Debug.Log($"_uiPositions: {_uiPositions}");
         _arrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         _arrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
     }

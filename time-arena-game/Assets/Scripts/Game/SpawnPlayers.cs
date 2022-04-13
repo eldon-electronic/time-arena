@@ -5,20 +5,21 @@ using Photon.Pun;
 
 public class SpawnPlayers : MonoBehaviour
 {
-
-    // Prefab defining a player object.
     public GameObject playerPrefab;
-
-	// Spawn point array.
-	public Vector3[] spawningPoint = {
-		new Vector3(-62f, -2f, 20f),
-		new Vector3(2f, 5f, 0f),
-		new Vector3(15f, 5f, 0f),
-		new Vector3(23f, 5f, 0f),
-		new Vector3(30f, 5f, 0f)
-	};
-
+	public Vector3[] spawningPoint;
     private TimeLord _timeLord;
+
+    void Awake()
+    {
+        spawningPoint = new Vector3[]
+        {
+            new Vector3(-20f, 5f, 0f),
+            new Vector3(-10f, 5f, 0f),
+            new Vector3(10f, 5f, 0f),
+            new Vector3(20f, 5f, 0f),
+            new Vector3(30f, 5f, 0f)
+        };
+    }
 
     void Start()
     {
