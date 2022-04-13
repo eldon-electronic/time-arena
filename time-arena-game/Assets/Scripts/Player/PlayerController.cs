@@ -5,6 +5,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public interface PPSubscriber
+{
+	public void TriggerPP(Constants.JumpDirection direction, bool jumpOut);
+}
+
 public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 {
 
@@ -30,6 +35,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	private float _grabCheckRadius = 1f;
 	private bool _damageWindow = false;
 	public ParticleController Particles;
+	private PPSubscriber _ppController;
 
     // The photonView component that syncs with the network.
 	public PhotonView View;
@@ -293,7 +299,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			{
 				if (CanTimeTravel(direction) && !Particles.IsDissolving())
 				{
-					//PPControl.TriggerPP(direction, jumpOut);
+					_ppController.TriggerPP(direction, jumpOut);
 					if (direction == Constants.JumpDirection.Backward)
 					{
 						View.RPC("RPC_jumpBackOut", RpcTarget.All);
@@ -305,7 +311,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			}
 			else if (_isJumping)
 			{
-				//PPControl.TriggerPP(direction, jumpOut);
+				_ppController.TriggerPP(direction, jumpOut);
 				int frame = _timelord.GetNearestReality(View.ViewID);
 				if (direction == Constants.JumpDirection.Backward)
 				{
@@ -551,4 +557,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
 		return (canJumpForward, canJumpBack);
 	}
+
+	public void Subscribe(PPSubscriber subscriber) { _ppController = subscriber; }
 }

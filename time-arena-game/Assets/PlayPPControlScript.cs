@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class PlayPPControlScript : MonoBehaviour
+public class PlayPPControlScript : MonoBehaviour, PPSubscriber
 {
     public VolumeProfile volProfile;
     public AnimationCurve inCurve;
@@ -50,6 +50,8 @@ public class PlayPPControlScript : MonoBehaviour
         lensDistortion.intensity.value = 0;
         chromaticAbberation.intensity.value = 0;
         vignette.intensity.value = 0;
+
+        cont.Subscribe(this);
     }
 
     public void TriggerPP(Constants.JumpDirection direction, bool jumpOut)
