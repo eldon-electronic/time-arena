@@ -6,17 +6,22 @@ using Photon.Pun;
 public class CollectingCrystals : MonoBehaviour
 {
   [SerializeField] private PlayerController _player;
+  [SerializeField] private CrystalManager cm;
     private GameController _game;
+
 
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner && col.gameObject.layer == 3)
+        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
         {
             if (_game != null) _player.incrScore();
-            PhotonNetwork.Destroy(col.gameObject);
+            cm.collected(col.gameObject.GetComponent<CrystalBehaviour>().ID);
         }
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    public void SetGame(GameController game) {
+      _game = game;
+      cm = game.gameObject.GetComponent<CrystalManager>();
+    }
 }

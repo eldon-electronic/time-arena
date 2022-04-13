@@ -354,6 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1944367506}
   - component: {fileID: 1944367505}
+  - component: {fileID: 1944367507}
   m_Layer: 0
   m_Name: GameController
   m_TagString: TimeLord
@@ -373,9 +374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b8f223c584f49dca13d854546d6dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectableCrystal: {fileID: 2449337122968480037, guid: 17201bb6ab6214f6b93d396a95f0168d, type: 3}
-  crystalSpawnDelay: 10
-  crystalSpawnCounter: 0
   Timer: 0
   GameStarted: 0
   GameEnded: 0
@@ -394,6 +392,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1944367507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944367504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b188546bb394561a772d63c101f700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crystal_prefab: {fileID: 2449337122968480037, guid: 17201bb6ab6214f6b93d396a95f0168d, type: 3}
+  _game: {fileID: 1944367505}
 --- !u!1001 &1957101240
 PrefabInstance:
   m_ObjectHideFlags: 0
