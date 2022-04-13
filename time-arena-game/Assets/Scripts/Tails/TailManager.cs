@@ -10,7 +10,7 @@ public class TailManager : MonoBehaviour
     [SerializeField] private GameObject _tailPrefab;
     private bool _particlesEnabled;
 
-    void Start()
+    void Awake()
     {
         _tails = new Dictionary<int, TailController>();
         _activated = false;

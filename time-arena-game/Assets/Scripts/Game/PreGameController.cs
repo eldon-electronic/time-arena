@@ -10,15 +10,18 @@ public class PreGameController : MonoBehaviour
     private bool _isCountingTillGameStart;
     private float _secondsTillGame;
 
-    void Start()
+    void Awake()
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = Constants.FrameRate;
-
         int totalFrames = Constants.FrameRate * 60 * 2;
         _timeLord = new TimeLord(totalFrames);
 
         _players = new Dictionary<int, PlayerController>();
+    }
+
+    void Start()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = Constants.FrameRate;
     }
 
     void Update()

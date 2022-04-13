@@ -22,7 +22,7 @@ public class ParticleController : MonoBehaviour
     private bool _isDissolving;
     private PlayerController _subscriber;
     
-    void Start()
+    void Awake()
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
         _isDissolving = false;

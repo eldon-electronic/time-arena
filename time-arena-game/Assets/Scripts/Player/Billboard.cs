@@ -4,7 +4,6 @@ using UnityEngine;
 // This script is used to control the rotation of an object so that it always faces the main camera
 public class Billboard : MonoBehaviour
 {
-
     private Transform _mainCameraTransform;
 
     void Start()
