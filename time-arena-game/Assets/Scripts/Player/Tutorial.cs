@@ -12,14 +12,16 @@ public class Tutorial : MonoBehaviour
         public KeyCode InputTrigger;
         public bool VisibilityOfArrow;
         public bool NeedKey;
+        public bool CrystalVisibility;
 
-        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress)
+        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress,bool visibilityOfCrystal)
         {
             Message = message;
             ElementToPointTo = elementToPointTo;
             InputTrigger = inputTrigger;
             VisibilityOfArrow = visibilityOfArrow;
             NeedKey = needKeyPress;
+            CrystalVisibility = visibilityOfCrystal;
         }
     }
     
@@ -108,7 +110,7 @@ public class Tutorial : MonoBehaviour
 
     private void NeedKeyPress(bool keyPressNeeded)
     {
-        if (_currentState < _states.Count)
+        if (_currentState <= _states.Count)
         {
             if ((keyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger)))
             {
@@ -128,7 +130,8 @@ public class Tutorial : MonoBehaviour
             _currentState++;
             _tutorialHud.SetMessage(_states[_currentState].Message);
             _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
+            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+            _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
     }
 
 
@@ -146,6 +149,7 @@ public class Tutorial : MonoBehaviour
         _tutorialHud.SetMessage(_states[_currentState].Message);
         _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
         _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         NeedKeyPress(_states[_currentState].NeedKey);
         _tutorialHud.SetVisibility(true);
     }
@@ -162,13 +166,25 @@ public class Tutorial : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {        
             _currentState = _states.Count - 1;
+
             _tutorialHud.SetMessage(_states[_currentState].Message);
+
         }
     }
 
     public void StartTutorialOver()
     {    
-        _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
-        if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();
+            if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();
+        
+            if (PhotonNetwork.IsMasterClient)
+            {
+                _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>\n\n Or start the game <sprite=8>");
+                //_tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+            }
+            
+            else {
+
+                _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+            }
     }
 } 

@@ -15,9 +15,13 @@ public class HudTutorial : MonoBehaviour
     [SerializeField] private GameObject _optionsPopUpText;
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
+    private GameObject _crystal;
+    
 
     void Awake()
     {
+        //_crystal = GameObject.FindWithTag("Collectable");
+        _crystal = GameObject.Find("TutorialCrystal");
         _uiPositions = new Dictionary<string, Vector2>();
         _uiPositions.Add("forwardJump",new Vector2(381f,-76f));
         _uiPositions.Add("backJump",new Vector2(-397f,-82f));
@@ -65,5 +69,10 @@ public class HudTutorial : MonoBehaviour
     public void SetOptionsText(string message)
     {
         _optionsPopUpText.GetComponent<TextMeshProUGUI>().text = message;
+    }
+    public void SetCrystalVisibility(bool crystalVis){
+        
+        _crystal.SetActive(crystalVis);
+
     }
 }
