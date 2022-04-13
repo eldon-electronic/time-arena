@@ -56,12 +56,12 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
 
     public void TriggerPP(Constants.JumpDirection direction, bool jumpOut)
     {
-        Debug.Log("TriggeringPP");
+        Debug.Log($"TriggeringPP {direction}");
         if (direction == Constants.JumpDirection.Backward)
         {
             StartAnim(lensDistortionIntensity, jumpOut, vingetteColorBackWard);
         }
-        else if (direction == Constants.JumpDirection.Backward)
+        else if (direction == Constants.JumpDirection.Forward)
         {
             StartAnim(-1 * lensDistortionIntensity, jumpOut, vingetteColorForward);
         }
