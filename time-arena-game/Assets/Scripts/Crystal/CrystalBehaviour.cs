@@ -40,6 +40,7 @@ public class CrystalBehaviour : MonoBehaviour
       //give self id according to position in list (syncing doesnt matter, only uniqueness and size)
       ID = cm.crystals.Count;
       cm.crystals.Add(this);
+      UpdateAnim();
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class CrystalBehaviour : MonoBehaviour
     }
 
     //update aesthetics
-    void UpdateAnim(){
+    public void UpdateAnim(){
       t += Time.deltaTime;
       float offsetY = (float)(0.01 * Sin(t));
       gameObject.transform.Translate(new Vector3(0.0f, offsetY, 0.0f));

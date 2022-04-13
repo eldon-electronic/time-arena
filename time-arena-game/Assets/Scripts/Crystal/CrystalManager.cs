@@ -41,6 +41,7 @@ public class CrystalManager : MonoBehaviour
       foreach(CrystalBehaviour crystal in crystals){
         float percievedTime = (game._timeLord.GetYourPosition()*game._timeLord._totalFrames) / Constants.FrameRate;
         if(percievedTime >= crystal.existanceRange[0] && percievedTime <= crystal.existanceRange[1]){
+          crystal.UpdateAnim();
           crystal.gameObject.SetActive(true);//set layers here
         } else {
           crystal.gameObject.SetActive(false);//set layers here
