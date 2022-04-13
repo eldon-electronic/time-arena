@@ -7,15 +7,13 @@ public class GameController : MonoBehaviour
 {
 	private Dictionary<int, PlayerController> _miners;
 	private Dictionary<int, PlayerController> _guardians;
-	private TimeLord _timeLord;
+	public TimeLord _timeLord;
 
 	public float Timer;
 	public bool GameStarted = false;
 	public bool GameEnded = false;
 	public Constants.Team WinningTeam = Constants.Team.Miner;
 	private int _minerScore;
-
-
 
 
 	void Start()
@@ -52,6 +50,7 @@ public class GameController : MonoBehaviour
 
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
+
 	// Checks to see if there are no hiders left.
 	private void CheckWon()
 	{
@@ -77,10 +76,8 @@ public class GameController : MonoBehaviour
 		else
 		{
 			// Increment global frame and individual player frames.
-			if (!GameEnded) {
-				_timeLord.Tick();
-				CheckWon();
-			}
+			if (!GameEnded) _timeLord.Tick();
+			CheckWon();
 		}
 	}
 
@@ -128,8 +125,4 @@ public class GameController : MonoBehaviour
 	public void IncrementMinerScore() { _minerScore++; }
 
 	public int GetMinerScore() { return _minerScore; }
-
-	public int GetElapsedTime() { return _timeLord.GetElapsedTime();}
-
-	public int GetCurrentTime() { return _timeLord.GetYourElapsedTime();}
 }

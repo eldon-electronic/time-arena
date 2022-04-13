@@ -13,7 +13,7 @@ public interface Tester
 
 public class TimeLord: Debuggable
 {
-    private int _totalFrames;
+    public int _totalFrames;
 	private int _currentFrame;
     private int _myID;
 
@@ -218,19 +218,12 @@ public class TimeLord: Debuggable
 		return _realities.InSameFrame(playerID, _myID);
 	}
 
-	// Returns your position in time as a fraction through the game time.
+    // Returns your position in time as a fraction through the game time.
 	public float GetYourPosition()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
 		float position = (float) frame / (float) _totalFrames;
 		return position;
-	}
-
-	// Returns your position in time in seconds
-	public int GetYourElapsedTime()
-	{
-		int frame = _realities.GetPerceivedFrame(_myID);
-		return (int)(frame / Constants.FrameRate);
 	}
 
 	// Returns the fraction elapsed through the game time.

@@ -6,58 +6,46 @@ using Photon.Pun;
 public class CrystalManager : MonoBehaviour
 {
 
-  [SerializeField] private GameObject crystal_prefab;
-  [SerializeField] private GameController _game;
+  [SerializeField] private GameObject spawnHolder;
+  [SerializeField] private GameObject crystalPrefab;
+  [SerializeField] private GameController game;
 
-  private List<CrystalBehaviour> crystals = new List<CrystalBehaviour>();
+  private Transform[] spawnPoints;
+  public List<CrystalBehaviour> crystals = new List<CrystalBehaviour>();
 
     // Start is called before the first frame update
     void Start()
     {
-      if(PhotonNetwork.IsMasterClient){
-        spawnCrystals();
-      }
-    }
-
-    public void collected(int id){
-      crystals[id].gameObject.SetActive(false);
+      spawnPoints = new Transform[spawnHolder.transform.childCount];
       int i = 0;
-      foreach(Vector2 existanceRange in crystals[id].existanceRanges){
-        if(_game.GetCurrentTime() >= existanceRange[0] && _game.GetCurrentTime() <= existanceRange[1]){
-          break;
-        }
-        i++;
+      foreach(Transform child in spawnHolder.transform){
+        spawnPoints[i++] = child;
       }
-      crystals[id].existanceRanges.RemoveAt(i);
+
+      foreach(Transform spawnPoint in spawnPoints){
+        PhotonNetwork.Instantiate(crystalPrefab.name, spawnPoint.position, Quaternion.identity);
+      }
     }
-
-    public void spawnCrystals(){
-      spawnCollectableCrystal(new Vector3(Random.Range(-10f, 10f), -3, Random.Range(-10f, 10f)));
-      spawnCollectableCrystal(new Vector3(Random.Range(-10f, 10f), -3, Random.Range(-10f, 10f)));
-      spawnCollectableCrystal(new Vector3(Random.Range(-10f, 10f), -3, Random.Range(-10f, 10f)));
-    }
-
-
-    private void spawnCollectableCrystal(Vector3 spawnLoc){
-      PhotonNetwork.Instantiate(crystal_prefab.name, spawnLoc, Quaternion.identity);
-    }
-
-    public int addCrystal(CrystalBehaviour newCrystal){
-      crystals.Add(newCrystal);
-      return crystals.Count-1;
-    }
-
 
     // Update is called once per frame
     void Update()
     {
       foreach(CrystalBehaviour crystal in crystals){
-        crystal.gameObject.SetActive(false);
-        foreach(Vector2 existanceRange in crystal.existanceRanges){
-          if(_game.GetCurrentTime() >= existanceRange[0] && _game.GetCurrentTime() <= existanceRange[1]){
-            crystal.gameObject.SetActive(true);
-          }
+        float percievedTime = (game._timeLord.GetYourPosition()*game._timeLord._totalFrames) / Constants.FrameRate;
+        if(percievedTime >= crystal.existanceRange[0] && percievedTime <= crystal.existanceRange[1]){
+          crystal.gameObject.SetActive(true);//set layers here
+        } else {
+          crystal.gameObject.SetActive(false);//set layers here
         }
       }
+    }
+
+
+    public IEnumerator Respawn(int id){
+      float newExistance = Random.Range(0.0f, (game._timeLord.GetTimeProportion()*game._timeLord._totalFrames)/Constants.FrameRate);
+      Vector2 newExistanceRange = new Vector2(newExistance, newExistance + 10f );
+      yield return new WaitForSeconds(1.0f);
+      crystals[id].gameObject.GetComponent<PhotonView>().RPC("RPC_setExistanceRange", RpcTarget.All, newExistanceRange);
+      Debug.Log("check2");
     }
 }
