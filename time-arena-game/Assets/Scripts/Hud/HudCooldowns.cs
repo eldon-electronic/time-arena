@@ -19,7 +19,7 @@ public class HudCooldowns : MonoBehaviour
     private bool _canJumpForward;
     private bool _canJumpBack;
 
-    void Start()
+    void Awake()
     {
         _forwardBarHeight = 0.0f;
         _backBarHeight = 0.0f;

@@ -15,11 +15,6 @@ using UnityEngine.UI;
 public class Launcher : MonoBehaviourPunCallbacks {
 
 	public static Launcher Instance;
-
-	void Awake() {
-		Instance = this;
-	}
-
 	[SerializeField] private TMP_InputField _roomNameInput;
 	[SerializeField] private TMP_Text _errorText;
 	[SerializeField] private TMP_Text _roomNameText;
@@ -30,6 +25,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	[SerializeField] private TMP_Text _creationFailedText;
 	[SerializeField] private Button _startButton;
 	[SerializeField] private TMP_Text _usernameErrorText;
+
+	void Awake()
+	{
+		Instance = this;
+	}
 
 	// Start is called before the first frame update
 	void Start() {
