@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 public class MenuSceneManager : MonoBehaviour{
 
 	//user presses start button
-	public void StartGame(){
+	public void StartGame()
+	{
 		SceneManager.LoadScene("ConnectingScene");
 	}
 
 	//user presses quit button
-	public void QuitGame(){
+	public void QuitGame()
+	{
 		Application.Quit();
 	}
 }

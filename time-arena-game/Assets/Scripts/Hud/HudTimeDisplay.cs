@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class HudTimeDisplay : MonoBehaviour
 {
-    [SerializeField] private GameObject _timeDisplay;
     [SerializeField] private Text _text;
     private GameController _game;
     private TimeLord _timeLord;
@@ -31,6 +30,4 @@ public class HudTimeDisplay : MonoBehaviour
     public void SetGame(GameController game) { _game = game; }
 
     public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
-
-    public void SetActive(bool value) { _timeDisplay.SetActive(value); }
 }

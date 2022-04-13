@@ -22,7 +22,7 @@ public class HudCooldowns : MonoBehaviour
     private bool _isBackButtonSpinning;
     private bool _isForwardButtonSpinning;
 
-    void Start()
+    void Awake()
     {
         _forwardBarHeight = 0.0f;
         _backBarHeight = 0.0f;
