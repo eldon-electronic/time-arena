@@ -22,7 +22,7 @@ public class CrystalBehaviour : MonoBehaviour
     void Update()
     {
       if(_game.GetCurrentTime() >= existanceRange[0] && _game.GetCurrentTime() <= existanceRange[1]){
-        gameObject.SetActive(true);
+        gameObject.SetActive(true); //shouldnt happen here
       } else {
         gameObject.SetActive(false);
       }
