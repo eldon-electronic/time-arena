@@ -50,29 +50,16 @@ public class PlayPPControlScript : MonoBehaviour
         vignette.intensity.value = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TriggerPP(Constants.JumpDirection direction, bool jumpOut)
     {
-            //back start
-            if (Input.GetKeyDown(KeyCode.Q)) {
-                StartAnim(lensDistortionIntensity, true, vingetteColorBackWard);               
-            }
-
-            //back fin
-            if (Input.GetKeyUp(KeyCode.Q)) {
-                StartAnim(lensDistortionIntensity, false, vingetteColorBackWard); 
-            }
-
-            //forward start
-            if (Input.GetKeyDown(KeyCode.E)) {
-                StartAnim(-1 *lensDistortionIntensity, true, vingetteColorForward);
-            }
-
-            //forward fin
-            if (Input.GetKeyUp(KeyCode.E)) {
-                StartAnim(-1 *lensDistortionIntensity, false, vingetteColorForward);
-            }
-        
+        if (direction == Constants.JumpDirection.Backward)
+        {
+            StartAnim(lensDistortionIntensity, jumpOut, vingetteColorBackWard);
+        }
+        else if (direction == Constants.JumpDirection.Backward)
+        {
+            StartAnim(-1 * lensDistortionIntensity, jumpOut, vingetteColorForward);
+        }
     }
 
     //launch animation
