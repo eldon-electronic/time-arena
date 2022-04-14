@@ -13,6 +13,8 @@ public class HudTutorial : MonoBehaviour
     [SerializeField] private GameObject _arrowImage;
     [SerializeField] private GameObject _popUpText;
     [SerializeField] private GameObject _optionsPopUpText;
+    [SerializeField] private GameObject[] _tutorialObjects;
+
     private Dictionary<string, Vector2> _uiPositions;
     private Dictionary<string, Vector3> _uiRotations;
 
@@ -46,8 +48,6 @@ public class HudTutorial : MonoBehaviour
 
     public void SetArrowPosition(string uiElement)
     {
-        Debug.Log($"_arrowImage: {_arrowImage}");
-        Debug.Log($"_uiPositions: {_uiPositions}");
         _arrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
         _arrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
     }

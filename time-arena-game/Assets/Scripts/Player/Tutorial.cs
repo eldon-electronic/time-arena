@@ -23,9 +23,10 @@ public class Tutorial : MonoBehaviour
         }
     }
     
-    private bool _hasMovedOn = true;
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PhotonView _view;
+
+    private bool _hasMovedOn = true;
     private List<State> _guardianStates;
     private List<State> _minerStates;
     private List<State> _states;
