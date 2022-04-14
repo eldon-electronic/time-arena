@@ -112,6 +112,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
 		_startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
     }
+	public void OpenChooseTeamMenu() {
+		MenuManager.Instance.OpenMenu("chooseTeamMenu");
+	}
 
 	public override void OnMasterClientSwitched(Player newMasterPlayer) {
 		_startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
@@ -179,4 +182,5 @@ public class Launcher : MonoBehaviourPunCallbacks {
 			else Instantiate(_roomListItemPrefab, _roomListContainer).GetComponent<RoomListItem>().SetUp(rooms[i]);
 		}
 	}
-}
+ }
+
