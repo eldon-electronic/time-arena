@@ -6,11 +6,14 @@ public class CrystalDevice : MonoBehaviour
 {
     public GameObject CompassPointer;
     public GameObject ButtonArrow;
+    public GameObject OffLine;
     public GameObject DeviceButton;
     public Material ButtonForwardMat;
     public Material ButtonBackwardMat;
+    public Material ButtonOffMat;
     public Material ButtonArrowForwardMat;
     public Material ButtonArrowBackwardMat;
+    public Material OffLineMat;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +43,7 @@ public class CrystalDevice : MonoBehaviour
             ButtonArrow.GetComponent<Renderer>().material = ButtonArrowForwardMat;
             Vector3 eulerRotation = ButtonArrow.transform.rotation.eulerAngles;
             ButtonArrow.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, 180f);
+            OffLine.SetActive(false);
 
         }
         else if(buttonMat == ButtonBackwardMat){
@@ -47,7 +51,16 @@ public class CrystalDevice : MonoBehaviour
             ButtonArrow.GetComponent<Renderer>().material = ButtonArrowBackwardMat;
             Vector3 eulerRotation = ButtonArrow.transform.rotation.eulerAngles;
             ButtonArrow.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, 0f);
+            OffLine.SetActive(false);
 
+
+        }
+        else if(buttonMat == ButtonOffMat){
+
+            ButtonArrow.GetComponent<Renderer>().material = OffLineMat;
+            ButtonArrow.SetActive(false);
+            OffLine.SetActive(true);
+            
 
         }
         
