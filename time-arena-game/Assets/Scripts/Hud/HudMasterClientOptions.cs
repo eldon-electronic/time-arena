@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class HudMasterClientOptions : MonoBehaviour
 {
     [SerializeField] private GameObject _masterClientOptions;
-    [SerializeField] private Text _text;
+    [SerializeField] private TMP_Text _text;
     private PreGameController _preGame;
 
     void Start()
@@ -29,7 +30,7 @@ public class HudMasterClientOptions : MonoBehaviour
         {
             float secondsTillGame = _preGame.GetSecondsTillGame();
             var timeLeft = System.Math.Round(secondsTillGame, 0);
-            _text.text = $"Starting in {timeLeft}s";
+            _text.text = $"Starting in {timeLeft}";
             if (System.Math.Round(secondsTillGame, 0) <= 0.0f)
             {
                 _text.text = "Loading...";
