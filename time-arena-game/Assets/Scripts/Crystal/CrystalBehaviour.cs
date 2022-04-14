@@ -20,15 +20,6 @@ public class CrystalBehaviour : MonoBehaviour
     public Vector2 existanceRange = new Vector2(5f, 10f);
     public bool isCollected = false; //if isCollected is true - there is no instance of the crystal at any time
 
-    //called upon player collision
-    // - crystal will be set to inactive in following frame so coroutine outsourced to cm
-    public void Collect(){
-      existanceRange = new Vector2(-1f, -1f);
-      isCollected = true;
-      if(PhotonNetwork.IsMasterClient){
-        cm.StartCoroutine(cm.Respawn(ID));
-      }
-    }
 
     // Start is called before the first frame
     void Start(){
@@ -73,12 +64,27 @@ public class CrystalBehaviour : MonoBehaviour
       transform.localScale = new Vector3(a, a, a);
     }
 
+    //called upon player collision
+    // - crystal will be set to inactive in following frame so coroutine outsourced to cm
+    [PunRPC]
+    void RPC_Collect(int viewID){
+      existanceRange = new Vector2(-1f, -1f);
+      isCollected = true;
+      PhotonView viewOfCollector = PhotonView.Find(viewID);
+      if(viewOfCollector == null){Debug.Log("!");}
+      PlayerController pcOfCollector = viewOfCollector.gameObject.GetComponent<PlayerController>();
+      if(pcOfCollector == null){Debug.Log("@");}
+      pcOfCollector.IncrementMinerScore();
+      if(PhotonNetwork.IsMasterClient){
+        cm.StartCoroutine(cm.Respawn(ID));
+      }
+    }
+
     //set existance range (period of time when crystal exists in game)
     //i.e. spawn a new crystal (called by coroutine after x seconds)
     [PunRPC]
   	void RPC_setExistanceRange(Vector2 newRange)
   	{
-      Debug.Log(newRange);
       existanceRange = newRange;
       isCollected = false;
     }

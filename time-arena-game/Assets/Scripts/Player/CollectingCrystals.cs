@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CollectingCrystals : MonoBehaviour
 {
-    [SerializeField] private PlayerController _player;
+  [SerializeField] private PlayerController _player;
     private GameController _game;
 
 
@@ -12,8 +13,12 @@ public class CollectingCrystals : MonoBehaviour
     {
         if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
         {
-            if (_game != null) _game.IncrementMinerScore();
-            col.gameObject.GetComponent<CrystalBehaviour>().Collect();
+          PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
+          PhotonView viewOfPlayer = gameObject.GetComponent<PhotonView>();
+            if(viewOfCrystal.IsMine && _game != null) {
+              viewOfCrystal.RPC("RPC_Collect", RpcTarget.All, viewOfPlayer.ViewID);
+              //col.gameObject.GetComponent<CrystalBehaviour>().Collect();
+            }
         }
     }
 

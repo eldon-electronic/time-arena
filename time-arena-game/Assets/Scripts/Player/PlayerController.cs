@@ -50,15 +50,16 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	private float _backJumpCooldown = 15f;
 	private Vector3[] _hiderSpawnPoints;
 	private Vector3 _seekerSpawnPoint;
+	public int score;
 
 
 	void Awake()
 	{
 		_hiderSpawnPoints =  new Vector3[] {
 			new Vector3(-42f, 0f, 22f),
-			new Vector3(-15f, -0.5f, -4f), 
-			new Vector3(-12f, -0.5f, -40f), 
-			new Vector3(-47f, -0.5f, -8f), 
+			new Vector3(-15f, -0.5f, -4f),
+			new Vector3(-12f, -0.5f, -40f),
+			new Vector3(-47f, -0.5f, -8f),
 			new Vector3(-36f, -2.5f, 2.2f)
 		};
 
@@ -70,7 +71,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	}
 
 	void Start()
-	{	
+	{
 		DontDestroyOnLoad(this.gameObject);
 
 		// TODO: Set the team in the menu before loading the pregame scene.
@@ -88,7 +89,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_preGame = FindObjectOfType<PreGameController>();
 		if (_preGame == null) Debug.LogError("PreGameController not found");
 		else _preGame.Register(this);
-		
+
 		if (View.IsMine)
 		{
 			Destroy(Nametag);
@@ -167,7 +168,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_timelord.LeaveReality(View.ViewID);
 		_backJumpCooldown = 15;
 
-		if (View.IsMine) 
+		if (View.IsMine)
 		{
 			if (_game == null) _preGame.HideAllPlayers();
 			else _game.HideAllPlayers();
@@ -187,10 +188,10 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_timelord.LeaveReality(View.ViewID);
 		_forwardsJumpCooldown = 15;
 
-		if (View.IsMine) 
+		if (View.IsMine)
 		{
 			if (_game == null) _preGame.HideAllPlayers();
-			else _game.HideAllPlayers();	
+			else _game.HideAllPlayers();
 		}
 		else if(!View.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
@@ -204,7 +205,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_isJumping = false;
 		_timelord.SetPerceivedFrame(playerID, frame);
 		_timelord.EnterReality(View.ViewID);
-		
+
 		if (View.IsMine)
 		{
 			// TODO: The following line might be redundant?
@@ -246,7 +247,9 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	// RPC function to be called when another player finds this one.
 	[PunRPC]
-	void RPC_getFound() { ChangeTeam(); }
+	void RPC_getFound() {
+		DecrementMinerScore();
+	}
 
 	// RPC function to be called by other machines to set this players transform.
 	[PunRPC]
@@ -331,7 +334,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			{
 				// Call grabplayer function on that player.
 				PlayerController targetPlayer = playerGotGrab.GetComponent<PlayerController>();
-				if (Team == Constants.Team.Guardian && 
+				if (Team == Constants.Team.Guardian &&
 					targetPlayer.Team == Constants.Team.Miner)
 				{
 					targetPlayer.GetFound();
@@ -392,6 +395,20 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_damageWindow = false;
 		PlayerAnim.SetBool("isGrabbing", false);
 	}
+
+	public void IncrementMinerScore() {
+		_game._minerScore++;
+		score++;
+		Hud.SetScores(score, _game._minerScore);
+	}
+
+	public void DecrementMinerScore() {
+		int decVal = (int)(score/2);
+		_game._minerScore-= decVal;
+		score-=decVal;
+		Hud.SetScores(score, _game._minerScore);
+ 	}
+
 
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
@@ -462,7 +479,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			Nametag.SetActive(false);
 		}
 		else Nametag.SetActive(true);
-	} 
+	}
 
 
 	void Update() {
@@ -488,7 +505,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		}
 		// Comment the following line to show player name tags for testing interaction.
 		else UpdateNameTag();
-		if (TimeTravelEnabled()) UpdateTimeTravel();		
+		if (TimeTravelEnabled()) UpdateTimeTravel();
 	}
 
 
@@ -507,7 +524,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		Hashtable debugItems = new Hashtable();
 		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
 		debugItems.Add("Sprint", Input.GetKey("left shift"));
-		debugItems.Add("Grab", _damageWindow);		
+		debugItems.Add("Grab", _damageWindow);
 		return debugItems;
 	}
 

@@ -38,6 +38,11 @@ public class PlayerHud : MonoBehaviour
         if (_view.IsMine) _teamDisplay.text = teamName;
     }
 
+    public void SetScores(int player, int team)
+    {
+        if (_view.IsMine) _score.setScores(player, team);
+    }
+
     public void SetGame(GameController game)
     {
         if (_view.IsMine)
