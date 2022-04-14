@@ -24,10 +24,6 @@ public class TimeLord: Debuggable
     // Each item stores a dictionary that maps tailIDs to their state.
     private Dictionary<int, PlayerState>[] _playerStates;
 
-    // TODO: Refactor to remove this; it's obsolete.
-    // A dictionary that maps frames to a list of tailIDs for those tails that were created on this frame.
-    private Dictionary<int, List<int>> _tailCreations;
-
 
     public TimeLord(int totalFrames)
     {
@@ -36,7 +32,6 @@ public class TimeLord: Debuggable
 
 		_playerStates = new Dictionary<int, PlayerState>[_totalFrames];
 		_realities = new RealityManager();
-        _tailCreations = new Dictionary<int, List<int>>();
     }
 
 
@@ -184,14 +179,6 @@ public class TimeLord: Debuggable
 		{
 			Debug.LogError($"{e}");
 		}
-
-        // Record the frame at which this tail was created.
-        int tailID = _realities.GetNextTailID(playerID);
-        if (_tailCreations.ContainsKey(frame))
-        {
-            _tailCreations[frame].Add(tailID);
-        }
-        else _tailCreations.Add(frame, new List<int>(){tailID});
 	}
 
 	// Set the perceived frame of the given player.
@@ -306,12 +293,6 @@ public class TimeLord: Debuggable
     public RealityManager RevealRealityManager(Tester tester)
 	{
 		if (tester.Authenticate()) return _realities;
-		else throw new InvalidOperationException("Must be a Tester to call this method.");
-	}
-
-    public Dictionary<int, List<int>> RevealTailCreations(Tester tester)
-	{
-		if (tester.Authenticate()) return _tailCreations;
 		else throw new InvalidOperationException("Must be a Tester to call this method.");
 	}
 }
