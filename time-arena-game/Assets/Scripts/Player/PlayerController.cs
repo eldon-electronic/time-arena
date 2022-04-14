@@ -74,14 +74,19 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		DontDestroyOnLoad(this.gameObject);
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		Team = Constants.Team.Miner;
-		if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count > 1)
+		if (View.ViewID == 1001)
 		{
 			Team = Constants.Team.Guardian;
+			Material.SetMaterial(Constants.Team.Guardian);
+			Hud.SetTeam("GUARDIAN");
+		}
+		else
+		{
+			Team = Constants.Team.Miner;
+			Material.SetMaterial(Constants.Team.Miner);
+			Hud.SetTeam("MINER");
 		}
 
-		Material.SetMaterial(Constants.Team.Miner);
-		Hud.SetTeam("MINER");
 		gameObject.layer = Constants.LayerPlayer;
 		Particles.Subscribe(this);
 
@@ -111,13 +116,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
         Cursor.lockState = CursorLockMode.Locked;
 		// Link scenechange event to Onscenechange.
         SceneManager.activeSceneChanged += OnSceneChange;
-
-		// TODO: Let each player do this themselves.
-		List<int> playerIDs = _timelord.GetAllPlayerIDs();
-		foreach (var id in playerIDs)
-		{
-			PhotonView.Find(id).gameObject.layer = Constants.LayerPlayer;
-		}
 	}
 
 
@@ -505,9 +503,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public Hashtable GetDebugValues()
 	{
 		Hashtable debugItems = new Hashtable();
-		debugItems.Add("Room", PhotonNetwork.CurrentRoom.Name);
-		debugItems.Add("Sprint", Input.GetKey("left shift"));
-		debugItems.Add("Grab", _damageWindow);		
+		debugItems.Add("Team", Team);	
 		return debugItems;
 	}
 

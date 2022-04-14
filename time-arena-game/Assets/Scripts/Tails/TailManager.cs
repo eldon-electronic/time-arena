@@ -22,7 +22,7 @@ public class TailManager : MonoBehaviour
         // Create a new tail for any state on this frame that doesn't currently have one.
         if (_activated && _timeLord != null)
         {
-            Dictionary<int, PlayerState> tails = _timeLord.GetTails();
+            Dictionary<int, PlayerState> tails = _timeLord.GetTailStates();
             foreach (var tail in tails)
             {
                 if (!_tails.ContainsKey(tail.Key))

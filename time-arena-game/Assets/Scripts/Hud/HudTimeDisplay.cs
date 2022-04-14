@@ -16,7 +16,8 @@ public class HudTimeDisplay : MonoBehaviour
         {
             if (_game.GameStarted)
             {
-                float time = _timeLord.GetElapsedTime();
+                int frame = _timeLord.GetCurrentFrame();
+                float time = (float) frame / (float) Constants.FrameRate;
                 float t = Constants.GameLength - time;
                 int minutes = (int) (t / 60);
                 int seconds = (int) (t % 60);

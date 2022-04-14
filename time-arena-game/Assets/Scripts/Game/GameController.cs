@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class GameController : MonoBehaviour
+public class GameController : SceneController
 {
-	private Dictionary<int, PlayerController> _miners;
-	private Dictionary<int, PlayerController> _guardians;
-	private TimeLord _timeLord;
-
 	public float Timer;
 	public bool GameStarted;
 	public bool GameEnded;
 	public Constants.Team WinningTeam;
-	private int _minerScore;
 
 
 	void Awake()
@@ -55,10 +50,6 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-
-	// ------------ UPDATE HELPER FUNCTIONS ------------
-
-	// Checks to see if there are no hiders left.
 	private void CheckWon()
 	{	
 		if (_timeLord.TimeEnded() && !GameEnded)
@@ -91,6 +82,7 @@ public class GameController : MonoBehaviour
 
 	// ------------ PUBLIC FUNCTIONS ------------
 
+	// TODO: remove this.
 	public void SetTeam(int playerID, Constants.Team team)
 	{
 		if (team == Constants.Team.Guardian)
@@ -106,30 +98,4 @@ public class GameController : MonoBehaviour
 			_miners.Add(playerID, player);
 		}
 	}
-
-	public void HideAllPlayers()
-	{
-		foreach (var guardian in _guardians)
-		{
-			guardian.Value.Hide();
-		}
-		foreach (var miner in _miners)
-		{
-			miner.Value.Hide();
-		}
-	}
-
-	public void ShowPlayersInReality()
-	{
-		HashSet<int> playerIDs = _timeLord.GetPlayersInReality();
-		foreach (var id in playerIDs)
-		{
-			if (_guardians.ContainsKey(id)) _guardians[id].Show();
-			else if (_miners.ContainsKey(id)) _miners[id].Show();
-		}
-	}
-
-	public void IncrementMinerScore() { _minerScore++; }
-
-	public int GetMinerScore() { return _minerScore; }
 }
