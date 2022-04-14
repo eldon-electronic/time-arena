@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     private float _jumpPower;
     private float _gravity;
     private bool _isGrounded;
+    private bool _isJumpPad;
     private bool _isCeiling;
     private float _xRot;
     private float _mouseSensitivity;
@@ -68,10 +69,15 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         groundCheck.y -= 1f;
         _isGrounded = Physics.CheckSphere(groundCheck, _groundCheckRadius, GroundMask);
 
+        // Check if the player is stood on a jump pad.
+        LayerMask jumpPadMask = LayerMask.GetMask("JumpPad");
+        _isJumpPad = Physics.CheckSphere(groundCheck, _groundCheckRadius, jumpPadMask);
+
         //Check if player's head intersects with any environment object.
         Vector3 ceilingCheck = PlayerTransform.position;
         ceilingCheck.y += 0.6f;
         _isCeiling = Physics.CheckSphere(ceilingCheck, _groundCheckRadius, GroundMask);
+        
 
         // Set and normalise movement vector.
         Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
@@ -84,18 +90,20 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
 		// Jump control.
-		if (Input.GetButtonDown("Jump") && _isGrounded && !PauseUI.IsPaused())
+		if (Input.GetButtonDown("Jump") && (_isGrounded || _isJumpPad) && !PauseUI.IsPaused())
         {
 			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
 		}
 
-
+        // Jump pad effect.
+        if(_isJumpPad) _jumpPower = 10f;
+        else _jumpPower = 3f;
         // Gravity effect.
         _velocity.y -= _gravity * Time.deltaTime;
 		if (_velocity.y <= -100f) _velocity.y = -100f;
 
 		// Reset vertical velocity value when grounded.
-		if (_isGrounded && _velocity.y < 0) _velocity.y = 0f;
+		if ((_isGrounded || _isJumpPad) && _velocity.y < 0) _velocity.y = 0f;
 
         // Reset vertical velocity when head it hitting ceiling.
         if (_isCeiling && _velocity.y > 0) _velocity.y = 0f;
