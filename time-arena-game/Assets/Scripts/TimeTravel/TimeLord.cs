@@ -186,42 +186,9 @@ public class TimeLord: Debuggable
 		_realities.SetPerceivedFrame(playerID, frame);
 	}
 
-    // TODO: adapt so it takes in a Constants.Team as parameter
-    // Returns the positions of all players (except you) as a fraction through the game time.
-	public List<float> GetPlayerPositions()
-	{
-		List<float> positions = new List<float>();
-
-		List<(int id, int frame)> players = _realities.GetPerceivedFrames();
-		foreach (var player in players)
-		{
-			if (player.id != _myID)
-			{
-				float position = (float) player.frame / (float) _totalFrames;
-				positions.Add(position);
-			}
-		}
-
-		return positions;
-	}
-
 	public bool InYourReality(int playerID)
 	{
 		return _realities.InSameFrame(playerID, _myID);
-	}
-
-    // Returns your position in time as a fraction through the game time.
-	public float GetYourPosition()
-	{
-		int frame = _realities.GetPerceivedFrame(_myID);
-		float position = (float) frame / (float) _totalFrames;
-		return position;
-	}
-
-	// Returns the fraction elapsed through the game time.
-	public float GetTimeProportion()
-	{
-		return (float) _currentFrame / (float) _totalFrames;
 	}
 
     // Returns true if the given player can travel in the given direction.
@@ -274,8 +241,6 @@ public class TimeLord: Debuggable
 	public int GetCurrentFrame() { return _currentFrame; }
 
 	public int GetTotalFrames() { return _totalFrames; }
-
-	public int GetYourPerceivedFrame() { return _realities.GetPerceivedFrame(_myID); }
 
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
