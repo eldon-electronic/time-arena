@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class HudTimeline : MonoBehaviour
 {
-    [SerializeField] private Slider _elapsedTimeSlider;
+    [SerializeField] private GameObject _timeline;
+    [SerializeField] private Image _timelineFill;
     [SerializeField] private Slider _yourIcon;
     [SerializeField] private Slider _playerIcon1;
     [SerializeField] private Slider _playerIcon2;
@@ -34,7 +35,7 @@ public class HudTimeline : MonoBehaviour
         // }
 
         // Set player icon positions.
-        _elapsedTimeSlider.value = _timeLord.GetTimeProportion();
+        _timelineFill.fillAmount = _timeLord.GetTimeProportion();
         _yourIcon.value = _timeLord.GetYourPosition();
         List<float> players = _timeLord.GetPlayerPositions();
         for (int i=0; i < players.Count; i++)
