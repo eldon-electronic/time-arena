@@ -10,14 +10,21 @@ public class HudWinningDisplay : MonoBehaviour
     [SerializeField] private GameObject _winningDisplay;
     [SerializeField] private Text _text;
 
-    void LateUpdate()
+    void OnEnable()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
-        {
-            _winningDisplay.SetActive(true);
-            _text.text = (_game.WinningTeam == Constants.Team.Miner) ? "MINERS WIN!" : "GUARDIANS WIN!";
-        }
+        GameController.gameEnded += OnGameEnded;
+    }
+
+    void OnDisable()
+    {
+        GameController.gameEnded -= OnGameEnded;
     }
 
     public void SetGame(GameController game) { _game = game; }
+
+    private void OnGameEnded(Constants.Team winningTeam)
+    {
+        _winningDisplay.SetActive(true);
+        _text.text = (winningTeam == Constants.Team.Miner) ? "MINERS WIN!" : "GUARDIANS WIN!";
+    }
 }

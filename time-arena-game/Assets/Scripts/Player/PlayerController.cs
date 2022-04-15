@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	private float _forwardsJumpCooldown = 15f;
 	private float _backJumpCooldown = 15f;
 	private bool _timeTravelEnabled;
+	private bool _freezeKeyControl;
 	private Vector3[] _hiderSpawnPoints;
 	private Vector3 _seekerSpawnPoint;
 
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
 		_timeTravelEnabled = true;
+		_freezeKeyControl = false;
 	}
 
 	void OnEnable()
@@ -156,10 +158,11 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_timeTravelEnabled = true;
 	}
 
-	private void OnGameEnded()
+	private void OnGameEnded(Constants.Team winningTeam)
 	{
 		_timeTravelEnabled = false;
 		PauseUI.Pause();
+		_freezeKeyControl = true;
 	}
 
 
@@ -499,14 +502,10 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	void Update() {
 		// Local keys only affect client's player.
-		if (View.IsMine)
+		if (View.IsMine && !_freezeKeyControl)
 		{
-			if (SceneManager.GetActiveScene().name == "PreGameScene" ||
-			(SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded))
-			{
-				UpdateCooldowns();
-				KeyControl();
-			}
+			UpdateCooldowns();
+			KeyControl();
 		}
 		// Comment the following line to show player name tags for testing interaction.
 		else UpdateNameTag();

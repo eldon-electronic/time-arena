@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 
     private void OnGameStarted() { _activated = true; }
 
-    private void OnGameEnded() { _activated = false; }
+    private void OnGameEnded(Constants.Team winningTeam) { _activated = false; }
     
     public void OnMouseSensChange(float a){ _mouseSensitivity = PauseUI.MouseSens; }
 

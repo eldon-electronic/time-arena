@@ -8,11 +8,10 @@ public class GameController : SceneController
 {
 	public float Timer;
 	private bool _gameStarted;
-	public bool GameEnded;
-	public Constants.Team WinningTeam;
+	private bool _gameEnded;
 	public static event Action<GameController> gameActive;
 	public static event Action gameStarted;
-	public static event Action gameEnded;
+	public static event Action<Constants.Team> gameEnded;
 
 
 	void Awake()
@@ -25,8 +24,7 @@ public class GameController : SceneController
 
 		Timer = 5f;
 		_gameStarted = false;
-		GameEnded = false;
-		WinningTeam = Constants.Team.Miner;
+		_gameEnded = false;
 		_minerScore = 0;
 	}
 
@@ -57,12 +55,11 @@ public class GameController : SceneController
 
 	private void CheckWon()
 	{	
-		if (_timeLord.TimeEnded() && !GameEnded)
+		if (_timeLord.TimeEnded() && !_gameEnded)
 		{
-			GameEnded = true;
-			gameEnded?.Invoke();
+			_gameEnded = true;
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
-			WinningTeam = Constants.Team.Miner;
+			gameEnded?.Invoke(Constants.Team.Miner);
 		}
 	}
 
@@ -84,7 +81,7 @@ public class GameController : SceneController
 		else
 		{
 			// Increment global frame and individual player frames.
-			if (!GameEnded) _timeLord.Tick();
+			if (!_gameEnded) _timeLord.Tick();
 			CheckWon();
 		}
 	}
