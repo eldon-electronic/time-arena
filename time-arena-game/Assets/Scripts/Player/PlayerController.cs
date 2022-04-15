@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public Canvas UI;
 	public PauseManager PauseUI;
 	public GameObject Nametag;
-	public PlayerHud Hud;
+	public HudTeam Hud;
 	[SerializeField] private Tutorial _tutorial;
 	[SerializeField] private HudDebugPanel _debugPanel;
 
@@ -96,18 +96,10 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		DontDestroyOnLoad(this.gameObject);
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		if (View.ViewID == 1001)
-		{
-			Team = Constants.Team.Guardian;
-			Material.SetMaterial(Constants.Team.Guardian);
-			Hud.SetTeam("GUARDIAN");
-		}
-		else
-		{
-			Team = Constants.Team.Miner;
-			Material.SetMaterial(Constants.Team.Miner);
-			Hud.SetTeam("MINER");
-		}
+		if (View.ViewID == 1001) Team = Constants.Team.Guardian;
+		else Team = Constants.Team.Miner;
+		Material.SetMaterial(Team);
+		Hud.SetTeam(Team);
 
 		gameObject.layer = Constants.LayerPlayer;
 		Particles.Subscribe(this);
@@ -120,7 +112,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		{
 			Destroy(Nametag);
 			gameObject.tag = "Client";
-			Hud.SetPlayer(this);
 			_debugPanel.Register(this);
 			_tutorial.SetTeam(Team);
 			_tutorial.StartTutorial();
@@ -394,15 +385,14 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		{
 			Team = Constants.Team.Guardian;
 			Material.SetArmActive(true);
-			Hud.SetTeam("GUARDIAN");
 		}
 		else
 		{
 			Team = Constants.Team.Miner;
 			Material.SetArmActive(false);
-			Hud.SetTeam("MINER");
 		}
 		Material.SetMaterial(Team);
+		Hud.SetTeam(Team);
 		_game.SetTeam(View.ViewID, Team);
 	}
 
@@ -546,7 +536,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		if (View.IsMine)
 		{
 			_tailManager.SetTimeLord(_timelord);
-			Hud.SetTimeLord(timelord);
 			_debugPanel.Register(_timelord);
 		}
 	}

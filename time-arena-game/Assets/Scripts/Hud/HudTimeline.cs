@@ -22,12 +22,23 @@ public class HudTimeline : MonoBehaviour
         _players = new Dictionary<int, Slider>();
     }
 
+    void OnEnable()
+    {
+        GameController.gameActive += OnGameActive;
+        GameController.newTimeLord += SetTimeLord;
+    }
+
+    void OnDisable()
+    {
+        GameController.gameActive -= OnGameActive;
+        GameController.newTimeLord -= SetTimeLord;
+    }
+
     void Start()
     {
         GameObject pregame = GameObject.FindWithTag("PreGameController");
         _sceneController = pregame.GetComponent<PreGameController>();
-
-        GameController.gameActive += OnGameActive;
+        _timeLord = _sceneController.GetTimeLord();
     }
 
     void LateUpdate()
@@ -47,6 +58,8 @@ public class HudTimeline : MonoBehaviour
     // ------------ PRIVATE METHODS ------------
 
     private void OnGameActive(GameController game) { _sceneController = game; }
+
+    private void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
 
     private void SetTimeBarPosition()
     {
@@ -111,9 +124,4 @@ public class HudTimeline : MonoBehaviour
             _players[player.id].gameObject.SetActive(true);
         }
     }
-
-
-    // ------------ PUBLIC METHODS ------------
-
-    public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
 }

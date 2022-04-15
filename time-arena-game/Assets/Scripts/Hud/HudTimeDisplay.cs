@@ -9,7 +9,16 @@ public class HudTimeDisplay : MonoBehaviour
     [SerializeField] private Text _text;
     private TimeLord _timeLord;
 
-    void Start() { _text.text = "0:00"; }
+    void OnEnable() { GameController.newTimeLord += SetTimeLord; }
+
+    void OnDisable() { GameController.newTimeLord -= SetTimeLord; }
+
+    void Start()
+    {
+        PreGameController pregame = GameObject.FindWithTag("PreGameController").GetComponent<PreGameController>();
+        _timeLord = pregame.GetTimeLord();
+        _text.text = "0:00";
+    }
 
     void LateUpdate()
     {

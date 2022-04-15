@@ -8415,6 +8415,7 @@ GameObject:
   - component: {fileID: 4621444560055183819}
   - component: {fileID: 2539957824911093140}
   - component: {fileID: 2588456402876655370}
+  - component: {fileID: 301267826106448637}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -8590,6 +8591,7 @@ MonoBehaviour:
   _backJumpIcon: {fileID: 3248866031582860552}
   _greenUnpressedSprite: {fileID: 21300000, guid: 3ec36685211ee4ee083b95ca1dbd0264, type: 3}
   _redPressedSprite: {fileID: 21300000, guid: 8c08b378297444559bac11d18a159fb0, type: 3}
+  _player: {fileID: 6458975045518551228}
 --- !u!114 &71524245628701223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8649,6 +8651,19 @@ MonoBehaviour:
   _arrowImage: {fileID: 5931293119998304570}
   _popUpText: {fileID: 931299746159129857}
   _optionsPopUpText: {fileID: 3655940851564926299}
+--- !u!114 &301267826106448637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6146106990117875522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc6d6e46c28c4ba4a215482d850d390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _teamDisplay: {fileID: 8151362755639177340}
 --- !u!1 &6189879322987748197
 GameObject:
   m_ObjectHideFlags: 0
@@ -8820,7 +8835,6 @@ GameObject:
   - component: {fileID: 9070032884028841073}
   - component: {fileID: 6458975045518551228}
   - component: {fileID: 2206506049548669404}
-  - component: {fileID: 3138509024607561696}
   - component: {fileID: 228805100952192999}
   - component: {fileID: 1743376766255182593}
   - component: {fileID: 3792925184382037071}
@@ -9179,7 +9193,7 @@ MonoBehaviour:
   UI: {fileID: 1130251741066097712}
   PauseUI: {fileID: 3792925184382037071}
   Nametag: {fileID: 2491143808538081395}
-  Hud: {fileID: 3138509024607561696}
+  Hud: {fileID: 301267826106448637}
   _tutorial: {fileID: 7995784166818512175}
   _debugPanel: {fileID: 2539957824911093140}
   PlayerAnim: {fileID: 9070032884028841073}
@@ -9204,27 +9218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 549207610321092005}
---- !u!114 &3138509024607561696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6458975045518551231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 581f43c940081476a84ec1f8091b146b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _view: {fileID: 5690578699466181193}
-  _startTimer: {fileID: 6915254337900917103}
-  _timeDisplay: {fileID: 5898631916957087412}
-  _masterClientOptions: {fileID: 4316980016572007731}
-  _timeline: {fileID: 5091965875285780587}
-  _cooldowns: {fileID: 5590288987897476469}
-  _winningDisplay: {fileID: 71524245628701223}
-  _score: {fileID: 4621444560055183819}
-  _teamDisplay: {fileID: 8151362755639177340}
 --- !u!114 &228805100952192999
 MonoBehaviour:
   m_ObjectHideFlags: 0

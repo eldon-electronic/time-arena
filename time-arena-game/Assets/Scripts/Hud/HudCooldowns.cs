@@ -12,8 +12,7 @@ public class HudCooldowns : MonoBehaviour
     [SerializeField] private Image _backJumpIcon;
     [SerializeField] private Sprite _greenUnpressedSprite;
     [SerializeField] private Sprite _redPressedSprite;
-
-    private PlayerController _player;
+    [SerializeField] private PlayerController _player;
     private float _forwardBarHeight;
     private float _backBarHeight;
     private bool _canJumpForward;
@@ -48,6 +47,4 @@ public class HudCooldowns : MonoBehaviour
         if (_canJumpBack) _backJumpIcon.sprite = _greenUnpressedSprite;
         else _backJumpIcon.sprite = _redPressedSprite;
     }
-
-    public void SetPlayer(PlayerController pc) { _player = pc; }
 }

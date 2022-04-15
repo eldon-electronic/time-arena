@@ -46,4 +46,6 @@ public abstract class SceneController: MonoBehaviour
 		_minerScore++;
 		scoreChange?.Invoke(_minerScore);
 	}
+
+	public TimeLord GetTimeLord() { return _timeLord; }
 }
