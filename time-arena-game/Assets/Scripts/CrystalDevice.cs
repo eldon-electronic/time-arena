@@ -15,6 +15,7 @@ public class CrystalDevice : MonoBehaviour
     public Material ButtonArrowBackwardMat;
     public Material OffLineMat;
     [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _manager;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,14 +23,21 @@ public class CrystalDevice : MonoBehaviour
         
     }
 
-    (int, int) GetCrystalWindow(GameObject Crystal)
+    (float, float) GetCrystalWindow(GameObject Crystal)
     {
-        return (0, 0);
+        CrystalBehaviour c = Crystal.GetComponent<CrystalBehaviour>();
+        return (c.existanceRange.x, c.existanceRange.y);
     }
 
     GameObject[] GetCrystals()
     {
-        return null;
+        List<CrystalBehaviour> comps = _manager.GetComponent<CrystalManager>().crystals;
+        List<GameObject> crystals = new List<GameObject>();
+        foreach(CrystalBehaviour c in comps)
+        {
+            crystals.Add(c.gameObject);
+        }
+        return crystals.ToArray();
     }
 
     float GetPlayerTime(GameObject Player)
@@ -62,7 +70,7 @@ public class CrystalDevice : MonoBehaviour
         //return 1 if ahead of time frame
         //return 0 if in time frame
         float p = GetPlayerTime(Player);
-        (int, int) w = GetCrystalWindow(Crystal);
+        (float, float) w = GetCrystalWindow(Crystal);
         if (p < w.Item1) return -1;
         if (p > w.Item2) return 1;
         return 0;
