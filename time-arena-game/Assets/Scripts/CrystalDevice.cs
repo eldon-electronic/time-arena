@@ -16,12 +16,14 @@ public class CrystalDevice : MonoBehaviour
     public Material OffLineMat;
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _manager;
+
+    public Material[] ButtonColours;
     private bool connected; //has script connected to all relevant scene objects?
     // Start is called before the first frame update
     void Start()
     {
+        ButtonColours = new Material[] {ButtonForwardMat, ButtonOffMat, ButtonBackwardMat};
         _player = this.gameObject;
-        
     }
 
     (float, float) GetCrystalWindow(GameObject Crystal)
@@ -102,7 +104,7 @@ public class CrystalDevice : MonoBehaviour
 
             if (Vector2.Distance(flatPlayer, flatCrystal) < Constants.Proximity)
             {
-                SetButtonMaterial(new Material[] { ButtonForwardMat, ButtonOffMat, ButtonBackwardMat }[1 - GetRelativeTimePosition(_player, Crystal)]);
+                SetButtonMaterial(ButtonColours[1 + GetRelativeTimePosition(_player, Crystal)]);
             }
         }
                    
