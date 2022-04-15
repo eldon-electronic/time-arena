@@ -39,14 +39,6 @@ public class PreGameController : SceneController
         _timeLord.Tick();
     }
 
-    public void Register(PlayerController pc)
-    {
-        pc.SetTimeLord(_timeLord);
-        int id = pc.GetID();
-		if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
-		else _miners.Add(id, pc);
-    }
-
     public void StartCountingDown()
     {
         if (_isCountingTillGameStart) return;

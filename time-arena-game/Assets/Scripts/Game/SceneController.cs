@@ -12,6 +12,14 @@ public abstract class SceneController: MonoBehaviour
     protected int _minerScore;
 	public static event Action<int> scoreChange;
 
+	public void Register(PlayerController pc)
+    {
+        pc.SetTimeLord(_timeLord);
+        int id = pc.GetID();
+		if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
+		else _miners.Add(id, pc);
+    }
+
     public Constants.Team GetTeam(int playerID)
 	{
 		if (_miners.ContainsKey(playerID)) return Constants.Team.Miner;

@@ -6,12 +6,13 @@ using Photon.Pun;
 
 public class GameController : SceneController
 {
-	public float Timer;
+	private float _timer;
 	private bool _gameStarted;
 	private bool _gameEnded;
 	public static event Action<GameController> gameActive;
 	public static event Action gameStarted;
 	public static event Action<Constants.Team> gameEnded;
+	public static event Action<float> countDown;
 	public static event Action<TimeLord> newTimeLord;
 
 
@@ -20,7 +21,7 @@ public class GameController : SceneController
 		_miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
 
-		Timer = 5f;
+		_timer = 5f;
 		_gameStarted = false;
 		_gameEnded = false;
 		_minerScore = 0;
@@ -32,24 +33,10 @@ public class GameController : SceneController
 		// Prevent anyone else from joining room.
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		GameObject client = GameObject.FindWithTag("Client");
-
-		List<GameObject> allPlayers = new List<GameObject>(players);
-		allPlayers.Add(client);
-
-		gameActive?.Invoke(this);
-
 		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
 		newTimeLord?.Invoke(_timeLord);
 
-		foreach (var player in allPlayers)
-		{
-			PlayerController pc = player.GetComponent<PlayerController>();
-			int id = pc.GetID();
-			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
-			else _miners.Add(id, pc);
-		}
+		gameActive?.Invoke(this);
 	}
 
 	private void CheckWon()
@@ -66,16 +53,18 @@ public class GameController : SceneController
 	{
 		if (!_gameStarted)
 		{
-			// Pregame timer is counting.
-			if (Timer <= 0f)
+			// Game starts.
+			if (_timer <= 0f)
 			{
-				if (!_gameStarted)
-				{
-					_gameStarted = true;
-					gameStarted?.Invoke();
-				}
+				_gameStarted = true;
+				gameStarted?.Invoke();
 			}
-			else Timer -= Time.deltaTime;
+			// Countdown timer is counting.
+			else
+			{
+				_timer -= Time.deltaTime;
+				countDown?.Invoke(_timer);
+			}
 		}
 		else
 		{
@@ -84,9 +73,6 @@ public class GameController : SceneController
 			CheckWon();
 		}
 	}
-
-
-	// ------------ PUBLIC FUNCTIONS ------------
 
 	// TODO: remove this.
 	public void SetTeam(int playerID, Constants.Team team)

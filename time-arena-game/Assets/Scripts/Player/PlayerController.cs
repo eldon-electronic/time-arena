@@ -80,7 +80,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		GameController.gameActive += OnGameActive;
 		GameController.gameStarted += OnGameStarted;
 		GameController.gameEnded += OnGameEnded;
-		GameController.newTimeLord += SetTimeLord;
 	}
 
 	void OnDisable()
@@ -88,7 +87,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		GameController.gameActive -= OnGameActive;
 		GameController.gameStarted -= OnGameStarted;
 		GameController.gameEnded -= OnGameEnded;
-		GameController.newTimeLord -= SetTimeLord;
 	}
 
 	void Start()
@@ -137,6 +135,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	private void OnGameActive(GameController game)
 	{
 		_game = game;
+		_game.Register(this);
 
 		// TODO: refactor to remove this.
 		_collectingCrystals.SetGame(game);
@@ -530,6 +529,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	public void SetTimeLord(TimeLord timelord)
 	{
+		if (View.IsMine && timelord != null) _debugPanel.UnRegister(_timelord);
 		_timelord = timelord;
 		_timelord.Connect(View.ViewID, View.IsMine);
 		_timelord.EnterReality(View.ViewID);
