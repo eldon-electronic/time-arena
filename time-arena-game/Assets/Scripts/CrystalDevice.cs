@@ -16,10 +16,11 @@ public class CrystalDevice : MonoBehaviour
     public Material OffLineMat;
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _manager;
+    private bool connected; //has script connected to all relevant scene objects?
     // Start is called before the first frame update
     void Start()
     {
-        
+        _player = this.gameObject;
         
     }
 
@@ -79,21 +80,32 @@ public class CrystalDevice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject Crystal = ClosestCrystal(_player.transform.position, GetCrystals());
-
-        Vector2 flatPlayer = new Vector2(_player.transform.position.x, _player.transform.position.z);
-        Vector2 flatCrystal = new Vector2(Crystal.transform.position.x, Crystal.transform.position.z);
-
-        float look = _player.transform.rotation.eulerAngles.y;
-        float angle = Vector2.Angle(Vector2.up, flatCrystal - flatPlayer);
-        ChangePointerPosition(angle-look);
-
-        if(Vector2.Distance(flatPlayer, flatCrystal) < Constants.Proximity)
+        if (!connected)
         {
-            SetButtonMaterial(new Material[] { ButtonForwardMat, ButtonOffMat, ButtonBackwardMat }[1 - GetRelativeTimePosition(_player, Crystal)]);
+            CrystalManager found = Component.FindObjectOfType<CrystalManager>();
+            if(found != null)
+            {
+                _manager = found.gameObject;
+                connected = true;
+            }
         }
+        else
+        {
+            GameObject Crystal = ClosestCrystal(_player.transform.position, GetCrystals());
 
-           
+            Vector2 flatPlayer = new Vector2(_player.transform.position.x, _player.transform.position.z);
+            Vector2 flatCrystal = new Vector2(Crystal.transform.position.x, Crystal.transform.position.z);
+
+            float look = _player.transform.rotation.eulerAngles.y;
+            float angle = Vector2.Angle(Vector2.up, flatCrystal - flatPlayer);
+            ChangePointerPosition(angle - look);
+
+            if (Vector2.Distance(flatPlayer, flatCrystal) < Constants.Proximity)
+            {
+                SetButtonMaterial(new Material[] { ButtonForwardMat, ButtonOffMat, ButtonBackwardMat }[1 - GetRelativeTimePosition(_player, Crystal)]);
+            }
+        }
+                   
     }
     public void ChangePointerPosition(float position)
     {
