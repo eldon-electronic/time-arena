@@ -7,28 +7,19 @@ using UnityEngine.UI;
 public class HudTimeDisplay : MonoBehaviour
 {
     [SerializeField] private Text _text;
-    private GameController _game;
     private TimeLord _timeLord;
+
+    void Start() { _text.text = "0:00"; }
 
     void LateUpdate()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameEnded)
-        {
-            if (_game.GameStarted)
-            {
-                int frame = _timeLord.GetCurrentFrame();
-                float time = (float) frame / (float) Constants.FrameRate;
-                float t = Constants.GameLength - time;
-                int minutes = (int) (t / 60);
-                int seconds = (int) (t % 60);
-                _text.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
-            } else {
-                _text.text = "0:00";
-            }
-        }
+        int frame = _timeLord.GetCurrentFrame();
+        float time = (float) frame / (float) Constants.FrameRate;
+        float t = Constants.GameLength - time;
+        int minutes = (int) (t / 60);
+        int seconds = (int) (t % 60);
+        _text.text = minutes.ToString() + ":" + seconds.ToString().PadLeft(2, '0');
     }
-
-    public void SetGame(GameController game) { _game = game; }
 
     public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
 }

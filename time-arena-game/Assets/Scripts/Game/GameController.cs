@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,12 @@ using Photon.Pun;
 public class GameController : SceneController
 {
 	public float Timer;
-	public bool GameStarted;
+	private bool _gameStarted;
 	public bool GameEnded;
 	public Constants.Team WinningTeam;
+	public static event Action<GameController> gameActive;
+	public static event Action gameStarted;
+	public static event Action gameEnded;
 
 
 	void Awake()
@@ -20,7 +24,7 @@ public class GameController : SceneController
 		_timeLord = new TimeLord(totalFrames);
 
 		Timer = 5f;
-		GameStarted = false;
+		_gameStarted = false;
 		GameEnded = false;
 		WinningTeam = Constants.Team.Miner;
 		_minerScore = 0;
@@ -41,13 +45,14 @@ public class GameController : SceneController
 		foreach (var player in allPlayers)
 		{
 			PlayerController pc = player.GetComponent<PlayerController>();
-			pc.SetGame(this);
 			pc.SetTimeLord(_timeLord);
 
 			int id = pc.GetID();
 			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
 			else _miners.Add(id, pc);
 		}
+
+		gameActive?.Invoke(this);
 	}
 
 	private void CheckWon()
@@ -55,6 +60,7 @@ public class GameController : SceneController
 		if (_timeLord.TimeEnded() && !GameEnded)
 		{
 			GameEnded = true;
+			gameEnded?.Invoke();
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
 			WinningTeam = Constants.Team.Miner;
 		}
@@ -62,12 +68,12 @@ public class GameController : SceneController
 
 	void Update()
 	{
-		if (!GameStarted)
+		if (!_gameStarted)
 		{
 			// Pregame timer is counting.
 			if (Timer <= 0f)
 			{
-				if (!GameStarted) GameStarted = true;
+				if (!_gameStarted) gameStarted?.Invoke();
 			}
 			else Timer -= Time.deltaTime;
 		}

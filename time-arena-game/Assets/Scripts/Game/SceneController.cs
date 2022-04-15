@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public abstract class SceneController: MonoBehaviour
 	protected Dictionary<int, PlayerController> _guardians;
 	protected TimeLord _timeLord;
     protected int _minerScore;
+	public static event Action<int> scoreChange;
 
     public Constants.Team GetTeam(int playerID)
 	{
@@ -39,7 +41,11 @@ public abstract class SceneController: MonoBehaviour
 		}
 	}
 
-    public void IncrementMinerScore() { _minerScore++; }
+    public void IncrementMinerScore()
+	{
+		_minerScore++;
+		scoreChange?.Invoke(_minerScore);
+	}
 
 	public int GetMinerScore() { return _minerScore; }
 }

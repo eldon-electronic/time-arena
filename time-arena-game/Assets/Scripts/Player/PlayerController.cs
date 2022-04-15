@@ -48,9 +48,12 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public Constants.Team Team;
 	private float _forwardsJumpCooldown = 15f;
 	private float _backJumpCooldown = 15f;
+	private bool _timeTravelEnabled;
 	private Vector3[] _hiderSpawnPoints;
 	private Vector3 _seekerSpawnPoint;
 
+
+	// ------------ UNITY METHODS ------------
 
 	void Awake()
 	{
@@ -67,6 +70,21 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
+		_timeTravelEnabled = true;
+	}
+
+	void OnEnable()
+	{
+		GameController.gameActive += OnGameActive;
+		GameController.gameStarted += OnGameStarted;
+		GameController.gameEnded += OnGameEnded;
+	}
+
+	void OnDisable()
+	{
+		GameController.gameActive -= OnGameActive;
+		GameController.gameStarted -= OnGameStarted;
+		GameController.gameEnded -= OnGameEnded;
 	}
 
 	void Start()
@@ -116,6 +134,32 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
         Cursor.lockState = CursorLockMode.Locked;
 		// Link scenechange event to Onscenechange.
         SceneManager.activeSceneChanged += OnSceneChange;
+	}
+
+
+	// ------------ PRIVATE METHODS ------------
+
+	private void OnGameActive(GameController game)
+	{
+		_game = game;
+
+		// TODO: refactor to remove this.
+		Hud.SetGame(game);
+		_collectingCrystals.SetGame(game);
+		gameObject.layer = Constants.LayerPlayer;
+
+		_timeTravelEnabled = false;
+	}
+
+	private void OnGameStarted()
+	{
+		_timeTravelEnabled = true;
+	}
+
+	private void OnGameEnded()
+	{
+		_timeTravelEnabled = false;
+		PauseUI.Pause();
 	}
 
 
@@ -258,13 +302,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	// ------------ HELPER CONDITION CHECKERS ------------
 
-	// Returns true if you're in a scene that allows time travelling.
-	private bool TimeTravelEnabled()
-	{
-		return SceneManager.GetActiveScene().name == "PreGameScene" ||
-			SceneManager.GetActiveScene().name == "GameScene" && _game.GameStarted && !_game.GameEnded;
-	}
-
 	// Returns true if you can jump in the given direction.
 	private bool CanTimeTravel(Constants.JumpDirection direction)
 	{
@@ -288,7 +325,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	private void TimeJump(Constants.JumpDirection direction, bool jumpOut)
 	{
-		if (TimeTravelEnabled())
+		if (_timeTravelEnabled)
 		{
 			if (jumpOut)
 			{
@@ -445,10 +482,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 				_timelord.TimeTravel(View.ViewID, _jumpDirection);
 			}
 			// Force stop jumping.
-			else
-			{
-				TimeJump(_jumpDirection, false);
-			}
+			else TimeJump(_jumpDirection, false);
 		}
 		else _jumpDirection = Constants.JumpDirection.Static;
 	}
@@ -473,20 +507,10 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 				UpdateCooldowns();
 				KeyControl();
 			}
-			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
-			{
-				Movement.SetActive(false);
-			}
-
-			// Update pauseUI and cursor lock if game is ended.
-			if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
-			{
-				PauseUI.Pause();
-			}
 		}
 		// Comment the following line to show player name tags for testing interaction.
 		else UpdateNameTag();
-		if (TimeTravelEnabled()) UpdateTimeTravel();		
+		if (_timeTravelEnabled) UpdateTimeTravel();
 	}
 
 
@@ -527,15 +551,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		}
 	}
 
-	public void SetGame(GameController game)
-	{
-		_game = game;
-		Movement.SetGame(game);
-		Hud.SetGame(game);
-		_collectingCrystals.SetGame(game);
-		gameObject.layer = Constants.LayerPlayer;
-	}
-
 	public int GetID() { return View.ViewID; }
 
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
@@ -546,8 +561,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	public (bool forward, bool back) GetCanJump()
 	{
-		bool canJumpForward = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Forward);
-		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
+		bool canJumpForward = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Forward);
+		bool canJumpBack = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Backward);
 		return (canJumpForward, canJumpBack);
 	}
 }

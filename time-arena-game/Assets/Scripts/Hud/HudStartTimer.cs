@@ -10,23 +10,30 @@ public class HudStartTimer : MonoBehaviour
     [SerializeField] private Text _text;
     private GameController _game;
 
-    void Start()
+    void OnEnable()
     {
-        _startTimer.SetActive(false);
+        GameController.gameActive += SetGame;
+        GameController.gameStarted += OnGameStart;
     }
+
+    void OnDisable() { GameController.gameActive -= SetGame; }
+
+    void Start() { _startTimer.SetActive(false); }
 
     void LateUpdate()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene")
+        if (_game != null)
         {
-            _startTimer.SetActive(!_game.GameStarted);
-            if (!_game.GameStarted && !_game.GameEnded)
-            {
-                int timer = (int) _game.Timer;
-                _text.text = $"{timer}";
-            }
+            int timer = (int) _game.Timer;
+            _text.text = $"{timer}";
         }
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    private void SetGame(GameController game)
+    {
+        _game = game;
+        _startTimer.SetActive(true);
+    }
+
+    private void OnGameStart() { _startTimer.SetActive(false); }
 }

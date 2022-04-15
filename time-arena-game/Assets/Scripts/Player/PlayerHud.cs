@@ -42,8 +42,6 @@ public class PlayerHud : MonoBehaviour
     {
         if (_view.IsMine)
         {
-            if (_startTimer != null) _startTimer.SetGame(game);
-            _timeDisplay.SetGame(game);
             _winningDisplay.SetGame(game);
         }
     }

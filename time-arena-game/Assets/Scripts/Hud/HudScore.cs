@@ -8,28 +8,22 @@ public class HudScore : MonoBehaviour
 {
     [SerializeField] private GameObject _container;
     [SerializeField] private Text _text;
-    private SceneController _sceneController;
 
-    void Start()
+    void OnEnable()
     {
-        _container.SetActive(false);
-
-        GameObject pregame = GameObject.FindWithTag("PreGameController");
-        _sceneController = pregame.GetComponent<PreGameController>();
-
-        SceneManager.activeSceneChanged += OnSceneChange;
+        GameController.gameActive += GameActive;
+        SceneController.scoreChange += SetScore;
     }
 
-    void LateUpdate()
+    void OnDisable()
     {
-        _text.text = _sceneController.GetMinerScore() + "";
+        GameController.gameActive -= GameActive;
+        SceneController.scoreChange += SetScore;
     }
 
-    private void OnSceneChange(Scene current, Scene next)
-    {
-        _container.SetActive(true);
+    void Start() { _container.SetActive(false); }
 
-        GameObject game = GameObject.FindWithTag("GameController");
-        _sceneController = game.GetComponent<GameController>();
-    }
+    private void GameActive(GameController game) { _container.SetActive(true); }
+
+    private void SetScore(int score) { _text.text = score + ""; }
 }

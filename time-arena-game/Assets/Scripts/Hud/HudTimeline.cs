@@ -27,7 +27,7 @@ public class HudTimeline : MonoBehaviour
         GameObject pregame = GameObject.FindWithTag("PreGameController");
         _sceneController = pregame.GetComponent<PreGameController>();
 
-        SceneManager.activeSceneChanged += OnSceneChange;
+        GameController.gameActive += OnGameActive;
     }
 
     void LateUpdate()
@@ -46,11 +46,7 @@ public class HudTimeline : MonoBehaviour
 
     // ------------ PRIVATE METHODS ------------
 
-    private void OnSceneChange(Scene current, Scene next)
-    {
-        GameObject game = GameObject.FindWithTag("GameController");
-        _sceneController = game.GetComponent<GameController>();
-    }
+    private void OnGameActive(GameController game) { _sceneController = game; }
 
     private void SetTimeBarPosition()
     {

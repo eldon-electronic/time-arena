@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour, Debuggable
 {
-    private GameController _game;
     [SerializeField] private HudDebugPanel _debugPanel;
     public PhotonView View;
     public CharacterController CharacterBody;
@@ -39,6 +38,20 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _activated = true;
     }
 
+    void OnEnable()
+    {
+        GameController.gameActive += OnGameActive;
+        GameController.gameStarted += OnGameStarted;
+        GameController.gameEnded += OnGameEnded;
+    }
+
+    void OnDisable()
+    {
+        GameController.gameActive -= OnGameActive;
+        GameController.gameStarted -= OnGameStarted;
+        GameController.gameEnded -= OnGameEnded;
+    }
+
     void Start()
     {
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
@@ -46,15 +59,17 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 
         _debugPanel.Register(this);
     }
+
+    private void OnGameActive(GameController game) { _activated = false; }
+
+    private void OnGameStarted() { _activated = true; }
+
+    private void OnGameEnded() { _activated = false; }
     
-    public void OnMouseSensChange(float a){
-      _mouseSensitivity = PauseUI.MouseSens;
-    }
+    public void OnMouseSensChange(float a){ _mouseSensitivity = PauseUI.MouseSens; }
 
     private void UpdatePosition()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameStarted) return;
-
         // Sprint speed.
         if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
 		else _speed = 5f;
@@ -140,10 +155,6 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     public Vector3 GetPosition() { return PlayerTransform.position; }
 
     public Quaternion GetRotation() { return PlayerTransform.rotation; }
-
-    public void SetActive(bool value) { _activated = value; }
-
-    public void SetGame(GameController game) { _game = game; }
 
     public Hashtable GetDebugValues()
     {
