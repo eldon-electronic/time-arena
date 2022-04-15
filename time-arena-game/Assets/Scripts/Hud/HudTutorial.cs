@@ -72,7 +72,11 @@ public class HudTutorial : MonoBehaviour
     }
     public void SetCrystalVisibility(bool crystalVis){
         
-        _crystal.SetActive(crystalVis);
+        if (SceneManager.GetActiveScene().name == "PreGameScene"){
+
+            _crystal.SetActive(crystalVis);
+        }
+        
 
     }
 }
