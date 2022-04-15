@@ -570,4 +570,9 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		bool canJumpBack = TimeTravelEnabled() && CanTimeTravel(Constants.JumpDirection.Backward);
 		return (canJumpForward, canJumpBack);
 	}
+
+	public float GetTime()
+    {
+		return _timelord.GetYourPosition();
+    }
 }

@@ -14,6 +14,7 @@ public class CrystalDevice : MonoBehaviour
     public Material ButtonArrowForwardMat;
     public Material ButtonArrowBackwardMat;
     public Material OffLineMat;
+    [SerializeField] private GameObject _player;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,10 +22,69 @@ public class CrystalDevice : MonoBehaviour
         
     }
 
+    (int, int) GetCrystalWindow(GameObject Crystal)
+    {
+        return (0, 0);
+    }
+
+    GameObject[] GetCrystals()
+    {
+        return null;
+    }
+
+    float GetPlayerTime(GameObject Player)
+    {
+        if (Player.GetComponent<PlayerController>() != null)
+        {
+            return Player.GetComponent<PlayerController>().GetTime();
+        }
+        return -1;
+    }
+
+    GameObject ClosestCrystal(Vector3 player, GameObject[] crystals)
+    {
+        GameObject output = null;
+        float lastDistance = float.MaxValue;
+        foreach(GameObject c in crystals)
+        {
+            if(Vector3.Distance(player, c.transform.position) < lastDistance)
+            {
+                lastDistance = Vector3.Distance(player, c.transform.position);
+                output = c;
+            }
+        }
+        return output;
+    }
+
+    int GetRelativeTimePosition(GameObject Player, GameObject Crystal)
+    {
+        //return -1 if behind time frame
+        //return 1 if ahead of time frame
+        //return 0 if in time frame
+        float p = GetPlayerTime(Player);
+        (int, int) w = GetCrystalWindow(Crystal);
+        if (p < w.Item1) return -1;
+        if (p > w.Item2) return 1;
+        return 0;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        GameObject Crystal = ClosestCrystal(_player.transform.position, GetCrystals());
+
+        Vector2 flatPlayer = new Vector2(_player.transform.position.x, _player.transform.position.z);
+        Vector2 flatCrystal = new Vector2(Crystal.transform.position.x, Crystal.transform.position.z);
+
+        float look = _player.transform.rotation.eulerAngles.y;
+        float angle = Vector2.Angle(Vector2.up, flatCrystal - flatPlayer);
+        ChangePointerPosition(angle-look);
+
+        if(Vector2.Distance(flatPlayer, flatCrystal) < Constants.Proximity)
+        {
+            SetButtonMaterial(new Material[] { ButtonForwardMat, ButtonOffMat, ButtonBackwardMat }[1 - GetRelativeTimePosition(_player, Crystal)]);
+        }
+
            
     }
     public void ChangePointerPosition(float position)
