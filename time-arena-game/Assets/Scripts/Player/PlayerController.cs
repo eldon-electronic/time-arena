@@ -92,12 +92,16 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		if(TeamSelectionManger.ChooseTeam == Constants.Team.Miner){
 			Team = Constants.Team.Miner;
 		    Hud.SetTeam("Miner");
+			//Guardian.SetActive(true);
+			//Miner.SetActive(false);
 			Material.SetArmActive(false);
 			//Debug.Log("I am here!");
 		}
 		else if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
 			Team = Constants.Team.Guardian;
 			Hud.SetTeam("Guardian");
+			//Guardian.SetActive(false);
+			//Miner.SetActive(true);
 			Material.SetArmActive(true);
 		}
 		Material.SetMaterial(Team);

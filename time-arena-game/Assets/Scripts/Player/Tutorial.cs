@@ -55,7 +55,7 @@ public class Tutorial : MonoBehaviour
     {
         _guardianStates = new List<State>();
         _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true,false));
-        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,true,false));
+        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false,false));
         _guardianStates.Add(new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true,false));
         _guardianStates.Add(new State("Press <sprite=29> + <sprite=21> to sprint. ","backJump", KeyCode.W,false,false,false));
         _guardianStates.Add(new State("Use <sprite=15> to jump.","backJump", KeyCode.Space,false,true,false));
@@ -128,11 +128,12 @@ public class Tutorial : MonoBehaviour
 
     private void MoveToNextState()
     {
-            _currentState++;
-            _tutorialHud.SetMessage(_states[_currentState].Message);
-            _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
-            _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
+        if(_currentState >= _states.Count) return;
+        _currentState++;
+        _tutorialHud.SetMessage(_states[_currentState].Message);
+        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
+        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
     }
 
 
