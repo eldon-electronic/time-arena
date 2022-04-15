@@ -7,13 +7,14 @@ public class GameController : MonoBehaviour
 {
 	private Dictionary<int, PlayerController> _miners;
 	private Dictionary<int, PlayerController> _guardians;
-	private TimeLord _timeLord;
+	public TimeLord _timeLord;
 
 	public float Timer;
 	public bool GameStarted;
 	public bool GameEnded;
 	public Constants.Team WinningTeam;
-	private int _minerScore;
+	public int _minerScore;
+	private int targetScore = 50;
 
 
 	void Awake()
@@ -60,12 +61,12 @@ public class GameController : MonoBehaviour
 
 	// Checks to see if there are no hiders left.
 	private void CheckWon()
-	{	
+	{
 		if (_timeLord.TimeEnded() && !GameEnded)
 		{
 			GameEnded = true;
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
-			WinningTeam = Constants.Team.Miner;
+			WinningTeam = _minerScore > targetScore ? Constants.Team.Miner : Constants.Team.Guardian;
 		}
 	}
 
@@ -129,7 +130,5 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	public void IncrementMinerScore() { _minerScore++; }
-
-	public int GetMinerScore() { return _minerScore; }
+	public int GetTeamScore() { return _minerScore; }
 }

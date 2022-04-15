@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class HudScore : MonoBehaviour
 {
     [SerializeField] private GameObject _container;
-    [SerializeField] private Text _text;
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private Text _teamScoreText;
     private GameController _game;
 
     void Start()
@@ -15,12 +16,16 @@ public class HudScore : MonoBehaviour
         _container.SetActive(false);
     }
 
+    public void setScores(int player, int team){
+      _scoreText.text = player + "";
+      _teamScoreText.text = team + "";
+    }
+
     void LateUpdate()
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             _container.SetActive(true);
-            _text.text = _game.GetMinerScore() + "";
         }
     }
 

@@ -13,7 +13,7 @@ public interface Tester
 
 public class TimeLord: Debuggable
 {
-    private int _totalFrames;
+    public int _totalFrames;
 	private int _currentFrame;
     private int _myID;
 
