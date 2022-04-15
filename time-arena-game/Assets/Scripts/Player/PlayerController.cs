@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		GameController.gameActive += OnGameActive;
 		GameController.gameStarted += OnGameStarted;
 		GameController.gameEnded += OnGameEnded;
+		GameController.newTimeLord += SetTimeLord;
 	}
 
 	void OnDisable()
@@ -87,6 +88,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		GameController.gameActive -= OnGameActive;
 		GameController.gameStarted -= OnGameStarted;
 		GameController.gameEnded -= OnGameEnded;
+		GameController.newTimeLord -= SetTimeLord;
 	}
 
 	void Start()
@@ -146,7 +148,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_game = game;
 
 		// TODO: refactor to remove this.
-		Hud.SetGame(game);
 		_collectingCrystals.SetGame(game);
 		gameObject.layer = Constants.LayerPlayer;
 

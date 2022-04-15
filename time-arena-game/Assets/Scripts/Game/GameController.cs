@@ -12,15 +12,13 @@ public class GameController : SceneController
 	public static event Action<GameController> gameActive;
 	public static event Action gameStarted;
 	public static event Action<Constants.Team> gameEnded;
+	public static event Action<TimeLord> newTimeLord;
 
 
 	void Awake()
 	{
 		_miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
-
-		int totalFrames = Constants.GameLength * Constants.FrameRate;
-		_timeLord = new TimeLord(totalFrames);
 
 		Timer = 5f;
 		_gameStarted = false;
@@ -42,11 +40,12 @@ public class GameController : SceneController
 
 		gameActive?.Invoke(this);
 
+		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
+		newTimeLord?.Invoke(_timeLord);
+
 		foreach (var player in allPlayers)
 		{
 			PlayerController pc = player.GetComponent<PlayerController>();
-			pc.SetTimeLord(_timeLord);
-
 			int id = pc.GetID();
 			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
 			else _miners.Add(id, pc);

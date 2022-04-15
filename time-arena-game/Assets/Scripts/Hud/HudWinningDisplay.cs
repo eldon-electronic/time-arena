@@ -6,21 +6,12 @@ using UnityEngine.UI;
 
 public class HudWinningDisplay : MonoBehaviour
 {
-    private GameController _game;
     [SerializeField] private GameObject _winningDisplay;
     [SerializeField] private Text _text;
 
-    void OnEnable()
-    {
-        GameController.gameEnded += OnGameEnded;
-    }
+    void OnEnable() { GameController.gameEnded += OnGameEnded; }
 
-    void OnDisable()
-    {
-        GameController.gameEnded -= OnGameEnded;
-    }
-
-    public void SetGame(GameController game) { _game = game; }
+    void OnDisable() { GameController.gameEnded -= OnGameEnded; }
 
     private void OnGameEnded(Constants.Team winningTeam)
     {

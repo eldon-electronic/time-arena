@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,34 +10,37 @@ public class HudMasterClientOptions : MonoBehaviour
 {
     [SerializeField] private GameObject _masterClientOptions;
     [SerializeField] private Text _text;
-    private PreGameController _preGame;
+
+    void OnEnable()
+    {
+        PreGameController.countDown += OnCountDown;
+        GameController.gameActive += OnGameActive;
+    }
+
+    void OnDisable()
+    {
+        PreGameController.countDown -= OnCountDown;
+        GameController.gameActive -= OnGameActive;
+    }
 
     void Start()
     {
-        _preGame = FindObjectOfType<PreGameController>();
-        if (_preGame == null) Debug.LogError("PreGameController not found");
+        if (!PhotonNetwork.IsMasterClient) _masterClientOptions.SetActive(false);
+        _text.text = "Press F to Start";
     }
 
-    private void LateUpdate()
+    private void OnCountDown(float secondsTillGame)
     {
-        // If master client, show options message.
-        if (SceneManager.GetActiveScene().name == "GameScene")
+        var timeLeft = System.Math.Round(secondsTillGame, 0);
+        if (System.Math.Round(secondsTillGame, 0) > 0.0f)
         {
-            _masterClientOptions.SetActive(false);
-        }
-
-        if (_preGame != null && _preGame.IsCountingDown())
-        {
-            float secondsTillGame = _preGame.GetSecondsTillGame();
-            var timeLeft = System.Math.Round(secondsTillGame, 0);
             _text.text = $"Starting in {timeLeft}s";
-            if (System.Math.Round(secondsTillGame, 0) <= 0.0f)
-            {
-                _text.text = "Loading...";
-            }
         }
-        else _text.text = "Press F to Start";
+        else _text.text = "Loading...";
     }
 
-    public void SetActive(bool value) { _masterClientOptions.SetActive(value); }
+    private void OnGameActive(GameController game)
+    {
+        _masterClientOptions.SetActive(false);
+    }
 }
