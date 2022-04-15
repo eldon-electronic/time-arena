@@ -6,19 +6,20 @@ public class GuardianController : MonoBehaviour
 {
     public Animator GuardianAnim;
     // Start is called before the first frame update
-    void Start(){
-
-      GuardianAnim = gameObject.GetComponent<Animator>();
+    void Start()
+    {
+    
     }
-    void Update() {
 
-        GuardianKeyControl();
-        GuardianIdle();
+    // Update is called once per frame
+    void Update()
+    {
+       
+
         
     }
-
     public void GuardianKeyControl()
-    {
+	{
 		if (Input.GetKey(KeyCode.W)) GuardianWalking();
 
 		if (Input.GetKeyDown(KeyCode.Space)) GuardianJumping();

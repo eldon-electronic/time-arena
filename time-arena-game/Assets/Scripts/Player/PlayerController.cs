@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public GameObject Miner;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
+	public GuardianController GuardianCont;
 	[SerializeField] private CollectingCrystals _collectingCrystals;
 
 	// Variables corresponding to UI.
@@ -92,17 +93,20 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		if(TeamSelectionManger.ChooseTeam == Constants.Team.Miner){
 			Team = Constants.Team.Miner;
 		    Hud.SetTeam("Miner");
-			//Guardian.SetActive(true);
-			//Miner.SetActive(false);
-			Material.SetArmActive(false);
+			Guardian.SetActive(false);
+			Miner.SetActive(true);
+	
+		
+			//Material.SetArmActive(false);
 			//Debug.Log("I am here!");
 		}
 		else if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
 			Team = Constants.Team.Guardian;
 			Hud.SetTeam("Guardian");
-			//Guardian.SetActive(false);
-			//Miner.SetActive(true);
-			Material.SetArmActive(true);
+			Guardian.SetActive(true);
+			Miner.SetActive(false);
+		
+			//Material.SetArmActive(true);
 		}
 		Material.SetMaterial(Team);
 		
@@ -433,6 +437,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	void KeyControl()
 	{
+		
 		if (Input.GetKeyDown(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, true);
 
 		if (Input.GetKeyDown(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, true);
@@ -492,6 +497,14 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		}
 		else Nametag.SetActive(true);
 	} 
+	private void UpdateGuardianAnimations(){
+
+		if(Team == Constants.Team.Guardian){
+			
+			GuardianCont.GuardianKeyControl();
+			GuardianCont.GuardianIdle();
+	   }
+	}
 
 
 	void Update() {
@@ -503,6 +516,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			{
 				UpdateCooldowns();
 				KeyControl();
+				UpdateGuardianAnimations();
+				Debug.Log("isGrabbing");
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
 			{
