@@ -42,6 +42,8 @@ public class GameController : SceneController
 		List<GameObject> allPlayers = new List<GameObject>(players);
 		allPlayers.Add(client);
 
+		gameActive?.Invoke(this);
+
 		foreach (var player in allPlayers)
 		{
 			PlayerController pc = player.GetComponent<PlayerController>();
@@ -51,8 +53,6 @@ public class GameController : SceneController
 			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
 			else _miners.Add(id, pc);
 		}
-
-		gameActive?.Invoke(this);
 	}
 
 	private void CheckWon()

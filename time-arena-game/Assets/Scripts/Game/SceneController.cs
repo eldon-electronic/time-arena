@@ -46,6 +46,4 @@ public abstract class SceneController: MonoBehaviour
 		_minerScore++;
 		scoreChange?.Invoke(_minerScore);
 	}
-
-	public int GetMinerScore() { return _minerScore; }
 }
