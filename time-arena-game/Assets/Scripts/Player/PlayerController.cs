@@ -58,6 +58,23 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	private Vector3 _seekerSpawnPoint;
 
 
+	void Awake()
+	{
+		_hiderSpawnPoints =  new Vector3[] {
+			new Vector3(-42f, 0f, 22f),
+			new Vector3(-15f, -0.5f, -4f), 
+			new Vector3(-12f, -0.5f, -40f), 
+			new Vector3(-47f, -0.5f, -8f), 
+			new Vector3(-36f, -2.5f, 2.2f)
+		};
+
+		_seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
+
+		_isJumping = false;
+		_jumpDirection = Constants.JumpDirection.Static;
+		_setJumpState = false;
+	}
+
 	void Start()
 	{	
 		DontDestroyOnLoad(this.gameObject);
@@ -69,7 +86,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			Team = Constants.Team.Guardian;
 		}
 
-		Material.SetMaterialMiner();
+		Material.SetMaterial(Constants.Team.Miner);
 		Hud.SetTeam("MINER");
 		gameObject.layer = Constants.LayerPlayer;
 		Particles.Subscribe(this);

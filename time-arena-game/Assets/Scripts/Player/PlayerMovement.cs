@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     private float _mouseSensitivity;
     private bool _activated;
 
-    void Start()
+    void Awake()
     {
         _speed = 5f;
         _groundCheckRadius = 0.5f;
@@ -37,7 +37,10 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _xRot = 0f;
         _mouseSensitivity = 100f;
         _activated = true;
+    }
 
+    void Start()
+    {
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
 

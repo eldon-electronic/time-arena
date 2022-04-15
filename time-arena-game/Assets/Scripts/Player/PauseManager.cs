@@ -6,16 +6,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-public class PauseManager : MonoBehaviourPunCallbacks {
-
-	//pause tracking vars
+public class PauseManager : MonoBehaviourPunCallbacks
+{
     private bool _paused = false;
 	public GameObject PauseMenuUI;
 	public PhotonView View;
 	public Slider MouseSensSlider;
   	public float MouseSens;
 
-	// Update is called once per frame
 	void Update()
 	{	
 		if (!View.IsMine) return;

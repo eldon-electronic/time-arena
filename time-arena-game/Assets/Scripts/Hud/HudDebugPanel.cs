@@ -16,7 +16,7 @@ public class HudDebugPanel : MonoBehaviour
     private List<Debuggable> _subsribers;
     private Hashtable _debugItems;
 
-    void Start()
+    void Awake()
     {
         _debugCanvasGroup.alpha = 0.0f;
         _subsribers = new List<Debuggable>();
