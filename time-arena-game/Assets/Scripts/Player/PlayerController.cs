@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public Camera Cam;
 	public GameObject CameraHolder;
 	public GameObject Guardian;
-	public gameObject Miner;
+	public GameObject Miner;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
 	[SerializeField] private CollectingCrystals _collectingCrystals;
