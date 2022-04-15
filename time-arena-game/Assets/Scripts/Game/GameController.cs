@@ -73,7 +73,11 @@ public class GameController : SceneController
 			// Pregame timer is counting.
 			if (Timer <= 0f)
 			{
-				if (!_gameStarted) gameStarted?.Invoke();
+				if (!_gameStarted)
+				{
+					_gameStarted = true;
+					gameStarted?.Invoke();
+				}
 			}
 			else Timer -= Time.deltaTime;
 		}

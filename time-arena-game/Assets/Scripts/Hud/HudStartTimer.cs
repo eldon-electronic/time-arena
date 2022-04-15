@@ -13,7 +13,7 @@ public class HudStartTimer : MonoBehaviour
     void OnEnable()
     {
         GameController.gameActive += SetGame;
-        GameController.gameStarted += OnGameStart;
+        GameController.gameStarted += OnGameStarted;
     }
 
     void OnDisable() { GameController.gameActive -= SetGame; }
@@ -35,5 +35,5 @@ public class HudStartTimer : MonoBehaviour
         _startTimer.SetActive(true);
     }
 
-    private void OnGameStart() { _startTimer.SetActive(false); }
+    private void OnGameStarted() { _startTimer.SetActive(false); }
 }
