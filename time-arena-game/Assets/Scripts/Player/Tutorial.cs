@@ -101,7 +101,6 @@ public class Tutorial : MonoBehaviour
     }
 
     IEnumerator DelayPopup() {
-
         yield return new WaitForSeconds(4);
         MoveToNextState();
         _hasMovedOn = true;
@@ -126,10 +125,16 @@ public class Tutorial : MonoBehaviour
 
     private void MoveToNextState()
     {
-            _currentState++;
-            _tutorialHud.SetMessage(_states[_currentState].Message);
-            _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-            _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
+        // Deactivate old arrow.
+        _tutorialHud.SetArrowVisibility(_states[_currentState].ElementToPointTo, false); 
+        _currentState++;
+        _tutorialHud.SetMessage(_states[_currentState].Message);
+        
+        // Activate new arrow (if there is one for the current state)
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo, 
+            _states[_currentState].VisibilityOfArrow
+        );  
     }
 
 
@@ -145,8 +150,10 @@ public class Tutorial : MonoBehaviour
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo,
+            _states[_currentState].VisibilityOfArrow
+        );
         NeedKeyPress(_states[_currentState].NeedKey);
         _tutorialHud.SetVisibility(true);
     }
