@@ -44,17 +44,17 @@ public class Tutorial : MonoBehaviour
     void Update()
     {
         if (!_view.IsMine) return;
-        if ((_currentState == (_states.Count-1))) StartTutorialOver();
-        else if (_currentState < _states.Count-1) SkipTutorial();
+        if ((_currentState == (_states.Count - 1))) StartTutorialOver();
+        if (_currentState < _states.Count - 1) SkipTutorial();
 
-        NeedKeyPress(_states[_currentState].NeedKey);
+        if (_currentState <= _states.Count - 1) NeedKeyPress(_states[_currentState].NeedKey);
     }
 
     private void CreateStatesGuardian()
     {
         _guardianStates = new List<State>();
         _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true));
-        _guardianStates.Add(new State("Welcome to tutorial Miner!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false));
+        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false));
         _guardianStates.Add(new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true));
         _guardianStates.Add(new State("Press <sprite=29> + <sprite=21> to sprint. ","backJump", KeyCode.W,false,false));
         _guardianStates.Add(new State("Use <sprite=15> to jump.","backJump", KeyCode.Space,false,true));
@@ -125,12 +125,14 @@ public class Tutorial : MonoBehaviour
 
     private void MoveToNextState()
     {
+        if (_currentState >= _states.Count) return;
+
         // Deactivate old arrow.
         _tutorialHud.SetArrowVisibility(_states[_currentState].ElementToPointTo, false); 
         _currentState++;
         _tutorialHud.SetMessage(_states[_currentState].Message);
         
-        // Activate new arrow (if there is one for the current state)
+        // Activate new arrow (if there is one for the current state).
         _tutorialHud.SetArrowVisibility(
             _states[_currentState].ElementToPointTo, 
             _states[_currentState].VisibilityOfArrow
