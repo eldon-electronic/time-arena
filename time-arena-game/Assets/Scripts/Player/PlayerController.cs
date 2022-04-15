@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	// Variables defining player values.
 	public Camera Cam;
 	public GameObject CameraHolder;
+	public GameObject Guardian;
+	public gameObject Miner;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
 	[SerializeField] private CollectingCrystals _collectingCrystals;
@@ -88,6 +90,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 		Material.SetMaterial(Constants.Team.Miner);
 		Hud.SetTeam("MINER");
+		
 		gameObject.layer = Constants.LayerPlayer;
 		Particles.Subscribe(this);
 
