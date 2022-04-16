@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class HudTimeline : MonoBehaviour
     [SerializeField] private Sprite _yourIcon;
     [SerializeField] private Sprite _minerIcon;
     [SerializeField] private Sprite _guardianIcon;
-    [SerializeField] private PlayerController _player;
+    [SerializeField] private PhotonView _view;
     private SceneController _sceneController;
     private TimeLord _timeLord;
     private Dictionary<int, Slider> _players;
@@ -96,7 +97,7 @@ public class HudTimeline : MonoBehaviour
         try
         {
             Constants.Team team = _sceneController.GetTeam(playerID);
-            Slider icon = InstantiateIcon(team, playerID == _player.GetID());
+            Slider icon = InstantiateIcon(team, playerID == _view.ViewID);
             _players.Add(playerID, icon);
             return true;
         }

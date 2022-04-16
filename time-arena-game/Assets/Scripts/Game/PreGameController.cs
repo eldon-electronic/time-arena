@@ -26,6 +26,11 @@ public class PreGameController : SceneController
 
     void Update()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (Input.GetKeyDown(KeyCode.F)) StartCountingDown();
+            if (Input.GetKeyDown(KeyCode.Escape)) StopCountingDown();
+        }
         if (_isCountingTillGameStart)
         {
             _secondsTillGame -= Time.deltaTime;
@@ -39,7 +44,7 @@ public class PreGameController : SceneController
         _timeLord.Tick();
     }
 
-    public void StartCountingDown()
+    private void StartCountingDown()
     {
         if (_isCountingTillGameStart) return;
         _isCountingTillGameStart = true;
@@ -47,9 +52,9 @@ public class PreGameController : SceneController
         countDown?.Invoke(_secondsTillGame);
     }
 
-    public void StopCountingDown()
+    private void StopCountingDown()
     {
         _isCountingTillGameStart = false;
-        _secondsTillGame = 0.0f;
+        _secondsTillGame = 5.0f;
     }
 }

@@ -23,6 +23,7 @@ public class Tutorial : MonoBehaviour
         }
     }
     
+    [SerializeField] private PlayerController _player;
     private bool _hasMovedOn = true;
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PhotonView _view;
@@ -32,22 +33,53 @@ public class Tutorial : MonoBehaviour
     private int _currentState;
   
 
+    // ------------ UNITY FUNCTIONS ------------
+
     void Awake()
     {
+        if (!_view.IsMine)
+        {
+            _tutorialHud.SetVisibility(false);
+            Destroy(this);
+        }
         CreateStatesGuardian();
         CreateStatesMiner();
         _states = _minerStates;
     }
 
+    void OnEnable() { GameController.gameActive += OnGameActive; }
+
+    void OnDisable() { GameController.gameActive -= OnGameActive; }
+
+    void Start()
+    {
+        if (_view.IsMine)
+        {
+            if (_player.Team == Constants.Team.Guardian) _states = _guardianStates;
+            else _states = _minerStates;
+            StartTutorial();
+        }
+    }
 
     void Update()
     {
         if (!_view.IsMine) return;
         if ((_currentState == (_states.Count - 1))) StartTutorialOver();
         if (_currentState < _states.Count - 1) SkipTutorial();
-
         if (_currentState <= _states.Count - 1) NeedKeyPress(_states[_currentState].NeedKey);
     }
+
+
+    // ------------ ON EVENT METHODS ------------
+
+    private void OnGameActive(GameController game)
+    {
+        _tutorialHud.SetVisibility(false);
+        Destroy(this);
+    }
+
+
+    // ------------ PRIVATE METHODS ------------
 
     private void CreateStatesGuardian()
     {
@@ -99,6 +131,16 @@ public class Tutorial : MonoBehaviour
         _minerStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.Return,false,true));
     }
 
+    private void StartTutorial()
+    {
+        _currentState = 0;
+        _tutorialHud.SetMessage(_states[_currentState].Message);
+        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
+        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        NeedKeyPress(_states[_currentState].NeedKey);
+        _tutorialHud.SetVisibility(true);
+    }
+
     IEnumerator DelayPopup() {
 
         yield return new WaitForSeconds(4);
@@ -122,7 +164,6 @@ public class Tutorial : MonoBehaviour
         }    
    }
   
-
     private void MoveToNextState()
     {
         if(_currentState >= _states.Count) return;
@@ -133,31 +174,7 @@ public class Tutorial : MonoBehaviour
         _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
     }
 
-
-    // ------------ PUBLIC METHODS ------------
-
-    public void SetTeam(Constants.Team team)
-    {
-        if (team == Constants.Team.Guardian) _states = _guardianStates;
-        else if(team == Constants.Team.Miner) _states = _minerStates;
-    }
-
-    public void StartTutorial()
-    {
-        _currentState = 0;
-        _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
-        NeedKeyPress(_states[_currentState].NeedKey);
-        _tutorialHud.SetVisibility(true);
-    }
-
-    public void StopTutorial()
-    {
-        _tutorialHud.SetVisibility(false);
-    }
-
-    public void SkipTutorial()
+    private void SkipTutorial()
     {
         _tutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
 
@@ -168,7 +185,7 @@ public class Tutorial : MonoBehaviour
         }
     }
 
-    public void StartTutorialOver()
+    private void StartTutorialOver()
     {    
         _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
         if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();

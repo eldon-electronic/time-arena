@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
+// TODO: revert back to this original method (to avoid alerting everyone)
 public interface ParticleUser
 {
     public void NotifyStoppedDissolving(bool dissolvedOut);
@@ -15,17 +17,15 @@ public class ParticleController : MonoBehaviour
 	public ParticleSystem Splash;
   	public Material Material;
     public Animator PlayerAnim;
-
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
   	private Color _white = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-    private bool _isDissolving;
-    private PlayerController _subscriber;
+    public static event Action startedDissolving;
+    public static event Action<bool> stoppedDissolving;
     
     void Awake()
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
-        _isDissolving = false;
     }
 
 
@@ -56,8 +56,7 @@ public class ParticleController : MonoBehaviour
     private void StopDissolving(Constants.JumpDirection jd, bool dissolveOut)
     {
         SetDissolveAnimationVariable(jd, dissolveOut, false);
-        if (_subscriber != null) _subscriber.NotifyStoppedDissolving(dissolveOut);
-        _isDissolving = false;
+        stoppedDissolving?.Invoke(dissolveOut);
     }
 
 
@@ -66,12 +65,7 @@ public class ParticleController : MonoBehaviour
     public void StartDissolving(Constants.JumpDirection jd, bool dissolveOut)
     {
         SetDissolveAnimationVariable(jd, dissolveOut, true);
-        _isDissolving = true;
     }
-
-    public bool IsDissolving() { return _isDissolving; }
-
-    public void Subscribe(PlayerController pc) { _subscriber = pc; }
 
 
     // ------------ FUNCTIONS CALLED BY ANIMATION ------------
@@ -122,8 +116,5 @@ public class ParticleController : MonoBehaviour
 
     void StopDissolvingForwardIn() { StopDissolving(Constants.JumpDirection.Forward, false); }
 
-    void StartedDissolving()
-    {
-        if (_subscriber != null) _subscriber.NotifyStartedDissolving();
-    }
+    void StartedDissolving() { startedDissolving?.Invoke(); }
 }

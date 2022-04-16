@@ -12,7 +12,7 @@ public class HudCooldowns : MonoBehaviour
     [SerializeField] private Image _backJumpIcon;
     [SerializeField] private Sprite _greenUnpressedSprite;
     [SerializeField] private Sprite _redPressedSprite;
-    [SerializeField] private PlayerController _player;
+    [SerializeField] private TimeConn _timeConn;
     private float _forwardBarHeight;
     private float _backBarHeight;
     private bool _canJumpForward;
@@ -28,11 +28,11 @@ public class HudCooldowns : MonoBehaviour
 
     void Update()
     {
-        (float forward, float back) cooldowns = _player.GetCooldowns();
+        (float forward, float back) cooldowns = _timeConn.GetCooldowns();
         _forwardBarHeight = 1.0f - (cooldowns.forward / 15.0f);
         _backBarHeight = 1.0f - (cooldowns.back / 15.0f);
 
-        (bool forward, bool back) canJump = _player.GetCanJump();
+        (bool forward, bool back) canJump = _timeConn.GetCanJump();
         _canJumpForward = canJump.forward;
         _canJumpBack = canJump.back;
     }

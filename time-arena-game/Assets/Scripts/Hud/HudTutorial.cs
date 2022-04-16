@@ -34,14 +34,6 @@ public class HudTutorial : MonoBehaviour
         _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
     }
 
-    void LateUpdate()
-    {
-        if (SceneManager.GetActiveScene().name != "PreGameScene" && _view.IsMine)
-        {
-            _tutorial.SetActive(false);
-        }
-    }
-
     public void SetVisibility(bool visibility) { _tutorial.SetActive(visibility); }
 
     public void SetArrowPosition(string uiElement)

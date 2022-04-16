@@ -7,6 +7,16 @@ public class CollectingCrystals : MonoBehaviour
     [SerializeField] private PlayerController _player;
     private GameController _game;
 
+    public void OnEnable()
+    {
+        GameController.gameActive += SetGame;
+    }
+
+    public void OnDisable()
+    {
+        GameController.gameActive -= SetGame;
+    }
+
 
     public void OnTriggerEnter(Collider col)
     {
@@ -17,5 +27,5 @@ public class CollectingCrystals : MonoBehaviour
         }
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    private void SetGame(GameController game) { _game = game; }
 }

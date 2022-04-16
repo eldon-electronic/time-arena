@@ -1,20 +1,43 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TailManager : MonoBehaviour
 {
+    [SerializeField] private GameObject _tailPrefab;
+    [SerializeField] private PhotonView _view;
     private TimeLord _timeLord;
     private Dictionary<int, TailController> _tails;
     private bool _activated;
-    [SerializeField] private GameObject _tailPrefab;
     private bool _particlesEnabled;
+
+
+    // ------------ UNITY METHODS ------------
 
     void Awake()
     {
+        if (!_view.IsMine) Destroy(this);
         _tails = new Dictionary<int, TailController>();
-        _activated = false;
+        _activated = true;
         _particlesEnabled = true;
+    }
+
+    void OnEnable()
+    {
+        GameController.gameActive += OnGameActive;
+        GameController.gameStarted += OnGameStarted;
+    }
+
+    void OnDisable()
+    {
+        GameController.gameActive -= OnGameActive;
+        GameController.gameStarted -= OnGameStarted;
+    }
+
+    void Start()
+    {
+        _timeLord = GameObject.FindObjectOfType<PreGameController>().GetTimeLord();
     }
 
     void Update()
@@ -37,11 +60,18 @@ public class TailManager : MonoBehaviour
     }
 
 
-    // ------------ PUBLIC FUNCTIONS FOR PLAYER CONTROLLER ------------
+    // ------------ ON EVENT FUNCTIONS ------------
 
-    public void SetTimeLord(TimeLord timeLord) { _timeLord = timeLord; }
+    private void OnGameActive(GameController game)
+    {
+        _activated = false;
+        _timeLord = game.GetTimeLord();
+    }
 
-    public void SetActive(bool value) { _activated = value; }
+    private void OnGameStarted() { _activated = true; }
+
+
+    // ------------ PUBLIC FUNCTIONS FOR TIME CONN ------------
 
     public void EnableParticles(bool value) { _particlesEnabled = value; }
 
