@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class HudMasterClientOptions : MonoBehaviour
 {
     [SerializeField] private GameObject _masterClientOptions;
-    [SerializeField] private Text _text;
+    [SerializeField] private TMP_Text _text;
 
     void OnEnable()
     {

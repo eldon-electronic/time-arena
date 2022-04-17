@@ -44,25 +44,10 @@ public class PauseManager : MonoBehaviourPunCallbacks
 	public void OnResume() { _paused = false; }
 	
 	// Work on this in the future. Pressing "Leave" should take the user back to main screen.
-	public void OnLeave()
+	private void DisconnectPlayer()
 	{
 		PhotonNetwork.LeaveRoom();
 		SceneManager.LoadScene("MenuScene");
 		Destroy(gameObject);
 	}
-
-  /*	StartCoroutine(DisconnectAndLoad());
-	}
-
-	IEnumerator DisconnectAndLoad() {
-		PhotonNetwork.LeaveRoom();
-		while (PhotonNetwork.InRoom) { // Busy waiting
-			Debug.Log("Busy waiting");
-			yield return null;
-		}
-		SceneManager.LoadScene("MenuScene");
-		Destroy(gameObject);
-	}*/
-
-	public bool IsPaused() { return _paused; }
 }
