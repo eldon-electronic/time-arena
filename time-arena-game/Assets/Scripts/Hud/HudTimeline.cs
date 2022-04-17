@@ -9,7 +9,7 @@ public class HudTimeline : MonoBehaviour
 {
     [SerializeField] private GameObject _timeline;
     [SerializeField] private GameObject _iconPrefab;
-    [SerializeField] private Slider _elapsedTimeSlider;
+    [SerializeField] private Image _timelineFill;
     [SerializeField] private Sprite _yourIcon;
     [SerializeField] private Sprite _minerIcon;
     [SerializeField] private Sprite _guardianIcon;
@@ -66,7 +66,7 @@ public class HudTimeline : MonoBehaviour
     {
         int frame = _timeLord.GetCurrentFrame();
         int totalFrames = _timeLord.GetTotalFrames();
-        _elapsedTimeSlider.value = (float) frame / (float) totalFrames;
+        _timelineFill.fillAmount = (float) frame / (float) totalFrames;
     }
 
     private Slider InstantiateIcon(Constants.Team team, bool isMe)

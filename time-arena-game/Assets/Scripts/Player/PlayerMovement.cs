@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     [SerializeField] private PlayerController _player;
     public PhotonView View;
     public CharacterController CharacterBody;
-    public PauseManager PauseUI;
     public Transform PlayerTransform;
     public LayerMask GroundMask;
     public GameObject CameraHolder;
@@ -24,6 +23,8 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     private bool _isCeiling;
     private float _xRot;
     private float _mouseSensitivity;
+    private bool _lockMovement;
+    private bool _lockRotation;
     private bool _activated;
     private Vector3[] _hiderSpawnPoints;
 	private Vector3 _seekerSpawnPoint;
@@ -41,6 +42,8 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _isCeiling = false;
         _xRot = 0f;
         _mouseSensitivity = 100f;
+        _lockMovement = false;
+        _lockRotation = false;
         _activated = true;
         _seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
         _hiderSpawnPoints =  new Vector3[] {
@@ -57,6 +60,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         GameController.gameActive += OnGameActive;
         GameController.gameStarted += OnGameStarted;
         GameController.gameEnded += OnGameEnded;
+        PauseManager.paused += OnPaused;
     }
 
     void OnDisable()
@@ -64,6 +68,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         GameController.gameActive -= OnGameActive;
         GameController.gameStarted -= OnGameStarted;
         GameController.gameEnded -= OnGameEnded;
+        PauseManager.paused -= OnPaused;
     }
 
     void Start()
@@ -88,13 +93,19 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 
     private void OnGameActive(GameController game)
     {
-        _activated = false;
+        _lockMovement = true;
         MoveToSpawnPoint();
     }
 
-    private void OnGameStarted() { _activated = true; }
+    private void OnGameStarted() { _lockMovement = false; }
 
     private void OnGameEnded(Constants.Team winningTeam) { _activated = false; }
+
+    private void OnPaused(bool isPaused)
+    {
+        _lockMovement = isPaused;
+        _lockRotation = isPaused;
+    }
     
     public void OnMouseSensChange(float sensitivity) { _mouseSensitivity = sensitivity; }
 
@@ -108,8 +119,8 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 		else _speed = 5f;
 
         // Get movement axis values.
-        float xMove = PauseUI.IsPaused() ? 0 : Input.GetAxis("Horizontal");
-        float zMove = PauseUI.IsPaused() ? 0 : Input.GetAxis("Vertical");
+        float xMove = _lockMovement ? 0 : Input.GetAxis("Horizontal");
+        float zMove = _lockMovement ? 0 : Input.GetAxis("Vertical");
 
         // Check if player's bottom intersects with any environment object.
         Vector3 groundCheck = PlayerTransform.position;
@@ -132,7 +143,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
 		// Jump control.
-		if (Input.GetButtonDown("Jump") && _isGrounded && !PauseUI.IsPaused())
+		if (Input.GetButtonDown("Jump") && _isGrounded && !_lockMovement)
         {
 			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
 		}
@@ -156,8 +167,8 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         // Rotate player about y and playercam about x.
 		// Get axis values from input.
         // deltaTime used for fps correction.
-		float mouseX = PauseUI.IsPaused() ? 0 : Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
-		float mouseY = PauseUI.IsPaused() ? 0 : Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+		float mouseX = _lockRotation ? 0 : Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
+		float mouseY = _lockRotation ? 0 : Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
 
 		// Invert vertical rotation and restrict up/down.
 		_xRot -= mouseY;

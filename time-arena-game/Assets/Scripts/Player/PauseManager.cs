@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class PauseManager : MonoBehaviourPunCallbacks
 	[SerializeField] private GameObject _pauseMenuUI;
 	[SerializeField] private PhotonView _view;
 	private bool _paused;
+	public static event Action<bool> paused;
 
 	void OnEnable()
 	{
@@ -30,24 +32,26 @@ public class PauseManager : MonoBehaviourPunCallbacks
 	void Update()
 	{	
 		if (!_view.IsMine) return;
-
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			_paused = !_paused;
-			_pauseMenuUI.SetActive(_paused);
-			Cursor.lockState = _paused ? CursorLockMode.None : CursorLockMode.Locked;
-		}
+		if (Input.GetKeyDown(KeyCode.Escape)) SetPause(!_paused);
 	}
 
-	private void OnGameEnded(Constants.Team team) { _paused = true; }
+	private void OnGameEnded(Constants.Team team) { SetPause(true); }
 
-	public void OnResume() { _paused = false; }
-	
+	public void OnResume() { SetPause(false); }
+
 	// Work on this in the future. Pressing "Leave" should take the user back to main screen.
-	private void DisconnectPlayer()
+	public void OnLeave()
 	{
 		PhotonNetwork.LeaveRoom();
 		SceneManager.LoadScene("MenuScene");
 		Destroy(gameObject);
+	}
+
+	private void SetPause(bool pause)
+	{
+		_paused = pause;
+		_pauseMenuUI.SetActive(_paused);
+		Cursor.lockState = _paused ? CursorLockMode.None : CursorLockMode.Locked;
+		paused?.Invoke(_paused);
 	}
 }

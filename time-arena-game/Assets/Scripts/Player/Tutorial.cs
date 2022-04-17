@@ -136,8 +136,10 @@ public class Tutorial : MonoBehaviour
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo,
+            _states[_currentState].VisibilityOfArrow
+        );
         NeedKeyPress(_states[_currentState].NeedKey);
         _tutorialHud.SetVisibility(true);
     }
