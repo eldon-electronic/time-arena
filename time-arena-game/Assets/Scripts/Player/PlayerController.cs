@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public GameObject Miner;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
-	public GuardianController GuardianCont;
+	//public GuardianController GuardianCont;
 	[SerializeField] private CollectingCrystals _collectingCrystals;
 
 	// Variables corresponding to UI.
@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
+		
 
 	
 		
@@ -105,10 +106,12 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			Hud.SetTeam("Guardian");
 			Guardian.SetActive(true);
 			Miner.SetActive(false);
+			//GuardianCont.GuardianKeyControl();
 		
 			//Material.SetArmActive(true);
 		}
 		Material.SetMaterial(Team);
+		
 		
 
 		//Material.SetMaterialMiner();
@@ -354,7 +357,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	}
 
 
-	private void Grab()
+	/*private void Grab()
 	{
 		// If grabbing, check for intersection with player.
 		if (!_damageWindow)
@@ -372,7 +375,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			}
 			PlayerAnim.SetBool("isGrabbing", true);
 		}
-	}
+	}*/
 
 	private void StartGame()
 	{
@@ -414,17 +417,17 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	}
 
 	// Function to enable player to grab others.
-	public void StartGrabbing()
-	{
-		_damageWindow = true;
-	}
+	//public void StartGrabbing()
+	//{
+		//_damageWindow = true;
+	//}
 
 	// Function to disable player to grab others.
-	public void StopGrabbing()
-	{
-		_damageWindow = false;
-		PlayerAnim.SetBool("isGrabbing", false);
-	}
+	//public void StopGrabbing()
+	//{
+		//_damageWindow = false;
+		//PlayerAnim.SetBool("isGrabbing", false);
+	//}
 
 
 	// ------------ UPDATE HELPER FUNCTIONS ------------
@@ -446,7 +449,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 		if (Input.GetKeyUp(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, false);
 
-		if (Input.GetMouseButtonDown(0)) Grab();
+		//if (Input.GetMouseButtonDown(0)) Grab();
 
 		if (Input.GetKeyDown(KeyCode.Return)) StartGame();
 
@@ -497,14 +500,15 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		}
 		else Nametag.SetActive(true);
 	} 
-	private void UpdateGuardianAnimations(){
+	/*private void UpdateGuardianAnimations(){
 
 		if(Team == Constants.Team.Guardian){
 			
 			GuardianCont.GuardianKeyControl();
-			GuardianCont.GuardianIdle();
+			
+			//GuardianCont.GuardianIdle();
 	   }
-	}
+	}*/
 
 
 	void Update() {
@@ -516,8 +520,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			{
 				UpdateCooldowns();
 				KeyControl();
-				UpdateGuardianAnimations();
-				Debug.Log("isGrabbing");
+				GuardianKeyControl();
+				
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
 			{
@@ -604,4 +608,43 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_ppController = subscriber;
 		Debug.Log("subscribed");
 	}
+	public void GuardianKeyControl()
+    {
+        
+		if (Input.GetKeyDown(KeyCode.W)) GuardianRunningForwards();
+		
+		if(Input.GetKeyDown(KeyCode.S)) GuardianRunningBackwards();
+
+		if(Input.GetKeyUp(KeyCode.S)) StopGuardianRunningBackwards();
+
+		if (Input.GetKeyUp(KeyCode.W)) StopGuardianRunningForwards();
+
+		if (Input.GetKeyDown(KeyCode.Space)) PlayerAnim.Play("Jumping");
+
+		if (Input.GetMouseButtonDown(0)) PlayerAnim.Play("Grabbing");
+		
+	}
+  
+    public void GuardianRunningForwards(){
+
+        PlayerAnim.SetBool("isRunningForwards", true);
+    }
+	public void GuardianRunningBackwards(){
+
+        PlayerAnim.SetBool("isRunningBackwards", true);
+    }
+	public void StopGuardianGrabbing(){
+		
+		PlayerAnim.SetBool("isGrabbing", false);
+    }
+	public void StopGuardianRunningForwards(){
+
+        PlayerAnim.SetBool("isRunningForwards", false);
+  
+    }
+	public void StopGuardianRunningBackwards(){
+
+        PlayerAnim.SetBool("isRunningBackwards", false);
+  
+    }
 }

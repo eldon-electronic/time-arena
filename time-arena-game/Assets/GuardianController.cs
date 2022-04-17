@@ -4,46 +4,60 @@ using UnityEngine;
 
 public class GuardianController : MonoBehaviour
 {
-    public Animator GuardianAnim;
+    public Animator PlayerAnim;
+   // private bool _isAnimating;
     // Start is called before the first frame update
     void Start(){
 
-      GuardianAnim = gameObject.GetComponent<Animator>();
+      
     }
     void Update() {
 
-        GuardianKeyControl();
-        GuardianIdle();
+       
         
     }
 
-    public void GuardianKeyControl()
-    {
-		if (Input.GetKey(KeyCode.W)) GuardianWalking();
-
-		if (Input.GetKeyDown(KeyCode.Space)) GuardianJumping();
-
-		if (Input.GetMouseButtonDown(0))  GuardianGrabbing();
-
-        //else GuardianIdle();
-
-       
-
-	}
     public void GuardianGrabbing(){
 
-        GuardianAnim.SetBool("isGuardianGrabbing", true);
+        PlayerAnim.SetBool("isGrabbing", true);
+        //_isIdle = false;
+        //_isAnimating = true;
+        //GuardianAnim.SetBool("isGuardianIdle", false);
     }
     public void GuardianJumping(){
 
-        GuardianAnim.SetBool("isGuardianJumping", true);
+        PlayerAnim.SetBool("isJumping", true);
+        //_isAnimating = true;
+        //_isIdle = false;
+        
     }
-    public void GuardianWalking(){
+    public void GuardianRunning(){
 
-        GuardianAnim.SetBool("isGuardianWalking", true);
+        PlayerAnim.SetBool("isRunning", true);
+        //_isIdle = false;
     }
-    public void GuardianIdle(){
+	public void StopGuardianGrabbing(){
 
-        GuardianAnim.SetBool("isGuardianIdle", true);
+        //if(_isAnimating == true){
+
+            PlayerAnim.SetBool("isGrabbing", false);
+            //_isAnimating = false;
+
+        //}
+    }
+	 public void StopGuardianJumping(){
+
+         //if(_isAnimating == true){
+
+            PlayerAnim.SetBool("isJumping", false);
+           // _isAnimating = false;
+
+       // }
+  
+    }
+	 public void StopGuardianRunning(){
+
+        PlayerAnim.SetBool("isRunning", false);
+        //_isIdle = false;
     }
 }
