@@ -5,12 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// TODO: replace as many script connections with events as possible
-// TODO: see if you can simplify any of the variables (e.g. cooldowns)
-// TODO: make sure the connection to scene controller and time lord work
 
-
-public class TimeConn : MonoBehaviour
+public class TimeConn : MonoBehaviour, ParticleUser
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
 	[SerializeField] private ParticleController _particles;
@@ -24,6 +20,7 @@ public class TimeConn : MonoBehaviour
 	private float _forwardsJumpCooldown;
 	private float _backJumpCooldown;
 	private bool _timeTravelEnabled;
+	private bool _isDissolving;
 
 
 	// ------------ UNITY METHODS ------------
@@ -36,6 +33,7 @@ public class TimeConn : MonoBehaviour
 		_forwardsJumpCooldown = 15f;
 		_backJumpCooldown = 15f;
 		_timeTravelEnabled = true;
+		_isDissolving = false;
 	}
 
 	void OnEnable()
@@ -43,8 +41,6 @@ public class TimeConn : MonoBehaviour
 		GameController.gameActive += OnGameActive;
 		GameController.gameStarted += OnGameStarted;
 		GameController.gameEnded += OnGameEnded;
-		ParticleController.startedDissolving += OnStartedDissolving;
-		ParticleController.stoppedDissolving += OnStoppedDissolving;
 	}
 
 	void OnDisable()
@@ -52,8 +48,6 @@ public class TimeConn : MonoBehaviour
 		GameController.gameActive -= OnGameActive;
 		GameController.gameStarted -= OnGameStarted;
 		GameController.gameEnded -= OnGameEnded;
-		ParticleController.startedDissolving -= OnStartedDissolving;
-		ParticleController.stoppedDissolving -= OnStoppedDissolving;
 	}
 
 	void Start()
@@ -61,6 +55,7 @@ public class TimeConn : MonoBehaviour
 		_sceneController = FindObjectOfType<PreGameController>();
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
 		else SetTimeLord();
+		_particles.SetSubscriber(this);
 	}
 
 	void Update() {
@@ -74,7 +69,7 @@ public class TimeConn : MonoBehaviour
 	}
 
 
-	// ------------ PRIVATE METHODS ------------
+	// ------------ ON EVENT METHODS ------------
 
 	private void OnGameActive(GameController game)
 	{
@@ -96,22 +91,29 @@ public class TimeConn : MonoBehaviour
 		Destroy(this);
 	}
 
-	private void OnStartedDissolving()
+	public void NotifyStartedDissolving()
 	{
-		_timeTravelEnabled = true;
-	}
-
-	private void OnStoppedDissolving(bool dissolvedOut)
-	{
-		_timeTravelEnabled = false;
-		if (dissolvedOut)
+		_isDissolving = true;
+		if (_timelord.InYourReality(_view.ViewID))
 		{
-			// TODO: check the original notify stopped dissolving to confirm what needs to be done here
-			_jumpDirection = Constants.JumpDirection.Static;
+			gameObject.layer = Constants.LayerPlayer;
 		}
 	}
 
-	public void SetTimeLord()
+	public void NotifyStoppedDissolving(bool dissolvedOut)
+	{
+		_isDissolving = false;
+		if (dissolvedOut)
+		{
+			_jumpDirection = Constants.JumpDirection.Static;
+			if (!_view.IsMine) gameObject.layer = Constants.LayerOutsideReality;
+		}
+	}
+
+
+	// ------------ PRIVATE METHODS ------------
+
+	private void SetTimeLord()
 	{
 		if (_view.IsMine && _timelord != null) _debugPanel.UnRegister(_timelord);
 		_timelord = _sceneController.GetTimeLord();
