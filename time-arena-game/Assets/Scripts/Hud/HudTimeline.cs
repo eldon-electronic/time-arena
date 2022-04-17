@@ -76,7 +76,7 @@ public class HudTimeline : MonoBehaviour
         newIcon.transform.parent = _timeline.transform;
 
         // Reset its position and scale.
-        newIcon.GetComponent<RectTransform>().localPosition = new Vector3(0, -180, 0);
+        newIcon.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
         newIcon.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
         // Set its icon image.
@@ -87,7 +87,6 @@ public class HudTimeline : MonoBehaviour
             handle.GetComponent<Image>().sprite = _guardianIcon;
         }
         else handle.GetComponent<Image>().sprite = _minerIcon;
-        Debug.Log($"isMe: {isMe}, team: {team}");
         
         return newIcon.GetComponent<Slider>();
     }
