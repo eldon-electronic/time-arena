@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-	[SerializeField] private Camera Cam;
-	[SerializeField] private Canvas UI;
+	[SerializeField] private GameObject _camera;
+	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
 	public Constants.Team Team;
 	public int ID;
@@ -43,8 +43,8 @@ public class PlayerController : MonoBehaviour
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
 		{
-			Destroy(Cam.gameObject);
-			Destroy(UI.gameObject);
+			Destroy(_camera);
+			Destroy(_UI);
 		}
 
 		// Allow master client to move players from one scene to another.

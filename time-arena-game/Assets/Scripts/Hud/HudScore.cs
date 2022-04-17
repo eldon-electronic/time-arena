@@ -18,7 +18,7 @@ public class HudScore : MonoBehaviour
     void OnDisable()
     {
         GameController.gameActive -= GameActive;
-        SceneController.scoreChange += SetScore;
+        SceneController.scoreChange -= SetScore;
     }
 
     void Start() { _container.SetActive(false); }
