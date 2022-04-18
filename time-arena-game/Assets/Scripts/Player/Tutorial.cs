@@ -13,7 +13,7 @@ public class Tutorial : MonoBehaviour
         public bool VisibilityOfArrow;
         public bool NeedKey;
 
-        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress)
+        public State(string message, string elementToPointTo, KeyCode inputTrigger, bool visibilityOfArrow, bool needKeyPress)
         {
             Message = message;
             ElementToPointTo = elementToPointTo;
@@ -23,9 +23,10 @@ public class Tutorial : MonoBehaviour
         }
     }
     
-    private bool _hasMovedOn = true;
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PhotonView _view;
+
+    private bool _hasMovedOn = true;
     private List<State> _guardianStates;
     private List<State> _minerStates;
     private List<State> _states;
@@ -100,7 +101,6 @@ public class Tutorial : MonoBehaviour
     }
 
     IEnumerator DelayPopup() {
-
         yield return new WaitForSeconds(4);
         MoveToNextState();
         _hasMovedOn = true;
@@ -125,12 +125,18 @@ public class Tutorial : MonoBehaviour
 
     private void MoveToNextState()
     {
-        if(_currentState >= _states.Count) return;
-        
+        if (_currentState >= _states.Count) return;
+
+        // Deactivate old arrow.
+        _tutorialHud.SetArrowVisibility(_states[_currentState].ElementToPointTo, false); 
         _currentState++;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);  
+        
+        // Activate new arrow (if there is one for the current state).
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo, 
+            _states[_currentState].VisibilityOfArrow
+        );  
     }
 
 
@@ -146,8 +152,10 @@ public class Tutorial : MonoBehaviour
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo,
+            _states[_currentState].VisibilityOfArrow
+        );
         NeedKeyPress(_states[_currentState].NeedKey);
         _tutorialHud.SetVisibility(true);
     }

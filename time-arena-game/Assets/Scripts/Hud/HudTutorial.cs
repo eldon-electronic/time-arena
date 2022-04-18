@@ -13,25 +13,16 @@ public class HudTutorial : MonoBehaviour
     [SerializeField] private GameObject _arrowImage;
     [SerializeField] private GameObject _popUpText;
     [SerializeField] private GameObject _optionsPopUpText;
-    private Dictionary<string, Vector2> _uiPositions;
-    private Dictionary<string, Vector3> _uiRotations;
+    [SerializeField] private GameObject[] _tutorialObjects;
+
+    private Dictionary<string, GameObject> _tutorialArrows;
 
     void Awake()
     {
-        _uiPositions = new Dictionary<string, Vector2>();
-        _uiPositions.Add("forwardJump",new Vector2(381f,-76f));
-        _uiPositions.Add("backJump",new Vector2(-397f,-82f));
-        _uiPositions.Add("timebar",new Vector2(-342f,-122f));
-        _uiPositions.Add("timer",new Vector2(-290f,105f));
-        _uiPositions.Add("team",new Vector2(284f,104f));
-
-
-        _uiRotations = new Dictionary<string, Vector3>();
-        _uiRotations.Add("forwardJump",new Vector3(-10.1f,-720.2f,18.5f));
-        _uiRotations.Add("backJump",new Vector3(-10.1f,-535.5f,4.7f));
-        _uiRotations.Add("timebar",new Vector3(-10.1f,-535.5f,4.7f));
-        _uiRotations.Add("timer",new Vector3(-10.1f,-535.5f,-150f));
-        _uiRotations.Add("team",new Vector3(-10.1f,-355.5f,-150f));
+        _tutorialArrows = new Dictionary<string, GameObject>();
+        foreach (GameObject tutorialObject in _tutorialObjects) {
+            _tutorialArrows.Add(tutorialObject.name, tutorialObject);
+        }
     }
 
     void LateUpdate()
@@ -44,17 +35,11 @@ public class HudTutorial : MonoBehaviour
 
     public void SetVisibility(bool visibility) { _tutorial.SetActive(visibility); }
 
-    public void SetArrowPosition(string uiElement)
+    public void SetArrowVisibility(string uiElement, bool visibility)
     {
-        Debug.Log($"_arrowImage: {_arrowImage}");
-        Debug.Log($"_uiPositions: {_uiPositions}");
-        _arrowImage.GetComponent<RectTransform>().anchoredPosition = _uiPositions[uiElement];
-        _arrowImage.GetComponent<RectTransform>().eulerAngles = _uiRotations[uiElement];
-    }
-
-    public void SetArrowVisibility(bool visibility)
-    {
-        _arrowImage.SetActive(visibility);
+        if (_tutorialArrows.ContainsKey(uiElement)) {
+            _tutorialArrows[uiElement].SetActive(visibility);
+        }
     }
 
     public void SetMessage(string message)

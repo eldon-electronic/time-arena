@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviourPunCallbacks
 {
-    private bool _paused = false;
+	private bool _paused = false;
 	public GameObject PauseMenuUI;
 	public PhotonView View;
 	public Slider MouseSensSlider;
@@ -43,17 +43,4 @@ public class PauseManager : MonoBehaviourPunCallbacks
     SceneManager.LoadScene("MenuScene");
     Destroy(gameObject);
   }
-
-  /*	StartCoroutine(DisconnectAndLoad());
-	}
-
-	IEnumerator DisconnectAndLoad() {
-		PhotonNetwork.LeaveRoom();
-		while (PhotonNetwork.InRoom) { // Busy waiting
-			Debug.Log("Busy waiting");
-			yield return null;
-		}
-		SceneManager.LoadScene("MenuScene");
-		Destroy(gameObject);
-	}*/
 }
