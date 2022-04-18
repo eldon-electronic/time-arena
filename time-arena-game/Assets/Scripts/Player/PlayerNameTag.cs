@@ -12,16 +12,18 @@ public class PlayerNameTag : MonoBehaviourPun
     [SerializeField] private GameObject _nameTag;
     [SerializeField] private TextMeshProUGUI _nameText;
 
-    void Start()
+    void Awake()
     {
+        if (_view.IsMine)
+        {
+            Destroy(_nameTag);
+            Destroy(this);
+        }
         _nameText.text = photonView.Owner.NickName;
-        if (_view.IsMine) Destroy(_nameTag);
     }
 
     void Update()
     {
-        if (_view.IsMine) return;
-
         if (gameObject.layer == Constants.LayerOutsideReality)
 		{
 			_nameTag.SetActive(false);

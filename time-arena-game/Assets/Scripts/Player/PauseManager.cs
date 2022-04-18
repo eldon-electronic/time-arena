@@ -14,6 +14,11 @@ public class PauseManager : MonoBehaviourPunCallbacks
 	private bool _paused;
 	public static event Action<bool> paused;
 
+	void OnAwake()
+	{
+		if (!_view.IsMine) Destroy(this);
+	}
+
 	void OnEnable()
 	{
 		GameController.gameEnded += OnGameEnded;
@@ -31,7 +36,6 @@ public class PauseManager : MonoBehaviourPunCallbacks
 
 	void Update()
 	{	
-		if (!_view.IsMine) return;
 		if (Input.GetKeyDown(KeyCode.Escape)) SetPause(!_paused);
 	}
 
