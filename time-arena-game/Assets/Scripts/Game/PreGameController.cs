@@ -14,6 +14,7 @@ public class PreGameController : SceneController
     {
         _miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
+        _secondsTillGame = 5.0f;
     }
 
     void Start()
@@ -41,7 +42,7 @@ public class PreGameController : SceneController
             }
             countDown?.Invoke(_secondsTillGame);
         }
-        _timeLord.Tick();
+        if (_secondsTillGame > 0) _timeLord.Tick();
     }
 
     private void StartCountingDown()

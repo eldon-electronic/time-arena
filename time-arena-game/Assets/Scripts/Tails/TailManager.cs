@@ -27,12 +27,14 @@ public class TailManager : MonoBehaviour
     {
         GameController.gameActive += OnGameActive;
         GameController.gameStarted += OnGameStarted;
+        GameController.gameEnded += OnGameEnded;
     }
 
     void OnDisable()
     {
         GameController.gameActive -= OnGameActive;
         GameController.gameStarted -= OnGameStarted;
+        GameController.gameEnded -= OnGameEnded;
     }
 
     void Start()
@@ -69,6 +71,8 @@ public class TailManager : MonoBehaviour
     }
 
     private void OnGameStarted() { _activated = true; }
+
+    private void OnGameEnded(Constants.Team team) { _activated = false; }
 
 
     // ------------ PUBLIC FUNCTIONS FOR TIME CONN ------------
