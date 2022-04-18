@@ -6,12 +6,19 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
+public abstract class PPController: MonoBehaviour
+{
+	public abstract void TriggerPP(Constants.JumpDirection direction, bool jumpOut);
+}
+
+
 public class TimeConn : MonoBehaviour, ParticleUser
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
 	[SerializeField] private ParticleController _particles;
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
+	[SerializeField] private PPController _ppController;
 	private SceneController _sceneController;
 	private TimeLord _timelord;
 	private bool _isJumping;
@@ -150,6 +157,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 				{
 					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
 					_tailManager.EnableParticles(false);
+					_ppController?.TriggerPP(direction, jumpOut);
 				}
 			}
 			else if (_isJumping)
@@ -157,6 +165,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 				int frame = _timelord.GetNearestReality(_view.ViewID);
 				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
 				_tailManager.EnableParticles(true);
+				_ppController?.TriggerPP(direction, jumpOut);
 			}
 		}
 	}

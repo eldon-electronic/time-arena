@@ -5,18 +5,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public interface PPSubscriber
-{
-	public void TriggerPP(Constants.JumpDirection direction, bool jumpOut);
-}
-
-
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
-	private PPSubscriber _ppController;
 	public Constants.Team Team;
 	public int ID;
 
@@ -75,10 +68,4 @@ public class PlayerController : MonoBehaviour
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
-
-	public void Subscribe(PPSubscriber subscriber)
-	{ 
-		_ppController = subscriber;
-		Debug.Log("subscribed");
-	}
 }

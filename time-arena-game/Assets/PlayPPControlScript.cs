@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,88 +6,84 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class PlayPPControlScript : MonoBehaviour, PPSubscriber
+public class PlayPPControlScript : PPController
 {
     [SerializeField] private VolumeProfile _volProfile;
     [SerializeField] private AnimationCurve _inCurve;
     [SerializeField] private AnimationCurve _outCurve;
-    private bool queued = false;
-    private bool playLock = false;
-    Vignette vignette;
-    ChromaticAberration chromaticAbberation;
-    LensDistortion lensDistortion;
+    [SerializeField] private PhotonView _view;
+    private bool _queued = false;
+    private bool _playLock = false;
+    private Vignette _vignette;
+    private ChromaticAberration _chromaticAbberation;
+    private LensDistortion _lensDistortion;
+    private float _lensDistortionIntensity = 0.6f;
+    private float _chromaticAberrationIntensity = 0.5f;
+    private float _vingetteIntensity = 0.6f;
+    private Color _vingetteColorForward = new Color(0, 0, 230, 0);
+    private Color _vingetteColorBackWard = new Color(230, 100, 0, 0);
+    private float _animationDuration = 2;
+    private float _lensDist = 0;
+    private bool _fadeIn = true;
+    private Color _vinColor = new Color(0, 0, 0, 0);
+    private float _queuedlensDist = 0;
+    private bool _queuedFadeIn = true;
+    private Color _queuedvinColor = new Color(0, 0, 0, 0);
 
-    public float lensDistortionIntensity = 0.6f;
-    public float chromaticAberrationIntensity = 0.5f;
-    public float vingetteIntensity = 0.6f;
-    public Color vingetteColorForward = new Color(0, 0, 230, 0);
-    public Color vingetteColorBackWard = new Color(230, 100, 0, 0);
-    public float animationDuration = 2;
-    float lensDist = 0;
-    bool fadeIn = true;
-    Color vinColor = new Color(0, 0, 0, 0);
-    float queuedlensDist = 0;
-    bool queuedFadeIn = true;
-    Color queuedvinColor = new Color(0, 0, 0, 0);
-    [SerializeField] PlayerController cont;
-    //public PlayerController cont;
-
-
+    void Awake()
+    {
+        if (!_view.IsMine) Destroy(this);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        if(_volProfile.TryGet<Vignette>(out vignette)) {
-            Debug.Log("Got Vignette");
+        if (!_volProfile.TryGet<Vignette>(out _vignette)) {
+            Debug.LogError("Failed to get Vignette");
         }
-        if(_volProfile.TryGet<ChromaticAberration>(out chromaticAbberation)) {
-            Debug.Log("Got Chrome Ab");
+        if (!_volProfile.TryGet<ChromaticAberration>(out _chromaticAbberation)) {
+            Debug.LogError("Failed to get Chrome Ab");
         }
-        if(_volProfile.TryGet<LensDistortion>(out lensDistortion)) {
-            Debug.Log("Got Distort");
+        if (!_volProfile.TryGet<LensDistortion>(out _lensDistortion)) {
+            Debug.LogError("Failed to get Distort");
         }
-        vignette.color.value = vingetteColorBackWard;
-        lensDistortion.intensity.value = 0;
-        chromaticAbberation.intensity.value = 0;
-        vignette.intensity.value = 0;
-
-        cont.Subscribe(this);
+        _vignette.color.value = _vingetteColorBackWard;
+        _lensDistortion.intensity.value = 0;
+        _chromaticAbberation.intensity.value = 0;
+        _vignette.intensity.value = 0;
     }
 
-    public void TriggerPP(Constants.JumpDirection direction, bool jumpOut)
+    public override void TriggerPP(Constants.JumpDirection direction, bool jumpOut)
     {
-        Debug.Log($"TriggeringPP {direction}");
         if (direction == Constants.JumpDirection.Backward)
         {
-            StartAnim(lensDistortionIntensity, jumpOut, vingetteColorBackWard);
+            StartAnim(_lensDistortionIntensity, jumpOut, _vingetteColorBackWard);
         }
         else if (direction == Constants.JumpDirection.Forward)
         {
-            StartAnim(-1 * lensDistortionIntensity, jumpOut, vingetteColorForward);
+            StartAnim(-1 * _lensDistortionIntensity, jumpOut, _vingetteColorForward);
         }
     }
 
     //launch animation
-    public void StartAnim(float distort, bool fade, Color col) 
+    private void StartAnim(float distort, bool fade, Color col) 
     {
-        Debug.Log("starting Animation");
-        //check lock
-        if(playLock)
+        if (_playLock)
         {
-            if(!queued) 
+            if (!_queued) 
             {
-                queued = true;
-                queuedlensDist = distort;
-                queuedFadeIn = fade;
-                queuedvinColor = col;
+                _queued = true;
+                _queuedlensDist = distort;
+                _queuedFadeIn = fade;
+                _queuedvinColor = col;
             }
         } 
         else
         {
-            playLock = true;
-            lensDist = distort;
-            vinColor = col;
-            fadeIn = fade;
+            _playLock = true;
+            _lensDist = distort;
+            _vinColor = col;
+            _fadeIn = fade;
             StartCoroutine(Animate());
         }
         
@@ -96,48 +93,35 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
     IEnumerator Animate()
     {
         float time = 0.0f;
-        float duration = animationDuration;
-        vignette.color.value = vinColor;
+        float duration = _animationDuration;
+        _vignette.color.value = _vinColor;
         float modifier = 1;
         while (time < duration)
         {
-            if(fadeIn)
-            {
-                modifier = _inCurve.Evaluate(time);
-            }
-            else
-            {
-                modifier = _outCurve.Evaluate(time);
-            }
+            if (_fadeIn) modifier = _inCurve.Evaluate(time);
+            else modifier = _outCurve.Evaluate(time);
             
-            lensDistortion.intensity.value = modifier * lensDist;
-            chromaticAbberation.intensity.value = modifier * chromaticAberrationIntensity;
-            vignette.intensity.value = modifier * vingetteIntensity;
+            _lensDistortion.intensity.value = modifier * _lensDist;
+            _chromaticAbberation.intensity.value = modifier * _chromaticAberrationIntensity;
+            _vignette.intensity.value = modifier * _vingetteIntensity;
             time += Time.deltaTime;
             yield return null;
         }
         
-        if(fadeIn)
-            {
-                modifier = _inCurve.keys[_inCurve.length-1].value;
-            }
-        else
-            {
-                modifier = _outCurve.keys[_outCurve.length-1].value;
-            }
-        lensDistortion.intensity.value = modifier * lensDist;
-        chromaticAbberation.intensity.value = modifier * chromaticAberrationIntensity;
-        vignette.intensity.value = modifier * vingetteIntensity;
+        if (_fadeIn) modifier = _inCurve.keys[_inCurve.length-1].value;
+        else modifier = _outCurve.keys[_outCurve.length-1].value;
+        _lensDistortion.intensity.value = modifier * _lensDist;
+        _chromaticAbberation.intensity.value = modifier * _chromaticAberrationIntensity;
+        _vignette.intensity.value = modifier * _vingetteIntensity;
         
-
-        if(queued)
+        if (_queued)
         {
-            lensDist = queuedlensDist;
-            vinColor = queuedvinColor;
-            fadeIn = queuedFadeIn;
-            queued = false;
+            _lensDist = _queuedlensDist;
+            _vinColor = _queuedvinColor;
+            _fadeIn = _queuedFadeIn;
+            _queued = false;
             StartCoroutine(Animate());
         }
-        playLock = false;
+        _playLock = false;
     }
 }
