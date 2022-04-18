@@ -6,66 +6,44 @@ using UnityEngine.UI;
 
 public class HudCooldowns : MonoBehaviour
 {
-    [SerializeField] private Slider _forwardCooldownSlider;
-    [SerializeField] private Slider _backCooldownSlider;
-    [SerializeField] private Image _forwardJumpIcon;
-    [SerializeField] private Image _backJumpIcon;
-    [SerializeField] private Sprite _greenUnpressedSprite;
-    [SerializeField] private Sprite _redPressedSprite;
     [SerializeField] private TimeConn _timeConn;
-    [SerializeField] private HotbarAnimator _hotbarAnim;
-    private float _forwardBarHeight;
-    private float _backBarHeight;
-    private bool _canJumpForward;
-    private bool _canJumpBack;
+    [SerializeField] private Animator _backButtonAnimator;
+    [SerializeField] private Animator _forwardButtonAnimator;
     private bool _isBackButtonSpinning;
     private bool _isForwardButtonSpinning;
 
     void Awake()
     {
-        _forwardBarHeight = 0.0f;
-        _backBarHeight = 0.0f;
-        _canJumpForward = false;
-        _canJumpBack = false;
         _isForwardButtonSpinning = false;
         _isBackButtonSpinning = false;
     }
 
-    void Update()
-    {
-        (float forward, float back) cooldowns = _timeConn.GetCooldowns();
-        _forwardBarHeight = 1.0f - (cooldowns.forward / 15.0f);
-        _backBarHeight = 1.0f - (cooldowns.back / 15.0f);
-
-        (bool forward, bool back) canJump = _timeConn.GetCanJump();
-        _canJumpForward = canJump.forward;
-        _canJumpBack = canJump.back;
-    }
-
     void LateUpdate()
     {
-        _forwardCooldownSlider.value = _forwardBarHeight;
-        _backCooldownSlider.value = _backBarHeight;
+        (bool forward, bool back) canJump = _timeConn.GetCanJump();
 
-        if (_canJumpBack && !_isBackButtonSpinning) { // Ready to jump after cooldown
-            _hotbarAnim.RotateBackButton();
+        if (canJump.back && !_isBackButtonSpinning)
+        {
+            // Ready to jump after cooldown.
+            _backButtonAnimator.SetBool("Rotate", true);
             _isBackButtonSpinning = true;
-        } else if (!_canJumpBack && _isBackButtonSpinning) { // Cooldown activated
-            _hotbarAnim.StopBackButton();
+        }
+        else if (!canJump.back && _isBackButtonSpinning)
+        {
+            // Cooldown activated.
+            _backButtonAnimator.SetBool("Rotate", false);
             _isBackButtonSpinning = false;
         }
 
-        if (_canJumpForward && !_isForwardButtonSpinning) {
-            _hotbarAnim.RotateForwardButton();
+        if (canJump.forward && !_isForwardButtonSpinning)
+        {
+            _forwardButtonAnimator.SetBool("Rotate", true);
             _isForwardButtonSpinning = true;
-        } else if (!_canJumpForward && _isForwardButtonSpinning) {
-            _hotbarAnim.StopForwardButton();
+        }
+        else if (!canJump.forward && _isForwardButtonSpinning)
+        {
+            _forwardButtonAnimator.SetBool("Rotate", false);
             _isForwardButtonSpinning = false;
         }
-
-        if (_canJumpForward) _forwardJumpIcon.sprite = _greenUnpressedSprite;
-        else _forwardJumpIcon.sprite = _redPressedSprite;
-        if (_canJumpBack) _backJumpIcon.sprite = _greenUnpressedSprite;
-        else _backJumpIcon.sprite = _redPressedSprite;
     }
 }
