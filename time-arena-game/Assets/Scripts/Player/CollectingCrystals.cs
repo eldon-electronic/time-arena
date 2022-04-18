@@ -7,7 +7,7 @@ public class CollectingCrystals : MonoBehaviour
     [SerializeField] private PlayerController _player;
     private GameController _game;
 
-    public void OnAwake()
+    public void Awake()
     {
         if (_player.Team == Constants.Team.Guardian) Destroy(this);
     }
