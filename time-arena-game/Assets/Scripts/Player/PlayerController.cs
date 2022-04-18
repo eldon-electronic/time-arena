@@ -5,6 +5,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public interface PPSubscriber
+{
+	public void TriggerPP(Constants.JumpDirection direction, bool jumpOut);
+}
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -69,4 +74,10 @@ public class PlayerController : MonoBehaviour
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+
+	public void Subscribe(PPSubscriber subscriber)
+	{ 
+		_ppController = subscriber;
+		Debug.Log("subscribed");
+	}
 }
