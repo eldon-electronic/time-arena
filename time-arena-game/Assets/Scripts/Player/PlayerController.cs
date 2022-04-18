@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 	public GameObject CameraHolder;
 	public GameObject Guardian;
 	public GameObject Miner;
+	//private GameObject _ghostMiner;
+	//private GameObject _ghostGuardian;
 	public PlayerMaterial Material;
 	public PlayerMovement Movement;
 	//public GuardianController GuardianCont;
@@ -33,6 +35,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
     // Variables corresponding to player Animations.
 	public Animator PlayerAnim;
+	public Animator GuardianAnim;
+	public Animator MinerAnim;
 	public Transform GrabCheck;
 	public LayerMask GrabMask;
 	private float _grabCheckRadius = 1f;
@@ -64,6 +68,8 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 
 	void Awake()
 	{
+		//_ghostGuardian = GameObject.Find("GhostGuardian");
+		//_ghostMiner = GameObject.Find("GhostMiner");
 		_hiderSpawnPoints =  new Vector3[] {
 			new Vector3(-42f, 0f, 22f),
 			new Vector3(-15f, -0.5f, -4f), 
@@ -77,10 +83,9 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
-		
 
-	
 		
+			
 	}
 
 	void Start()
@@ -96,19 +101,20 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		    Hud.SetTeam("Miner");
 			Guardian.SetActive(false);
 			Miner.SetActive(true);
-	
-		
-			//Material.SetArmActive(false);
-			//Debug.Log("I am here!");
+			//_ghostGuardian.SetActive(false);
+			//_ghostMiner.SetActive(true);
+			PlayerAnim = MinerAnim;
+			
 		}
 		else if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
 			Team = Constants.Team.Guardian;
 			Hud.SetTeam("Guardian");
 			Guardian.SetActive(true);
 			Miner.SetActive(false);
-			//GuardianCont.GuardianKeyControl();
-		
-			//Material.SetArmActive(true);
+			//_ghostGuardian.SetActive(true);
+			//_ghostMiner.SetActive(false);
+			PlayerAnim = GuardianAnim;
+			
 		}
 		Material.SetMaterial(Team);
 		
@@ -500,15 +506,6 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		}
 		else Nametag.SetActive(true);
 	} 
-	/*private void UpdateGuardianAnimations(){
-
-		if(Team == Constants.Team.Guardian){
-			
-			GuardianCont.GuardianKeyControl();
-			
-			//GuardianCont.GuardianIdle();
-	   }
-	}*/
 
 
 	void Update() {
@@ -520,7 +517,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			{
 				UpdateCooldowns();
 				KeyControl();
-				GuardianKeyControl();
+				CharacterKeyControl();
 				
 			}
 			else if (SceneManager.GetActiveScene().name == "GameScene" && _game.GameEnded)
@@ -608,7 +605,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 		_ppController = subscriber;
 		Debug.Log("subscribed");
 	}
-	public void GuardianKeyControl()
+	public void CharacterKeyControl()
     {
         
 		if (Input.GetKeyDown(KeyCode.W)) GuardianRunningForwards();
