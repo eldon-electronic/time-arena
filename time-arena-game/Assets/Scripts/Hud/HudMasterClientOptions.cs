@@ -12,6 +12,15 @@ public class HudMasterClientOptions : MonoBehaviour
     [SerializeField] private GameObject _masterClientOptions;
     [SerializeField] private TMP_Text _text;
 
+    void Awake()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            _masterClientOptions.SetActive(false);
+            Destroy(this);
+        }
+    }
+
     void OnEnable()
     {
         PreGameController.countDown += OnCountDown;
@@ -26,7 +35,6 @@ public class HudMasterClientOptions : MonoBehaviour
 
     void Start()
     {
-        if (!PhotonNetwork.IsMasterClient) _masterClientOptions.SetActive(false);
         _text.text = "Press F to Start";
     }
 

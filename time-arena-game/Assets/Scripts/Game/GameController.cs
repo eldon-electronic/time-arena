@@ -27,7 +27,6 @@ public class GameController : SceneController
 		_minerScore = 0;
 	}
 
-
 	void Start()
 	{
 		// Prevent anyone else from joining room.
@@ -71,23 +70,6 @@ public class GameController : SceneController
 			// Increment global frame and individual player frames.
 			if (!_gameEnded) _timeLord.Tick();
 			CheckWon();
-		}
-	}
-
-	// TODO: remove this.
-	public void SetTeam(int playerID, Constants.Team team)
-	{
-		if (team == Constants.Team.Guardian)
-		{
-			PlayerController player = _miners[playerID];
-			_miners.Remove(playerID);
-			_guardians.Add(playerID, player);
-		}
-		else if (team == Constants.Team.Miner)
-		{
-			PlayerController player = _guardians[playerID];
-			_guardians.Remove(playerID);
-			_miners.Add(playerID, player);
 		}
 	}
 }
