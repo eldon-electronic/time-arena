@@ -41,9 +41,10 @@ public class PauseManager : MonoBehaviour
 
 	private void OnGameEnded(Constants.Team team) { SetPause(true); }
 
+	// This gets called on the Resume button press.
 	public void OnResume() { SetPause(false); }
 
-	// Work on this in the future. Pressing "Leave" should take the user back to main screen.
+	// This gets called on the Leave button press.
 	public void OnLeave()
 	{
 		PhotonNetwork.LeaveRoom();

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CollectingCrystals : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
-    private GameController _game;
+    private SceneController _sceneController;
 
     public void Awake()
     {
@@ -22,14 +22,19 @@ public class CollectingCrystals : MonoBehaviour
         GameController.gameActive -= SetGame;
     }
 
+    public void Start()
+    {
+        _sceneController = FindObjectOfType<PreGameController>();
+    }
+
     public void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "Collectable")
         {
-            _game?.IncrementMinerScore();
+            _sceneController?.IncrementMinerScore();
             Destroy(col.gameObject);
         }
     }
 
-    private void SetGame(GameController game) { _game = game; }
+    private void SetGame(GameController game) { _sceneController = game; }
 }

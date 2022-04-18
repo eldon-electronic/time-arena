@@ -7,12 +7,11 @@ using UnityEngine.Rendering.Universal;
 
 public class PlayPPControlScript : MonoBehaviour, PPSubscriber
 {
-    public VolumeProfile volProfile;
-    public AnimationCurve inCurve;
-    public AnimationCurve outCurve;
-    bool queued = false;
-    bool playLock = false;
-    Scene lastScene;    
+    [SerializeField] private VolumeProfile _volProfile;
+    [SerializeField] private AnimationCurve _inCurve;
+    [SerializeField] private AnimationCurve _outCurve;
+    private bool queued = false;
+    private bool playLock = false;
     Vignette vignette;
     ChromaticAberration chromaticAbberation;
     LensDistortion lensDistortion;
@@ -37,13 +36,13 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
     // Start is called before the first frame update
     void Start()
     {
-        if(volProfile.TryGet<Vignette>(out vignette)) {
+        if(_volProfile.TryGet<Vignette>(out vignette)) {
             Debug.Log("Got Vignette");
         }
-        if(volProfile.TryGet<ChromaticAberration>(out chromaticAbberation)) {
+        if(_volProfile.TryGet<ChromaticAberration>(out chromaticAbberation)) {
             Debug.Log("Got Chrome Ab");
         }
-        if(volProfile.TryGet<LensDistortion>(out lensDistortion)) {
+        if(_volProfile.TryGet<LensDistortion>(out lensDistortion)) {
             Debug.Log("Got Distort");
         }
         vignette.color.value = vingetteColorBackWard;
@@ -104,11 +103,11 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
         {
             if(fadeIn)
             {
-                modifier = inCurve.Evaluate(time);
+                modifier = _inCurve.Evaluate(time);
             }
             else
             {
-                modifier = outCurve.Evaluate(time);
+                modifier = _outCurve.Evaluate(time);
             }
             
             lensDistortion.intensity.value = modifier * lensDist;
@@ -120,11 +119,11 @@ public class PlayPPControlScript : MonoBehaviour, PPSubscriber
         
         if(fadeIn)
             {
-                modifier = inCurve.keys[inCurve.length-1].value;
+                modifier = _inCurve.keys[_inCurve.length-1].value;
             }
         else
             {
-                modifier = outCurve.keys[outCurve.length-1].value;
+                modifier = _outCurve.keys[_outCurve.length-1].value;
             }
         lensDistortion.intensity.value = modifier * lensDist;
         chromaticAbberation.intensity.value = modifier * chromaticAberrationIntensity;
