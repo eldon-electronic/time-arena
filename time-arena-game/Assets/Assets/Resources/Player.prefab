@@ -10837,6 +10837,7 @@ GameObject:
   - component: {fileID: 561111332934807323}
   - component: {fileID: 77372880126097527}
   - component: {fileID: 2163583655740837010}
+  - component: {fileID: -6138956800540563541}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -10961,6 +10962,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: isDissolvingBackwardOut
+  - Type: 4
+    SynchronizeType: 0
+    Name: isWarpingForward
+  - Type: 4
+    SynchronizeType: 0
+    Name: isWarpingBackward
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -11117,7 +11124,7 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   unityMicrophoneDevice: 
-  photonMicrophoneDeviceId: -1
+  photonMicrophoneDeviceId: 0
   interestGroup: 0
   debugEchoMode: 0
   reliableMode: 0
@@ -11349,7 +11356,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375f92b8143b2024b8c7015f6bdf247f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 6458975045518551228}
+  _player: {fileID: 0}
+--- !u!114 &-6138956800540563541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458975045518551231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f9e368644a4a744a1acbdd2b4c440d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volProfile: {fileID: 11400000, guid: 22c6041de5ccfdc40b13ebd9a745750a, type: 2}
+  inCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  outCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  lensDistortionIntensity: 0.6
+  chromaticAberrationIntensity: 0.5
+  vingetteIntensity: 0.6
+  vingetteColorForward: {r: 0, g: 0, b: 230, a: 0}
+  vingetteColorBackWard: {r: 0.9019608, g: 0.33275574, b: 0, a: 0}
+  animationDuration: 1
+  cont: {fileID: 6458975045518551228}
 --- !u!1 &6458975045590433009
 GameObject:
   m_ObjectHideFlags: 0
@@ -11481,7 +11556,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
