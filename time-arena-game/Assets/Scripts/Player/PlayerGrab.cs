@@ -28,6 +28,7 @@ public class PlayerGrab : MonoBehaviour
 					targetPlayer.Team == Constants.Team.Miner)
 				{
 					// TODO: grab the miner.
+					Debug.Log("Grabbed a miner");
 				}
 			}
 			PlayerAnim.SetBool("isGrabbing", true);

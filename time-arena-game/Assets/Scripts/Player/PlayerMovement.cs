@@ -107,6 +107,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _lockRotation = isPaused;
     }
     
+    // Called when mouse sensitivity is changed in the pause screen.
     public void OnMouseSensChange(float sensitivity) { _mouseSensitivity = sensitivity; }
 
 
@@ -193,10 +194,6 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 	}
 
     // ------------ PUBLIC METHODS ------------
-    
-    public Vector3 GetPosition() { return PlayerTransform.position; }
-
-    public Quaternion GetRotation() { return PlayerTransform.rotation; }
 
     public Hashtable GetDebugValues()
     {

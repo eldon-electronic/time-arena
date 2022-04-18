@@ -24,10 +24,6 @@ public class PlayerNameTag : MonoBehaviourPun
 
     void Update()
     {
-        if (gameObject.layer == Constants.LayerOutsideReality)
-		{
-			_nameTag.SetActive(false);
-		}
-		else _nameTag.SetActive(true);
+        _nameTag.SetActive(gameObject.layer == Constants.LayerPlayer);
     }
 }

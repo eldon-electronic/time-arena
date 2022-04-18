@@ -8,9 +8,7 @@ using TMPro;
 
 public class HudTutorial : MonoBehaviour
 {
-    [SerializeField] private PhotonView _view;
     [SerializeField] private GameObject _tutorial;
-    [SerializeField] private GameObject _arrowImage;
     [SerializeField] private GameObject _popUpText;
     [SerializeField] private GameObject _optionsPopUpText;
     [SerializeField] private GameObject[] _tutorialObjects;
@@ -25,7 +23,21 @@ public class HudTutorial : MonoBehaviour
         }
     }
 
-    public void SetVisibility(bool visibility) { _tutorial.SetActive(visibility); }
+    void OnEnable()
+    {
+        GameController.gameActive += OnGameActive;
+    }
+
+    void OnDisable()
+    {
+        GameController.gameActive -= OnGameActive;
+    }
+
+    private void OnGameActive(GameController game)
+    {
+        Destroy(_tutorial);
+        Destroy(this);
+    }
 
     public void SetArrowVisibility(string uiElement, bool visibility)
     {
