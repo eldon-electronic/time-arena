@@ -7,14 +7,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-public class PauseManager : MonoBehaviourPunCallbacks
+public class PauseManager : MonoBehaviour
 {
 	[SerializeField] private GameObject _pauseMenuUI;
 	[SerializeField] private PhotonView _view;
 	private bool _paused;
 	public static event Action<bool> paused;
 
-	void OnAwake()
+	void Awake()
 	{
 		if (!_view.IsMine) Destroy(this);
 	}
