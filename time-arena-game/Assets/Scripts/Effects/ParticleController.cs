@@ -15,6 +15,8 @@ public class ParticleController : MonoBehaviour
 	public ParticleSystem Splash;
   	public Material Material;
     public Animator PlayerAnim;
+    public Animator GuardianAnim;
+    public Animator MinerAnim;
 
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
@@ -26,6 +28,13 @@ public class ParticleController : MonoBehaviour
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
         _isDissolving = false;
+
+        if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
+            PlayerAnim = GuardianAnim;
+        }
+        if(TeamSelectionManger.ChooseTeam == Constants.Team.Miner){
+            PlayerAnim = MinerAnim;
+        }
     }
 
 

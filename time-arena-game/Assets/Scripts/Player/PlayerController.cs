@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour, ParticleUser, Debuggable
 			PlayerAnim = GuardianAnim;
 			
 		}
-		Material.SetMaterial(Team);
+		//Material.SetMaterial(Team);
 		
 		
 
