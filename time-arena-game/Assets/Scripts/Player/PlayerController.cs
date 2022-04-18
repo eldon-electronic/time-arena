@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
+	private PPSubscriber _ppController;
 	public Constants.Team Team;
 	public int ID;
 
