@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DissolveForwardOut
+  m_Name: GuardianDissolveForwardIn
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -22,7 +22,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: -4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -32,15 +32,15 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 2.6666667
+        outSlope: 2.6666667
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
-        value: -4
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -51,7 +51,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -88,7 +88,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -125,7 +125,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -162,7 +162,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -170,7 +170,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -180,15 +180,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/Body
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -199,7 +236,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/HelmetPoly
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -236,7 +273,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/HelmetPoly
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -273,118 +310,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/HelmetPoly
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: -4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -421,7 +347,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -429,7 +355,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -439,15 +365,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftArmTop
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -458,7 +421,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -495,7 +458,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -532,7 +495,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -569,7 +532,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -577,7 +540,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -587,15 +550,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftFoot
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -606,7 +606,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -643,7 +643,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -680,7 +680,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -717,7 +717,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -725,7 +725,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -735,15 +735,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftForearm
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -754,7 +791,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -791,7 +828,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -828,7 +865,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -865,7 +902,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -873,7 +910,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -883,15 +920,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftHand
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -902,7 +976,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -939,7 +1013,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -976,7 +1050,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1013,7 +1087,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1021,7 +1095,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1031,15 +1105,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftLeg
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1050,7 +1161,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1087,7 +1198,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1124,7 +1235,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1161,7 +1272,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1169,7 +1280,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1179,15 +1290,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightArmTop
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1198,7 +1346,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1235,7 +1383,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1272,7 +1420,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1309,7 +1457,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1317,7 +1465,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1327,15 +1475,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightFoot
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1346,7 +1531,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1383,7 +1568,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1420,7 +1605,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1457,7 +1642,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1465,7 +1650,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1475,15 +1660,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightForearm
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1494,7 +1716,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1531,7 +1753,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1568,7 +1790,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1605,7 +1827,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1613,7 +1835,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1623,15 +1845,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightHand
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1642,7 +1901,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/RightHand
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1679,7 +1938,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/RightHand
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1716,7 +1975,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/RightHand
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1753,44 +2012,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/RightHand
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: -4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/TorsoArms
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1826,82 +2048,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/TorsoArms
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/TorsoArms
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 47.771
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 47.771
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 47.771
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/TorsoArms
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -1913,358 +2061,386 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3634341423
+      path: 3013411636
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1466721705
+      path: 505544424
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1684068201
+      path: 2258074021
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2397214359
+      path: 2813216264
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2859800404
+      path: 1752826553
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1570699854
+      path: 2992825580
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2808820516
+      path: 72984064
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3346956901
+      path: 1836261254
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1608729671
+      path: 157635610
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 4132844749
+      path: 2208195738
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 433783785
+      path: 1479735337
       attribute: 2294269337
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 233806418
-      attribute: 2294269337
-      script: {fileID: 0}
-      typeID: 137
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 952863066
-      attribute: 2294269337
-      script: {fileID: 0}
-      typeID: 137
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 3634341423
+      path: 3013411636
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3634341423
+      path: 3013411636
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3634341423
+      path: 3013411636
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1466721705
+      path: 3013411636
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 505544424
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1466721705
+      path: 505544424
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1684068201
-      attribute: 116101113
-      script: {fileID: 0}
-      typeID: 137
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 1684068201
-      attribute: 384536569
-      script: {fileID: 0}
-      typeID: 137
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 1684068201
+      path: 505544424
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2397214359
+      path: 505544424
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 2258074021
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2397214359
+      path: 2258074021
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2397214359
+      path: 2258074021
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2859800404
+      path: 2258074021
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 2813216264
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2859800404
+      path: 2813216264
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2859800404
+      path: 2813216264
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1570699854
+      path: 2813216264
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 1752826553
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1570699854
+      path: 1752826553
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1570699854
+      path: 1752826553
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2808820516
+      path: 1752826553
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 2992825580
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2808820516
+      path: 2992825580
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2808820516
+      path: 2992825580
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3346956901
+      path: 2992825580
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 72984064
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3346956901
+      path: 72984064
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3346956901
+      path: 72984064
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1608729671
+      path: 72984064
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 1836261254
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1608729671
+      path: 1836261254
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1608729671
+      path: 1836261254
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 4132844749
+      path: 1836261254
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 157635610
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 4132844749
+      path: 157635610
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 4132844749
+      path: 157635610
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 433783785
+      path: 157635610
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 2208195738
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 433783785
+      path: 2208195738
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 433783785
+      path: 2208195738
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 233806418
+      path: 2208195738
+      attribute: 921407481
+      script: {fileID: 0}
+      typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 1479735337
       attribute: 116101113
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 233806418
+      path: 1479735337
       attribute: 384536569
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 233806418
+      path: 1479735337
       attribute: 652972025
       script: {fileID: 0}
       typeID: 137
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 952863066
-      attribute: 116101113
-      script: {fileID: 0}
-      typeID: 137
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 952863066
-      attribute: 384536569
-      script: {fileID: 0}
-      typeID: 137
-      customType: 22
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 952863066
-      attribute: 652972025
+      path: 1479735337
+      attribute: 921407481
       script: {fileID: 0}
       typeID: 137
       customType: 22
@@ -2280,7 +2456,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
+    m_LoopTime: 1
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -2296,7 +2472,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: -4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2306,15 +2482,15 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 2.6666667
+        outSlope: 2.6666667
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
-        value: -4
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2325,7 +2501,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2362,7 +2538,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2399,7 +2575,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2436,7 +2612,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Abdomen
+    path: GurdianMesh/Body
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2444,7 +2620,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2454,15 +2630,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/Body
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2473,7 +2686,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/HelmetPoly
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2510,7 +2723,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/HelmetPoly
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2547,118 +2760,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/HelmetPoly
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: -4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2695,7 +2797,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadGear/LeftEar
+    path: GurdianMesh/LeftArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2703,7 +2805,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2713,15 +2815,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftArmTop
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2732,7 +2871,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2769,7 +2908,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2806,7 +2945,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2843,7 +2982,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadGear/RightEar
+    path: GurdianMesh/LeftFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2851,7 +2990,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2861,15 +3000,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftFoot
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2880,7 +3056,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2917,7 +3093,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2954,7 +3130,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2991,7 +3167,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadGear/Visor
+    path: GurdianMesh/LeftForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2999,7 +3175,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3009,15 +3185,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftForearm
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3028,7 +3241,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3065,7 +3278,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3102,7 +3315,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3139,7 +3352,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Head/HeadSmooth
+    path: GurdianMesh/LeftHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3147,7 +3360,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3157,15 +3370,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftHand
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3176,7 +3426,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3213,7 +3463,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3250,7 +3500,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3287,7 +3537,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/LeftHand
+    path: GurdianMesh/LeftLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3295,7 +3545,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3305,15 +3555,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/LeftLeg
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3324,7 +3611,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3361,7 +3648,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3398,7 +3685,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3435,7 +3722,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/LeftFoot
+    path: GurdianMesh/RightArmTop
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3443,7 +3730,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3453,15 +3740,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightArmTop
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3472,7 +3796,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3509,7 +3833,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3546,7 +3870,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3583,7 +3907,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/LeftLeg
+    path: GurdianMesh/RightFoot
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3591,7 +3915,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3601,15 +3925,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightFoot
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3620,7 +3981,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3657,7 +4018,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3694,7 +4055,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3731,7 +4092,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/RightFoot
+    path: GurdianMesh/RightForearm
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3739,7 +4100,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3749,15 +4110,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightForearm
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3768,7 +4166,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3805,7 +4203,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3842,7 +4240,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3879,7 +4277,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/Legs/RightLeg
+    path: GurdianMesh/RightHand
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3887,7 +4285,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3897,15 +4295,52 @@ AnimationClip:
       - serializedVersion: 3
         time: 1.5
         value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
+        inSlope: 0
+        outSlope: 0
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightHand
+    classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
         value: -4
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5
+        value: 0
+        inSlope: 2.6666667
+        outSlope: 2.6666667
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 3
+        value: 4
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -3916,7 +4351,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/RightHand
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3953,7 +4388,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/RightHand
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3990,7 +4425,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/RightHand
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -4027,44 +4462,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/RightHand
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: -2.6666667
-        outSlope: -2.6666667
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: -4
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._CutoffHeight
-    path: minerFixed/CharacterMesh/TorsoArms
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -4100,99 +4498,11 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material._EdgeColour.x
-    path: minerFixed/CharacterMesh/TorsoArms
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 0.93669
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.y
-    path: minerFixed/CharacterMesh/TorsoArms
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 47.771
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.5
-        value: 47.771
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 3
-        value: 47.771
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: material._EdgeColour.z
-    path: minerFixed/CharacterMesh/TorsoArms
+    attribute: material._EdgeColour.w
+    path: GurdianMesh/RightLeg
     classID: 137
     script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0
-    functionName: BlueBeam
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 3
-    functionName: StopDissolvingForwardOut
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []
