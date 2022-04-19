@@ -18,7 +18,7 @@ public class TestTimeLord
     {
         TimeLord timeLord = new TimeLord(100);
         timeLord.Connect(1001, true);
-        Dictionary<int, PlayerState> tails = timeLord.GetTails();
+        Dictionary<int, PlayerState> tails = timeLord.GetTailStates();
         Assert.AreEqual(0, tails.Count);
     }
 

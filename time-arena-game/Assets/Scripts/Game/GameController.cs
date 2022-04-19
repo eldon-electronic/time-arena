@@ -1,19 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class GameController : MonoBehaviour
+public class GameController : SceneController
 {
-	private Dictionary<int, PlayerController> _miners;
-	private Dictionary<int, PlayerController> _guardians;
-	private TimeLord _timeLord;
-
-	public float Timer;
-	public bool GameStarted;
-	public bool GameEnded;
-	public Constants.Team WinningTeam;
-	private int _minerScore;
+	private float _timer;
+	private bool _gameStarted;
+	private bool _gameEnded;
+	public static event Action<GameController> gameActive;
+	public static event Action gameStarted;
+	public static event Action<Constants.Team> gameEnded;
+	public static event Action<float> countDown;
+	public static event Action<TimeLord> newTimeLord;
 
 
 	void Awake()
@@ -21,115 +21,55 @@ public class GameController : MonoBehaviour
 		_miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
 
-		int totalFrames = Constants.GameLength * Constants.FrameRate;
-		_timeLord = new TimeLord(totalFrames);
-
-		Timer = 5f;
-		GameStarted = false;
-		GameEnded = false;
-		WinningTeam = Constants.Team.Miner;
+		_timer = 5f;
+		_gameStarted = false;
+		_gameEnded = false;
 		_minerScore = 0;
 	}
-
 
 	void Start()
 	{
 		// Prevent anyone else from joining room.
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		GameObject client = GameObject.FindWithTag("Client");
+		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
+		newTimeLord?.Invoke(_timeLord);
 
-		List<GameObject> allPlayers = new List<GameObject>(players);
-		allPlayers.Add(client);
-
-		foreach (var player in allPlayers)
-		{
-			PlayerController pc = player.GetComponent<PlayerController>();
-			pc.SetGame(this);
-			pc.SetTimeLord(_timeLord);
-
-			int id = pc.GetID();
-			if (pc.Team == Constants.Team.Guardian) _guardians.Add(id, pc);
-			else _miners.Add(id, pc);
-		}
+		gameActive?.Invoke(this);
 	}
 
-
-	// ------------ UPDATE HELPER FUNCTIONS ------------
-
-	// Checks to see if there are no hiders left.
 	private void CheckWon()
 	{	
-		if (_timeLord.TimeEnded() && !GameEnded)
+		if (_timeLord.TimeEnded() && !_gameEnded)
 		{
-			GameEnded = true;
+			_gameEnded = true;
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
-			WinningTeam = Constants.Team.Miner;
+			gameEnded?.Invoke(Constants.Team.Miner);
 		}
 	}
 
 	void Update()
 	{
-		if (!GameStarted)
+		if (!_gameStarted)
 		{
-			// Pregame timer is counting.
-			if (Timer <= 0f)
+			// Game starts.
+			if (_timer <= 0f)
 			{
-				if (!GameStarted) GameStarted = true;
+				_gameStarted = true;
+				gameStarted?.Invoke();
 			}
-			else Timer -= Time.deltaTime;
+			// Countdown timer is counting.
+			else
+			{
+				_timer -= Time.deltaTime;
+				countDown?.Invoke(_timer);
+			}
 		}
 		else
 		{
 			// Increment global frame and individual player frames.
-			if (!GameEnded) _timeLord.Tick();
+			if (!_gameEnded) _timeLord.Tick();
 			CheckWon();
 		}
 	}
-
-
-	// ------------ PUBLIC FUNCTIONS ------------
-
-	public void SetTeam(int playerID, Constants.Team team)
-	{
-		if (team == Constants.Team.Guardian)
-		{
-			PlayerController player = _miners[playerID];
-			_miners.Remove(playerID);
-			_guardians.Add(playerID, player);
-		}
-		else if (team == Constants.Team.Miner)
-		{
-			PlayerController player = _guardians[playerID];
-			_guardians.Remove(playerID);
-			_miners.Add(playerID, player);
-		}
-	}
-
-	public void HideAllPlayers()
-	{
-		foreach (var guardian in _guardians)
-		{
-			guardian.Value.Hide();
-		}
-		foreach (var miner in _miners)
-		{
-			miner.Value.Hide();
-		}
-	}
-
-	public void ShowPlayersInReality()
-	{
-		HashSet<int> playerIDs = _timeLord.GetPlayersInReality();
-		foreach (var id in playerIDs)
-		{
-			if (_guardians.ContainsKey(id)) _guardians[id].Show();
-			else if (_miners.ContainsKey(id)) _miners[id].Show();
-		}
-	}
-
-	public void IncrementMinerScore() { _minerScore++; }
-
-	public int GetMinerScore() { return _minerScore; }
 }
