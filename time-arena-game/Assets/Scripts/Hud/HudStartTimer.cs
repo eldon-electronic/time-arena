@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,25 +6,26 @@ public class HudStartTimer : MonoBehaviour
 {
     [SerializeField] private GameObject _startTimer;
     [SerializeField] private Text _text;
-    private GameController _game;
 
-    void Start()
+    void OnEnable()
     {
-        _startTimer.SetActive(false);
+        GameController.gameActive += SetGame;
+        GameController.gameStarted += OnGameStarted;
+        GameController.countDown += OnCountDown;
     }
 
-    void LateUpdate()
+    void OnDisable()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene")
-        {
-            _startTimer.SetActive(!_game.GameStarted);
-            if (!_game.GameStarted && !_game.GameEnded)
-            {
-                int timer = (int) _game.Timer;
-                _text.text = $"{timer}";
-            }
-        }
+        GameController.gameActive -= SetGame;
+        GameController.gameStarted -= OnGameStarted;
+        GameController.countDown -= OnCountDown;
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    void Start() { _startTimer.SetActive(false); }
+
+    private void SetGame(GameController game) { _startTimer.SetActive(true); }
+
+    private void OnGameStarted() { _startTimer.SetActive(false); }
+
+    private void OnCountDown(float seconds) { _text.text = $"{(int) seconds}"; }
 }
