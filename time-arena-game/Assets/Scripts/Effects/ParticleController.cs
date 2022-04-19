@@ -29,7 +29,7 @@ public class ParticleController : MonoBehaviour
     void Awake()
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
-        _isDissolving = false;
+      
 
         if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
             PlayerAnim = GuardianAnim;

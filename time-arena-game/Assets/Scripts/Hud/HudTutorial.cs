@@ -12,18 +12,16 @@ public class HudTutorial : MonoBehaviour
     [SerializeField] private GameObject _popUpText;
     [SerializeField] private GameObject _optionsPopUpText;
     [SerializeField] private GameObject[] _tutorialObjects;
+    private GameObject _crystal;
 
     private Dictionary<string, GameObject> _tutorialArrows;
 
-    void LateUpdate()
     void Awake()
     {
-        if (SceneManager.GetActiveScene().name != "PreGameScene" && _view.IsMine)
-        {
-            _tutorial.SetActive(false);
+        _crystal = GameObject.Find("TutorialCrystal");
         _tutorialArrows = new Dictionary<string, GameObject>();
         foreach (GameObject tutorialObject in _tutorialObjects) {
-            _tutorialArrows.Add(tutorialObject.name, tutorialObject);
+        _tutorialArrows.Add(tutorialObject.name, tutorialObject);
         }
     }
 
@@ -59,9 +57,15 @@ public class HudTutorial : MonoBehaviour
     {
         _optionsPopUpText.GetComponent<TextMeshProUGUI>().text = message;
     }
+
+
     public void SetCrystalVisibility(bool crystalVis){
         
-        _crystal.SetActive(crystalVis);
+        if (SceneManager.GetActiveScene().name == "PreGameScene"){
+
+            _crystal.SetActive(crystalVis);
+        }
 
     }
-}
+ }
+
