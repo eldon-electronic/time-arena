@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class HudTimeline : MonoBehaviour
 {
     [SerializeField] private GameObject _timeline;
+    [SerializeField] private Transform _iconContainer;
     [SerializeField] private GameObject _iconPrefab;
     [SerializeField] private Image _timelineFill;
     [SerializeField] private Sprite _yourIcon;
@@ -72,8 +73,7 @@ public class HudTimeline : MonoBehaviour
     private Slider InstantiateIcon(Constants.Team team, bool isMe)
     {
         // Instantiate and set its parent to be the timeline.
-        GameObject newIcon = Instantiate(_iconPrefab);
-        newIcon.transform.parent = _timeline.transform;
+        GameObject newIcon = Instantiate(_iconPrefab, _iconContainer);
 
         // Reset its position and scale.
         newIcon.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
