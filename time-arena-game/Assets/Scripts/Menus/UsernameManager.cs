@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class UsernameManager : MonoBehaviour
 {
-
     private string welcomeText;
     [SerializeField] private TMP_InputField _userInputField;
     [SerializeField] private Button _submitButton;

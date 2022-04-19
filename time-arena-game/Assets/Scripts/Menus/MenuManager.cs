@@ -8,12 +8,12 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance;
     [SerializeField] Menu[] menus;
 
-    void Awake() {
+    void Awake()
+    {
         Instance = this;
     }
 
     public void OpenMenu(string name) { 
-        // Loop through all our Menu instances
         for (int i = 0; i < menus.Length; i++) {
             if (menus[i].MenuName == name) {
                 menus[i].Open();

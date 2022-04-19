@@ -10,25 +10,32 @@ public class GameController : MonoBehaviour
 	private TimeLord _timeLord;
 
 	public float Timer;
-	public bool GameStarted = false;
-	public bool GameEnded = false;
-	public Constants.Team WinningTeam = Constants.Team.Miner;
+	public bool GameStarted;
+	public bool GameEnded;
+	public Constants.Team WinningTeam;
 	private int _minerScore;
+
+
+	void Awake()
+	{
+		_miners = new Dictionary<int, PlayerController>();
+		_guardians = new Dictionary<int, PlayerController>();
+
+		int totalFrames = Constants.GameLength * Constants.FrameRate;
+		_timeLord = new TimeLord(totalFrames);
+
+		Timer = 5f;
+		GameStarted = false;
+		GameEnded = false;
+		WinningTeam = Constants.Team.Miner;
+		_minerScore = 0;
+	}
 
 
 	void Start()
 	{
 		// Prevent anyone else from joining room.
 		PhotonNetwork.CurrentRoom.IsOpen = false;
-
-		_miners = new Dictionary<int, PlayerController>();
-		_guardians = new Dictionary<int, PlayerController>();
-
-		Timer = 5f;
-		_minerScore = 0;
-
-		int totalFrames = Constants.GameLength * Constants.FrameRate;
-		_timeLord = new TimeLord(totalFrames);
 
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		GameObject client = GameObject.FindWithTag("Client");

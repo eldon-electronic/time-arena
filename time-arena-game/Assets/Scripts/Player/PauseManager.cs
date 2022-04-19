@@ -6,16 +6,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-public class PauseManager : MonoBehaviourPunCallbacks {
-
-	//pause tracking vars
-    private bool _paused = false;
+public class PauseManager : MonoBehaviourPunCallbacks
+{
+	private bool _paused = false;
 	public GameObject PauseMenuUI;
 	public PhotonView View;
 	public Slider MouseSensSlider;
   	public float MouseSens;
 
-	// Update is called once per frame
 	void Update()
 	{	
 		if (!View.IsMine) return;
@@ -45,17 +43,4 @@ public class PauseManager : MonoBehaviourPunCallbacks {
     SceneManager.LoadScene("MenuScene");
     Destroy(gameObject);
   }
-
-  /*	StartCoroutine(DisconnectAndLoad());
-	}
-
-	IEnumerator DisconnectAndLoad() {
-		PhotonNetwork.LeaveRoom();
-		while (PhotonNetwork.InRoom) { // Busy waiting
-			Debug.Log("Busy waiting");
-			yield return null;
-		}
-		SceneManager.LoadScene("MenuScene");
-		Destroy(gameObject);
-	}*/
 }
