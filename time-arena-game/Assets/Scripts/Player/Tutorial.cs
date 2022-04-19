@@ -28,6 +28,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private PlayerController _player;
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PhotonView _view;
+    [SerializeField] private GameObject _masterClientOptions;
 
     private bool _hasMovedOn = true;
     private List<State> _guardianStates;
@@ -40,6 +41,7 @@ public class Tutorial : MonoBehaviour
 
     void Awake()
     {
+        _masterClientOptions.SetActive(false);
         if (!_view.IsMine) Destroy(this);
         CreateStatesGuardian();
         CreateStatesMiner();
@@ -137,6 +139,7 @@ public class Tutorial : MonoBehaviour
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
+        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         _tutorialHud.SetArrowVisibility(
             _states[_currentState].ElementToPointTo,
             _states[_currentState].VisibilityOfArrow
@@ -153,15 +156,19 @@ public class Tutorial : MonoBehaviour
         // Set the new state.
         _currentState = state;
         _tutorialHud.SetMessage(_states[_currentState].Message);
+        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         
         // Activate new arrow (if there is one for the current state).
         _tutorialHud.SetArrowVisibility(
             _states[_currentState].ElementToPointTo, 
             _states[_currentState].VisibilityOfArrow
         );
-
+        
         // Set the options text.
-        if (state == _states.Count - 1) _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+        if (state == _states.Count - 1){
+            _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+            _masterClientOptions.SetActive(true);
+        } 
         else _tutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
     }
 

@@ -6605,10 +6605,10 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+      - m_Target: {fileID: 561111332934807323}
+        m_TargetAssemblyTypeName: PlayerMovement, AllScripts
         m_MethodName: OnMouseSensChange
-        m_Mode: 0
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12860,7 +12860,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3792925184382037071}
         m_TargetAssemblyTypeName: PauseManager, AllScripts
         m_MethodName: OnResume
         m_Mode: 1
@@ -12974,7 +12974,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2d15c120e1f501d4398ff4d48250a16a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ff006955be63bda4ab0a6c2d413a2d06, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14338,6 +14338,7 @@ MonoBehaviour:
   _player: {fileID: 6458975045518551228}
   _tutorialHud: {fileID: 4309630990017238307}
   _view: {fileID: 5690578699466181193}
+  _masterClientOptions: {fileID: 3075963632921435585}
 --- !u!114 &561111332934807323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15570,7 +15571,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3792925184382037071}
         m_TargetAssemblyTypeName: PauseManager, AllScripts
         m_MethodName: OnLeave
         m_Mode: 1

@@ -29,7 +29,7 @@ public class PreGameController : SceneController
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (Input.GetKeyDown(KeyCode.F)) StartCountingDown();
+            if (Input.GetKeyDown(KeyCode.Return)) StartCountingDown();
             if (Input.GetKeyDown(KeyCode.Escape)) StopCountingDown();
         }
         if (_isCountingTillGameStart)
