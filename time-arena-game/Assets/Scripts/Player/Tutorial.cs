@@ -25,32 +25,63 @@ public class Tutorial : MonoBehaviour
         }
     }
     
-    private bool _hasMovedOn = true;
+    [SerializeField] private PlayerController _player;
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PhotonView _view;
+
+    private bool _hasMovedOn = true;
     private List<State> _guardianStates;
     private List<State> _minerStates;
     private List<State> _states;
     private int _currentState;
   
 
+    // ------------ UNITY FUNCTIONS ------------
+
     void Awake()
     {
+        if (!_view.IsMine) Destroy(this);
         CreateStatesGuardian();
         CreateStatesMiner();
-        _states = _minerStates;
     }
 
+    void OnEnable() { GameController.gameActive += OnGameActive; }
+
+    void OnDisable() { GameController.gameActive -= OnGameActive; }
+
+    void Start()
+    {
+        if (_player.Team == Constants.Team.Guardian) _states = _guardianStates;
+        else _states = _minerStates;
+        StartTutorial();
+    }
 
     void Update()
     {
-        if (!_view.IsMine) return;
-        if ((_currentState == (_states.Count - 1))) StartTutorialOver();
-        if (_currentState < _states.Count - 1) SkipTutorial();
-
-        if (_currentState <= _states.Count - 1) NeedKeyPress(_states[_currentState].NeedKey);
+        if (_currentState == _states.Count - 1 && Input.GetKeyDown(KeyCode.Alpha1)) MoveToState(0);
+        if (_currentState < _states.Count - 1 && Input.GetKeyDown(KeyCode.Alpha2)) MoveToState(_states.Count - 1);
+        if (_currentState < _states.Count)
+        {
+            if (_states[_currentState].NeedKey)
+            {
+                if (Input.GetKeyDown(_states[_currentState].InputTrigger)) MoveToState(_currentState + 1);
+            }
+            else if (_hasMovedOn)
+            {
+                StartCoroutine(DelayPopup());
+                _hasMovedOn = false;     
+            }
+        }
     }
-    
+
+
+    // ------------ ON EVENT METHODS ------------
+
+    private void OnGameActive(GameController game) { Destroy(this); }
+
+
+    // ------------ PRIVATE METHODS ------------
+
     private void CreateStatesGuardian()
     {
         _guardianStates = new List<State>();
@@ -102,92 +133,42 @@ public class Tutorial : MonoBehaviour
  
     }
 
-    IEnumerator DelayPopup() {
-
-        yield return new WaitForSeconds(4);
-        MoveToNextState();
-        _hasMovedOn = true;
-    }
-
-    private void NeedKeyPress(bool keyPressNeeded)
-    {
-        if (_currentState <= _states.Count)
-        {
-            if ((keyPressNeeded == true) && (Input.GetKeyDown(_states[_currentState].InputTrigger)))
-            {
-                MoveToNextState();
-            }
-            else if ((keyPressNeeded == false) && _hasMovedOn)
-            {    
-                StartCoroutine(DelayPopup());
-                _hasMovedOn = false;      
-            }
-        }    
-   }
-  
-
-    private void MoveToNextState()
-    {
-        if(_currentState >= _states.Count) return;
-        _currentState++;
-        _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
-        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
-    }
-
-
-    // ------------ PUBLIC METHODS ------------
-
-    public void SetTeam(Constants.Team team)
-    {
-        if (team == Constants.Team.Guardian) _states = _guardianStates;
-        else if(team == Constants.Team.Miner) _states = _minerStates;
-    }
-
-    public void StartTutorial()
+    private void StartTutorial()
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetArrowPosition(_states[_currentState].ElementToPointTo);
-        _tutorialHud.SetArrowVisibility(_states[_currentState].VisibilityOfArrow);
-        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
-        NeedKeyPress(_states[_currentState].NeedKey);
-        _tutorialHud.SetVisibility(true);
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo,
+            _states[_currentState].VisibilityOfArrow
+        );
     }
 
-    public void StopTutorial()
+    private void MoveToState(int state)
     {
-        _tutorialHud.SetVisibility(false);
-    }
-
-    public void SkipTutorial()
-    {
-        _tutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
-
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {        
-            _currentState = _states.Count - 1;
-
-            _tutorialHud.SetMessage(_states[_currentState].Message);
-
-        }
-    }
-
-    public void StartTutorialOver()
-    {    
-            if(Input.GetKeyDown(KeyCode.Alpha1)) StartTutorial();
+        if (state >= _states.Count) return;
         
-            if (PhotonNetwork.IsMasterClient)
-            {
-                _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>\n\n Or start the game <sprite=8>");
-                //_tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
-            }
-            
-            else {
+        // Deactivate old arrow.
+        _tutorialHud.SetArrowVisibility(_states[_currentState].ElementToPointTo, false);
 
-                _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
-            }
+        // Set the new state.
+        _currentState = state;
+        _tutorialHud.SetMessage(_states[_currentState].Message);
+        
+        // Activate new arrow (if there is one for the current state).
+        _tutorialHud.SetArrowVisibility(
+            _states[_currentState].ElementToPointTo, 
+            _states[_currentState].VisibilityOfArrow
+        );
+
+        // Set the options text.
+        if (state == _states.Count - 1) _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
+        else _tutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
+    }
+
+    IEnumerator DelayPopup() {
+        yield return new WaitForSeconds(4);
+        MoveToState(_currentState + 1);
+        _hasMovedOn = true;
     }
  }
 

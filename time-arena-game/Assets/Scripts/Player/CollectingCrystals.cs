@@ -5,17 +5,36 @@ using UnityEngine;
 public class CollectingCrystals : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
-    private GameController _game;
+    private SceneController _sceneController;
 
+    public void Awake()
+    {
+        if (_player.Team == Constants.Team.Guardian) Destroy(this);
+    }
+
+    public void OnEnable()
+    {
+        GameController.gameActive += SetGame;
+    }
+
+    public void OnDisable()
+    {
+        GameController.gameActive -= SetGame;
+    }
+
+    public void Start()
+    {
+        _sceneController = FindObjectOfType<PreGameController>();
+    }
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
+        if (col.gameObject.tag == "Collectable")
         {
-            if (_game != null) _game.IncrementMinerScore();
+            _sceneController?.IncrementMinerScore();
             Destroy(col.gameObject);
         }
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    private void SetGame(GameController game) { _sceneController = game; }
 }

@@ -16,7 +16,7 @@ public class TailController : MonoBehaviour
 
     void Update()
     {
-        PlayerState state = _timeLord.GetState(_tailID);
+        PlayerState state = _timeLord.GetTailState(_tailID);
         if (state == null) _manager.ReceiveResignation(_tailID);
         else
         {

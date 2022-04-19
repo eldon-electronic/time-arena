@@ -6,48 +6,44 @@ using UnityEngine.UI;
 
 public class HudCooldowns : MonoBehaviour
 {
-    [SerializeField] private Slider _forwardCooldownSlider;
-    [SerializeField] private Slider _backCooldownSlider;
-    [SerializeField] private Image _forwardJumpIcon;
-    [SerializeField] private Image _backJumpIcon;
-    [SerializeField] private Sprite _greenUnpressedSprite;
-    [SerializeField] private Sprite _redPressedSprite;
-
-    private PlayerController _player;
-    private float _forwardBarHeight;
-    private float _backBarHeight;
-    private bool _canJumpForward;
-    private bool _canJumpBack;
+    [SerializeField] private TimeConn _timeConn;
+    [SerializeField] private Animator _backButtonAnimator;
+    [SerializeField] private Animator _forwardButtonAnimator;
+    private bool _isBackButtonSpinning;
+    private bool _isForwardButtonSpinning;
 
     void Awake()
     {
-        _forwardBarHeight = 0.0f;
-        _backBarHeight = 0.0f;
-        _canJumpForward = false;
-        _canJumpBack = false;
-    }
-
-    void Update()
-    {
-        (float forward, float back) cooldowns = _player.GetCooldowns();
-        _forwardBarHeight = 1.0f - (cooldowns.forward / 15.0f);
-        _backBarHeight = 1.0f - (cooldowns.back / 15.0f);
-
-        (bool forward, bool back) canJump = _player.GetCanJump();
-        _canJumpForward = canJump.forward;
-        _canJumpBack = canJump.back;
+        _isForwardButtonSpinning = false;
+        _isBackButtonSpinning = false;
     }
 
     void LateUpdate()
     {
-        _forwardCooldownSlider.value = _forwardBarHeight;
-        _backCooldownSlider.value = _backBarHeight;
+        (bool forward, bool back) canJump = _timeConn.GetCanJump();
 
-        if (_canJumpForward) _forwardJumpIcon.sprite = _greenUnpressedSprite;
-        else _forwardJumpIcon.sprite = _redPressedSprite;
-        if (_canJumpBack) _backJumpIcon.sprite = _greenUnpressedSprite;
-        else _backJumpIcon.sprite = _redPressedSprite;
+        if (canJump.back && !_isBackButtonSpinning)
+        {
+            // Ready to jump after cooldown.
+            _backButtonAnimator.SetBool("Rotate", true);
+            _isBackButtonSpinning = true;
+        }
+        else if (!canJump.back && _isBackButtonSpinning)
+        {
+            // Cooldown activated.
+            _backButtonAnimator.SetBool("Rotate", false);
+            _isBackButtonSpinning = false;
+        }
+
+        if (canJump.forward && !_isForwardButtonSpinning)
+        {
+            _forwardButtonAnimator.SetBool("Rotate", true);
+            _isForwardButtonSpinning = true;
+        }
+        else if (!canJump.forward && _isForwardButtonSpinning)
+        {
+            _forwardButtonAnimator.SetBool("Rotate", false);
+            _isForwardButtonSpinning = false;
+        }
     }
-
-    public void SetPlayer(PlayerController pc) { _player = pc; }
 }

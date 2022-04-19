@@ -58,4 +58,9 @@ public class HudDebugPanel : MonoBehaviour
     {
         _subsribers.Add(subscriber);
     }
+
+    public void UnRegister(Debuggable subscriber)
+    {
+        _subsribers.Remove(subscriber);
+    }
 }
