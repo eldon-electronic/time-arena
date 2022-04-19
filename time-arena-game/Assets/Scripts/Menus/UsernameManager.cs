@@ -20,14 +20,10 @@ public class UsernameManager : MonoBehaviour
     void Start()
     {
         if (PlayerPrefs.HasKey("username")) {
-            string playerNickname = PlayerPrefs.GetString("username");
-            welcomeText = "Welcome to Time Arena " + playerNickname + ".";
-            _welcomeText.text = welcomeText;
-            displayWelcomeMessage();
-            PhotonNetwork.NickName = playerNickname;
-        } else {
-            DisplayUsernameInput();
+            PlayerPrefs.DeleteAll();
         }
+
+        DisplayUsernameInput();
     }
 
     // Helper function to disable error text display after a set amount of time has passed.
@@ -41,8 +37,6 @@ public class UsernameManager : MonoBehaviour
             PhotonNetwork.NickName = userInput;
             welcomeText = "Welcome to Time Arena " + userInput + ".";
             _welcomeText.text = welcomeText;
-            PlayerPrefs.SetString("username", userInput);
-            PlayerPrefs.Save();
             displayWelcomeMessage();
         } else {
             _errorText.gameObject.SetActive(true);
@@ -58,11 +52,5 @@ public class UsernameManager : MonoBehaviour
     private void displayWelcomeMessage() {
         _usernameInputContainer.gameObject.SetActive(false);
         _welcomeTextContainer.gameObject.SetActive(true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
