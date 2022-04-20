@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 			new Vector3(-25f, -5f, -31f), 
 			new Vector3(-11f, -5f, -30f), 
 			new Vector3(-18f, -5f, -39f), 
-			new Vector3(-25f, -5f, 36f)
+			new Vector3(-25f, -5f, -36f)
 		};
     }
 
