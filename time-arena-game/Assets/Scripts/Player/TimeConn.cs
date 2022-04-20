@@ -15,6 +15,7 @@ public abstract class PPController: MonoBehaviour
 public class TimeConn : MonoBehaviour, ParticleUser
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
+	[SerializeField] private PlayerController _player;
 	[SerializeField] private ParticleController _minerParticles;
 	[SerializeField] private ParticleController _guardianParticles;
 	[SerializeField] private PhotonView _view;
