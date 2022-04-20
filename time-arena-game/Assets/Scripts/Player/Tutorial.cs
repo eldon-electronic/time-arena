@@ -167,9 +167,10 @@ public class Tutorial : MonoBehaviour
         // Set the options text.
         if (state == _states.Count - 1){
             _tutorialHud.SetOptionsText("Go back to tutorial <sprite=1>");
-            _masterClientOptions.SetActive(true);
+            if (PhotonNetwork.IsMasterClient) _masterClientOptions.SetActive(true);
         } 
         else _tutorialHud.SetOptionsText("Skip tutorial <sprite=3>");
+
     }
 
     IEnumerator DelayPopup() {

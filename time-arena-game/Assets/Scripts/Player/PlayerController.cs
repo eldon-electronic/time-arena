@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
+	[SerializeField] ParticleController _particle;
+
 	public Constants.Team Team;
 	public int ID;
 
@@ -23,6 +25,9 @@ public class PlayerController : MonoBehaviour
 		// TODO: Set the team in the menu before loading the pregame scene.
 		if (ID == 1001) Team = Constants.Team.Guardian;
 		else Team = Constants.Team.Miner;
+		_particle.SetDissolveAnimations(Team);
+		Debug.Log($"player: {_particle.PlayerAnim}");
+		Debug.Log($"team: {Team}");
 	}
 
 	void OnEnable() { GameController.gameActive += OnGameActive; }

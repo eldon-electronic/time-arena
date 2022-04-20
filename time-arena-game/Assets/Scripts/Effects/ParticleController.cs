@@ -19,7 +19,7 @@ public class ParticleController : MonoBehaviour
   	public Material Material;
     public Animator PlayerAnim;
     private ParticleUser _subscriber;
-    [SerializeField] private PlayerController _player;
+    //[SerializeField] private PlayerController _player;
     [SerializeField] private Animator GuardianAnim;
     [SerializeField] private Animator MinerAnim;
 
@@ -33,16 +33,18 @@ public class ParticleController : MonoBehaviour
        
     }
     void Start(){
+       
 
-        SetDissolveAnimations(_player.Team);
+        //SetDissolveAnimations(_player.Team);
     }
+  
 
 
     // ------------ HELPER FUNCTIONS ------------
 
     private void SetDissolveAnimationVariable(Constants.JumpDirection jd, bool dissolveOut, bool active)
     {
-        Debug.Log(_player.Team);
+        
         if (jd == Constants.JumpDirection.Forward && dissolveOut)
         {
             PlayerAnim.SetBool("isDissolvingForwardOut", active);
@@ -130,7 +132,7 @@ public class ParticleController : MonoBehaviour
 
     void StartedDissolving() { _subscriber?.NotifyStartedDissolving(); }
     
-    void SetDissolveAnimations(Constants.Team team){
+    public void SetDissolveAnimations(Constants.Team team){
         if(team == Constants.Team.Miner){
             PlayerAnim = MinerAnim;
         }
