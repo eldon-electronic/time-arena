@@ -20,10 +20,6 @@ public class ParticleController : MonoBehaviour
   	public Material Material;
     public Animator PlayerAnim;
     private ParticleUser _subscriber;
-<<<<<<< HEAD
-    [SerializeField] private PlayerController _player;
-=======
->>>>>>> 06c6806 (rearranged particle things)
     [SerializeField] private Animator GuardianAnim;
     [SerializeField] private Animator MinerAnim;
 
@@ -36,16 +32,9 @@ public class ParticleController : MonoBehaviour
         Material.SetFloat("_CutoffHeight", 50.0f);
        
     }
-<<<<<<< HEAD
-    void Start(){
-       
-
-        SetDissolveAnimations(_player.Team);
-=======
     void Start()
     {
         SetDissolveAnimations(_subscriber.GetTeam());
->>>>>>> 06c6806 (rearranged particle things)
     }
   
 
