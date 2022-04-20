@@ -45,13 +45,13 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _lockMovement = false;
         _lockRotation = false;
         _activated = true;
-        _seekerSpawnPoint = new Vector3(-36f, -2f, -29f);
+        _seekerSpawnPoint = new Vector3(-24f, -5f, -18f);
         _hiderSpawnPoints =  new Vector3[] {
-			new Vector3(-42f, 0f, 22f),
-			new Vector3(-15f, -0.5f, -4f), 
-			new Vector3(-12f, -0.5f, -40f), 
-			new Vector3(-47f, -0.5f, -8f), 
-			new Vector3(-36f, -2.5f, 2.2f)
+			new Vector3(-19f, -5f, -33f),
+			new Vector3(-25f, -5f, -31f), 
+			new Vector3(-11f, -5f, -30f), 
+			new Vector3(-18f, -5f, -39f), 
+			new Vector3(-25f, -5f, 36f)
 		};
     }
 
