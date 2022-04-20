@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class CrystalRecorder : MonoBehaviour
+public class CrystalRecorder2 : MonoBehaviour
 {
     
     private Transform shardtransform;
-    private static StreamWriter file;
+    private StreamWriter file;
 
     void Awake()
     {
@@ -17,9 +17,8 @@ public class CrystalRecorder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //using StreamWriter file = new StreamWriter("shardPositions.txt");
         shardtransform = this.transform;
-        string line = shardtransform.position.ToString() + " " + shardtransform.rotation.ToString();
+        string line = shardtransform.localPosition.ToString() + " " + shardtransform.localRotation.ToString();
         file.WriteLine(line);
     }
 }
