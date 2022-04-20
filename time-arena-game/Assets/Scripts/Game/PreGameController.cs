@@ -15,14 +15,13 @@ public class PreGameController : SceneController
         _miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
         _secondsTillGame = 5.0f;
+        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
     }
 
     void Start()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Constants.FrameRate;
-
-        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
     }
 
     void Update()
