@@ -6,15 +6,15 @@ public class Menu : MonoBehaviour
 {
 
     public string MenuName;
-    public bool IsOpen;
+    public bool MenuOpen;
 
     public void Open() {
-        IsOpen = true;
+        MenuOpen = true;
         gameObject.SetActive(true);
     }
 
     public void Close() {
-        IsOpen = false;
+        MenuOpen = false;
         gameObject.SetActive(false);
     }
 }

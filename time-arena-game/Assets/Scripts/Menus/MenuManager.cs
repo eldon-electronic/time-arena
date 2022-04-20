@@ -17,7 +17,7 @@ public class MenuManager : MonoBehaviour
         for (int i = 0; i < menus.Length; i++) {
             if (menus[i].MenuName == name) {
                 menus[i].Open();
-            } else if (menus[i].IsOpen) {
+            } else if (menus[i].MenuOpen) {
                 CloseMenu(menus[i]);
             }
         }
@@ -25,7 +25,7 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMenu(Menu menu) {
         for (int i = 0; i < menus.Length; i++) {
-            if (menus[i].IsOpen) {
+            if (menus[i].MenuOpen) {
                 CloseMenu(menus[i]);
             }
         }
@@ -34,5 +34,11 @@ public class MenuManager : MonoBehaviour
 
     public void CloseMenu(Menu menu) { 
         menu.Close();
+    }
+
+    public bool IsOpen(string name) {
+        for (int i = 0; i < menus.Length; i++) {
+            if ((menus[i].MenuName == name) && menus[i].MenuOpen) return true;
+        } return false;
     }
 }
