@@ -15,10 +15,13 @@ public abstract class PPController: MonoBehaviour
 public class TimeConn : MonoBehaviour, ParticleUser
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
-	[SerializeField] private ParticleController _particles;
+	[SerializeField] private PlayerController _player;
+	[SerializeField] private ParticleController _minerParticles;
+	[SerializeField] private ParticleController _guardianParticles;
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
 	[SerializeField] private PPController _ppController;
+	private ParticleController _particles;
 	private SceneController _sceneController;
 	private TimeLord _timelord;
 	private bool _isJumping;
@@ -63,6 +66,12 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		_sceneController = FindObjectOfType<PreGameController>();
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
 		else SetTimeLord();
+
+		if (_player.Team == Constants.Team.Guardian)
+		{
+			_particles = _guardianParticles;
+		}
+		else _particles = _minerParticles;
 		_particles.SetSubscriber(this);
 		_tailManager.SetActive(true);
 	}
