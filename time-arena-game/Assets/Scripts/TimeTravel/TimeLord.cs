@@ -24,10 +24,6 @@ public class TimeLord: Debuggable
     // Each item stores a dictionary that maps tailIDs to their state.
     private Dictionary<int, PlayerState>[] _playerStates;
 
-    // TODO: Refactor to remove this; it's obsolete.
-    // A dictionary that maps frames to a list of tailIDs for those tails that were created on this frame.
-    private Dictionary<int, List<int>> _tailCreations;
-
 
     public TimeLord(int totalFrames)
     {
@@ -36,7 +32,6 @@ public class TimeLord: Debuggable
 
 		_playerStates = new Dictionary<int, PlayerState>[_totalFrames];
 		_realities = new RealityManager();
-        _tailCreations = new Dictionary<int, List<int>>();
     }
 
 
@@ -75,7 +70,7 @@ public class TimeLord: Debuggable
 
     // ------------ PUBLIC METHODS FOR TAIL MANAGER ------------
 
-	public Dictionary<int, PlayerState> GetTails()
+	public Dictionary<int, PlayerState> GetTailStates()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
 		if (_playerStates[frame] != null)
@@ -89,7 +84,7 @@ public class TimeLord: Debuggable
     // ------------ PUBLIC METHODS FOR THE TAIL CONTROLLER ------------
 
 	// Returns the state for the given tail at your current perceived frame.
-    public PlayerState GetState(int tailID)
+    public PlayerState GetTailState(int tailID)
     {
         int frame = _realities.GetPerceivedFrame(_myID);
         if (_playerStates[frame] != null)
@@ -113,7 +108,6 @@ public class TimeLord: Debuggable
 	public void RecordState(PlayerState ps)
 	{
 		if (TimeEnded()) return;
-
 
 		int lastTailID = _realities.GetLastTailID(ps.PlayerID);
 		List<int> frames = _realities.GetWriteFrames(ps.PlayerID);
@@ -184,14 +178,6 @@ public class TimeLord: Debuggable
 		{
 			Debug.LogError($"{e}");
 		}
-
-        // Record the frame at which this tail was created.
-        int tailID = _realities.GetNextTailID(playerID);
-        if (_tailCreations.ContainsKey(frame))
-        {
-            _tailCreations[frame].Add(tailID);
-        }
-        else _tailCreations.Add(frame, new List<int>(){tailID});
 	}
 
 	// Set the perceived frame of the given player.
@@ -200,48 +186,9 @@ public class TimeLord: Debuggable
 		_realities.SetPerceivedFrame(playerID, frame);
 	}
 
-    // TODO: adapt so it takes in a Constants.Team as parameter
-    // Returns the positions of all players (except you) as a fraction through the game time.
-	public List<float> GetPlayerPositions()
-	{
-		List<float> positions = new List<float>();
-
-		List<(int id, int frame)> players = _realities.GetPerceivedFrames();
-		foreach (var player in players)
-		{
-			if (player.id != _myID)
-			{
-				float position = (float) player.frame / (float) _totalFrames;
-				positions.Add(position);
-			}
-		}
-
-		return positions;
-	}
-
 	public bool InYourReality(int playerID)
 	{
 		return _realities.InSameFrame(playerID, _myID);
-	}
-
-    // Returns your position in time as a fraction through the game time.
-	public float GetYourPosition()
-	{
-		int frame = _realities.GetPerceivedFrame(_myID);
-		float position = (float) frame / (float) _totalFrames;
-		return position;
-	}
-
-	// Returns the fraction elapsed through the game time.
-	public float GetTimeProportion()
-	{
-		return (float) _currentFrame / (float) _totalFrames;
-	}
-
-	// Returns the elapsed time in seconds.
-	public int GetElapsedTime()
-	{
-		return _currentFrame / Constants.FrameRate;
 	}
 
     // Returns true if the given player can travel in the given direction.
@@ -262,12 +209,6 @@ public class TimeLord: Debuggable
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
 		return _realities.GetHeadsInFrame(frame);
-	}
-
-	// Returns a list of the other player's playerIDs.
-	public List<int> GetAllPlayerIDs()
-	{
-		return _realities.GetAllHeads(_myID);
 	}
 
 	// Writes a representation of _playerStates to a text file.
@@ -295,6 +236,14 @@ public class TimeLord: Debuggable
 		}
 	}
 
+	// ------------ PUBLIC METHODS ------------
+
+	public int GetCurrentFrame() { return _currentFrame; }
+
+	public int GetTotalFrames() { return _totalFrames; }
+
+	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
+
 
     // WARNING: The following functions are to be used by test framework and debugging only.
     public Dictionary<int, PlayerState>[] RevealPlayerStates(Tester tester)
@@ -306,12 +255,6 @@ public class TimeLord: Debuggable
     public RealityManager RevealRealityManager(Tester tester)
 	{
 		if (tester.Authenticate()) return _realities;
-		else throw new InvalidOperationException("Must be a Tester to call this method.");
-	}
-
-    public Dictionary<int, List<int>> RevealTailCreations(Tester tester)
-	{
-		if (tester.Authenticate()) return _tailCreations;
 		else throw new InvalidOperationException("Must be a Tester to call this method.");
 	}
 }

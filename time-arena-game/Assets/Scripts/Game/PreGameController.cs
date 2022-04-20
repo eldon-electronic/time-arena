@@ -1,21 +1,21 @@
+using System;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PreGameController : MonoBehaviour
+public class PreGameController : SceneController
 {
-    private TimeLord _timeLord;
-    private Dictionary<int, PlayerController> _players;
     private bool _isCountingTillGameStart;
     private float _secondsTillGame;
+    public static event Action<float> countDown;
 
     void Awake()
     {
-        int totalFrames = Constants.FrameRate * 60 * 2;
-        _timeLord = new TimeLord(totalFrames);
-
-        _players = new Dictionary<int, PlayerController>();
+        _miners = new Dictionary<int, PlayerController>();
+		_guardians = new Dictionary<int, PlayerController>();
+        _secondsTillGame = 5.0f;
+        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
     }
 
     void Start()
@@ -26,6 +26,11 @@ public class PreGameController : MonoBehaviour
 
     void Update()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (Input.GetKeyDown(KeyCode.F)) StartCountingDown();
+            if (Input.GetKeyDown(KeyCode.Escape)) StopCountingDown();
+        }
         if (_isCountingTillGameStart)
         {
             _secondsTillGame -= Time.deltaTime;
@@ -34,49 +39,32 @@ public class PreGameController : MonoBehaviour
                 PhotonNetwork.LoadLevel("GameScene");
                 _isCountingTillGameStart = false;
             }
+            countDown?.Invoke(_secondsTillGame);
         }
         _timeLord.Tick();
     }
 
-    public void Register(PlayerController pc)
+    void OnDisable()
     {
-        pc.SetTimeLord(_timeLord);
-
-        int id = pc.GetID();
-        _players.Add(id, pc);
+        Debug.Log("PreGame disabled");
     }
 
-    public void HideAllPlayers()
+    void OnDestroy()
     {
-        foreach (var player in _players)
-        {
-            player.Value.Hide();
-        }
+        Debug.Log("PreGame destroyed");
     }
 
-    public void ShowPlayersInReality()
-    {
-        HashSet<int> ids = _timeLord.GetPlayersInReality();
-        foreach (var id in ids)
-        {
-            if (_players.ContainsKey(id)) _players[id].Show();
-        }
-    }
-
-    public void StartCountingDown()
+    private void StartCountingDown()
     {
         if (_isCountingTillGameStart) return;
         _isCountingTillGameStart = true;
         _secondsTillGame = 5.0f;
+        countDown?.Invoke(_secondsTillGame);
     }
 
-    public void StopCountingDown()
+    private void StopCountingDown()
     {
         _isCountingTillGameStart = false;
-        _secondsTillGame = 0.0f;
+        _secondsTillGame = 5.0f;
     }
-
-    public bool IsCountingDown() { return _isCountingTillGameStart; }
-
-    public float GetSecondsTillGame() { return _secondsTillGame; }
 }
