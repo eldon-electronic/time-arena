@@ -5,21 +5,10 @@ using UnityEngine;
 
 public class CharacterAnimationController : MonoBehaviour
 {
-    [SerializeField] private Animator GuardianAnim;
-    [SerializeField] private Animator MinerAnim;
     [SerializeField] private Animator PlayerAnim;
-    [SerializeField] private GameObject _miner;
-    [SerializeField] private GameObject _guardian;
-    [SerializeField] private PlayerController _player;
     [SerializeField] private PlayerGrab _grab;
     [SerializeField] private  PhotonView _view;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetCharacter(_player.Team);
-        //AnimationKeyControl();
-    }
 
     // Update is called once per frame
     void Update()
@@ -49,24 +38,5 @@ public class CharacterAnimationController : MonoBehaviour
     }
     public void StopRunningBackwards(){
         PlayerAnim.SetBool("isRunningBackwards",false);
-    }
- 
-    public void SetCharacter(Constants.Team team){
-        if(team == Constants.Team.Guardian){
-            _guardian.SetActive(true);
-            _miner.SetActive(false);
-            SetGuardianAnimations();
-        }
-        else if(team == Constants.Team.Miner){
-            _guardian.SetActive(false);
-            _miner.SetActive(true);
-            SetMinerAnimations();
-        }
-    }
-    public void SetGuardianAnimations(){
-        PlayerAnim = GuardianAnim;
-    }
-    public void SetMinerAnimations(){
-        PlayerAnim = MinerAnim;
     }
 }

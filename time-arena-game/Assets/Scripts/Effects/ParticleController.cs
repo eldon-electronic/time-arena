@@ -20,8 +20,6 @@ public class ParticleController : MonoBehaviour
   	public Material Material;
     public Animator PlayerAnim;
     private ParticleUser _subscriber;
-    [SerializeField] private Animator GuardianAnim;
-    [SerializeField] private Animator MinerAnim;
 
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
@@ -32,11 +30,6 @@ public class ParticleController : MonoBehaviour
         Material.SetFloat("_CutoffHeight", 50.0f);
        
     }
-    void Start()
-    {
-        SetDissolveAnimations(_subscriber.GetTeam());
-    }
-  
 
 
     // ------------ HELPER FUNCTIONS ------------
@@ -130,13 +123,4 @@ public class ParticleController : MonoBehaviour
     void StopDissolvingForwardIn() { StopDissolving(Constants.JumpDirection.Forward, false); }
 
     void StartedDissolving() { _subscriber?.NotifyStartedDissolving(); }
-    
-    public void SetDissolveAnimations(Constants.Team team){
-        if(team == Constants.Team.Miner){
-            PlayerAnim = MinerAnim;
-        }
-        else if(team == Constants.Team.Guardian){
-            PlayerAnim = GuardianAnim;
-        }
-    }
 }
