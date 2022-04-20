@@ -13066,7 +13066,6 @@ GameObject:
   - component: {fileID: 7955099349307058717}
   - component: {fileID: 6458975045518551228}
   - component: {fileID: 2206506049548669404}
-  - component: {fileID: 228805100952192999}
   - component: {fileID: 3792925184382037071}
   - component: {fileID: 7995784166818512175}
   - component: {fileID: 561111332934807323}
@@ -13412,7 +13411,7 @@ MonoBehaviour:
   _camera: {fileID: 7212197885090081049}
   _UI: {fileID: 7638476624103306937}
   _view: {fileID: 5690578699466181193}
-  _particle: {fileID: 228805100952192999}
+  _particle: {fileID: 0}
   Team: 0
   ID: 0
 --- !u!114 &2206506049548669404
@@ -13430,24 +13429,6 @@ MonoBehaviour:
   _view: {fileID: 5690578699466181193}
   _nameTag: {fileID: 1234489650407111268}
   _nameText: {fileID: 3759580702855348146}
---- !u!114 &228805100952192999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6458975045518551231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FireCircle: {fileID: 9148636156920695723}
-  Splash: {fileID: 1145282697892473509}
-  Material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
-  PlayerAnim: {fileID: -146944612541216301}
-  GuardianAnim: {fileID: 5088695436559237432}
-  MinerAnim: {fileID: 4160232533976547290}
 --- !u!114 &3792925184382037071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13656,7 +13637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugPanel: {fileID: 225767600715821736}
-  _particles: {fileID: 228805100952192999}
+  _particles: {fileID: 0}
   _view: {fileID: 5690578699466181193}
   _tailManager: {fileID: 77372880126097527}
   _ppController: {fileID: 8343514786758450845}
@@ -15268,6 +15249,24 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5272793562315657840, guid: 1e917e31f78f34096a4684cff365fae0, type: 3}
   m_PrefabInstance: {fileID: 4007578917135155543}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3634956029097754539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9129216476155548455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FireCircle: {fileID: 9148636156920695723}
+  Splash: {fileID: 1145282697892473509}
+  Material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
+  PlayerAnim: {fileID: -146944612541216301}
+  GuardianAnim: {fileID: 5088695436559237432}
+  MinerAnim: {fileID: 4160232533976547290}
 --- !u!1001 &5482412469400449801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15364,3 +15363,21 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2430087975864838685, guid: cb74a8d3d4e8849d2babe40bd993eca3, type: 3}
   m_PrefabInstance: {fileID: 5482412469400449801}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7572096272091270714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5429207602823226832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FireCircle: {fileID: 9148636156920695723}
+  Splash: {fileID: 1145282697892473509}
+  Material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
+  PlayerAnim: {fileID: -146944612541216301}
+  GuardianAnim: {fileID: 5088695436559237432}
+  MinerAnim: {fileID: 4160232533976547290}
