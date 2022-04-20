@@ -277,4 +277,9 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		bool canJumpBack = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Backward);
 		return (canJumpForward, canJumpBack);
 	}
+
+	public Constants.Team GetTeam()
+	{
+		return _player.Team;
+	}
 }
