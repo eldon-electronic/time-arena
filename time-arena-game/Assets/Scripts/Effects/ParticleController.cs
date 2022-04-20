@@ -19,7 +19,7 @@ public class ParticleController : MonoBehaviour
   	public Material Material;
     public Animator PlayerAnim;
     private ParticleUser _subscriber;
-    //[SerializeField] private PlayerController _player;
+    [SerializeField] private PlayerController _player;
     [SerializeField] private Animator GuardianAnim;
     [SerializeField] private Animator MinerAnim;
 
@@ -35,7 +35,7 @@ public class ParticleController : MonoBehaviour
     void Start(){
        
 
-        //SetDissolveAnimations(_player.Team);
+        SetDissolveAnimations(_player.Team);
     }
   
 
