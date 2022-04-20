@@ -67,6 +67,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
 		else SetTimeLord();
 
+		// Make sure that this script is executed before ParticleController.
 		if (_player.Team == Constants.Team.Guardian)
 		{
 			_particles = _guardianParticles;
