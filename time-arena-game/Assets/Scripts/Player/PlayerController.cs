@@ -84,7 +84,23 @@ public class PlayerController : MonoBehaviour
 
 	// ------------ PUBLIC METHODS ------------
 
-	public void Show() { gameObject.layer = Constants.LayerPlayer; }
+	public void Show()
+	{
+		gameObject.layer = Constants.LayerPlayer;
+		if (Team == Constants.Team.Guardian)
+		{
+			_guardian.SetActive(true);
+		}
+		else _miner.SetActive(true);
+	}
 
-	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+	public void Hide()
+	{
+		gameObject.layer = Constants.LayerOutsideReality;
+		if (Team == Constants.Team.Guardian)
+		{
+			_guardian.SetActive(false);
+		}
+		else _miner.SetActive(false);
+	}
 }
