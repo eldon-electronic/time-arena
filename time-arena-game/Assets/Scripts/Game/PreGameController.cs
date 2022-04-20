@@ -41,7 +41,17 @@ public class PreGameController : SceneController
             }
             countDown?.Invoke(_secondsTillGame);
         }
-        if (_secondsTillGame > 0) _timeLord.Tick();
+        _timeLord.Tick();
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("PreGame disabled");
+    }
+
+    void OnDestroy()
+    {
+        Debug.Log("PreGame destroyed");
     }
 
     private void StartCountingDown()
