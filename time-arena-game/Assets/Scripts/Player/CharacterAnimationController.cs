@@ -12,23 +12,25 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private GameObject _guardian;
     [SerializeField] private PlayerController _player;
     [SerializeField] private PlayerGrab _grab;
-
-    void Awake() 
-    {
-        SetCharacter(_player.Team);
-    }
+    [SerializeField] private  PhotonView _view;
+    
     // Start is called before the first frame update
     void Start()
     {
+        SetCharacter(_player.Team);
         //AnimationKeyControl();
     }
 
     // Update is called once per frame
     void Update()
     {
-        AnimationKeyControl();
+        if(_view.IsMine){
+            AnimationKeyControl();
+        }
+        
     }
     public void AnimationKeyControl(){
+        
         if(Input.GetKeyDown(KeyCode.W)) StartRunningForwards();
         if(Input.GetKeyDown(KeyCode.S)) StartRunningBackwards();
         if(Input.GetKeyUp(KeyCode.W)) StopRunningForwards();

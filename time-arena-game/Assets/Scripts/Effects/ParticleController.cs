@@ -19,8 +19,9 @@ public class ParticleController : MonoBehaviour
   	public Material Material;
     public Animator PlayerAnim;
     private ParticleUser _subscriber;
-    public Animator GuardianAnim;
-    public Animator MinerAnim;
+    [SerializeField] private PlayerController _player;
+    [SerializeField] private Animator GuardianAnim;
+    [SerializeField] private Animator MinerAnim;
 
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
@@ -29,14 +30,11 @@ public class ParticleController : MonoBehaviour
     void Awake()
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
-      
+       
+    }
+    void Start(){
 
-        if(TeamSelectionManger.ChooseTeam == Constants.Team.Guardian){
-            PlayerAnim = GuardianAnim;
-        }
-        if(TeamSelectionManger.ChooseTeam == Constants.Team.Miner){
-            PlayerAnim = MinerAnim;
-        }
+        SetDissolveAnimations(_player.Team);
     }
 
 
@@ -44,6 +42,7 @@ public class ParticleController : MonoBehaviour
 
     private void SetDissolveAnimationVariable(Constants.JumpDirection jd, bool dissolveOut, bool active)
     {
+        Debug.Log(_player.Team);
         if (jd == Constants.JumpDirection.Forward && dissolveOut)
         {
             PlayerAnim.SetBool("isDissolvingForwardOut", active);
@@ -130,4 +129,13 @@ public class ParticleController : MonoBehaviour
     void StopDissolvingForwardIn() { StopDissolving(Constants.JumpDirection.Forward, false); }
 
     void StartedDissolving() { _subscriber?.NotifyStartedDissolving(); }
+    
+    void SetDissolveAnimations(Constants.Team team){
+        if(team == Constants.Team.Miner){
+            PlayerAnim = MinerAnim;
+        }
+        else if(team == Constants.Team.Guardian){
+            PlayerAnim = GuardianAnim;
+        }
+    }
 }
