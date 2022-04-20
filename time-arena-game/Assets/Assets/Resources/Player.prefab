@@ -13134,7 +13134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 0
+  ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
   Synchronization: 3
@@ -15338,37 +15338,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 187748914797672672, guid: cb74a8d3d4e8849d2babe40bd993eca3, type: 3}
   m_PrefabInstance: {fileID: 5482412469400449801}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3455796574021598410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5429207602823226832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df79ac3fc77784e73bd253a3681bd2c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerAnim: {fileID: 4160232533976547290}
-  _grab: {fileID: 6994046210970033235}
-  _view: {fileID: 5690578699466181193}
---- !u!114 &7572096272091270714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5429207602823226832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FireCircle: {fileID: 9148636156920695723}
-  Splash: {fileID: 1145282697892473509}
-  Material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
-  PlayerAnim: {fileID: 4160232533976547290}
 --- !u!114 &43764112257483668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15414,3 +15383,34 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &3455796574021598410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5429207602823226832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df79ac3fc77784e73bd253a3681bd2c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerAnim: {fileID: 4160232533976547290}
+  _grab: {fileID: 6994046210970033235}
+  _view: {fileID: 5690578699466181193}
+--- !u!114 &7572096272091270714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5429207602823226832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13bf9645568f34520a58829620048af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FireCircle: {fileID: 9148636156920695723}
+  Splash: {fileID: 1145282697892473509}
+  Material: {fileID: 2100000, guid: 61823f09d0e1344a3909b0aeff7e4ccc, type: 2}
+  PlayerAnim: {fileID: 4160232533976547290}
