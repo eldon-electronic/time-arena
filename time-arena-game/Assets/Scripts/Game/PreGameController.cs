@@ -15,14 +15,13 @@ public class PreGameController : SceneController
         _miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
         _secondsTillGame = 5.0f;
+        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
     }
 
     void Start()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Constants.FrameRate;
-
-        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
     }
 
     void Update()
@@ -42,7 +41,17 @@ public class PreGameController : SceneController
             }
             countDown?.Invoke(_secondsTillGame);
         }
-        if (_secondsTillGame > 0) _timeLord.Tick();
+        _timeLord.Tick();
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("PreGame disabled");
+    }
+
+    void OnDestroy()
+    {
+        Debug.Log("PreGame destroyed");
     }
 
     private void StartCountingDown()
