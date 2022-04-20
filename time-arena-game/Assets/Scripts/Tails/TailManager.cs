@@ -19,7 +19,7 @@ public class TailManager : MonoBehaviour
     {
         if (!_view.IsMine) Destroy(this);
         _tails = new Dictionary<int, TailController>();
-        _activated = true;
+        _activated = false;
         _particlesEnabled = true;
     }
 
@@ -39,6 +39,7 @@ public class TailManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("TailManager Start");
         _timeLord = GameObject.FindObjectOfType<PreGameController>().GetTimeLord();
     }
 
@@ -76,6 +77,8 @@ public class TailManager : MonoBehaviour
 
 
     // ------------ PUBLIC FUNCTIONS FOR TIME CONN ------------
+
+    public void SetActive(bool value) { _activated = value; }
 
     public void EnableParticles(bool value) { _particlesEnabled = value; }
 
