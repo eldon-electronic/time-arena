@@ -59,10 +59,12 @@ public class TimeConn : MonoBehaviour, ParticleUser
 
 	void Start()
 	{
+		Debug.Log("TimeConn Start");
 		_sceneController = FindObjectOfType<PreGameController>();
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
 		else SetTimeLord();
 		_particles.SetSubscriber(this);
+		_tailManager.SetActive(true);
 	}
 
 	void Update() {
