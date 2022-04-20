@@ -197,6 +197,8 @@ public class TimeLord: Debuggable
     // Returns true if the given player can travel in the given direction.
 	public bool CanJump(int playerID, Constants.JumpDirection direction)
 	{
+		if (_currentFrame >= _totalFrames - 1) return false;
+		
 		int frame = _realities.GetPerceivedFrame(playerID);
 		if (direction == Constants.JumpDirection.Backward)
 		{
