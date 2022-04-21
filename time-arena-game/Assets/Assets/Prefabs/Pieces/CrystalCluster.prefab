@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1214919120821063203}
   - component: {fileID: 6095986959690093488}
   - component: {fileID: 6095986959690093489}
-  - component: {fileID: 6020395187115064622}
+  - component: {fileID: 4640012505572869319}
+  - component: {fileID: 704664836982741704}
   m_Layer: 6
   m_Name: CrystalCluster
   m_TagString: Untagged
@@ -73,9 +74,9 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.1807857, y: 4.91636, z: 2.8881583}
-  m_Center: {x: 0.098247886, y: 2.3096573, z: -0.25735682}
---- !u!114 &6020395187115064622
+  m_Size: {x: 1.6240412, y: 3.36567, z: 1.6924464}
+  m_Center: {x: 0.08822281, y: 1.5343125, z: 0.12832499}
+--- !u!114 &4640012505572869319
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,6 +89,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyedVersion: {fileID: 3305926015824373991, guid: a39119605569b7d49b89a948647f98e1, type: 3}
+--- !u!114 &704664836982741704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8752827126464576340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71210427de825474cab80713f3c3eef0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startFrame: 1000
 --- !u!1001 &1884386501296297824
 PrefabInstance:
   m_ObjectHideFlags: 0
