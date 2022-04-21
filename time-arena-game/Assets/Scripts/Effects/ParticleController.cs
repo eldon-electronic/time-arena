@@ -9,6 +9,7 @@ public interface ParticleUser
 {
     public void NotifyStartedDissolving();
     public void NotifyStoppedDissolving(bool dissolvedOut);
+    public Constants.Team GetTeam();
 }
 
 
@@ -19,6 +20,7 @@ public class ParticleController : MonoBehaviour
   	public Material Material;
     public Animator PlayerAnim;
     private ParticleUser _subscriber;
+
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
   	private Color _white = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -26,6 +28,7 @@ public class ParticleController : MonoBehaviour
     void Awake()
     {
         Material.SetFloat("_CutoffHeight", 50.0f);
+       
     }
 
 
@@ -33,6 +36,7 @@ public class ParticleController : MonoBehaviour
 
     private void SetDissolveAnimationVariable(Constants.JumpDirection jd, bool dissolveOut, bool active)
     {
+        
         if (jd == Constants.JumpDirection.Forward && dissolveOut)
         {
             PlayerAnim.SetBool("isDissolvingForwardOut", active);

@@ -49,6 +49,7 @@ public class TimeLord: Debuggable
 			}
 			else debugItems.Add($"{f.id}'s frame", f.frame);
 		}
+		debugItems.Add("Current frame", _currentFrame);
 		return debugItems;
 	}
 
@@ -65,7 +66,7 @@ public class TimeLord: Debuggable
 		}
     }
 
-    public bool TimeEnded() { return _currentFrame >= _totalFrames; }
+    public bool TimeEnded() { return _currentFrame >= _totalFrames - 1; }
 
 
     // ------------ PUBLIC METHODS FOR TAIL MANAGER ------------
@@ -169,7 +170,7 @@ public class TimeLord: Debuggable
 		int frame = GetNearestReality(playerID);
 
         // Set your perceived frame and start recording in the new reality.
-        _realities.SetPerceivedFrame(playerID, frame);
+        SetPerceivedFrame(playerID, frame);
 		try
 		{
 			_realities.AddWriter(playerID, frame);
@@ -183,6 +184,8 @@ public class TimeLord: Debuggable
 	// Set the perceived frame of the given player.
 	public void SetPerceivedFrame(int playerID, int frame)
 	{
+		if (frame < 0) frame = 0;
+		else if (frame >= _totalFrames) frame = _totalFrames - 1;
 		_realities.SetPerceivedFrame(playerID, frame);
 	}
 
@@ -194,6 +197,8 @@ public class TimeLord: Debuggable
     // Returns true if the given player can travel in the given direction.
 	public bool CanJump(int playerID, Constants.JumpDirection direction)
 	{
+		if (_currentFrame >= _totalFrames - 1) return false;
+		
 		int frame = _realities.GetPerceivedFrame(playerID);
 		if (direction == Constants.JumpDirection.Backward)
 		{

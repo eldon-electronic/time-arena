@@ -35,7 +35,7 @@ public class HudMasterClientOptions : MonoBehaviour
 
     void Start()
     {
-        _text.text = "Press F to Start";
+        _text.text = "Press <sprite=8> to Start";
     }
 
     private void OnCountDown(float secondsTillGame)

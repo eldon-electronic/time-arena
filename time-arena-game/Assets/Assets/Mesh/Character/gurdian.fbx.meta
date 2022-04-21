@@ -23,7 +23,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -52,7 +52,7 @@ ModelImporter:
     bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
-    maxBonesPerVertex: 4
+    maxBonesPerVertex: 103
     minBoneWeight: 0.001
     meshOptimizationFlags: -1
     indexFormat: 0
@@ -77,7 +77,142 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: gurdian(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Hips
+      parentName: gurdian(Clone)
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Central_JT
+      parentName: Hips
+      position: {x: 0, y: 0.14999999, z: 0.015414993}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LeftHip
+      parentName: Central_JT
+      position: {x: -0.02, y: -0.02, z: -0.011561245}
+      rotation: {x: 0, y: 0, z: 0.6021955, w: 0.79834867}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LeftLeg 1
+      parentName: LeftHip
+      position: {x: -0.0728011, y: -3.9676596e-16, z: 0.0077074966}
+      rotation: {x: 0, y: -0, z: -0.6021955, w: 0.79834867}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LeftFoot
+      parentName: LeftLeg 1
+      position: {x: 0.27499497, y: -0.039680347, z: 0.19447872}
+      rotation: {x: 0.92491245, y: -0.0070627034, z: 0.36238182, w: -0.11474579}
+      scale: {x: -5.489432, y: -6.587317, z: -5.489431}
+    - name: LeftShoulder
+      parentName: Central_JT
+      position: {x: -0.029237468, y: 0.044177894, z: -0.018172534}
+      rotation: {x: -0.0000061712194, y: -0.00000006472595, z: -0.01048735, w: 0.99994504}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LeftElbow
+      parentName: LeftShoulder
+      position: {x: -0.04973867, y: -0.0010434686, z: 0.00007978888}
+      rotation: {x: 4.4185202e-17, y: -4.2199635e-15, z: 0.010487781, w: 0.99994504}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LeftWrist
+      parentName: LeftElbow
+      position: {x: -0.049173195, y: -7.105427e-17, z: 0.0068295347}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightHip
+      parentName: Central_JT
+      position: {x: 0.02, y: -0.02, z: -0.011561245}
+      rotation: {x: 0.6021955, y: 0.79834867, z: 8.57586e-17, w: -1.2010916e-17}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightLeg 1
+      parentName: RightHip
+      position: {x: -0.0728011, y: -2.3980816e-16, z: -0.007707496}
+      rotation: {x: 0.6021955, y: 0.79834867, z: 8.57586e-17, w: -1.2010916e-17}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightFoot
+      parentName: RightLeg 1
+      position: {x: -0.30357698, y: -0.024171516, z: 0.12654813}
+      rotation: {x: -0.11956616, y: -0.38377178, z: 0.0030636191, w: -0.9156494}
+      scale: {x: 5.489432, y: 6.5873184, z: 5.4894323}
+    - name: RightShoulder
+      parentName: Central_JT
+      position: {x: 0.028100953, y: 0.044177905, z: -0.018172534}
+      rotation: {x: 0.0000000090953485, y: 1, z: -0.00000009018273, w: -7.500538e-15}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightElbow
+      parentName: RightShoulder
+      position: {x: -0.049999997, y: -0.000000007810512, z: -0.000079788864}
+      rotation: {x: -1.0711885e-21, y: 7.5332535e-15, z: 5.041331e-21, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: RightWrist
+      parentName: RightElbow
+      position: {x: -0.04468267, y: 0, z: -0.009469399}
+      rotation: {x: -6.123234e-17, y: 1, z: 6.123234e-17, w: -6.123234e-17}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body
+      parentName: Central_JT
+      position: {x: 0, y: -0.14999999, z: -0.015414993}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GurdianMesh
+      parentName: gurdian(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LeftArmTop
+      parentName: GurdianMesh
+      position: {x: -0.073056, y: 0.19315183, z: 0.019306352}
+      rotation: {x: 0.6532815, y: 0.27059805, z: 0.6532815, w: 0.27059805}
+      scale: {x: -2, y: -2, z: -2}
+    - name: LeftForearm
+      parentName: GurdianMesh
+      position: {x: -0.121513285, y: 0.19092807, z: 0.018603299}
+      rotation: {x: 0.6532815, y: 0.27059805, z: 0.6532815, w: 0.27059805}
+      scale: {x: -1.8, y: -1.8, z: -1.8}
+    - name: LeftHand
+      parentName: GurdianMesh
+      position: {x: -0.1468614, y: 0.17682624, z: -0.08288071}
+      rotation: {x: 0.7865661, y: 0.10355339, z: 0.6035534, w: -0.07945931}
+      scale: {x: -3.6878798, y: -2.244041, z: -4.6191998}
+    - name: LeftLeg
+      parentName: GurdianMesh
+      position: {x: 0.08388007, y: 0.07584719, z: -0.0435231}
+      rotation: {x: 0.25660482, y: -0.033782665, z: 0.9576622, w: 0.12607862}
+      scale: {x: -2, y: -2, z: -2}
+    - name: RightArmTop
+      parentName: GurdianMesh
+      position: {x: 0.3543688, y: 0.19315183, z: 0.12616256}
+      rotation: {x: -0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
+      scale: {x: 2, y: 2, z: 2}
+    - name: RightForearm
+      parentName: GurdianMesh
+      position: {x: 0.5947952, y: 0.19092807, z: 0.20237407}
+      rotation: {x: -0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
+      scale: {x: 1.8, y: 1.8, z: 1.8}
+    - name: RightHand
+      parentName: GurdianMesh
+      position: {x: 1.6960403, y: -0.17973976, z: 0.54022413}
+      rotation: {x: 0.05644118, y: 0.6235253, z: -0.10903151, w: 0.7721028}
+      scale: {x: 3.6878798, y: 2.244041, z: 4.6191998}
+    - name: RightLeg
+      parentName: GurdianMesh
+      position: {x: 0.030199805, y: 0.09006662, z: -0.011795877}
+      rotation: {x: -0.12607862, y: 0.9576622, z: 0.033782665, w: 0.25660482}
+      scale: {x: 2, y: 2, z: 2}
+    - name: ikHandle1
+      parentName: gurdian(Clone)
+      position: {x: 0.12278362, y: 0.1941779, z: 0.006791647}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ikHandle2
+      parentName: gurdian(Clone)
+      position: {x: -0.12816028, y: 0.1941779, z: 0.0041517825}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -88,13 +223,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
