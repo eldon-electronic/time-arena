@@ -211,10 +211,4 @@ public class TimeSimulator: Tester
         if (tester.Authenticate()) return _timeLord.RevealRealityManager(this);
         else throw new InvalidOperationException("Must be a Tester to call this method.");
     }
-
-    public Dictionary<int, List<int>> RevealTailCreations(Tester tester)
-    {
-        if (tester.Authenticate()) return _timeLord.RevealTailCreations(this);
-        else throw new InvalidOperationException("Must be a Tester to call this method.");
-    }
 }

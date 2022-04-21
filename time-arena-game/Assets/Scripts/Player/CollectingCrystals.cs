@@ -5,13 +5,33 @@ using Photon.Pun;
 
 public class CollectingCrystals : MonoBehaviour
 {
-  [SerializeField] private PlayerController _player;
+    [SerializeField] private PlayerController _player;
+    private SceneController _sceneController;
     private GameController _game;
 
+    public void Awake()
+    {
+        if (_player.Team == Constants.Team.Guardian) Destroy(this);
+    }
+
+    public void OnEnable()
+    {
+        GameController.gameActive += SetGame;
+    }
+
+    public void OnDisable()
+    {
+        GameController.gameActive -= SetGame;
+    }
+
+    public void Start()
+    {
+        _sceneController = FindObjectOfType<PreGameController>();
+    }
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Collectable" && _player.Team == Constants.Team.Miner)
+        if (col.gameObject.tag == "Collectable")
         {
           PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
           PhotonView viewOfPlayer = gameObject.GetComponent<PhotonView>();
@@ -22,5 +42,5 @@ public class CollectingCrystals : MonoBehaviour
         }
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    private void SetGame(GameController game) { _sceneController = game; }
 }

@@ -7,7 +7,6 @@ public class SpawnPlayers : MonoBehaviour
 {
     public GameObject playerPrefab;
 	public Vector3[] spawningPoint;
-    private TimeLord _timeLord;
 
     void Awake()
     {
@@ -24,7 +23,7 @@ public class SpawnPlayers : MonoBehaviour
     void Start()
     {
         // Spawn a new player into the scene.
-        int n = (int)((spawningPoint.Length) * Random.value);
+        int n = (int) (spawningPoint.Length * Random.value);
         PhotonNetwork.Instantiate(playerPrefab.name, spawningPoint[0], Quaternion.identity);
     }
 }
