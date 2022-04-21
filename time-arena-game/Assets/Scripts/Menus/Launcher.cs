@@ -13,7 +13,7 @@ using UnityEngine.UI;
 */
 
 // PunCallbacks gives us access to callbacks for joining lobbys, room creation, errors etc.
-public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
+public class Launcher : MonoBehaviourPunCallbacks {
 
 	public static Launcher Instance;
 	[SerializeField] private TMP_InputField _roomNameInput;
@@ -25,20 +25,11 @@ public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
 	[SerializeField] private GameObject _playerListItemPrefab;
 	[SerializeField] private TMP_Text _creationFailedText;
 	[SerializeField] private Button _startButton;
+	[SerializeField] private Image _startButtonMask;
 	[SerializeField] private TMP_Text _usernameErrorText;
 	[SerializeField] private Sprite[] _teamIcons;
 	private PhotonView _view;
 	private Dictionary<string, string> _currentPlayerIcons = new Dictionary<string, string>();
-
-	void OnEnable() 
-	{
-		PhotonNetwork.AddCallbackTarget(this);
-	}
-
-	void OnDisable()
-	{
-		PhotonNetwork.RemoveCallbackTarget(this);
-	}
 
 	void Awake()
 	{
@@ -52,6 +43,12 @@ public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
 			Debug.Log("Connecting to Master");
 			PhotonNetwork.ConnectUsingSettings();
 		}
+	}
+
+	void Update() 
+	{
+		_startButton.interactable = AllPlayersHaveTeams(_playerListContainer);
+		_startButton.gameObject.GetComponent<StartButtonController>().isActive = AllPlayersHaveTeams(_playerListContainer);
 	}
 
 	// --------------- Callbacks ---------------
@@ -73,6 +70,7 @@ public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
 
 		UpdatePlayerList();
 
+		_startButton.interactable = AllPlayersHaveTeams(_playerListContainer);
 		_startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
     }
 
@@ -84,7 +82,7 @@ public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
 	public override void OnPlayerEnteredRoom(Player newPlayer) { 
 		Instantiate(_playerListItemPrefab, _playerListContainer)
 			.GetComponent<PlayerListItem>()
-			.SetUp(newPlayer, PhotonNetwork.IsMasterClient);
+			.SetUp(newPlayer, PhotonNetwork.IsMasterClient, _teamIcons);
 	}
 
 	public override void OnPlayerLeftRoom(Player oldPlayer) {
@@ -199,29 +197,47 @@ public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
 		}
 	}
 
-	public void OnEvent(EventData photonEvent) {
-		
+	[PunRPC] void RPC_getIcons() {
+		_currentPlayerIcons.Clear();
+
+		foreach (Transform playerListTransform in _playerListContainer) {
+			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
+			_currentPlayerIcons.Add(playerListItem.username, playerListItem.teamImage.sprite.name);
+			Debug.Log($"Added {playerListItem.username}, {playerListItem.teamImage.sprite.name} to dict");
+		}
+
+		// If you're the first to enter the room there are no PlayerListItems in the container,
+		// then simply add yourself and specify no icon.
+		if (_currentPlayerIcons.Count == 0) {
+			Player[] players = PhotonNetwork.PlayerList;
+			_currentPlayerIcons.Add(players[0].NickName, "no_team_icon");
+		}
+
+		_view.RPC("RPC_instantiatePlayers", RpcTarget.All, _currentPlayerIcons);
 	}
 
-	// --------------- Private functions ---------------
-
-	private void UpdatePlayerList() {
+	[PunRPC] void RPC_instantiatePlayers(Dictionary<string, string> playerIcons) {
 		Player[] players = PhotonNetwork.PlayerList;
-
 		foreach (Transform playerListItem in _playerListContainer) {
-			Debug.Log("Destroying " + playerListItem);
 			Destroy(playerListItem.gameObject);
 		}
 
 		for (int i = 0; i < players.Length; i++) {
 			Instantiate(_playerListItemPrefab, _playerListContainer)
 				.GetComponent<PlayerListItem>()
-				.SetUp(players[i], PhotonNetwork.IsMasterClient);
+				.SetUp(players[i], PhotonNetwork.IsMasterClient, _teamIcons, playerIcons[players[i].NickName]);
+		}
+	}
+
+	// --------------- Private functions ---------------
+
+	private void UpdatePlayerList() {
+		foreach (Transform playerListItem in _playerListContainer) {
+			Destroy(playerListItem.gameObject);
 		}
 
-		foreach (KeyValuePair<string, string> iconData in _currentPlayerIcons) {
-			Debug.Log($"{iconData.Key}: {iconData.Value}");
-		}
+		// Get icons from master and send out updates to all players
+		_view.RPC("RPC_getIcons", RpcTarget.MasterClient);
 	}
 
 	private void UpdateMaster(bool isMasterClient) {
@@ -254,5 +270,13 @@ public class Launcher : MonoBehaviourPunCallbacks, IOnEventCallback {
 
 	private void disableCreationErrorText() {
 		_creationFailedText.gameObject.SetActive(false);
+	}
+
+	private bool AllPlayersHaveTeams(Transform playerListContainer) {
+		int playersWithoutTeam = 0;
+		foreach (Transform playerItemTransform in playerListContainer) {
+			PlayerListItem playerListItem = playerItemTransform.gameObject.GetComponent<PlayerListItem>();
+			if (playerListItem.teamImage.sprite.name == "no_team_icon") playersWithoutTeam++;
+		} return playersWithoutTeam == 0;
 	}
 }

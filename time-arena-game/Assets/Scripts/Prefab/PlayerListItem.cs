@@ -20,11 +20,16 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
 
     public string username;
 
-    public void SetUp(Player player, bool isMasterClient) { 
+    public void SetUp(Player player, bool isMasterClient,  Sprite[] allIcons, string iconName="no_team_icon") { 
         _displayingTeamSelector = false;
         _player = player;
         _playerName.text = player.NickName;
         username = player.NickName;
+        
+        foreach (Sprite icon in allIcons) {
+            if (iconName == icon.name) teamImage.sprite = icon;
+        }
+
         _chooseTeamButton.gameObject.SetActive(isMasterClient);
     }
 
