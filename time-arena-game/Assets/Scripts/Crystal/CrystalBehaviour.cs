@@ -71,11 +71,7 @@ public class CrystalBehaviour : MonoBehaviour
     void RPC_Collect(int viewID){
       existanceRange = new Vector2(-1f, -1f);
       isCollected = true;
-      PhotonView viewOfCollector = PhotonView.Find(viewID);
-      if(viewOfCollector == null){Debug.Log("! cant find playerview from id");}
-      /*PlayerController pcOfCollector = viewOfCollector.gameObject.GetComponent<PlayerController>();
-      if(pcOfCollector == null){Debug.Log("! cant find player controller");}
-      pcOfCollector.IncrementMinerScore();*/
+      sceneController.IncrementMinerScore();
       if(PhotonNetwork.IsMasterClient){
         cm.StartCoroutine(cm.Respawn(ID));
       }
