@@ -13,9 +13,9 @@ public class CharacterAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_view.IsMine){
-            AnimationKeyControl();
-        }
+        if(!_view.IsMine) return;
+        AnimationKeyControl();
+        
         
     }
     public void AnimationKeyControl(){
