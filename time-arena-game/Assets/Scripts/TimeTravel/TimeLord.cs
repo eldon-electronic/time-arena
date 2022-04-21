@@ -13,7 +13,7 @@ public interface Tester
 
 public class TimeLord: Debuggable
 {
-    private int _totalFrames;
+    public int _totalFrames;
 	private int _currentFrame;
     private int _myID;
 
@@ -246,6 +246,8 @@ public class TimeLord: Debuggable
 	public int GetCurrentFrame() { return _currentFrame; }
 
 	public int GetTotalFrames() { return _totalFrames; }
+
+	public int GetMyPercievedFrame() { return _realities.GetPerceivedFrame(_myID); }
 
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
