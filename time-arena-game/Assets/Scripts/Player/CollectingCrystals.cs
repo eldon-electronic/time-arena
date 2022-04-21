@@ -7,11 +7,10 @@ public class CollectingCrystals : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
     private SceneController _sceneController;
-    private GameController _game;
 
     public void Awake()
     {
-        if (_player.Team == Constants.Team.Guardian) Destroy(this);
+        //if (_player.Team == Constants.Team.Guardian) Destroy(this);
     }
 
     public void OnEnable()
@@ -26,7 +25,7 @@ public class CollectingCrystals : MonoBehaviour
 
     public void Start()
     {
-        _sceneController = FindObjectOfType<PreGameController>();
+      _sceneController = FindObjectOfType<PreGameController>();
     }
 
     public void OnTriggerEnter(Collider col)
@@ -35,7 +34,7 @@ public class CollectingCrystals : MonoBehaviour
         {
           PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
           PhotonView viewOfPlayer = gameObject.GetComponent<PhotonView>();
-            if(viewOfCrystal.IsMine && _game != null) {
+            if(viewOfCrystal.IsMine && _sceneController != null) {
               viewOfCrystal.RPC("RPC_Collect", RpcTarget.All, viewOfPlayer.ViewID);
               //col.gameObject.GetComponent<CrystalBehaviour>().Collect();
             }

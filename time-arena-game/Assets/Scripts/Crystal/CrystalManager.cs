@@ -38,7 +38,8 @@ public class CrystalManager : MonoBehaviour
     {
       //check if player should be able to see crystals
       foreach(CrystalBehaviour crystal in crystals){
-        float percievedTime = (game._timeLord.GetYourPosition()*game._timeLord._totalFrames) / Constants.FrameRate;
+        TimeLord t = game.GetTimeLord();
+        float percievedTime = (float)(t.GetMyPercievedFrame()) / Constants.FrameRate;
         if(percievedTime >= crystal.existanceRange[0] && percievedTime <= crystal.existanceRange[1]){
           crystal.UpdateAnim();
           crystal.gameObject.SetActive(true);
@@ -48,12 +49,14 @@ public class CrystalManager : MonoBehaviour
           crystal.gameObject.layer = 9;
         }
       }
+
     }
 
     //enumerator coroutine to be called when crystal is collected - waits x seconds before respawning crystal at random time
     public IEnumerator Respawn(int id){
       float spawnDelay = 5.0f;
-      float newExistance = Random.Range(0.0f, (game._timeLord.GetTimeProportion()*game._timeLord._totalFrames)/Constants.FrameRate);
+      TimeLord t = game.GetTimeLord();
+      float newExistance = Random.Range(0.0f, (t.GetCurrentFrame())/Constants.FrameRate);
       Vector2 newExistanceRange = new Vector2(newExistance, newExistance + 10f );
 
       yield return new WaitForSeconds(spawnDelay);

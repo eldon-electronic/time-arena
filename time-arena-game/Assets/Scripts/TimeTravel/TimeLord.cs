@@ -242,6 +242,8 @@ public class TimeLord: Debuggable
 
 	public int GetTotalFrames() { return _totalFrames; }
 
+	public int GetMyPercievedFrame() { return _realities.GetPerceivedFrame(_myID); }
+
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
 
