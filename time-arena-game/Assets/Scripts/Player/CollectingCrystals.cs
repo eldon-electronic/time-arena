@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CollectingCrystals : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class CollectingCrystals : MonoBehaviour
 
     public void Awake()
     {
-        if (_player.Team == Constants.Team.Guardian) Destroy(this);
+        //if (_player.Team == Constants.Team.Guardian) Destroy(this);
     }
 
     public void OnEnable()
@@ -24,15 +25,19 @@ public class CollectingCrystals : MonoBehaviour
 
     public void Start()
     {
-        _sceneController = FindObjectOfType<PreGameController>();
+      _sceneController = FindObjectOfType<PreGameController>();
     }
 
     public void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "Collectable")
         {
-            _sceneController?.IncrementMinerScore();
-            Destroy(col.gameObject);
+          PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
+          PhotonView viewOfPlayer = gameObject.GetComponent<PhotonView>();
+            if(viewOfCrystal.IsMine && _sceneController != null) {
+              viewOfCrystal.RPC("RPC_Collect", RpcTarget.All, viewOfPlayer.ViewID);
+              //col.gameObject.GetComponent<CrystalBehaviour>().Collect();
+            }
         }
     }
 

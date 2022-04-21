@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class HudScore : MonoBehaviour
 {
     [SerializeField] private GameObject _container;
-    [SerializeField] private Text _text;
+    [SerializeField] private Text _playerText;
+    [SerializeField] private Text _teamText;
 
     void OnEnable()
     {
@@ -25,5 +26,5 @@ public class HudScore : MonoBehaviour
 
     private void GameActive(GameController game) { _container.SetActive(true); }
 
-    private void SetScore(int score) { _text.text = score + ""; }
+    private void SetScore(int pScore, int tScore) { _playerText.text = pScore + ""; _teamText.text = tScore + ""; }
 }
