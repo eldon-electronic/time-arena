@@ -249,6 +249,8 @@ public class TimeLord: Debuggable
 
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
+	public int GetYourFrame() { return _realities.GetPerceivedFrame(_myID); }
+
 
     // WARNING: The following functions are to be used by test framework and debugging only.
     public Dictionary<int, PlayerState>[] RevealPlayerStates(Tester tester)
