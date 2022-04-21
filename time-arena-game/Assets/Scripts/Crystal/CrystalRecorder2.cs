@@ -18,7 +18,9 @@ public class CrystalRecorder2 : MonoBehaviour
     void Update()
     {
         shardtransform = this.transform;
-        string line = shardtransform.localPosition.ToString() + " " + shardtransform.localRotation.ToString();
+        StringBuilder sb = new StringBuilder();
+        sb.Append(shardtransform.localPosition.x).Append(" ").Append(shardtransform.localPosition.y).Append(" ").Append(shardtransform.localPosition.z).Append("|").Append(shardtransform.rotation.w).Append(" ").Append(shardtransform.rotation.x).Append(" ").Append(shardtransform.rotation.y).Append(" ").Append(shardtransform.rotation.z);
+        string line = sb.ToString();
         file.WriteLine(line);
     }
 }
