@@ -37,14 +37,15 @@ public class CrystalManager : MonoBehaviour
     void Update()
     {
       //check if player should be able to see crystals
-      //TODO::> set crystal layers???
       foreach(CrystalBehaviour crystal in crystals){
         float percievedTime = (game._timeLord.GetYourPosition()*game._timeLord._totalFrames) / Constants.FrameRate;
         if(percievedTime >= crystal.existanceRange[0] && percievedTime <= crystal.existanceRange[1]){
           crystal.UpdateAnim();
-          crystal.gameObject.SetActive(true);//set layers here
+          crystal.gameObject.SetActive(true);
+          crystal.gameObject.layer = 3;
         } else {
-          crystal.gameObject.SetActive(false);//set layers here
+          crystal.gameObject.SetActive(false);
+          crystal.gameObject.layer = 9;
         }
       }
     }
