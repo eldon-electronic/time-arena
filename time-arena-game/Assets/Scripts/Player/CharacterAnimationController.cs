@@ -27,7 +27,16 @@ public class CharacterAnimationController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.S)) StartRunningBackwards();
         if(Input.GetKeyUp(KeyCode.W)) StopRunningForwards();
         if(Input.GetKeyUp(KeyCode.S)) StopRunningBackwards();
-        if(Input.GetKeyDown(KeyCode.Space)) PlayerAnim.Play("Jumping");
+        if(Input.GetKeyDown(KeyCode.Space)){
+            //PlayerAnim.Play("Jumping");
+            StartJumping();
+            Debug.Log("isJumping");
+        }
+        if(Input.GetKeyUp(KeyCode.Space)){
+            //PlayerAnim.Play("Jumping");
+            StopJumping();
+            //Debug.Log("isJumping");
+        }
         if(Input.GetMouseButtonDown(0)) _grab.Grab();
     }
     public void StartRunningForwards(){
@@ -41,5 +50,11 @@ public class CharacterAnimationController : MonoBehaviour
     }
     public void StopRunningBackwards(){
         PlayerAnim.SetBool("isRunningBackwards",false);
+    }
+    public void StartJumping(){
+        PlayerAnim.SetBool("isJumping",true);
+    }
+    public void StopJumping(){
+        PlayerAnim.SetBool("isJumping",false);
     }
 }
