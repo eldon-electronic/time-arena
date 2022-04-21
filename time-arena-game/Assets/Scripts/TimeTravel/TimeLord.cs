@@ -63,8 +63,11 @@ public class TimeLord: Debuggable
     // Increments game time as well as the individual time for all player realities.
     public void Tick()
     {
-        _currentFrame++;
-        _realities.Tick();
+		if (!TimeEnded())
+		{
+			_currentFrame++;
+			_realities.Tick();
+		}
     }
 
     public bool TimeEnded() { return _currentFrame >= _totalFrames; }
@@ -109,6 +112,9 @@ public class TimeLord: Debuggable
     // Records the given state in all realities this player exists in.
 	public void RecordState(PlayerState ps)
 	{
+		if (TimeEnded()) return;
+
+
 		int lastTailID = _realities.GetLastTailID(ps.PlayerID);
 		List<int> frames = _realities.GetWriteFrames(ps.PlayerID);
 		for (int i=0; i < frames.Count; i++)
