@@ -57,11 +57,7 @@ public class CrystalBehaviour : MonoBehaviour
       if(size > animLength){
         setScale(1.0f);
       } else {
-        float scale = size/animLength;
-        if(scale >= 1.0001f){
-          scale = 0;
-        }
-        setScale(scale);
+        setScale(size/animLength);
       }
     }
 
@@ -76,7 +72,12 @@ public class CrystalBehaviour : MonoBehaviour
     void RPC_Collect(int viewID){
       existanceRange = new Vector2(-1f, -1f);
       isCollected = true;
-      sceneController.IncrementMinerScore();
+      PhotonView viewOfCollector = PhotonView.Find(viewID);
+      if(viewOfCollector.IsMine){
+        sceneController.IncrementPlayerScore();
+      } else {
+        sceneController.IncrementMinerScore();
+      }
       if(PhotonNetwork.IsMasterClient){
         cm.StartCoroutine(cm.Respawn(ID));
       }
