@@ -6,15 +6,18 @@ using System.IO;
 public class CrystalController : MonoBehaviour
 {
     private List<(Vector3, Quaternion)> _positions;
-
     private TimeLord _timeLord;
-
-    private int startFrame;
+    private int _startFrame;
+    private int _animationLength;
+    private Vector3 _startPosition;
+    private Quaternion _startRotation;
+    private Vector3 _endPosition;
+    private Quaternion _endRotation;
 
     void Awake()
     {
         //get the number of the frame that the animation should start at from the parent prefab. 
-        startFrame = transform.parent.gameObject.GetComponent<CrystalParent>().startFrame;
+        _startFrame = transform.parent.gameObject.GetComponent<CrystalParent>().startFrame;
         _positions = new List<(Vector3, Quaternion)>();
         foreach (string line in System.IO.File.ReadLines(gameObject.name + ".txt"))
         {   
@@ -30,10 +33,14 @@ public class CrystalController : MonoBehaviour
                 throw new System.FormatException("component count mismatch. Expected 3 components but got " + rotationString.Length);
             }
             Vector3 localPosition = new Vector3(float.Parse(localPositionString[0]), float.Parse(localPositionString[1]), float.Parse(localPositionString[2]));
-            Quaternion rotation = new Quaternion(float.Parse(rotationString[0]), float.Parse(rotationString[1]), float.Parse(rotationString[2]), float.Parse(rotationString[3])); 
+            Quaternion rotation = new Quaternion(float.Parse(rotationString[1]), float.Parse(rotationString[2]), float.Parse(rotationString[3]), float.Parse(rotationString[0])); 
             _positions.Add((localPosition, rotation));
         }  
-        
+        _startPosition = _positions[0].Item1;
+        _startRotation = _positions[0].Item2;
+        _endPosition = _positions[_positions.Count - 1].Item1;
+        _endRotation = _positions[_positions.Count - 1].Item2;
+        _animationLength = _positions.Count;
     }
 
     void OnEnable()
@@ -58,10 +65,25 @@ public class CrystalController : MonoBehaviour
 
     void Update()
     {
-        int frame = _timeLord.getYourFrame();
-        if(frame <= startFrame)
+        int frame = _timeLord.GetYourFrame();
+        // If the current frame being rendered is before the start of the 
+        // animation, then set the local position to default.
+        if (frame <= _startFrame)
         {
-            transform.localPosition = _positions[0];
+            transform.localPosition = _startPosition;
+            transform.rotation = _startRotation;
+        }
+        // Else if your current frame is after the animation has ended, then 
+        // set local postion of shard to the final position of the animation. 
+        else if (frame >= (_startFrame + _animationLength))
+        {
+            transform.localPosition = _endPosition;
+            transform.rotation = _endRotation;
+        }
+        else
+        {
+            transform.localPosition = _positions[frame].Item1;
+            transform.rotation = _positions[frame].Item2;
         }
     }
 }
