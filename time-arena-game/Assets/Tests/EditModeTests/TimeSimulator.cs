@@ -145,7 +145,7 @@ public class TimeSimulator: Tester
                 }
 
 
-                // 2 PlayerController:Update() -> KeyControl()
+                // 2 TimeConn:Update() -> KeyControl()
 
                 // Pressed jump key down on this frame.
                 if (_players[id].Jumps.Count > 0)
@@ -167,7 +167,7 @@ public class TimeSimulator: Tester
                 }
 
 
-                // 3. PlayerController:Update()
+                // 3. TimeConn:Update()
 
                 // Record state.
                 PlayerState ps = new PlayerState(
@@ -188,7 +188,7 @@ public class TimeSimulator: Tester
                 if (_players[id].DissolveInTimer > -1) _players[id].DissolveInTimer--;
             }
 
-            // 4. GameController:Update()
+            // 4. SceneController:Update()
             // Beware that this may happen before PlayerController:Update().
             // I don't believe this will be a problem until the final frame of the game.
             _timeLord.Tick();
