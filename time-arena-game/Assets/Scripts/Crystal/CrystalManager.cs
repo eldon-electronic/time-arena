@@ -27,9 +27,11 @@ public class CrystalManager : MonoBehaviour
         spawnPoints[i++] = child;
       }
 
-      //instantiate crystals (they will populate the crystals list themselves)
-      foreach(Transform spawnPoint in spawnPoints){
-        PhotonNetwork.Instantiate(crystalPrefab.name, spawnPoint.position, Quaternion.identity);
+      if(PhotonNetwork.IsMasterClient){
+        //instantiate crystals (they will populate the crystals list themselves)
+        foreach(Transform spawnPoint in spawnPoints){
+          PhotonNetwork.Instantiate(crystalPrefab.name, spawnPoint.position, Quaternion.identity);
+        }
       }
     }
 
@@ -41,9 +43,12 @@ public class CrystalManager : MonoBehaviour
         TimeLord t = game.GetTimeLord();
         float percievedTime = (float)(t.GetMyPercievedFrame()) / Constants.FrameRate;
         if(percievedTime >= crystal.existanceRange[0] && percievedTime <= crystal.existanceRange[1]){
-          crystal.UpdateAnim();
-          crystal.gameObject.SetActive(true);
-          crystal.gameObject.layer = 3;
+          if(!crystal.gameObject.activeSelf){
+            crystal.UpdateAnim();
+            crystal.t = 0;
+            crystal.gameObject.SetActive(true);
+            crystal.gameObject.layer = 3;
+          }
         } else {
           crystal.gameObject.SetActive(false);
           crystal.gameObject.layer = 9;

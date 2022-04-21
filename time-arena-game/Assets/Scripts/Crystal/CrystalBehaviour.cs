@@ -9,7 +9,7 @@ public class CrystalBehaviour : MonoBehaviour
     //attributes relating to anim/aesthetics
     public Material overlay;
     public float initial_wave = 0;
-    private float t = 0;
+    public float t = 0;
 
     //attributes for crystalmanager access
     private CrystalManager cm;
@@ -53,10 +53,15 @@ public class CrystalBehaviour : MonoBehaviour
       float percievedTime = (float)(timelord.GetMyPercievedFrame()) / Constants.FrameRate;
       float closestBorderOFExistance = Min(Abs(percievedTime - existanceRange[0]), Abs(percievedTime - existanceRange[1]));
       float animLength = 2.0f;
-      if(closestBorderOFExistance > animLength){
+      float size = Min(closestBorderOFExistance, t);
+      if(size > animLength){
         setScale(1.0f);
       } else {
-        setScale(closestBorderOFExistance/animLength);
+        float scale = size/animLength;
+        if(scale >= 1.0001f){
+          scale = 0;
+        }
+        setScale(scale);
       }
     }
 
