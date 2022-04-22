@@ -4,12 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Photon.Realtime;
 
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
+	private string _userID;
+	private Dictionary<int, string> _viewIDtoUserID;
+	private Dictionary<string, string> _iconAssignments;
+
 	public Constants.Team Team;
 	public int ID;
 
@@ -18,11 +23,18 @@ public class PlayerController : MonoBehaviour
 
 	void Awake()
 	{
+		_viewIDtoUserID = new Dictionary<int, string>();
+		_iconAssignments = new Dictionary<string, string>();
 		ID = _view.ViewID;
-
-		// TODO: Set the team in the menu before loading the pregame scene.
-		if (ID == 1001) Team = Constants.Team.Guardian;
-		else Team = Constants.Team.Miner;
+		
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (var player in players) {
+			string playerRealtimeID = player.GetComponent<PhotonView>().Owner.UserId;
+			PhotonView playerView = player.GetComponent<PhotonView>();
+			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
+		}
+		_userID = _viewIDtoUserID[ID];
+		_view.RPC("RPC_getIcons", RpcTarget.MasterClient);
 	}
 
 	void OnEnable() { GameController.gameActive += OnGameActive; }
@@ -68,4 +80,38 @@ public class PlayerController : MonoBehaviour
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+
+	public string GetIconName() { return _iconAssignments[_viewIDtoUserID[ID]]; }
+
+	// ------------ RPC ------------
+
+	[PunRPC] void RPC_getIcons() {
+		_iconAssignments.Clear();
+		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
+			_iconAssignments.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
+		}
+
+		foreach (Player player in PhotonNetwork.PlayerList) {
+			if (player.UserId != _userID) {
+				_view.RPC("RPC_sendIcons", player, _iconAssignments);
+			}
+		}
+		// _view.RPC("RPC_sendIcons", RpcTarget.All, _iconAssignments);
+	}
+
+	[PunRPC] void RPC_sendIcons(Dictionary<string, string> iconAssignments) {
+		_iconAssignments = iconAssignments;
+		string userID = _viewIDtoUserID[ID];
+		string iconAssignment = _iconAssignments[userID];
+		Debug.Log("NUM OF ICONS: " + _iconAssignments.Count.ToString());
+		foreach (var icon in _iconAssignments) {
+			Debug.Log($"{icon.Key} {icon.Value}");
+		}
+
+		// e.g. "miner_icon_red" returns "miner"
+		string teamName = iconAssignment.Split('_')[0]; 
+		if (teamName == "miner") Team = Constants.Team.Miner;
+		else if (teamName == "guardian") Team = Constants.Team.Guardian;
+	}
+
 }

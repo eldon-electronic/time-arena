@@ -22,15 +22,6 @@ public class HudTimeline : MonoBehaviour
     void Awake()
     {
         _players = new Dictionary<int, Slider>();
-        _viewIDtoUserID = new Dictionary<int, string>();
-        _iconAssignment = new Dictionary<string, string>();
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (var player in players) {
-            string userID = player.GetComponent<PhotonView>().Owner.UserId;
-            PhotonView playerView = player.GetComponent<PhotonView>();
-            _viewIDtoUserID.Add(playerView.ViewID, userID);
-        }
-        _view.RPC("RPC_getIcons", RpcTarget.MasterClient);
     }
 
     void OnEnable()
@@ -62,7 +53,7 @@ public class HudTimeline : MonoBehaviour
             icon.Value.gameObject.SetActive(false);
         }
         
-        //SetIconPositions();
+        SetIconPositions();
     }
 
 
@@ -97,9 +88,7 @@ public class HudTimeline : MonoBehaviour
     {
         try
         {
-            string userID = _viewIDtoUserID[playerID];
-            string iconName = _iconAssignment[userID];
-            Slider icon = InstantiateIcon(iconName);
+            Slider icon = InstantiateIcon(_sceneController.GetIcon());
             _players.Add(playerID, icon);
             return true;
         }
