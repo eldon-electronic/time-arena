@@ -25,7 +25,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
 	[SerializeField] private PPController _ppController;
-	[SerializeField] private DisController _disController;
+	[SerializeField] private DisController _disMinerController;
+	[SerializeField] private DisController _disGuardianController;
 
 	private ParticleController _particles;
 	private SceneController _sceneController;
@@ -252,8 +253,11 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
-			Debug.Log($"RPC jump out called on {_view.ViewID}");
-			_disController?.TriggerDissolve(direction,true);
+			if (_player.Team == Constants.Team.Miner)
+			{
+				_disMinerController?.TriggerDissolve(_jumpDirection, true);
+			}
+			else _disGuardianController?.TriggerDissolve(_jumpDirection, true);
 		}
 	}
 
@@ -272,8 +276,11 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		}
 		else if (_timelord.InYourReality(_view.ViewID))
 		{
-			Debug.Log($"RPC jump in called on {_view.ViewID}");
-			_disController?.TriggerDissolve(_jumpDirection,false);
+			if (_player.Team == Constants.Team.Miner)
+			{
+				_disMinerController?.TriggerDissolve(_jumpDirection, false);
+			}
+			else _disGuardianController?.TriggerDissolve(_jumpDirection, false);
 		}
 	}
 
