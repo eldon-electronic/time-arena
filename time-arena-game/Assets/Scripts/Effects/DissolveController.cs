@@ -126,9 +126,9 @@ public class DissolveController : DisController
                 time += Time.deltaTime;
                 yield return null;
             }
-            //if (_fadeIn) modifier = _inCurve.keys[_inCurve.length-1].value;
-            //else modifier = _outCurve.keys[_outCurve.length-1].value;
-            //_guardianBody.SetFloat("_CutoffHeight", modifier);
+            if (_fadeIn) modifier = _inCurve.keys[_inCurve.length-1].value;
+            else modifier = _outCurve.keys[_outCurve.length-1].value;
+            _guardianBody.SetFloat("_CutoffHeight", modifier);
         }
         else if(Character == Constants.Team.Miner){
             while (time < duration){
@@ -149,7 +149,7 @@ public class DissolveController : DisController
                 time += Time.deltaTime;
                 yield return null;
             }
-            /*if (_fadeIn) modifier = _inCurve.keys[_inCurve.length-1].value;
+            if (_fadeIn) modifier = _inCurve.keys[_inCurve.length-1].value;
             else modifier = _outCurve.keys[_outCurve.length-1].value;
              _minerMetal.SetFloat("_CutoffHeight", modifier);
             _minerAbdomen.SetFloat("_CutoffHeight", modifier);
@@ -162,7 +162,7 @@ public class DissolveController : DisController
             _deviceButtonBackward.SetFloat("_CutoffHeight", modifier);
             _deviceButtonForward.SetFloat("_CutoffHeight", modifier);
             _deviceCompass.SetFloat("_CutoffHeight", modifier);
-            _deviceNeedle.SetFloat("_CutoffHeight", modifier);*/
+            _deviceNeedle.SetFloat("_CutoffHeight", modifier);
 
         }
         if (_queued)
