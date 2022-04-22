@@ -39,7 +39,7 @@ public class DissolveController : DisController
 
     void Awake()
     {
-        if (!_view.IsMine) Destroy(this);
+        if (_view.IsMine) Destroy(this);
     }
 
 
