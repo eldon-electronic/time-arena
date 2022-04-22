@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //assaign to a directional light
 public class SunAngle : MonoBehaviour
@@ -13,15 +14,12 @@ public class SunAngle : MonoBehaviour
     private float _sunDif;
 
     void Start()
-    {
-        try {
+    {   
+        if (SceneManager.GetActiveScene().name == "PreGameScene")
+        {
             _timeLord = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTimeLord();
         }
-        catch (Exception e) {}
-        try {
-            _timeLord = FindObjectOfType<GameController>().GetComponent<GameController>().GetTimeLord();
-        }
-        catch (Exception e) {}
+        else _timeLord = FindObjectOfType<GameController>().GetComponent<GameController>().GetTimeLord();
         _sunDif = _sunMax - _sunMin;
     }
 
