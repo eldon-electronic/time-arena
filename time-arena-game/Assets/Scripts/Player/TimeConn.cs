@@ -176,7 +176,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
 					_tailManager.EnableParticles(false);
 					_ppController?.TriggerPP(direction, jumpOut);
-					_disController?.TriggerDissolve(direction,jumpOut);
+					
 				}
 			}
 			else if (_isJumping)
@@ -185,7 +185,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
 				_tailManager.EnableParticles(true);
 				_ppController?.TriggerPP(direction, jumpOut);
-				_disController?.TriggerDissolve(direction,jumpOut);
+				
 			}
 		}
 	}
@@ -252,7 +252,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
-			_particles.StartDissolving(_jumpDirection, true);
+			
+			_disController?.TriggerDissolve(direction,true);
 		}
 	}
 
@@ -271,7 +272,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		}
 		else if (_timelord.InYourReality(_view.ViewID))
 		{
-			_particles.StartDissolving(_jumpDirection, false);
+			
+			_disController?.TriggerDissolve(direction,false);
 		}
 	}
 
