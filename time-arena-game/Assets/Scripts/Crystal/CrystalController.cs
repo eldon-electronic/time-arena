@@ -75,7 +75,7 @@ public class CrystalController : MonoBehaviour
     List<(Vector3, Quaternion)> ReadFile()
     {   
         _positions = new List<(Vector3, Quaternion)>();
-        foreach (string line in System.IO.File.ReadLines(gameObject.name + ".txt"))
+        foreach (string line in System.IO.File.ReadLines("Assets/Assets/Resources/" + gameObject.name + ".txt"))
         {   
             string[] data = line.Split('|'); 
             string[] localPositionString = data[0].Split(' ');
