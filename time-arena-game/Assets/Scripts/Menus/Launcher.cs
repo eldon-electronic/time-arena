@@ -125,6 +125,13 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	// --------------- Public functions ---------------
 
 	public void StartGame() {
+		if (PhotonNetwork.IsMasterClient) {
+			foreach (Transform playerListTransform in _playerListContainer) {
+				PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
+				PlayerPrefs.SetString(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
+			}
+		}
+		
 		// Level index of PreGameScene is 1, check build settings
 		PhotonNetwork.LoadLevel(1);
 	}
@@ -138,7 +145,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
 			return;
 		}
 
-		PhotonNetwork.CreateRoom(_roomNameInput.text);
+		RoomOptions roomOptions = new RoomOptions();
+		roomOptions.PublishUserId = true;
+		roomOptions.MaxPlayers = 10;
+
+		PhotonNetwork.CreateRoom(_roomNameInput.text, roomOptions);
 		MenuManager.Instance.OpenMenu("loadingMenu");
 	}
 
@@ -176,13 +187,13 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		MenuManager.Instance.OpenMenu("mainMenu");
 	}
 
-	public void UpdateIcons(string username, string spriteName) {
-		_view.RPC("RPC_updateIcon", RpcTarget.All, username, spriteName);
+	public void UpdateIcons(string userID, string spriteName) {
+		_view.RPC("RPC_updateIcon", RpcTarget.All, userID, spriteName);
 	}
 
 	// --------------- RPC and Events ---------------
 
-	[PunRPC] void RPC_updateIcon(string username, string spriteName) {
+	[PunRPC] void RPC_updateIcon(string userID, string spriteName) {
 		Sprite newIcon = null;
 		foreach (Sprite teamIcon in _teamIcons) {
 			if (teamIcon.name == spriteName) newIcon = teamIcon;
@@ -190,9 +201,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
 		foreach (Transform playerListTransform in _playerListContainer) {
 			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
-			if (playerListItem.username == username)
+			if (playerListItem.GetUserID() == userID)
 			{
-				playerListItem.teamImage.sprite = newIcon;
+				playerListItem.SetTeamImage(newIcon);
 			}
 		}
 	}
@@ -202,15 +213,15 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
 		foreach (Transform playerListTransform in _playerListContainer) {
 			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
-			_currentPlayerIcons.Add(playerListItem.username, playerListItem.teamImage.sprite.name);
-			Debug.Log($"Added {playerListItem.username}, {playerListItem.teamImage.sprite.name} to dict");
+			_currentPlayerIcons.Add(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
+			// Debug.Log($"Added {playerListItem.username}: {playerListItem.GetUserID()}, {playerListItem.teamImage.sprite.name} to dict");
 		}
 
 		// If you're the first to enter the room there are no PlayerListItems in the container,
 		// then simply add yourself and specify no icon.
 		if (_currentPlayerIcons.Count == 0) {
 			Player[] players = PhotonNetwork.PlayerList;
-			_currentPlayerIcons.Add(players[0].NickName, "no_team_icon");
+			_currentPlayerIcons.Add(players[0].UserId, "no_team_icon");
 		}
 
 		_view.RPC("RPC_instantiatePlayers", RpcTarget.All, _currentPlayerIcons);
@@ -225,7 +236,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		for (int i = 0; i < players.Length; i++) {
 			Instantiate(_playerListItemPrefab, _playerListContainer)
 				.GetComponent<PlayerListItem>()
-				.SetUp(players[i], PhotonNetwork.IsMasterClient, _teamIcons, playerIcons[players[i].NickName]);
+				.SetUp(players[i], PhotonNetwork.IsMasterClient, _teamIcons, playerIcons[players[i].UserId]);
 		}
 	}
 
@@ -276,7 +287,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		int playersWithoutTeam = 0;
 		foreach (Transform playerItemTransform in playerListContainer) {
 			PlayerListItem playerListItem = playerItemTransform.gameObject.GetComponent<PlayerListItem>();
-			if (playerListItem.teamImage.sprite.name == "no_team_icon") playersWithoutTeam++;
+			if (playerListItem.GetTeamImage().sprite.name == "no_team_icon") playersWithoutTeam++;
 		} return playersWithoutTeam == 0;
 	}
 }

@@ -12,11 +12,11 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text _playerName;
     [SerializeField] private Button _chooseTeamButton;
     [SerializeField] private GameObject _chooseTeamContainer;
-    [SerializeField] private Launcher _launcher;
-    public Image teamImage;
+    [SerializeField] private Image _teamImage;
 
     private Player _player;
     private bool _displayingTeamSelector;
+    private string _userID;
 
     public string username;
 
@@ -25,9 +25,10 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
         _player = player;
         _playerName.text = player.NickName;
         username = player.NickName;
+        _userID = player.UserId;
         
         foreach (Sprite icon in allIcons) {
-            if (iconName == icon.name) teamImage.sprite = icon;
+            if (iconName == icon.name) _teamImage.sprite = icon;
         }
 
         _chooseTeamButton.gameObject.SetActive(isMasterClient);
@@ -54,12 +55,24 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
     }
 
     public void SelectTeam() {
-        teamImage.sprite = EventSystem.current.currentSelectedGameObject.GetComponent<Image>().sprite;
+        _teamImage.sprite = EventSystem.current.currentSelectedGameObject.GetComponent<Image>().sprite;
         DisplayTeamSelector(); // disables the menu
-        Launcher.Instance.UpdateIcons(this.username, this.teamImage.sprite.name);
+        Launcher.Instance.UpdateIcons(this._userID, this._teamImage.sprite.name);
     }
 
     public void UpdateMasterClientOptions(bool isMasterClient) {
         _chooseTeamButton.gameObject.SetActive(isMasterClient);
+    }
+
+    public string GetUserID() { 
+        return _userID; 
+    }
+
+    public Image GetTeamImage() {
+        return _teamImage;
+    }
+
+    public void SetTeamImage(Sprite newImage) {
+        _teamImage.sprite = newImage;
     }
 }

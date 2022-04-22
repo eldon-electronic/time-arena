@@ -11,17 +11,25 @@ public class HudTimeline : MonoBehaviour
     [SerializeField] private Transform _iconContainer;
     [SerializeField] private GameObject _iconPrefab;
     [SerializeField] private Image _timelineFill;
-    [SerializeField] private Sprite _yourIcon;
-    [SerializeField] private Sprite _minerIcon;
-    [SerializeField] private Sprite _guardianIcon;
     [SerializeField] private PhotonView _view;
+    [SerializeField] private Sprite[] _teamIcons;
     private SceneController _sceneController;
     private TimeLord _timeLord;
     private Dictionary<int, Slider> _players;
+    private Dictionary<int, string> _viewIDtoUserID;
+    private Dictionary<string, string> _iconAssignment;
 
     void Awake()
     {
         _players = new Dictionary<int, Slider>();
+        _viewIDtoUserID = new Dictionary<int, string>();
+        _iconAssignment = new Dictionary<string, string>();
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var player in players) {
+            string userID = player.GetComponent<PhotonView>().Owner.UserId;
+            PhotonView playerView = player.GetComponent<PhotonView>();
+            _viewIDtoUserID.Add(playerView.ViewID, userID);
+        }
     }
 
     void OnEnable()
@@ -41,6 +49,11 @@ public class HudTimeline : MonoBehaviour
         GameObject pregame = GameObject.FindWithTag("PreGameController");
         _sceneController = pregame.GetComponent<PreGameController>();
         _timeLord = _sceneController.GetTimeLord();
+
+        if (!PhotonNetwork.IsMasterClient) {
+            Debug.Log("Requesting icons from master");
+            _view.RPC("RPC_getIconAssignment", RpcTarget.MasterClient);
+        }
     }
 
     void LateUpdate()
@@ -53,7 +66,7 @@ public class HudTimeline : MonoBehaviour
             icon.Value.gameObject.SetActive(false);
         }
         
-        SetIconPositions();
+        //SetIconPositions();
     }
 
 
@@ -70,24 +83,17 @@ public class HudTimeline : MonoBehaviour
         _timelineFill.fillAmount = (float) frame / (float) totalFrames;
     }
 
-    private Slider InstantiateIcon(Constants.Team team, bool isMe)
+    private Slider InstantiateIcon(string iconName)
     {
-        // Instantiate and set its parent to be the timeline.
-        GameObject newIcon = Instantiate(_iconPrefab, _iconContainer);
-
-        // Reset its position and scale.
-        newIcon.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-        newIcon.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-
-        // Set its icon image.
-        GameObject handle = newIcon.transform.GetChild(0).GetChild(0).gameObject;
-        if (isMe) handle.GetComponent<Image>().sprite = _yourIcon;
-        else if (team == Constants.Team.Guardian)
-        {
-            handle.GetComponent<Image>().sprite = _guardianIcon;
+        Sprite teamIcon = null;
+        foreach (var icon in _teamIcons) {
+            if (icon.name == iconName) teamIcon = icon;
         }
-        else handle.GetComponent<Image>().sprite = _minerIcon;
-        
+
+        // Instantiate, set its parent to be the timeline and specify which icon to use
+        GameObject newIcon = Instantiate(_iconPrefab, _iconContainer);
+        newIcon.GetComponent<TimelineSliderItem>().SetUp(teamIcon);
+
         return newIcon.GetComponent<Slider>();
     }
 
@@ -95,8 +101,9 @@ public class HudTimeline : MonoBehaviour
     {
         try
         {
-            Constants.Team team = _sceneController.GetTeam(playerID);
-            Slider icon = InstantiateIcon(team, playerID == _view.ViewID);
+            string userID = _viewIDtoUserID[playerID];
+            string iconName = _iconAssignment[userID];
+            Slider icon = InstantiateIcon(iconName);
             _players.Add(playerID, icon);
             return true;
         }
@@ -124,4 +131,23 @@ public class HudTimeline : MonoBehaviour
             _players[player.id].gameObject.SetActive(true);
         }
     }
+
+    // ------------ RPC ------------
+
+    // Only called on Master Client (they've got the PlayerPrefs).
+    [PunRPC] void RPC_getIconAssignment() { 
+        Debug.Log("Getting icons from PlayerPrefs");
+        _iconAssignment.Clear();
+        foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
+            _iconAssignment.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
+        }
+        Debug.Log("Sending them over");
+        _view.RPC("RPC_sendIconAssignment", RpcTarget.All, _iconAssignment);
+    }
+
+    [PunRPC] void RPC_sendIconAssignment(Dictionary<string, string> iconAssignment) {
+        _iconAssignment.Clear();
+        _iconAssignment = iconAssignment;
+    }
+
 }

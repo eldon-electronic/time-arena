@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 3824619193279726888}
   - component: {fileID: 2569486927433707507}
   m_Layer: 5
-  m_Name: Handle
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 20}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3824619193279726888
 CanvasRenderer:
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1d6d7e100ab864b4db367a43ec2fbf45, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4755f68475b613948b826e0c168d40a7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -121,6 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2918863091857525164}
   - component: {fileID: 7302839773138410298}
+  - component: {fileID: 6433057021090450717}
   m_Layer: 5
   m_Name: PlayerIcon
   m_TagString: Untagged
@@ -199,3 +200,16 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6433057021090450717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7708835829176264796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15b81c74a34ce604baa2d9e983577bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sliderIcon: {fileID: 2569486927433707507}
