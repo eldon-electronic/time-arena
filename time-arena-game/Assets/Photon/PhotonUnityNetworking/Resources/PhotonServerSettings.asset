@@ -34,33 +34,17 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
   - ClickRpc
   - DestroyRpc
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - CantHearYou
-  - ChangeColour
   - HeresWhy
-  - RPC_getHit
-  - RPC_incrScore
-  - RPC_getFound
-  - RPC_movePlayer
-  - RPC_jumpBackwards
-  - RPC_jumpForward
-  - RPC_jumpBackIn
-  - RPC_jumpBackOut
-  - RPC_jumpForwardIn
-  - RPC_jumpForwardOut
+  - RPC_getIconAssignment
+  - RPC_getIcons
+  - RPC_instantiatePlayers
   - RPC_jumpIn
   - RPC_jumpOut
-  - RPC_updateIcon
-  - RPC_getIcons
-  - RPC_sendIcons
-  - RPC_instaniatePlayers
-  - RPC_instantiatePlayers
-  - RPC_getIconAssignment
   - RPC_sendIconAssignment
+  - RPC_updateIcon
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

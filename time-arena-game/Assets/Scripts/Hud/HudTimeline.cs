@@ -30,6 +30,7 @@ public class HudTimeline : MonoBehaviour
             PhotonView playerView = player.GetComponent<PhotonView>();
             _viewIDtoUserID.Add(playerView.ViewID, userID);
         }
+        _view.RPC("RPC_getIcons", RpcTarget.MasterClient);
     }
 
     void OnEnable()
@@ -49,11 +50,6 @@ public class HudTimeline : MonoBehaviour
         GameObject pregame = GameObject.FindWithTag("PreGameController");
         _sceneController = pregame.GetComponent<PreGameController>();
         _timeLord = _sceneController.GetTimeLord();
-
-        if (!PhotonNetwork.IsMasterClient) {
-            Debug.Log("Requesting icons from master");
-            _view.RPC("RPC_getIconAssignment", RpcTarget.MasterClient);
-        }
     }
 
     void LateUpdate()
@@ -135,17 +131,17 @@ public class HudTimeline : MonoBehaviour
     // ------------ RPC ------------
 
     // Only called on Master Client (they've got the PlayerPrefs).
-    [PunRPC] void RPC_getIconAssignment() { 
+    [PunRPC] void RPC_getIcons() { 
         Debug.Log("Getting icons from PlayerPrefs");
         _iconAssignment.Clear();
         foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
             _iconAssignment.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
         }
         Debug.Log("Sending them over");
-        _view.RPC("RPC_sendIconAssignment", RpcTarget.All, _iconAssignment);
+        _view.RPC("RPC_sendIcons", RpcTarget.All, _iconAssignment);
     }
 
-    [PunRPC] void RPC_sendIconAssignment(Dictionary<string, string> iconAssignment) {
+    [PunRPC] void RPC_sendIcons(Dictionary<string, string> iconAssignment) {
         _iconAssignment.Clear();
         _iconAssignment = iconAssignment;
     }
