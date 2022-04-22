@@ -107,7 +107,7 @@ public class TailManager : MonoBehaviour, Debuggable
         Hashtable debugItems = new Hashtable();
         foreach (var tail in _tails)
         {
-            debugItems.Add("tail", tail.Key);
+            debugItems.Add($"tail {tail.Key}", true);
         }
 		return debugItems;
     }

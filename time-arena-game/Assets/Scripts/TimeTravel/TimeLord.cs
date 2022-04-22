@@ -6,23 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public interface Tester
-{
-	public bool Authenticate();
-}
 
 public class TimeLord: Debuggable
 {
-    public int _totalFrames;
-	private int _currentFrame;
-    private int _myID;
+    protected int _totalFrames;
+	protected int _currentFrame;
+    protected int _myID;
 
     // A RealityManager object for keeping track of each individual's current frames.
-    private RealityManager _realities;
+    protected RealityManager _realities;
 
     // An array the lenth of the game, with an item for each frame.
     // Each item stores a dictionary that maps tailIDs to their state.
-    private Dictionary<int, PlayerState>[] _playerStates;
+    protected Dictionary<int, PlayerState>[] _playerStates;
 
 
     public TimeLord(int totalFrames)
@@ -57,7 +53,7 @@ public class TimeLord: Debuggable
     // ------------ PUBLIC METHODS FOR THE GAME CONTROLLER ------------
 
     // Increments game time as well as the individual time for all player realities.
-    public void Tick()
+    public virtual void Tick()
     {
 		if (!TimeEnded())
 		{
@@ -96,7 +92,7 @@ public class TimeLord: Debuggable
     }
 
 
-    // ------------ PUBLIC METHODS FOR THE PLAYER CONTROLLER ------------
+    // ------------ PUBLIC METHODS FOR TIME CONN ------------
 
     // Adds the given player to the Reality Manager, allowing them to time travel.
     public void Connect(int playerID, bool isMe)
@@ -106,7 +102,7 @@ public class TimeLord: Debuggable
 	}
 
     // Records the given state in all realities this player exists in.
-	public void RecordState(PlayerState ps)
+	public virtual void RecordState(PlayerState ps)
 	{
 		if (TimeEnded()) return;
 
@@ -216,30 +212,6 @@ public class TimeLord: Debuggable
 		return _realities.GetHeadsInFrame(frame);
 	}
 
-	// Writes a representation of _playerStates to a text file.
-	// Might cause lag if trying to call this during the game.
-	public void SnapshotStates(string filename)
-	{
-		using StreamWriter file = new StreamWriter(filename);
-
-		for (int i=0; i < _playerStates.Length; i++)
-		{
-			StringBuilder sb = new StringBuilder(55);
-
-			sb.Append(i.ToString("D4"));
-
-			if (_playerStates[i] != null)
-			{
-				foreach (var item in _playerStates[i])
-				{
-					string tail = item.Key.ToString();
-					sb.Append($" - {tail}");
-				}
-			}
-
-			file.WriteLine(sb.ToString());
-		}
-	}
 
 	// ------------ PUBLIC METHODS ------------
 
@@ -252,18 +224,4 @@ public class TimeLord: Debuggable
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
 	public int GetYourFrame() { return _realities.GetPerceivedFrame(_myID); }
-
-
-    // WARNING: The following functions are to be used by test framework and debugging only.
-    public Dictionary<int, PlayerState>[] RevealPlayerStates(Tester tester)
-	{
-		if (tester.Authenticate()) return _playerStates;
-		else throw new InvalidOperationException("Must be a Tester to call this method.");
-	}
-
-    public RealityManager RevealRealityManager(Tester tester)
-	{
-		if (tester.Authenticate()) return _realities;
-		else throw new InvalidOperationException("Must be a Tester to call this method.");
-	}
 }

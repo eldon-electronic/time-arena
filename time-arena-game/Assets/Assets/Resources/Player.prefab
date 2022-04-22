@@ -9298,13 +9298,21 @@ MonoBehaviour:
     Name: isDissolvingBackwardOut
   - Type: 4
     SynchronizeType: 0
-    Name: isWarpingForward
+    Name: isRunningBackwards
   - Type: 4
     SynchronizeType: 0
-    Name: isWarpingBackward
+    Name: isRunningForwards
+  - Type: 4
+    SynchronizeType: 0
+    Name: isJumping
+  - Type: 4
+    SynchronizeType: 0
+    Name: isCaught
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!114 &2934516782390166729
 MonoBehaviour:
   m_ObjectHideFlags: 0
