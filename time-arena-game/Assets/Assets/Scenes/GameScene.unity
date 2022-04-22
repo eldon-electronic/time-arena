@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
   - component: {fileID: 705507996}
+  - component: {fileID: 705507997}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -515,13 +516,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.44731617, y: -0.12997769, z: 0.08413329, w: 0.8808721}
+  m_LocalRotation: {x: 0.6341273, y: -0.1191245, z: 0.10569629, w: 0.7566506}
   m_LocalPosition: {x: -14.37, y: 19.56, z: -51.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 54.089, y: -15.194, z: 3.122}
+  m_LocalEulerAnglesHint: {x: 80, y: -15.437, z: 2.928}
 --- !u!114 &705507996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,6 +536,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UsePipelineSettings: 0
+--- !u!114 &705507997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29098b945b7fa144b4e67e9e47d71f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sunPath:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &953955618
 GameObject:
   m_ObjectHideFlags: 0
