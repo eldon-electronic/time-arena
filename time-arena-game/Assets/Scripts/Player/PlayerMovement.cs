@@ -201,6 +201,4 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         debugValues.Add($"{_view.ViewID}'s layer", gameObject.layer);
         return debugValues;
     }
-  
-    
 }
