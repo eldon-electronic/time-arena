@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1214919120821063203}
   - component: {fileID: 6095986959690093488}
-  - component: {fileID: 6095986959690093489}
   - component: {fileID: 704664836982741704}
   m_Layer: 6
   m_Name: CrystalCluster
@@ -62,19 +61,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &6095986959690093489
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8752827126464576340}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.6240412, y: 3.36567, z: 1.6924464}
-  m_Center: {x: 0.08822281, y: 1.5343125, z: 0.12832499}
 --- !u!114 &704664836982741704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +137,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 12.207
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard7
@@ -171,6 +165,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 1884386501296297824}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &8165289204975578253
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650505870137862705}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &4017377971911738802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,6 +254,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 33.501
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard11
@@ -256,16 +272,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!1 &3243771570972433222 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 2433448889947235863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2760673183154749948 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 2433448889947235863}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3243771570972433222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 2433448889947235863}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &7138671974262963981
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3243771570972433222}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &5049995851605387854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,6 +371,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 4.052
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard0
@@ -361,6 +399,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 2523027128080457830}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &361549840788436283
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3441592477782760759}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &5386089325112269761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,6 +488,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -19.305
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard8
@@ -446,16 +506,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!4 &2658749139614437508 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 2553399409469912943}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3435708776771504702 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 2553399409469912943}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2658749139614437508 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 2553399409469912943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &6331284388044302307
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3435708776771504702}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &8447370495669696169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +605,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
       propertyPath: m_Name
       value: crystalShard12
@@ -541,16 +623,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
---- !u!4 &3103794735556805956 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
-  m_PrefabInstance: {fileID: 3213421290705265327}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2330951948891004926 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
   m_PrefabInstance: {fileID: 3213421290705265327}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &3103794735556805956 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
+  m_PrefabInstance: {fileID: 3213421290705265327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2572094458422144500
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330951948891004926}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3210848504867199338, guid: fd65231e40a29ae499975dac977d8e3f, type: 3}
 --- !u!114 &8267280574667747605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,6 +722,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -3.68
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard3
@@ -646,6 +750,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 4664153592313731832}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &425713683696928225
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5511015246840850345}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &3482395063861786720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,6 +839,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 24.947
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard4
@@ -731,16 +857,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!1 &5616241364878699197 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 4697689895303256044}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5096726156250673159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 4697689895303256044}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5616241364878699197 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 4697689895303256044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &6651376928678038305
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5616241364878699197}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &900852772883522238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,6 +956,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 1.99
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard1
@@ -826,16 +974,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!4 &4964615776739806288 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 4859211115640204219}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5741538748228703978 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 4859211115640204219}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &4964615776739806288 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 4859211115640204219}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1903339006952586105
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5741538748228703978}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &2193460070177392043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -911,6 +1073,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -16.873
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard2
@@ -921,16 +1091,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!1 &6032251566287793514 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 6879165998447824955}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6412295163759097808 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 6879165998447824955}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6032251566287793514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 6879165998447824955}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &3635050764917654257
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6032251566287793514}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &4916983536639717420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1006,6 +1190,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard6
@@ -1026,6 +1218,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 6981992539825875240}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &5942065983289913515
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7792473002917139577}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &1017658303510139322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,6 +1307,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 10.239
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard5
@@ -1121,6 +1335,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 7522411381293223703}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &4303732694998015182
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7252361767531819590}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &6721378513361226965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1196,6 +1424,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard10
@@ -1206,16 +1442,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!4 &7651213927173405818 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 7900487999510305681}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7018088351056094912 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 7900487999510305681}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &7651213927173405818 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 7900487999510305681}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &8253161935245085376
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7018088351056094912}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &1458700271754789051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1291,6 +1541,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -22.742
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 052e637fd89e13147bd58888ef811db3, type: 2}
     - target: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
       propertyPath: m_Name
       value: crystalShard9
@@ -1301,16 +1559,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
---- !u!4 &8557311594812188925 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
-  m_PrefabInstance: {fileID: 8163641787469123350}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9046180386705306183 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
   m_PrefabInstance: {fileID: 8163641787469123350}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &8557311594812188925 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
+  m_PrefabInstance: {fileID: 8163641787469123350}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &5694675604084277987
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9046180386705306183}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: d97d3198e606a9a4c99850880e6f6537, type: 3}
 --- !u!114 &274103909706727187
 MonoBehaviour:
   m_ObjectHideFlags: 0

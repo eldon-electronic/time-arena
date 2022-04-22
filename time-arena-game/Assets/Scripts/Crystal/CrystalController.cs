@@ -38,7 +38,7 @@ public class CrystalController : MonoBehaviour
 
     void Start()
     {
-        _timeLord = GameObject.FindWithTag("PreGameController").GetComponent<PreGameController>().GetTimeLord();
+        _timeLord = GameObject.FindWithTag("GameController").GetComponent<GameController>().GetTimeLord();
     }
 
     private void OnNewTimeLord(TimeLord time)
