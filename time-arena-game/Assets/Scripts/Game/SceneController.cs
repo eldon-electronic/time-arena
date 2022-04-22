@@ -10,13 +10,17 @@ public abstract class SceneController: MonoBehaviour
 	protected Dictionary<int, PlayerController> _guardians;
 	protected TimeLord _timeLord;
     protected int _minerScore;
+	protected string _iconName;
 	public static event Action<int> scoreChange;
 
 	public void Register(PlayerController pc)
     {
+		_iconName = pc.GetIconName();
 		if (pc.Team == Constants.Team.Guardian) _guardians.Add(pc.ID, pc);
 		else _miners.Add(pc.ID, pc);
     }
+
+	public string GetIcon() { return _iconName; }
 
     public Constants.Team GetTeam(int playerID)
 	{
