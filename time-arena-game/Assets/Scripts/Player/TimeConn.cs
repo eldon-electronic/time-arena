@@ -252,7 +252,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
-			
+			Debug.Log($"RPC jump out called on {_view.ViewID}");
 			_disController?.TriggerDissolve(direction,true);
 		}
 	}
@@ -272,7 +272,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		}
 		else if (_timelord.InYourReality(_view.ViewID))
 		{
-			
+			Debug.Log($"RPC jump in called on {_view.ViewID}");
 			_disController?.TriggerDissolve(_jumpDirection,false);
 		}
 	}

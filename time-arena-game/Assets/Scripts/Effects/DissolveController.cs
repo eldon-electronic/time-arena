@@ -65,6 +65,7 @@ public class DissolveController : DisController
     }
     public override void TriggerDissolve(Constants.JumpDirection direction, bool jumpOut)
     {
+        Debug.Log($"Trigger dissolve called on {_view.ViewID} with direction {direction} and jumpOut {jumpOut}");
         if (direction == Constants.JumpDirection.Backward)
         {
             StartAnim(jumpOut, _backwardColour);
