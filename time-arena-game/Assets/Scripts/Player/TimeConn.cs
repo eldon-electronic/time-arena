@@ -273,7 +273,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		else if (_timelord.InYourReality(_view.ViewID))
 		{
 			
-			_disController?.TriggerDissolve(direction,false);
+			_disController?.TriggerDissolve(_jumpDirection,false);
 		}
 	}
 
