@@ -16,19 +16,18 @@ public abstract class DisController: MonoBehaviour
 }
 
 
-public class TimeConn : MonoBehaviour, ParticleUser
+public class TimeConn : MonoBehaviour, DissolveUser
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
 	[SerializeField] private PlayerController _player;
-	[SerializeField] private ParticleController _minerParticles;
-	[SerializeField] private ParticleController _guardianParticles;
+	[SerializeField] private ParticleController _particles;
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
 	[SerializeField] private PPController _ppController;
-	[SerializeField] private DisController _disMinerController;
-	[SerializeField] private DisController _disGuardianController;
+	[SerializeField] private DissolveController _disMinerController;
+	[SerializeField] private DissolveController _disGuardianController;
 
-	private ParticleController _particles;
+	private DissolveController _disController;
 	private SceneController _sceneController;
 	private TimeLord _timelord;
 	private bool _isJumping;
@@ -77,10 +76,10 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		// Make sure that this script is executed before ParticleController.
 		if (_player.Team == Constants.Team.Guardian)
 		{
-			_particles = _guardianParticles;
+			_disController = _disGuardianController;
 		}
-		else _particles = _minerParticles;
-		_particles.SetSubscriber(this);
+		else _disController = _disMinerController;
+		_disController.SetSubscriber(this);
 		_tailManager.SetActive(true);
 	}
 
@@ -253,11 +252,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
-			if (_player.Team == Constants.Team.Miner)
-			{
-				_disMinerController?.TriggerDissolve(_jumpDirection, true);
-			}
-			else _disGuardianController?.TriggerDissolve(_jumpDirection, true);
+			_disController?.TriggerDissolve(_jumpDirection, true);
+			_particles.StartParticles(_jumpDirection);
 		}
 	}
 
@@ -276,11 +272,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		}
 		else if (_timelord.InYourReality(_view.ViewID))
 		{
-			if (_player.Team == Constants.Team.Miner)
-			{
-				_disMinerController?.TriggerDissolve(_jumpDirection, false);
-			}
-			else _disGuardianController?.TriggerDissolve(_jumpDirection, false);
+			_disController?.TriggerDissolve(_jumpDirection, false);
+			_particles.StartParticles(_jumpDirection);
 		}
 	}
 

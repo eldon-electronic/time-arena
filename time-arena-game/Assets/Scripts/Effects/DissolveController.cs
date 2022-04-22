@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public interface DissolveUser
+{
+    public void NotifyStartedDissolving();
+    public void NotifyStoppedDissolving(bool dissolvedOut);
+    public Constants.Team GetTeam();
+}
+
+
 public class DissolveController : DisController
 {
     [SerializeField] private AnimationCurve _inCurve;
@@ -15,11 +23,14 @@ public class DissolveController : DisController
     private Color _forwardColour = new Color(0, 4, 191, 0);
     private Color _disColor;
     private bool _fadeIn;
+    private DissolveUser _subscriber;
 
     void Awake()
     {
         if (_view.IsMine) Destroy(this);
     }
+
+    public void SetSubscriber(DissolveUser subscriber) { _subscriber = subscriber; }
 
     public override void TriggerDissolve(Constants.JumpDirection direction, bool jumpOut)
     {
@@ -55,6 +66,8 @@ public class DissolveController : DisController
 
     IEnumerator AnimateDis()
     {
+        _subscriber?.NotifyStartedDissolving();
+
         float time = 0.0f;
 
         SetColour(gameObject);
@@ -77,5 +90,7 @@ public class DissolveController : DisController
         else modifier = _outCurve.keys[_outCurve.length-1].value;
 
         SetCutOffHeight(gameObject, modifier);
+
+        _subscriber?.NotifyStoppedDissolving(!_fadeIn);
     }
 }
