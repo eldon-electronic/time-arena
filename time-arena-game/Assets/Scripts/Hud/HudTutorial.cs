@@ -18,7 +18,7 @@ public class HudTutorial : MonoBehaviour
 
     void Awake()
     {
-        _crystal = GameObject.Find("TutorialCrystal");
+        //_crystal = GameObject.Find("TutorialTimeCrystal");
         _tutorialArrows = new Dictionary<string, GameObject>();
         foreach (GameObject tutorialObject in _tutorialObjects) {
         _tutorialArrows.Add(tutorialObject.name, tutorialObject);
@@ -59,13 +59,13 @@ public class HudTutorial : MonoBehaviour
     }
 
 
-    public void SetCrystalVisibility(bool crystalVis){
+    /*public void SetCrystalVisibility(bool crystalVis){
         
         if (SceneManager.GetActiveScene().name == "PreGameScene"){
 
             _crystal.SetActive(crystalVis);
         }
 
-    }
+    }*/
  }
 
