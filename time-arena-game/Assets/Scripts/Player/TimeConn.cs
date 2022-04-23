@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -167,6 +168,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	private void TimeJump(Constants.JumpDirection direction, bool jumpOut)
 	{
+		if (!_view.IsMine) throw new InvalidOperationException("This function may not be called on an RPC-controlled Player.");
+
 		if (_timeTravelEnabled)
 		{
 			if (jumpOut)
@@ -231,7 +234,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 				_timelord.TimeTravel(_view.ViewID, _jumpDirection);
 			}
 			// Force stop jumping.
-			else TimeJump(_jumpDirection, false);
+			else if (_view.IsMine) TimeJump(_jumpDirection, false);
 		}
 		else _jumpDirection = Constants.JumpDirection.Static;
 	}

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
 	public Constants.Team Team;
 	public int ID;
+	public int score;
 
 
 	// ------------ UNITY METHODS ------------
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
 		ID = _view.ViewID;
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		if (ID == 1001) Team = Constants.Team.Guardian;
+		if (ID == 1002) Team = Constants.Team.Guardian;
 		else Team = Constants.Team.Miner;
 
 		SetCharacter();
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour
 	void OnDisable() { GameController.gameActive -= OnGameActive; }
 
 	void Start()
-	{	
+	{
 		DontDestroyOnLoad(gameObject);
 
 		gameObject.layer = Constants.LayerPlayer;
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour
 		SceneController sceneController = FindObjectOfType<PreGameController>();
 		if (sceneController == null) Debug.LogError("PreGameController not found");
 		else sceneController.Register(this);
-		
+
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
 		{
