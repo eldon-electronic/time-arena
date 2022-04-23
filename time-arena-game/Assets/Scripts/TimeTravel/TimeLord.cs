@@ -113,7 +113,8 @@ public class TimeLord: Debuggable
 			ps.TailID = lastTailID + i;
 			int frame = frames[i];
             if (_playerStates[frame] == null) _playerStates[frame] = new Dictionary<int, PlayerState>();
-            _playerStates[frame].Add(ps.TailID, ps);
+			if (_playerStates[frame].ContainsKey(ps.TailID)) _playerStates[frame][ps.TailID] = ps;
+			else _playerStates[frame].Add(ps.TailID, ps);
 		}
 	}
 
@@ -211,6 +212,10 @@ public class TimeLord: Debuggable
 		int frame = _realities.GetPerceivedFrame(_myID);
 		return _realities.GetHeadsInFrame(frame);
 	}
+
+	public Dictionary<int, Reality> GetRealities() { return _realities.GetRealities(); }
+
+	public void SetRealities(Dictionary<int, Reality> realities) { _realities.SetRealities(realities); }
 
 
 	// ------------ PUBLIC METHODS ------------
