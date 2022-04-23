@@ -13788,7 +13788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c080f0b9afe42aea90cac668195173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crystal: {fileID: 1850932449228467299, guid: 1edf5d2748f6b4cd5be2adb000bb1db0, type: 3}
   sandMat: {fileID: 2100000, guid: 9a55a84c7b3e24ba78dd0019f91a2059, type: 2}
 --- !u!114 &8829473542284816613
 MonoBehaviour:
@@ -15327,9 +15326,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -7
-      inSlope: 4.657249
-      outSlope: 4.657249
+      value: -8
+      inSlope: 5.3225703
+      outSlope: 5.3225703
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -15337,17 +15336,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1.5030333
       value: 0
-      inSlope: 4.666686
-      outSlope: 4.666686
+      inSlope: 5.333355
+      outSlope: 5.333355
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 3
-      value: 7
-      inSlope: 4.6761227
-      outSlope: 4.6761227
+      value: 8
+      inSlope: 5.34414
+      outSlope: 5.34414
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -15360,9 +15359,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 7
-      inSlope: -4.6666665
-      outSlope: -4.6666665
+      value: 8
+      inSlope: -5.3333335
+      outSlope: -5.3333335
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -15370,17 +15369,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1.5
       value: 0
-      inSlope: -4.6666665
-      outSlope: -4.6666665
+      inSlope: -5.3333335
+      outSlope: -5.3333335
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 3
-      value: -7
-      inSlope: -4.6666665
-      outSlope: -4.6666665
+      value: -8
+      inSlope: -5.3333335
+      outSlope: -5.3333335
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -15407,18 +15406,6 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: isGrabbing
-  - Type: 4
-    SynchronizeType: 0
-    Name: isDissolvingForwardIn
-  - Type: 4
-    SynchronizeType: 0
-    Name: isDissolvingForwardOut
-  - Type: 4
-    SynchronizeType: 0
-    Name: isDissolvingBackwardIn
-  - Type: 4
-    SynchronizeType: 0
-    Name: isDissolvingBackwardOut
   - Type: 4
     SynchronizeType: 1
     Name: isRunningBackwards
