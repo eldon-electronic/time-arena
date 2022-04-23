@@ -26,17 +26,13 @@ public class CharacterAnimationController : MonoBehaviour
         } 
         if(Input.GetKeyDown(KeyCode.S)) StartRunningBackwards();
         if(Input.GetKeyUp(KeyCode.W)) StopRunningForwards();
+        if(Input.GetKeyDown(KeyCode.A)) StartRunningForwards();
+        if(Input.GetKeyUp(KeyCode.A)) StopRunningForwards();
+        if(Input.GetKeyDown(KeyCode.D)) StartRunningForwards();
+        if(Input.GetKeyUp(KeyCode.D)) StopRunningForwards();
         if(Input.GetKeyUp(KeyCode.S)) StopRunningBackwards();
-        if(Input.GetKeyDown(KeyCode.Space)){
-            //PlayerAnim.Play("Jumping");
-            StartJumping();
-            Debug.Log("isJumping");
-        }
-        if(Input.GetKeyUp(KeyCode.Space)){
-            //PlayerAnim.Play("Jumping");
-            StopJumping();
-            //Debug.Log("isJumping");
-        }
+        if(Input.GetKeyDown(KeyCode.Space))StartJumping();
+        if(Input.GetKeyUp(KeyCode.Space))StopJumping();
         if(Input.GetMouseButtonDown(0)) _grab.Grab();
     }
     public void StartRunningForwards(){
