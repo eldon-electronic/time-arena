@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _guardian;
 	[SerializeField] private GameObject _minerBody;
 	[SerializeField] private GameObject _guardianBody;
+	[SerializeField] private GameObject _minerDevice;
 
 	public Constants.Team Team;
 	public int ID;
@@ -76,23 +77,23 @@ public class PlayerController : MonoBehaviour
 		{
 			if(_view.IsMine){
 				_guardianBody.SetActive(false);
-				_miner.SetActive(false);
+				_minerBody.SetActive(false);
 			}
 			else{
-				_guardian.SetActive(true);
-				_miner.SetActive(false);
+				_guardianBody.SetActive(true);
+				_minerBody.SetActive(false);
 			}
            
         }
         else if (Team == Constants.Team.Miner)
 		{
 			if(_view.IsMine){
-				_guardian.SetActive(false);
+				_guardianBody.SetActive(false);
 				_minerBody.SetActive(false);
 			}
 			else{
-				_guardian.SetActive(false);
-                _miner.SetActive(true);
+				_guardianBody.SetActive(false);
+                _minerBody.SetActive(true);
 			}
             
         }
@@ -107,12 +108,15 @@ public class PlayerController : MonoBehaviour
 		if (Team == Constants.Team.Guardian)
 		{
 			if (_view.IsMine) _guardianBody.SetActive(true);
-			else _guardian.SetActive(true);
+			else _guardianBody.SetActive(true);
 		}
 		else
 		{
 			if (_view.IsMine) _minerBody.SetActive(true);
-			_miner.SetActive(true);
+			else {
+				_minerBody.SetActive(true);
+				_minerDevice.SetActive(true);
+		    }
 		}
 	}
 
@@ -122,12 +126,16 @@ public class PlayerController : MonoBehaviour
 		if (Team == Constants.Team.Guardian)
 		{
 			if (_view.IsMine) _guardianBody.SetActive(false);
-			else _guardian.SetActive(false);
+			else _guardianBody.SetActive(false);
 		}
 		else
 		{
 			if (_view.IsMine) _minerBody.SetActive(false);
-			_miner.SetActive(false);
+			else{
+				_minerBody.SetActive(false);
+				_minerDevice.SetActive(false);
+			} 
+		
 		}
 	}
 }

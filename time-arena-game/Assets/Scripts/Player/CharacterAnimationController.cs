@@ -9,14 +9,20 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private PlayerGrab _grab;
     [SerializeField] private  PhotonView _view;
     
+    void Awake() {
 
+        if(!_view.IsMine){
+            Destroy(this);
+            return;
+        }
+        
+    }
+    
     // Update is called once per frame
     void Update()
     {
-        if(!_view.IsMine) return;
         AnimationKeyControl();
-        
-        
+ 
     }
     public void AnimationKeyControl(){
         
