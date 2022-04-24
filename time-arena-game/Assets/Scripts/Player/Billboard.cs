@@ -6,15 +6,9 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
     private Transform _mainCameraTransform;
-    [SerializeField] private PhotonView _view;
 
     void Start()
     {
-        if (_view.IsMine)
-        {
-            Destroy(gameObject);
-            return;
-        }
         _mainCameraTransform = Camera.main.transform;
     }
 
@@ -23,7 +17,10 @@ public class Billboard : MonoBehaviour
         if (transform != null)
         {
             if (_mainCameraTransform == null) Debug.LogError("mainCameraTransform is null");
-            transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
+            else if (transform != null)
+            {
+                transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
+            }
         }
     }
 }
