@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
 
 	public Constants.Team Team;
 	public int ID;
-	public int score;
 
 
 	// ------------ UNITY METHODS ------------

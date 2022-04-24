@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerGrab : MonoBehaviour
 {
@@ -7,7 +8,13 @@ public class PlayerGrab : MonoBehaviour
 	[SerializeField] private LayerMask GrabMask;
   [SerializeField] private PlayerController _player;
   [SerializeField] private SphereCollider collider;
+  private PhotonView _view;
 	private bool _damageWindow = false;
+  private SceneController sceneController;
+
+  void Start(){
+    sceneController = GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<SceneController>();
+  }
 
     void Update()
     {
@@ -24,8 +31,19 @@ public class PlayerGrab : MonoBehaviour
   				{
   					// TODO: grab the miner.
   					Debug.Log("Grabbed a miner");
+            PhotonView viewOfMiner = targetPlayer.GetComponent<PhotonView>();
+            viewOfMiner?.RPC("RPC_getGrabbed", RpcTarget.All);
   				}
   			}
+      }
+    }
+
+    [PunRPC]
+    void RPC_getGrabbed(){
+      if(_view.IsMine){
+        sceneController.DecrementPlayerScore();
+      } else {
+        sceneController.DecrementMinerScore();
       }
     }
 
