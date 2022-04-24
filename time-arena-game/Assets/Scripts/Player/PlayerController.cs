@@ -106,9 +106,14 @@ public class PlayerController : MonoBehaviour
 		gameObject.layer = Constants.LayerPlayer;
 		if (Team == Constants.Team.Guardian)
 		{
-			_guardian.SetActive(true);
+			if (_view.IsMine) _guardianBody.SetActive(true);
+			else _guardian.SetActive(true);
 		}
-		else _miner.SetActive(true);
+		else
+		{
+			if (_view.IsMine) _minerBody.SetActive(true);
+			_miner.SetActive(true);
+		}
 	}
 
 	public void Hide()
@@ -116,8 +121,13 @@ public class PlayerController : MonoBehaviour
 		gameObject.layer = Constants.LayerOutsideReality;
 		if (Team == Constants.Team.Guardian)
 		{
-			_guardian.SetActive(false);
+			if (_view.IsMine) _guardianBody.SetActive(false);
+			else _guardian.SetActive(false);
 		}
-		else _miner.SetActive(false);
+		else
+		{
+			if (_view.IsMine) _minerBody.SetActive(false);
+			_miner.SetActive(false);
+		}
 	}
 }
