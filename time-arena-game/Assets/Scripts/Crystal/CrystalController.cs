@@ -5,6 +5,7 @@ using System.IO;
 
 public class CrystalController : MonoBehaviour
 {
+    private TextAsset _textFile;
     private List<(Vector3, Quaternion)> _positions;
     private TimeLord _timeLord;
     private int _startFrame;
@@ -14,10 +15,12 @@ public class CrystalController : MonoBehaviour
     private Vector3 _endPosition;
     private Quaternion _endRotation;
 
+
     void Awake()
     {
         //get the number of the frame that the animation should start at from the parent prefab. 
         _startFrame = transform.parent.gameObject.GetComponent<CrystalParent>().startFrame;
+        _textFile = Resources.Load<TextAsset>(gameObject.name);
         _positions = ReadFile();         
         _startPosition = _positions[0].Item1;
         _startRotation = _positions[0].Item2;
@@ -75,7 +78,7 @@ public class CrystalController : MonoBehaviour
     List<(Vector3, Quaternion)> ReadFile()
     {   
         _positions = new List<(Vector3, Quaternion)>();
-        foreach (string line in System.IO.File.ReadLines("Assets/Resources/" + gameObject.name + ".txt"))
+        foreach (string line in _textFile.text.Split('\n'))
         {   
             string[] data = line.Split('|'); 
             string[] localPositionString = data[0].Split(' ');
