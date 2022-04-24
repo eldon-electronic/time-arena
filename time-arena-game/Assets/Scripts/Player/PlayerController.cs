@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
+	[SerializeField] private GameObject _minerBody;
+	[SerializeField] private GameObject _guardianBody;
+	[SerializeField] private GameObject _minerDevice;
+
 	public Constants.Team Team;
 	public int ID;
 	public int score;
@@ -22,8 +26,10 @@ public class PlayerController : MonoBehaviour
 		ID = _view.ViewID;
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		if (ID == 1002) Team = Constants.Team.Guardian;
+		if (ID == 2001) Team = Constants.Team.Guardian;
 		else Team = Constants.Team.Miner;
+
+		SetCharacter();
 	}
 
 	void OnEnable() { GameController.gameActive += OnGameActive; }
@@ -63,10 +69,55 @@ public class PlayerController : MonoBehaviour
 		gameObject.layer = Constants.LayerPlayer;
 	}
 
+	private void SetCharacter()
+	{
+        if (Team == Constants.Team.Guardian)
+		{
+			_guardianBody.SetActive(!_view.IsMine);
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
+           
+        }
+        else if (Team == Constants.Team.Miner)
+		{
+			_minerBody.SetActive(!_view.IsMine);
+			_minerDevice.SetActive(true);
+            _guardianBody.SetActive(false);
+        }
+    }
+
 
 	// ------------ PUBLIC METHODS ------------
 
-	public void Show() { gameObject.layer = Constants.LayerPlayer; }
+	public void Show()
+	{
+		if (_view.IsMine) return;
 
-	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+		gameObject.layer = Constants.LayerPlayer;
+		if (Team == Constants.Team.Guardian)
+		{
+			_guardianBody.SetActive(true);
+		}
+		else
+		{
+			_minerBody.SetActive(true);
+			_minerDevice.SetActive(true);
+		}
+	}
+
+	public void Hide()
+	{
+		if (_view.IsMine) return;
+
+		gameObject.layer = Constants.LayerOutsideReality;
+		if (Team == Constants.Team.Guardian)
+		{
+			_guardianBody.SetActive(false);
+		}
+		else
+		{
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
+		}
+	}
 }

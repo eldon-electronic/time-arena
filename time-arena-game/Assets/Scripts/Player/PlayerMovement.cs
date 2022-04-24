@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 {
     [SerializeField] private HudDebugPanel _debugPanel;
     [SerializeField] private PlayerController _player;
-    public PhotonView View;
+    [SerializeField] private PhotonView _view;
     public CharacterController CharacterBody;
     public Transform PlayerTransform;
     public LayerMask GroundMask;
@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 
     void Update()
     {
-        if (View.IsMine && _activated)
+        if (_view.IsMine && _activated)
         {
             UpdatePosition();
             UpdateRotation();
@@ -207,7 +207,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     public Hashtable GetDebugValues()
     {
         Hashtable debugValues = new Hashtable();
-        debugValues.Add("IsGrounded", _isGrounded);
+        debugValues.Add($"{_view.ViewID}'s layer", gameObject.layer);
         return debugValues;
     }
 }
