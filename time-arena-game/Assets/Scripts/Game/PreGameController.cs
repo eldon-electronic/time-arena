@@ -8,6 +8,7 @@ public class PreGameController : SceneController
 {
     private bool _isCountingTillGameStart;
     private float _secondsTillGame;
+    public static event Action countDownReset;
     public static event Action<float> countDown;
 
     void Awake()
@@ -66,5 +67,6 @@ public class PreGameController : SceneController
     {
         _isCountingTillGameStart = false;
         _secondsTillGame = 5.0f;
+        countDownReset?.Invoke();
     }
 }
