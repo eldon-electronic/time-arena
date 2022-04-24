@@ -26,10 +26,7 @@ public class CharacterAnimationController : MonoBehaviour
     }
     public void AnimationKeyControl(){
         
-        if(Input.GetKeyDown(KeyCode.W)){
-            StartRunningForwards();
-            Debug.Log(PlayerAnim);
-        } 
+        if(Input.GetKeyDown(KeyCode.W))StartRunningForwards();
         if(Input.GetKeyDown(KeyCode.S)) StartRunningBackwards();
         if(Input.GetKeyUp(KeyCode.W)) StopRunningForwards();
         if(Input.GetKeyDown(KeyCode.A)) StartRunningForwards();
