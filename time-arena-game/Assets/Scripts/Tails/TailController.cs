@@ -49,6 +49,7 @@ public class TailController : MonoBehaviour
 
         nameText.text = PhotonView.Find(_playerID).Owner.NickName;
         
+        
     }
 
     // Tails must be ordered to commit suicide; they should not be able to take the initiative themselves.

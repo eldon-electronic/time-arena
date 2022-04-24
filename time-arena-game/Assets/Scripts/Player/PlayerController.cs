@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private GameObject _miner;
     [SerializeField] private GameObject _guardian;
+	[SerializeField] private GameObject _minerBody;
 
 	public Constants.Team Team;
 	public int ID;
@@ -72,13 +73,27 @@ public class PlayerController : MonoBehaviour
 	{
         if (Team == Constants.Team.Guardian)
 		{
-            _guardian.SetActive(true);
-            _miner.SetActive(false);
+			if(_view.IsMine){
+				_guardian.SetActive(false);
+				_miner.SetActive(false);
+			}
+			else{
+				_guardian.SetActive(true);
+				_miner.SetActive(false);
+			}
+           
         }
         else if (Team == Constants.Team.Miner)
 		{
-            _guardian.SetActive(false);
-            _miner.SetActive(true);
+			if(_view.IsMine){
+				_guardian.SetActive(false);
+				_minerBody.SetActive(false);
+			}
+			else{
+				_guardian.SetActive(false);
+                _miner.SetActive(true);
+			}
+            
         }
     }
 
