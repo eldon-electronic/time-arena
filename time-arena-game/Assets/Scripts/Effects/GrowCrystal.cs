@@ -76,6 +76,6 @@ public class GrowCrystal : MonoBehaviour
             gameObject.transform.position = positionChange;
             gameObject.transform.localScale = scaleChange;
         } 
-        catch (Exception e) {}
+        catch (Exception e) {Debug.LogError($"Error: {e}");}
     }
 }
