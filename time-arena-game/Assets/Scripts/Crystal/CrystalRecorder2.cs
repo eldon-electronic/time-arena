@@ -7,21 +7,21 @@ using System.Text;
 public class CrystalRecorder2 : MonoBehaviour
 {
     
-    private Transform shardtransform;
-    private StreamWriter file;
+    private Transform _shardtransform;
+    private StreamWriter _file;
 
     void Awake()
     {
-        file = new StreamWriter(gameObject.name + ".txt");
+        _file = new StreamWriter(gameObject.name + ".txt");
     }
     
     // Update is called once per frame
     void Update()
     {
-        shardtransform = this.transform;
+        _shardtransform = this.transform;
         StringBuilder sb = new StringBuilder();
-        sb.Append(shardtransform.localPosition.x).Append(" ").Append(shardtransform.localPosition.y).Append(" ").Append(shardtransform.localPosition.z).Append("|").Append(shardtransform.rotation.w).Append(" ").Append(shardtransform.rotation.x).Append(" ").Append(shardtransform.rotation.y).Append(" ").Append(shardtransform.rotation.z);
+        sb.Append(_shardtransform.localPosition.x).Append(" ").Append(_shardtransform.localPosition.y).Append(" ").Append(_shardtransform.localPosition.z).Append("|").Append(_shardtransform.rotation.w).Append(" ").Append(_shardtransform.rotation.x).Append(" ").Append(_shardtransform.rotation.y).Append(" ").Append(_shardtransform.rotation.z);
         string line = sb.ToString();
-        file.WriteLine(line);
+        _file.WriteLine(line);
     }
 }
