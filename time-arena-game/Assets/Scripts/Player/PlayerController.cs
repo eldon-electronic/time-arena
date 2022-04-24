@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _miner;
     [SerializeField] private GameObject _guardian;
 	[SerializeField] private GameObject _minerBody;
+	[SerializeField] private GameObject _guardianBody;
 
 	public Constants.Team Team;
 	public int ID;
@@ -74,7 +75,7 @@ public class PlayerController : MonoBehaviour
         if (Team == Constants.Team.Guardian)
 		{
 			if(_view.IsMine){
-				_guardian.SetActive(false);
+				_guardianBody.SetActive(false);
 				_miner.SetActive(false);
 			}
 			else{
