@@ -92,5 +92,6 @@ public class DissolveController : DisController
         SetCutOffHeight(gameObject, modifier);
 
         _subscriber?.NotifyStoppedDissolving(!_fadeIn);
+        SetCutOffHeight(gameObject, 8.0f);
     }
 }

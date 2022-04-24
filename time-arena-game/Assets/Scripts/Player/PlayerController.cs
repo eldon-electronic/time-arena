@@ -10,8 +10,6 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
-	[SerializeField] private GameObject _miner;
-    [SerializeField] private GameObject _guardian;
 	[SerializeField] private GameObject _minerBody;
 	[SerializeField] private GameObject _guardianBody;
 	[SerializeField] private GameObject _minerDevice;

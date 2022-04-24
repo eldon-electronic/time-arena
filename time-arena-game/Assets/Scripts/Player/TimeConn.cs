@@ -122,7 +122,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_isDissolving = true;
 		if (_timelord.InYourReality(_view.ViewID))
 		{
-			gameObject.layer = Constants.LayerPlayer;
+			_player.Show();
 		}
 	}
 
@@ -132,7 +132,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		if (dissolvedOut)
 		{
 			_jumpDirection = Constants.JumpDirection.Static;
-			if (!_view.IsMine) gameObject.layer = Constants.LayerOutsideReality;
+			_player.Hide();
 		}
 	}
 
