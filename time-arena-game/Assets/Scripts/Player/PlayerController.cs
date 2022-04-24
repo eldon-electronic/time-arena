@@ -85,6 +85,8 @@ public class PlayerController : MonoBehaviour
 
 	// ------------ RPC ------------
 
+	// This RPC call is only called on the Master Client, so it needs to send out RPCs to everyone
+	// but themselves.
 	[PunRPC] void RPC_getIcons() {
 		_iconAssignments.Clear();
 		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
