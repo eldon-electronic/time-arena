@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using TMPro;
 
@@ -49,7 +50,13 @@ public class TailController : MonoBehaviour
 
         nameText.text = PhotonView.Find(_playerID).Owner.NickName;
         
-        
+        Constants.Team team;
+        if (SceneManager.GetActiveScene().name == "PreGameScene")
+        {
+            team = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTeam(_playerID);
+        }
+        else team = FindObjectOfType<GameController>().GetComponent<GameController>().GetTeam(_playerID);
+        // TODO: use the team to set visibility of mesh.
     }
 
     // Tails must be ordered to commit suicide; they should not be able to take the initiative themselves.
