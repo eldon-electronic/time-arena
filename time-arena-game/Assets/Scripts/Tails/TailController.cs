@@ -25,7 +25,7 @@ public class TailController : MonoBehaviour
 
             if (state.JumpDirection != Constants.JumpDirection.Static && _manager.GetParticlesEnabled())
             {
-                _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
+                // _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
             }
         }
     }
@@ -44,10 +44,11 @@ public class TailController : MonoBehaviour
 
         if (ps.JumpDirection != Constants.JumpDirection.Static)
         {
-            _particles.StartDissolving(ps.JumpDirection, false);
+            // _particles.StartDissolving(ps.JumpDirection, false);
         }
 
         nameText.text = PhotonView.Find(_playerID).Owner.NickName;
+        
         
     }
 

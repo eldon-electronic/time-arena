@@ -10,11 +10,13 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
-	[SerializeField] private GameObject _miner;
-    [SerializeField] private GameObject _guardian;
+	[SerializeField] private GameObject _minerBody;
+	[SerializeField] private GameObject _guardianBody;
+	[SerializeField] private GameObject _minerDevice;
 
 	public Constants.Team Team;
 	public int ID;
+	public int score;
 
 
 	// ------------ UNITY METHODS ------------
@@ -24,7 +26,7 @@ public class PlayerController : MonoBehaviour
 		ID = _view.ViewID;
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		if (ID == 1001) Team = Constants.Team.Guardian;
+		if (ID == 2001) Team = Constants.Team.Guardian;
 		else Team = Constants.Team.Miner;
 
 		SetCharacter();
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviour
 	void OnDisable() { GameController.gameActive -= OnGameActive; }
 
 	void Start()
-	{	
+	{
 		DontDestroyOnLoad(gameObject);
 
 		gameObject.layer = Constants.LayerPlayer;
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour
 		SceneController sceneController = FindObjectOfType<PreGameController>();
 		if (sceneController == null) Debug.LogError("PreGameController not found");
 		else sceneController.Register(this);
-		
+
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
 		{
@@ -71,13 +73,16 @@ public class PlayerController : MonoBehaviour
 	{
         if (Team == Constants.Team.Guardian)
 		{
-            _guardian.SetActive(true);
-            _miner.SetActive(false);
+			_guardianBody.SetActive(!_view.IsMine);
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
+           
         }
         else if (Team == Constants.Team.Miner)
 		{
-            _guardian.SetActive(false);
-            _miner.SetActive(true);
+			_minerBody.SetActive(!_view.IsMine);
+			_minerDevice.SetActive(true);
+            _guardianBody.SetActive(false);
         }
     }
 
@@ -86,21 +91,33 @@ public class PlayerController : MonoBehaviour
 
 	public void Show()
 	{
+		if (_view.IsMine) return;
+
 		gameObject.layer = Constants.LayerPlayer;
 		if (Team == Constants.Team.Guardian)
 		{
-			_guardian.SetActive(true);
+			_guardianBody.SetActive(true);
 		}
-		else _miner.SetActive(true);
+		else
+		{
+			_minerBody.SetActive(true);
+			_minerDevice.SetActive(true);
+		}
 	}
 
 	public void Hide()
 	{
+		if (_view.IsMine) return;
+
 		gameObject.layer = Constants.LayerOutsideReality;
 		if (Team == Constants.Team.Guardian)
 		{
-			_guardian.SetActive(false);
+			_guardianBody.SetActive(false);
 		}
-		else _miner.SetActive(false);
+		else
+		{
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
+		}
 	}
 }

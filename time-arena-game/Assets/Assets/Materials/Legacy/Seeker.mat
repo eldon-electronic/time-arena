@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Seeker
-  m_Shader: {fileID: -6465566751694194690, guid: b74e03b62ebd8496dbea4b6607ed0596, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 334bfe0e97b27a74080c58554c5488de, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -63,6 +63,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -76,7 +80,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1__EdgeWidth: 0.05
     - _AlphaClip: 0
+    - _BaseShadowAmount: 0
+    - _Base_Gloss: 32
+    - _BlackEdgeThickness: 1
+    - _BlackEdgeThreshold: 1
     - _Blend: 0
     - _BlendOp: 0
     - _BumpScale: 1
@@ -96,7 +105,7 @@ Material:
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0.1
     - _DstBlend: 0
-    - _EdgeWidth: 0.05
+    - _EdgeWidth: 0.2
     - _EmissionEnabled: 0
     - _EnvironmentReflections: 1
     - _FlipbookBlending: 0
@@ -113,6 +122,13 @@ Material:
     - _Parallax: 0.02
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _RimThickness: 1
+    - _RimThreshold: 0.1
+    - _ShineA: 3
+    - _ShineB: 1
+    - _ShineOffset: 0.2
+    - _ShineScale: 0.7
+    - _ShineWidth: 0.5
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
@@ -125,13 +141,20 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _AmbientColor: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 0}
+    - _BaseColor: {r: 0.0754902, g: 0, b: 0, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColour: {r: 0.3018868, g: 0, b: 0, a: 0}
+    - _Base_SpecularColor: {r: 0, g: 0, b: 0, a: 0}
+    - _BlackEdgeColor: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 0, b: 0, a: 1}
-    - _EdgeColour: {r: 0, g: 0.9366921, b: 47.77129, a: 0}
+    - _EdgeColour: {r: 63.528313, g: 0.500223, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
+    - _ShineColor: {r: 0, g: 0, b: 0, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _Tiling: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

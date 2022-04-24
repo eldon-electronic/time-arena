@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 {
     [SerializeField] private HudDebugPanel _debugPanel;
     [SerializeField] private PlayerController _player;
-    public PhotonView View;
+    [SerializeField] private PhotonView _view;
     public CharacterController CharacterBody;
     public Transform PlayerTransform;
     public LayerMask GroundMask;
@@ -20,14 +20,15 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     private float _jumpPower;
     private float _gravity;
     private bool _isGrounded;
+    private bool _isJumpPad;
     private bool _isCeiling;
     private float _xRot;
     private float _mouseSensitivity;
     private bool _lockMovement;
     private bool _lockRotation;
     private bool _activated;
-    private Vector3[] _hiderSpawnPoints;
-	private Vector3 _seekerSpawnPoint;
+    private Vector3[] _minerSpawnPoints;
+	private Vector3 _guardianSpawnPoint;
 
 
     // ------------ UNITY FUNCTIONS ------------
@@ -45,8 +46,8 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _lockMovement = false;
         _lockRotation = false;
         _activated = true;
-        _seekerSpawnPoint = new Vector3(-24f, -5f, -18f);
-        _hiderSpawnPoints =  new Vector3[] {
+        _guardianSpawnPoint = new Vector3(-24f, -5f, -18f);
+        _minerSpawnPoints =  new Vector3[] {
 			new Vector3(-19f, -5f, -33f),
 			new Vector3(-25f, -5f, -31f), 
 			new Vector3(-11f, -5f, -30f), 
@@ -81,7 +82,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 
     void Update()
     {
-        if (View.IsMine && _activated)
+        if (_view.IsMine && _activated)
         {
             UpdatePosition();
             UpdateRotation();
@@ -128,10 +129,15 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         groundCheck.y -= 1f;
         _isGrounded = Physics.CheckSphere(groundCheck, _groundCheckRadius, GroundMask);
 
+        // Check if the player is stood on a jump pad.
+        LayerMask jumpPadMask = LayerMask.GetMask("JumpPad");
+        _isJumpPad = Physics.CheckSphere(groundCheck, _groundCheckRadius, jumpPadMask);
+
         //Check if player's head intersects with any environment object.
         Vector3 ceilingCheck = PlayerTransform.position;
         ceilingCheck.y += 0.6f;
         _isCeiling = Physics.CheckSphere(ceilingCheck, _groundCheckRadius, GroundMask);
+        
 
         // Set and normalise movement vector.
         Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
@@ -144,17 +150,20 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
 		// Jump control.
-		if (Input.GetButtonDown("Jump") && _isGrounded && !_lockMovement)
+		if (Input.GetButtonDown("Jump") && (_isGrounded || _isJumpPad) && !_lockMovement)
         {
 			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
 		}
 
+        // Jump pad effect.
+        if(_isJumpPad) _jumpPower = 10f;
+        else _jumpPower = 3f;
         // Gravity effect.
         _velocity.y -= _gravity * Time.deltaTime;
 		if (_velocity.y <= -100f) _velocity.y = -100f;
 
 		// Reset vertical velocity value when grounded.
-		if (_isGrounded && _velocity.y < 0) _velocity.y = 0f;
+		if ((_isGrounded || _isJumpPad) && _velocity.y < 0) _velocity.y = 0f;
 
         // Reset vertical velocity when head it hitting ceiling.
         if (_isCeiling && _velocity.y > 0) _velocity.y = 0f;
@@ -186,11 +195,11 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 	{
 		if (_player.Team == Constants.Team.Miner)
 		{
-			int index = Random.Range(0, _hiderSpawnPoints.Length);
-			Vector3 position = _hiderSpawnPoints[index];
+			int index = Random.Range(0, _minerSpawnPoints.Length);
+			Vector3 position = _minerSpawnPoints[index];
 			transform.position = position;
 		}
-		else transform.position = _seekerSpawnPoint;
+		else transform.position = _guardianSpawnPoint;
 	}
 
     // ------------ PUBLIC METHODS ------------
@@ -198,9 +207,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     public Hashtable GetDebugValues()
     {
         Hashtable debugValues = new Hashtable();
-        debugValues.Add("IsGrounded", _isGrounded);
+        debugValues.Add($"{_view.ViewID}'s layer", gameObject.layer);
         return debugValues;
     }
-  
-    
 }

@@ -9,8 +9,9 @@ public abstract class SceneController: MonoBehaviour
     protected Dictionary<int, PlayerController> _miners;
 	protected Dictionary<int, PlayerController> _guardians;
 	protected TimeLord _timeLord;
-    protected int _minerScore;
-	public static event Action<int> scoreChange;
+  protected int _minerScore;
+  protected int _clientScore;
+    public static event Action<int, int> scoreChange;
 
 	public void Register(PlayerController pc)
     {
@@ -48,10 +49,18 @@ public abstract class SceneController: MonoBehaviour
 	}
 
     public void IncrementMinerScore()
-	{
-		_minerScore++;
-		scoreChange?.Invoke(_minerScore);
-	}
+  {
+    _minerScore++;
+    scoreChange?.Invoke(_clientScore, _minerScore);
+  }
 
-	public TimeLord GetTimeLord() { return _timeLord; }
+    public void IncrementPlayerScore()
+  {
+    _minerScore++;
+    _clientScore++;
+    scoreChange?.Invoke(_clientScore, _minerScore);
+  }
+
+	public TimeLord GetTimeLord() { return _timeLord;}
+	
 }
