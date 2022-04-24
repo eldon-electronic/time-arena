@@ -12,7 +12,7 @@ public class HudTutorial : MonoBehaviour
     [SerializeField] private GameObject _popUpText;
     [SerializeField] private GameObject _optionsPopUpText;
     [SerializeField] private GameObject[] _tutorialObjects;
-    private GameObject _crystal;
+    // private GameObject _crystal;
 
     private Dictionary<string, GameObject> _tutorialArrows;
 

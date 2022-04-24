@@ -9,6 +9,12 @@ public class HudScore : MonoBehaviour
     [SerializeField] private Text _playerText;
     [SerializeField] private Text _teamText;
 
+    void Awake()
+    {
+        _playerText.text = "0";
+        _teamText.text = "0";
+    }
+
     void OnEnable()
     {
         SceneController.scoreChange += SetScore;

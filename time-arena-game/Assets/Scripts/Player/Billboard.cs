@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 
@@ -5,9 +6,15 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
     private Transform _mainCameraTransform;
+    [SerializeField] private PhotonView _view;
 
     void Start()
     {
+        if (_view.IsMine)
+        {
+            Destroy(gameObject);
+            return;
+        }
         _mainCameraTransform = Camera.main.transform;
     }
 
