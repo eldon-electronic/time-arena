@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using TMPro;
 
@@ -8,9 +9,12 @@ public class TailController : MonoBehaviour
 {
     [SerializeField] private ParticleController _particles;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private GameObject _ghostGuardian;
+    [SerializeField] private GameObject _ghostMiner;
     private int _playerID;
     private int _tailID;
     private TimeLord _timeLord;
+    private PlayerController _player;
     private TailManager _manager;
 
 
@@ -49,7 +53,22 @@ public class TailController : MonoBehaviour
 
         nameText.text = PhotonView.Find(_playerID).Owner.NickName;
         
-        
+        Constants.Team team;
+        if (SceneManager.GetActiveScene().name == "PreGameScene")
+        {
+            team = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTeam(_playerID);
+        }
+        else team = FindObjectOfType<GameController>().GetComponent<GameController>().GetTeam(_playerID);
+        // TODO: use the team to set visibility of mesh.
+        if(team == Constants.Team.Guardian)
+        {
+            _ghostGuardian.SetActive(true);
+            _ghostMiner.SetActive(false);
+        }
+        else{
+            _ghostGuardian.SetActive(false);
+            _ghostMiner.SetActive(true);
+        }
     }
 
     // Tails must be ordered to commit suicide; they should not be able to take the initiative themselves.

@@ -75,5 +75,4 @@ public abstract class SceneController: MonoBehaviour
   }
 
 	public TimeLord GetTimeLord() { return _timeLord;}
-
 }
