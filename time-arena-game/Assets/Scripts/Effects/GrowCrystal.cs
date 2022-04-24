@@ -17,6 +17,7 @@ public class GrowCrystal : MonoBehaviour
     private float _yMax = 45;
     private float _xzScale = 45;
     private float _yPosStart;
+    private float _yPosChange = 2.15f;
     private Vector3 _startPos;
 
 
@@ -37,6 +38,9 @@ public class GrowCrystal : MonoBehaviour
         try {
             //get the percieved frame
             float percievedFrame = (float) _timeLord?.GetYourFrame();
+            Vector3 scaleChange = new Vector3(1f, 1f, 1f);
+            Vector3 position = gameObject.transform.position;
+            Vector3 positionChange = _startPos;
 
             if( (percievedFrame >= _startFrame) && (percievedFrame <= _endFrame) )
             {
@@ -46,22 +50,31 @@ public class GrowCrystal : MonoBehaviour
                 //modifiy values by progress
                 float xzSChange = (gP*_xzScale) + _ScaleBase;
                 float ySChange = (gP*_yMax) + _ScaleBase;
-                float yPosChange = (gP* 2.15f);
-                Vector3 scaleChange = new Vector3(xzSChange,ySChange,xzSChange);
-                Vector3 position = gameObject.transform.position;
-                Vector3 positionChange = _startPos;
+                float yPosChange = (gP* _yPosChange);
+                scaleChange = new Vector3(xzSChange,ySChange,xzSChange);
+                positionChange = _startPos;
                 positionChange[1] +=  yPosChange;
-                gameObject.transform.position = positionChange;
-                gameObject.transform.localScale = scaleChange;
             } 
             else if (percievedFrame < _startFrame)
             {
+                //turn collider off
                 _ObjectCollider.isTrigger = true;
+                //set origonal scale and pos
+                scaleChange = new Vector3(_ScaleBase,_ScaleBase,_ScaleBase);
+                positionChange = _startPos;
             } 
             else if (percievedFrame > _startFrame) 
             {
+                //turn collider off
                 _ObjectCollider.isTrigger = false;
+                //set post growth scale and position
+                scaleChange = new Vector3(_xzScale,_yMax,_xzScale);
+                positionChange = _startPos;
+                positionChange[1] += _yPosChange;
             }
+            
+            gameObject.transform.position = positionChange;
+            gameObject.transform.localScale = scaleChange;
         } 
         catch (Exception e) {}
     }
