@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using TMPro;
 
 public class TailController : MonoBehaviour
 {
     [SerializeField] private ParticleController _particles;
+    [SerializeField] private TextMeshProUGUI nameText;
     private int _playerID;
     private int _tailID;
     private TimeLord _timeLord;
@@ -22,7 +25,7 @@ public class TailController : MonoBehaviour
 
             if (state.JumpDirection != Constants.JumpDirection.Static && _manager.GetParticlesEnabled())
             {
-                _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
+                // _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
             }
         }
     }
@@ -41,8 +44,12 @@ public class TailController : MonoBehaviour
 
         if (ps.JumpDirection != Constants.JumpDirection.Static)
         {
-            _particles.StartDissolving(ps.JumpDirection, false);
+            // _particles.StartDissolving(ps.JumpDirection, false);
         }
+
+        nameText.text = PhotonView.Find(_playerID).Owner.NickName;
+        
+        
     }
 
     // Tails must be ordered to commit suicide; they should not be able to take the initiative themselves.

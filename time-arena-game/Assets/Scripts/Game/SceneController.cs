@@ -61,5 +61,6 @@ public abstract class SceneController: MonoBehaviour
     scoreChange?.Invoke(_clientScore, _minerScore);
   }
 
-	public TimeLord GetTimeLord() { return _timeLord; }
+	public TimeLord GetTimeLord() { return _timeLord;}
+	
 }
