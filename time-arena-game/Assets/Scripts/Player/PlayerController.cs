@@ -96,15 +96,20 @@ public class PlayerController : MonoBehaviour
 		if (_view.IsMine) return;
 
 		gameObject.layer = Constants.LayerPlayer;
+		// if (Team == Constants.Team.Guardian)
+		// {
+		// 	_guardianBody.SetActive(true);
+		// }
+		// else
+		// {
+		// 	_minerBody.SetActive(true);
+		// 	_minerDevice.SetActive(true);
+		// }
 		if (Team == Constants.Team.Guardian)
 		{
-			_guardianBody.SetActive(true);
+			_guardian.SetActive(true);
 		}
-		else
-		{
-			_minerBody.SetActive(true);
-			_minerDevice.SetActive(true);
-		}
+		else _miner.SetActive(true);
 	}
 
 	public void Hide()
@@ -112,14 +117,19 @@ public class PlayerController : MonoBehaviour
 		if (_view.IsMine) return;
 
 		gameObject.layer = Constants.LayerOutsideReality;
+		// if (Team == Constants.Team.Guardian)
+		// {
+		// 	_guardianBody.SetActive(false);
+		// }
+		// else
+		// {
+		// 	_minerBody.SetActive(false);
+		// 	_minerDevice.SetActive(false);
+		// }
 		if (Team == Constants.Team.Guardian)
 		{
-			_guardianBody.SetActive(false);
+			_guardian.SetActive(false);
 		}
-		else
-		{
-			_minerBody.SetActive(false);
-			_minerDevice.SetActive(false);
-		}
+		else _miner.SetActive(false);
 	}
 }
