@@ -75,27 +75,16 @@ public class PlayerController : MonoBehaviour
 	{
         if (Team == Constants.Team.Guardian)
 		{
-			if(_view.IsMine){
-				_guardianBody.SetActive(false);
-				_minerBody.SetActive(false);
-			}
-			else{
-				_guardianBody.SetActive(true);
-				_minerBody.SetActive(false);
-			}
+			_guardianBody.SetActive(!_view.IsMine);
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
            
         }
         else if (Team == Constants.Team.Miner)
 		{
-			if(_view.IsMine){
-				_guardianBody.SetActive(false);
-				_minerBody.SetActive(false);
-			}
-			else{
-				_guardianBody.SetActive(false);
-                _minerBody.SetActive(true);
-			}
-            
+			_minerBody.SetActive(!_view.IsMine);
+			_minerDevice.SetActive(true);
+            _guardianBody.SetActive(false);
         }
     }
 
@@ -104,38 +93,33 @@ public class PlayerController : MonoBehaviour
 
 	public void Show()
 	{
+		if (_view.IsMine) return;
+
 		gameObject.layer = Constants.LayerPlayer;
 		if (Team == Constants.Team.Guardian)
 		{
-			if (_view.IsMine) _guardianBody.SetActive(true);
-			else _guardianBody.SetActive(true);
+			_guardianBody.SetActive(true);
 		}
 		else
 		{
-			if (_view.IsMine) _minerBody.SetActive(true);
-			else {
-				_minerBody.SetActive(true);
-				_minerDevice.SetActive(true);
-		    }
+			_minerBody.SetActive(true);
+			_minerDevice.SetActive(true);
 		}
 	}
 
 	public void Hide()
 	{
+		if (_view.IsMine) return;
+
 		gameObject.layer = Constants.LayerOutsideReality;
 		if (Team == Constants.Team.Guardian)
 		{
-			if (_view.IsMine) _guardianBody.SetActive(false);
-			else _guardianBody.SetActive(false);
+			_guardianBody.SetActive(false);
 		}
 		else
 		{
-			if (_view.IsMine) _minerBody.SetActive(false);
-			else{
-				_minerBody.SetActive(false);
-				_minerDevice.SetActive(false);
-			} 
-		
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
 		}
 	}
 }
