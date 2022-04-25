@@ -32,6 +32,7 @@ public class PlayerGrab : MonoBehaviour
       } else {
         sceneController.DecrementMinerScore();
       }
+      Debug.Log("A miner has been grabbed");
       //TODO: respawn?
     }
 
@@ -41,9 +42,11 @@ public class PlayerGrab : MonoBehaviour
     Collider[] playersGrab = Physics.OverlapSphere(collider.gameObject.transform.position, collider.radius, GrabMask);
     foreach (var playerGotGrab in playersGrab)
     {
+      Debug.Log("Checking target" + playerGotGrab);
       // Call grabplayer function on that player.
       PlayerController targetPlayer = playerGotGrab.gameObject.GetComponent<PlayerController>();
       if(targetPlayer!=null){
+        Debug.Log("found PC");
         if (_player.Team == Constants.Team.Guardian && targetPlayer.Team == Constants.Team.Miner)
         {
           Debug.Log("Grabbed a miner");
