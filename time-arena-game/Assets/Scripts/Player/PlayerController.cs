@@ -32,9 +32,16 @@ public class PlayerController : MonoBehaviour
 			string playerRealtimeID = player.GetComponent<PhotonView>().Owner.UserId;
 			PhotonView playerView = player.GetComponent<PhotonView>();
 			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
-		}
-		_userID = _viewIDtoUserID[ID];
-		_view.RPC("RPC_getIcons", RpcTarget.MasterClient);
+		} _userID = _viewIDtoUserID[ID];
+
+		if (PhotonNetwork.IsMasterClient) {
+			foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
+				Debug.Log($"Added {pair.Value}: {PlayerPrefs.GetString(pair.Value)}");
+				_iconAssignments.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
+			}
+		} //else {
+			//_view.RPC("RPC_getIcons", RpcTarget.MasterClient);
+		//}
 	}
 
 	void OnEnable() { GameController.gameActive += OnGameActive; }
@@ -88,13 +95,9 @@ public class PlayerController : MonoBehaviour
 	// This RPC call is only called on the Master Client, so it needs to send out RPCs to everyone
 	// but themselves.
 	[PunRPC] void RPC_getIcons() {
-		_iconAssignments.Clear();
-		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
-			_iconAssignments.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
-		}
-
 		foreach (Player player in PhotonNetwork.PlayerList) {
 			if (player.UserId != _userID) {
+				Debug.Log($"Sending _iconAssignment to {player.NickName}");
 				_view.RPC("RPC_sendIcons", player, _iconAssignments);
 			}
 		}

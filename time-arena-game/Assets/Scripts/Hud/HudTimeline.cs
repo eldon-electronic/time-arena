@@ -116,23 +116,4 @@ public class HudTimeline : MonoBehaviour
             _players[player.id].gameObject.SetActive(true);
         }
     }
-
-    // ------------ RPC ------------
-
-    // Only called on Master Client (they've got the PlayerPrefs).
-    [PunRPC] void RPC_getIcons() { 
-        Debug.Log("Getting icons from PlayerPrefs");
-        _iconAssignment.Clear();
-        foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
-            _iconAssignment.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
-        }
-        Debug.Log("Sending them over");
-        _view.RPC("RPC_sendIcons", RpcTarget.All, _iconAssignment);
-    }
-
-    [PunRPC] void RPC_sendIcons(Dictionary<string, string> iconAssignment) {
-        _iconAssignment.Clear();
-        _iconAssignment = iconAssignment;
-    }
-
 }
