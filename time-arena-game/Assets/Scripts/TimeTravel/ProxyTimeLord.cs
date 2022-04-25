@@ -21,14 +21,17 @@ public class ProxyTimeLord: TimeLord
 
     public ProxyTimeLord(int totalFrames, bool activate): base(totalFrames)
     {
-        // Use _time if you want to store different log files each time.
-        _time = DateTime.Now.ToString("dd-MM-yyyy-HH-mm");
-        _file = new StreamWriter(Constants.LogFolder + "timeLog.txt");
-        _file.WriteLine(totalFrames.ToString());
-
-        _logLineItems = new List<string>();
-
         _activated = activate;
+
+        if (_activated)
+        {
+            // Use _time if you want to store different log files each time.
+            _time = DateTime.Now.ToString("dd-MM-yyyy-HH-mm");
+            _file = new StreamWriter(Constants.LogFolder + "timeLog.txt");
+            _file.WriteLine(totalFrames.ToString());
+
+            _logLineItems = new List<string>();
+        }
     }
 
     public override void Tick()
@@ -43,12 +46,12 @@ public class ProxyTimeLord: TimeLord
             _file.WriteLine(line);
 
             _logLineItems = new List<string>();
-        }
 
-        if (_currentFrame == _totalFrames - 1 && _activated)
-        {
-            _activated = false;
-            WriteFinalStates(Constants.LogFolder + "stateLog.txt");
+            if (_currentFrame == _totalFrames - 1)
+            {
+                _activated = false;
+                WriteFinalStates(Constants.LogFolder + "stateLog.txt");
+            }
         }
     }
 
