@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class HudTimeline : MonoBehaviour
 {
-    [SerializeField] private GameObject _timeline;
     [SerializeField] private GameObject _iconPrefab;
     [SerializeField] private Image _timelineFill;
     [SerializeField] private Sprite _yourMinerIcon;
