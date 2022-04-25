@@ -124,6 +124,6 @@ public class PlayerController : MonoBehaviour
 
 	public float GetTime()
     {
-		return _timelord.GetYourPosition();
+		return 0.0f; // _timelord.GetYourPosition();
     }
 }

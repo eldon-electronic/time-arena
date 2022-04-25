@@ -12,7 +12,7 @@ public static class Constants
     public static int AnimationFrames = 3 * FrameRate;
     public static int LayerPlayer = 3;
     public static int LayerOutsideReality = 9;
-    public static int Proximity = 10;
+    public static float Proximity = 10f;
     public static string LogFolder = "StateDisplay/";
 
     public enum Team
@@ -26,5 +26,12 @@ public static class Constants
         Static,
         Forward,
         Backward
+    }
+
+    public enum RelTime
+    {
+        Behind,
+        Same,
+        Ahead
     }
 }
