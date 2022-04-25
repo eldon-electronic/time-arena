@@ -9,10 +9,11 @@ public class PlayerGrab : MonoBehaviour
   [SerializeField] private PlayerController _player;
   [SerializeField] private SphereCollider collider;
   private PhotonView _view;
-	public bool _damageWindow = false;
-  private SceneController sceneController;
+	private bool _damageWindow = false;
+  private SceneController _sceneController;
 
     void Start(){
+      _sceneController = FindObjectOfType<PreGameController>();
     }
 
     public void OnEnable()
@@ -37,9 +38,9 @@ public class PlayerGrab : MonoBehaviour
     [PunRPC]
     void RPC_getGrabbed(){
       if(_view.IsMine){
-        sceneController.DecrementPlayerScore();
+        _sceneController.DecrementPlayerScore();
       } else {
-        sceneController.DecrementMinerScore();
+        _sceneController.DecrementMinerScore();
       }
       Debug.Log("A miner has been grabbed");
       //TODO: respawn?
@@ -68,6 +69,6 @@ public class PlayerGrab : MonoBehaviour
     }
   }
 
-  private void SetGame(GameController game) { sceneController = game; }
+  private void SetGame(GameController game) { _sceneController = game; }
 
 }

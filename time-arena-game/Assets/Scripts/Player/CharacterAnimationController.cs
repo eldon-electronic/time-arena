@@ -8,10 +8,8 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private Animator PlayerAnim;
     [SerializeField] private PlayerGrab _grab;
     [SerializeField] private  PhotonView _view;
+    [SerializeField] private  PlayerController _playerController;
     private bool _paused = false;
-    private float grabTimer = 0;
-    private bool mouseDown = false;
-    private bool mouseReset = true;
 
     void Awake() {
         PauseManager.paused += updatePause;
@@ -29,16 +27,6 @@ public class CharacterAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if(mouseDown && mouseReset){
-        mouseReset = false;
-        StartGrabbing();
-      } else if(_grab._damageWindow) {
-        grabTimer += Time.deltaTime;
-        if(grabTimer >= 1){
-          StopGrabbing();
-          mouseReset = true;
-        }
-      }
 
         AnimationKeyControl();
 
@@ -55,18 +43,21 @@ public class CharacterAnimationController : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.S)) StopRunningBackwards();
         if(Input.GetKeyDown(KeyCode.Space))StartJumping();
         if(Input.GetKeyUp(KeyCode.Space))StopJumping();
-        if(Input.GetMouseButtonDown(0)) mouseDown = true;
-        if(Input.GetMouseButtonUp(0)) mouseDown = false;
+        if(_playerController.Team == Constants.Team.Guardian){
+          Debug.Log("S");
+          if(Input.GetMouseButtonDown(0)) {
+            Debug.Log("B");
+            StartGrabbing();
+          }
+        }
     }
     public void StartGrabbing(){
-      Debug.Log("started grab");
-      _grab._damageWindow = true;
       PlayerAnim.SetBool("isGrabbing", true);
+      _grab.damageWindow = true;
     }
     public void StopGrabbing(){
-      Debug.Log("stopped grab");
-        _grab._damageWindow = false;
-        PlayerAnim.SetBool("isGrabbing", false);
+      PlayerAnim.SetBool("isGrabbing", false);
+      _grab.damageWindow = false;
     }
     public void StartRunningForwards(){
         PlayerAnim.SetBool("isRunningForwards",true);
