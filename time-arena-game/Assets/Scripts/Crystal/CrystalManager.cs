@@ -11,6 +11,8 @@ public class CrystalManager : MonoBehaviour
   [SerializeField] private GameObject crystalPrefab;
   [SerializeField] private GameController game;
 
+  private boolean initialSpawn = false;
+
   //spawnPoints will have a location of every single crystal
   //order is shared with crystals list so can be iterated over simultaneously
   //spawnpoints necessary for crystal instantiation - add more by adding spawn points in editor
@@ -38,6 +40,9 @@ public class CrystalManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      if(!initialSpawn){
+        cm.StartCoroutine(cm.Respawn(ID, 20));
+      }
       //check if player should be able to see crystals
       foreach(CrystalBehaviour crystal in crystals){
         TimeLord t = game.GetTimeLord();
@@ -58,8 +63,7 @@ public class CrystalManager : MonoBehaviour
     }
 
     //enumerator coroutine to be called when crystal is collected - waits x seconds before respawning crystal at random time
-    public IEnumerator Respawn(int id){
-      float spawnDelay = 5.0f;
+    public IEnumerator Respawn(int id, float spawnDelay){
       TimeLord t = game.GetTimeLord();
       float newExistance = Random.Range(0.0f, (t.GetCurrentFrame())/Constants.FrameRate);
       Vector2 newExistanceRange = new Vector2(newExistance, newExistance + 10f );

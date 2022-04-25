@@ -17,8 +17,8 @@ public class CrystalBehaviour : MonoBehaviour
     private SceneController sceneController;
 
     //attributes defining crystal state
-    public Vector2 existanceRange = new Vector2(5f, 10f);
-    public bool isCollected = false; //if isCollected is true - there is no instance of the crystal at any time
+    public Vector2 existanceRange = new Vector2(-1f, -1f);
+    public bool isCollected = true; //if isCollected is true - there is no instance of the crystal at any time
 
 
     // Start is called before the first frame
@@ -79,7 +79,7 @@ public class CrystalBehaviour : MonoBehaviour
         sceneController.IncrementMinerScore();
       }
       if(PhotonNetwork.IsMasterClient){
-        cm.StartCoroutine(cm.Respawn(ID));
+        cm.StartCoroutine(cm.Respawn(ID, 10));
       }
     }
 
