@@ -8,24 +8,30 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private Animator PlayerAnim;
     [SerializeField] private PlayerGrab _grab;
     [SerializeField] private  PhotonView _view;
-    
-    void Awake() {
+    private bool _paused = false;
 
+    void Awake() {
+        PauseManager.paused += updatePause;
         if(!_view.IsMine){
             Destroy(this);
             return;
         }
-        
+
     }
-    
+
+    void updatePause(bool newVal){
+      _paused = newVal;
+    }
+
     // Update is called once per frame
     void Update()
     {
+
         AnimationKeyControl();
- 
+
     }
     public void AnimationKeyControl(){
-        
+
         if(Input.GetKeyDown(KeyCode.W))StartRunningForwards();
         if(Input.GetKeyDown(KeyCode.S)) StartRunningBackwards();
         if(Input.GetKeyUp(KeyCode.W)) StopRunningForwards();
@@ -36,7 +42,18 @@ public class CharacterAnimationController : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.S)) StopRunningBackwards();
         if(Input.GetKeyDown(KeyCode.Space))StartJumping();
         if(Input.GetKeyUp(KeyCode.Space))StopJumping();
-        if(Input.GetMouseButtonDown(0)) _grab.Grab();
+        if(Input.GetMouseButtonDown(0)) StartGrabbing();
+        if(Input.GetMouseButtonUp(0)) StopGrabbing();
+    }
+    public void StartGrabbing(){
+      Debug.Log("started grab");
+        _grab._damageWindow = true;
+        PlayerAnim.SetBool("isGrabbing", true);
+    }
+    public void StopGrabbing(){
+      Debug.Log("stopped grab");
+        _grab._damageWindow = false;
+        PlayerAnim.SetBool("isGrabbing", false);
     }
     public void StartRunningForwards(){
         PlayerAnim.SetBool("isRunningForwards",true);
