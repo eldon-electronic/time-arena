@@ -10,10 +10,12 @@ public class HudTimeline : MonoBehaviour
     [SerializeField] private GameObject _timeline;
     [SerializeField] private GameObject _iconPrefab;
     [SerializeField] private Image _timelineFill;
-    [SerializeField] private Sprite _yourIcon;
+    [SerializeField] private Sprite _yourMinerIcon;
+    [SerializeField] private Sprite _yourGuardianIcon;
     [SerializeField] private Sprite _minerIcon;
     [SerializeField] private Sprite _guardianIcon;
     [SerializeField] private PhotonView _view;
+    [SerializeField] private Transform _iconContainer;
     private SceneController _sceneController;
     private TimeLord _timeLord;
     private Dictionary<int, Slider> _players;
@@ -72,8 +74,7 @@ public class HudTimeline : MonoBehaviour
     private Slider InstantiateIcon(Constants.Team team, bool isMe)
     {
         // Instantiate and set its parent to be the timeline.
-        GameObject newIcon = Instantiate(_iconPrefab);
-        newIcon.transform.parent = _timeline.transform;
+        GameObject newIcon = Instantiate(_iconPrefab, _iconContainer);
 
         // Reset its position and scale.
         newIcon.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
@@ -81,7 +82,14 @@ public class HudTimeline : MonoBehaviour
 
         // Set its icon image.
         GameObject handle = newIcon.transform.GetChild(0).GetChild(0).gameObject;
-        if (isMe) handle.GetComponent<Image>().sprite = _yourIcon;
+        GameObject handleSliderArea = newIcon.transform.GetChild(0).gameObject;
+        if (isMe) {
+            if (team == Constants.Team.Miner) handle.GetComponent<Image>().sprite = _yourMinerIcon;
+            else handle.GetComponent<Image>().sprite = _yourGuardianIcon;
+            handle.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 0);
+            handleSliderArea.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+            handleSliderArea.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        }
         else if (team == Constants.Team.Guardian)
         {
             handle.GetComponent<Image>().sprite = _guardianIcon;
