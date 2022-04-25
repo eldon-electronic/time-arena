@@ -13,7 +13,16 @@ public class PlayerGrab : MonoBehaviour
   private SceneController sceneController;
 
     void Start(){
-      sceneController = GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<SceneController>();
+    }
+
+    public void OnEnable()
+    {
+        GameController.gameActive += SetGame;
+    }
+
+    public void OnDisable()
+    {
+        GameController.gameActive -= SetGame;
     }
 
     void Update()
@@ -58,4 +67,7 @@ public class PlayerGrab : MonoBehaviour
       }
     }
   }
+
+  private void SetGame(GameController game) { sceneController = game; }
+
 }

@@ -9,6 +9,8 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private PlayerGrab _grab;
     [SerializeField] private  PhotonView _view;
     private bool _paused = false;
+    private float grabTimer = 0;
+    private bool mouseDown = false;
 
     void Awake() {
         PauseManager.paused += updatePause;
@@ -26,6 +28,18 @@ public class CharacterAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      if(_grab._damageWindow){
+        grabTimer+=Time.deltaTime;
+        if(grabTimer >= 1){
+          grabTimer = 0;
+          stopGrabbing();
+          mouseDown = false;
+        }
+      } else {
+        if(mouseDown){
+          startGrabbing();
+        }
+      }
 
         AnimationKeyControl();
 
@@ -42,13 +56,13 @@ public class CharacterAnimationController : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.S)) StopRunningBackwards();
         if(Input.GetKeyDown(KeyCode.Space))StartJumping();
         if(Input.GetKeyUp(KeyCode.Space))StopJumping();
-        if(Input.GetMouseButtonDown(0)) StartGrabbing();
-        if(Input.GetMouseButtonUp(0)) StopGrabbing();
+        if(Input.GetMouseButtonDown(0)) mouseDown = true;
+        if(Input.GetMouseButtonUp(0)) mouseDown = false;
     }
     public void StartGrabbing(){
       Debug.Log("started grab");
-        _grab._damageWindow = true;
-        PlayerAnim.SetBool("isGrabbing", true);
+      _grab._damageWindow = true;
+      PlayerAnim.SetBool("isGrabbing", true);
     }
     public void StopGrabbing(){
       Debug.Log("stopped grab");
