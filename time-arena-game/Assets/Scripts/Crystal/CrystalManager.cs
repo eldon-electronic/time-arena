@@ -40,7 +40,7 @@ public class CrystalManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if(!initialSpawn){
+      if(PhotonNetwork.IsMasterClient && !initialSpawn){
         int n = 0;
         foreach(CrystalBehaviour crystal in crystals){
           StartCoroutine(Respawn(n++, 20));
