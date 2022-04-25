@@ -32,6 +32,7 @@ public class PlayerGrab : MonoBehaviour
       } else {
         sceneController.DecrementMinerScore();
       }
+      //TODO: respawn?
     }
 
     public void Grab()
@@ -45,10 +46,11 @@ public class PlayerGrab : MonoBehaviour
       if(targetPlayer!=null){
         if (_player.Team == Constants.Team.Guardian && targetPlayer.Team == Constants.Team.Miner)
         {
-          // TODO: grab the miner.
           Debug.Log("Grabbed a miner");
           PhotonView viewOfMiner = targetPlayer.GetComponent<PhotonView>();
           viewOfMiner?.RPC("RPC_getGrabbed", RpcTarget.All);
+          _damageWindow = false;
+          continue;
         }
       }
     }
