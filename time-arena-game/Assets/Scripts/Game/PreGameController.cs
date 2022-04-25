@@ -39,6 +39,7 @@ public class PreGameController : SceneController
             {
                 PhotonNetwork.LoadLevel("GameScene");
                 _isCountingTillGameStart = false;
+                
             }
             countDown?.Invoke(_secondsTillGame);
         }
