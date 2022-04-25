@@ -12,10 +12,13 @@ public class PreGameController : SceneController
 
     void Awake()
     {
+        Debug.Log("Pregame awake");
         _miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
         _secondsTillGame = 5.0f;
+        // _timeLord = new ProxyTimeLord(Constants.PreGameLength * Constants.FrameRate, true);
         _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
+        Debug.Log("Pregame created new TimeLord");
     }
 
     void Start()

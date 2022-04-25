@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TailManager : MonoBehaviour
+public class TailManager : MonoBehaviour, Debuggable
 {
     [SerializeField] private GameObject _tailPrefab;
     [SerializeField] private PhotonView _view;
+    [SerializeField] private HudDebugPanel _debugPanel;
     private TimeLord _timeLord;
     private Dictionary<int, TailController> _tails;
     private bool _activated;
@@ -41,6 +42,7 @@ public class TailManager : MonoBehaviour
     {
         Debug.Log("TailManager Start");
         _timeLord = GameObject.FindObjectOfType<PreGameController>().GetTimeLord();
+        _debugPanel.Register(this);
     }
 
     void Update()
@@ -96,4 +98,17 @@ public class TailManager : MonoBehaviour
     }
 
     public bool GetParticlesEnabled() { return _particlesEnabled; }
+
+
+    // ------------ OTHER PUBLIC FUNCTIONS ------------
+
+    public Hashtable GetDebugValues()
+    {
+        Hashtable debugItems = new Hashtable();
+        foreach (var tail in _tails)
+        {
+            debugItems.Add($"tail {tail.Key}", true);
+        }
+		return debugItems;
+    }
 }
