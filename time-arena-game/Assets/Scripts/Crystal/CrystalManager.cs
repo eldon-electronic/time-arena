@@ -11,7 +11,7 @@ public class CrystalManager : MonoBehaviour
   [SerializeField] private GameObject crystalPrefab;
   [SerializeField] private GameController game;
 
-  private boolean initialSpawn = false;
+  private bool initialSpawn = false;
 
   //spawnPoints will have a location of every single crystal
   //order is shared with crystals list so can be iterated over simultaneously
@@ -41,7 +41,10 @@ public class CrystalManager : MonoBehaviour
     void Update()
     {
       if(!initialSpawn){
-        cm.StartCoroutine(cm.Respawn(ID, 20));
+        int n = 0;
+        foreach(CrystalBehaviour crystal in crystals){
+          StartCoroutine(Respawn(n++, 20));
+        }
       }
       //check if player should be able to see crystals
       foreach(CrystalBehaviour crystal in crystals){
