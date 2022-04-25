@@ -217,6 +217,8 @@ public class TimeLord: Debuggable
 
 	public void SetRealities(Dictionary<int, Reality> realities) { _realities.SetRealities(realities); }
 
+	public void SetCurrentFrame(int currentFrame) { _currentFrame = currentFrame; }
+
 
 	// ------------ PUBLIC METHODS ------------
 

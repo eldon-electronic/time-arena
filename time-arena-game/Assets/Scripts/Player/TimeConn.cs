@@ -105,7 +105,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 				{
 					data.Add(reality.Key, reality.Value.GetData());
 				}
-				_view.RPC("RPC_synchronise", RpcTarget.All, data);
+				int frame = _timelord.GetCurrentFrame();
+				_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
 				_syncTimer = 10;
 			}
 			_syncTimer--;
@@ -298,8 +299,9 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	}
 
 	[PunRPC]
-	void RPC_synchronise(Dictionary<int, int[]> data)
+	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
 	{
+		_timelord.SetCurrentFrame(currentFrame);
 		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
 		foreach (var item in data)
 		{
