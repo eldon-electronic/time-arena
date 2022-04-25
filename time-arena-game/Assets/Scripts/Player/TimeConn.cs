@@ -38,6 +38,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	private float _backJumpCooldown;
 	private bool _timeTravelEnabled;
 	private bool _isDissolving;
+	private int _syncTimer;
 
 
 	// ------------ UNITY METHODS ------------
@@ -51,6 +52,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_backJumpCooldown = 15f;
 		_timeTravelEnabled = true;
 		_isDissolving = false;
+		_syncTimer = 10;
 	}
 
 	void OnEnable()
@@ -91,7 +93,24 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			UpdateCooldowns();
 			KeyControl();
 		}
-		if (_timeTravelEnabled) UpdateTimeTravel();
+		if (_timeTravelEnabled)
+		{
+			UpdateTimeTravel();
+
+			// If master client, synchronise everyone else every ten frames.
+			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0)
+			{
+				Dictionary<int, int[]> data = new Dictionary<int, int[]>();
+				foreach (var reality in _timelord.GetRealities())
+				{
+					data.Add(reality.Key, reality.Value.GetData());
+				}
+				int frame = _timelord.GetCurrentFrame();
+				_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
+				_syncTimer = 10;
+			}
+			_syncTimer--;
+		}
 	}
 
 
@@ -205,7 +224,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		if (Input.GetKeyDown(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, true);
 		if (Input.GetKeyUp(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, false);
 		if (Input.GetKeyUp(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, false);
-		if (Input.GetKeyDown(KeyCode.L)) _timelord.SnapshotStates("GameSnapshot.txt");
 	}
 
 
@@ -278,6 +296,18 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			_disController?.TriggerDissolve(_jumpDirection, false);
 			_particles.StartParticles(_jumpDirection);
 		}
+	}
+
+	[PunRPC]
+	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
+	{
+		_timelord.SetCurrentFrame(currentFrame);
+		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
+		foreach (var item in data)
+		{
+			realities.Add(item.Key, new Reality(item.Value));
+		}
+		_timelord.SetRealities(realities);
 	}
 
 
