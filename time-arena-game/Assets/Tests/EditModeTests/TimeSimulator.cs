@@ -83,7 +83,7 @@ public class TimeSimulator: Tester
     private int _simulationLength;
     private List<Player> _players;
     private int _dissolveTime;
-    private TimeLord _timeLord;
+    private ProxyTimeLord _timeLord;
     private bool _writeFinalStates;
 
     // All time values are measured in frames.
@@ -98,7 +98,7 @@ public class TimeSimulator: Tester
         }
 
         _dissolveTime = dissolveTime;
-        _timeLord = new TimeLord(_simulationLength);
+        _timeLord = new ProxyTimeLord(_simulationLength, false);
         _writeFinalStates = writeFinalStates;
     }
 

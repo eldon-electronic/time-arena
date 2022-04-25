@@ -18,7 +18,7 @@ public class TestTimeLordSimulation: Tester
         Constants.JumpDirection dir = Constants.JumpDirection.Static;
 
         // Run the simulation.
-        TimeLord timeLord = new TimeLord(20);
+        ProxyTimeLord timeLord = new ProxyTimeLord(20, false);
         timeLord.Connect(playerID, true);
         timeLord.EnterReality(playerID);
         
