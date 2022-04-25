@@ -20,11 +20,8 @@ public class UsernameManager : MonoBehaviour
     void Start()
     {
         if (PlayerPrefs.HasKey("username")) {
-            string playerNickname = PlayerPrefs.GetString("username");
-            welcomeText = "Welcome to Time Arena " + playerNickname + ".";
-            _welcomeText.text = welcomeText;
-            displayWelcomeMessage();
-            PhotonNetwork.NickName = playerNickname;
+            PlayerPrefs.DeleteAll();
+            DisplayUsernameInput();
         } else {
             DisplayUsernameInput();
         }
@@ -58,11 +55,5 @@ public class UsernameManager : MonoBehaviour
     private void displayWelcomeMessage() {
         _usernameInputContainer.gameObject.SetActive(false);
         _welcomeTextContainer.gameObject.SetActive(true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
