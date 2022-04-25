@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 		}
 
         // Jump pad effect.
-        if(_isJumpPad) _jumpPower = 10f;
+        if(_isJumpPad) _jumpPower = 14f;
         else _jumpPower = 3f;
         // Gravity effect.
         _velocity.y -= _gravity * Time.deltaTime;

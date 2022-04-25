@@ -9,8 +9,8 @@ public abstract class SceneController: MonoBehaviour
     protected Dictionary<int, PlayerController> _miners;
 	protected Dictionary<int, PlayerController> _guardians;
 	protected TimeLord _timeLord;
-  protected int _minerScore;
-  protected int _clientScore;
+  	protected int _minerScore;
+  	protected int _clientScore;
     public static event Action<int, int> scoreChange;
 
 	public void Register(PlayerController pc)
