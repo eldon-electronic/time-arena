@@ -11,15 +11,24 @@ public abstract class PPController: MonoBehaviour
 {
 	public abstract void TriggerPP(Constants.JumpDirection direction, bool jumpOut);
 }
+public abstract class DisController: MonoBehaviour
+{
+	public abstract void TriggerDissolve(Constants.JumpDirection direction, bool jumpOut);
+}
 
 
-public class TimeConn : MonoBehaviour, ParticleUser
+public class TimeConn : MonoBehaviour, DissolveUser
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
+	[SerializeField] private PlayerController _player;
 	[SerializeField] private ParticleController _particles;
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
 	[SerializeField] private PPController _ppController;
+	[SerializeField] private DissolveController _disMinerController;
+	[SerializeField] private DissolveController _disGuardianController;
+
+	private DissolveController _disController;
 	private SceneController _sceneController;
 	private TimeLord _timelord;
 	private bool _isJumping;
@@ -66,7 +75,14 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		_sceneController = FindObjectOfType<PreGameController>();
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
 		else SetTimeLord();
-		_particles.SetSubscriber(this);
+
+		// Make sure that this script is executed before ParticleController.
+		if (_player.Team == Constants.Team.Guardian)
+		{
+			_disController = _disGuardianController;
+		}
+		else _disController = _disMinerController;
+		_disController.SetSubscriber(this);
 		_tailManager.SetActive(true);
 	}
 
@@ -124,7 +140,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		_isDissolving = true;
 		if (_timelord.InYourReality(_view.ViewID))
 		{
-			gameObject.layer = Constants.LayerPlayer;
+			_player.Show();
 		}
 	}
 
@@ -134,7 +150,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (dissolvedOut)
 		{
 			_jumpDirection = Constants.JumpDirection.Static;
-			if (!_view.IsMine) gameObject.layer = Constants.LayerOutsideReality;
+			_player.Hide();
 		}
 	}
 
@@ -181,6 +197,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
 					_tailManager.EnableParticles(false);
 					_ppController?.TriggerPP(direction, jumpOut);
+					
 				}
 			}
 			else if (_isJumping)
@@ -189,6 +206,7 @@ public class TimeConn : MonoBehaviour, ParticleUser
 				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
 				_tailManager.EnableParticles(true);
 				_ppController?.TriggerPP(direction, jumpOut);
+				
 			}
 		}
 	}
@@ -254,7 +272,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
 		{
-			_particles.StartDissolving(_jumpDirection, true);
+			_disController?.TriggerDissolve(_jumpDirection, true);
+			_particles.StartParticles(_jumpDirection);
 		}
 	}
 
@@ -273,7 +292,8 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		}
 		else if (_timelord.InYourReality(_view.ViewID))
 		{
-			_particles.StartDissolving(_jumpDirection, false);
+			_disController?.TriggerDissolve(_jumpDirection, false);
+			_particles.StartParticles(_jumpDirection);
 		}
 	}
 
@@ -298,5 +318,10 @@ public class TimeConn : MonoBehaviour, ParticleUser
 		bool canJumpForward = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Forward);
 		bool canJumpBack = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Backward);
 		return (canJumpForward, canJumpBack);
+	}
+
+	public Constants.Team GetTeam()
+	{
+		return _player.Team;
 	}
 }
