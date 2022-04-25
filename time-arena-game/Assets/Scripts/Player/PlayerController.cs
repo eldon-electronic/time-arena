@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (Team == Constants.Team.Guardian)
 		{
-			_guardianBody.SetActive(true);
+			_guardianBody.SetActive(!view.IsMine);
 			_minerBody.SetActive(false);
 			_minerDevice.SetActive(false);
 
