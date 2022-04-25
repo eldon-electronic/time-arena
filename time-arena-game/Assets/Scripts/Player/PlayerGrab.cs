@@ -63,8 +63,9 @@ public class PlayerGrab : MonoBehaviour
           PhotonView viewOfMiner = targetPlayer.gameObject.GetComponent<PhotonView>();
           if(viewOfMiner == null){
             Debug.Log("error  null view");
+          } else {
+            viewOfMiner.RPC("RPC_getGrabbed", RpcTarget.All);
           }
-          viewOfMiner?.RPC("RPC_getGrabbed", RpcTarget.All);
           continue;
         }
       }
