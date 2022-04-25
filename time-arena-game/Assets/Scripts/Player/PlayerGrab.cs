@@ -36,7 +36,7 @@ public class PlayerGrab : MonoBehaviour
     }
 
     [PunRPC]
-    public void RPC_getGrabbed(){
+    public void RPC_getGrabbed(){ //TODO:nullreference exception for this function??
       if(_view.IsMine){
         _sceneController.DecrementPlayerScore();
       } else {
