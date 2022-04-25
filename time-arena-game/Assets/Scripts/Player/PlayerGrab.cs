@@ -36,7 +36,7 @@ public class PlayerGrab : MonoBehaviour
     }
 
     [PunRPC]
-    void RPC_getGrabbed(){
+    public void RPC_getGrabbed(){
       if(_view.IsMine){
         _sceneController.DecrementPlayerScore();
       } else {
@@ -60,7 +60,7 @@ public class PlayerGrab : MonoBehaviour
         if (_player.Team == Constants.Team.Guardian && targetPlayer.Team == Constants.Team.Miner)
         {
           Debug.Log("Grabbed a miner");
-          PhotonView viewOfMiner = targetPlayer.GetComponent<PhotonView>();
+          PhotonView viewOfMiner = targetPlayer.gameObject.GetComponent<PhotonView>();
           viewOfMiner?.RPC("RPC_getGrabbed", RpcTarget.All);
           continue;
         }

@@ -14104,6 +14104,7 @@ MonoBehaviour:
     m_Bits: 8
   _player: {fileID: 3961948662385648054}
   collider: {fileID: 205782201560635344}
+  damageWindow: 0
 --- !u!114 &3072241911820505086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15304,7 +15305,7 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: isGrabbing
   - Type: 4
     SynchronizeType: 1
