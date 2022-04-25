@@ -9,7 +9,7 @@ public class PlayerGrab : MonoBehaviour
   [SerializeField] private PlayerController _player;
   [SerializeField] private SphereCollider collider;
   private PhotonView _view;
-	private bool _damageWindow = false;
+	public bool damageWindow = false;
   private SceneController _sceneController;
 
     void Start(){
@@ -29,7 +29,7 @@ public class PlayerGrab : MonoBehaviour
     void Update()
     {
       // If grabbing, check for intersection with player.
-  		if (_damageWindow)
+  		if (damageWindow)
   		{
         Grab();
       }
@@ -62,7 +62,6 @@ public class PlayerGrab : MonoBehaviour
           Debug.Log("Grabbed a miner");
           PhotonView viewOfMiner = targetPlayer.GetComponent<PhotonView>();
           viewOfMiner?.RPC("RPC_getGrabbed", RpcTarget.All);
-          _damageWindow = false;
           continue;
         }
       }

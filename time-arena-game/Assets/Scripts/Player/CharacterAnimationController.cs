@@ -10,6 +10,7 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private  PhotonView _view;
     [SerializeField] private  PlayerController _playerController;
     private bool _paused = false;
+    private bool _grabCooldown = false;
 
     void Awake() {
         PauseManager.paused += updatePause;
@@ -44,9 +45,9 @@ public class CharacterAnimationController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))StartJumping();
         if(Input.GetKeyUp(KeyCode.Space))StopJumping();
         if(_playerController.Team == Constants.Team.Guardian){
-          Debug.Log("S");
-          if(Input.GetMouseButtonDown(0)) {
-            Debug.Log("B");
+          Debug.Log("teamcheck pass");
+          if(Input.GetMouseButtonDown(0) && !_grabCooldown) {
+            Debug.Log("mousepress pass");
             StartGrabbing();
           }
         }
@@ -54,6 +55,8 @@ public class CharacterAnimationController : MonoBehaviour
     public void StartGrabbing(){
       PlayerAnim.SetBool("isGrabbing", true);
       _grab.damageWindow = true;
+      _grabCooldown = true;
+      StartCoroutine(grabReset(3));
     }
     public void StopGrabbing(){
       PlayerAnim.SetBool("isGrabbing", false);
@@ -76,5 +79,11 @@ public class CharacterAnimationController : MonoBehaviour
     }
     public void StopJumping(){
         PlayerAnim.SetBool("isJumping",false);
+    }
+
+    //enumerator coroutine to be called when grabbing
+    public IEnumerator grabReset(int grabDelay){
+      yield return new WaitForSeconds(grabDelay);
+      _grabCooldown = false;
     }
 }
