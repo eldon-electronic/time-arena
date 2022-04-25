@@ -6,11 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour, Debuggable
 {
-    private GameController _game;
     [SerializeField] private HudDebugPanel _debugPanel;
-    public PhotonView View;
+    [SerializeField] private PlayerController _player;
+    [SerializeField] private PhotonView _view;
     public CharacterController CharacterBody;
-    public PauseManager PauseUI;
     public Transform PlayerTransform;
     public LayerMask GroundMask;
     public GameObject CameraHolder;
@@ -21,10 +20,18 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     private float _jumpPower;
     private float _gravity;
     private bool _isGrounded;
+    private bool _isJumpPad;
     private bool _isCeiling;
     private float _xRot;
     private float _mouseSensitivity;
+    private bool _lockMovement;
+    private bool _lockRotation;
     private bool _activated;
+    private Vector3[] _minerSpawnPoints;
+	private Vector3 _guardianSpawnPoint;
+
+
+    // ------------ UNITY FUNCTIONS ------------
 
     void Awake()
     {
@@ -36,7 +43,33 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _isCeiling = false;
         _xRot = 0f;
         _mouseSensitivity = 100f;
+        _lockMovement = false;
+        _lockRotation = false;
         _activated = true;
+        _guardianSpawnPoint = new Vector3(-24f, -5f, -18f);
+        _minerSpawnPoints =  new Vector3[] {
+			new Vector3(-19f, -5f, -33f),
+			new Vector3(-25f, -5f, -31f), 
+			new Vector3(-11f, -5f, -30f), 
+			new Vector3(-18f, -5f, -39f), 
+			new Vector3(-25f, -5f, -36f)
+		};
+    }
+
+    void OnEnable()
+    {
+        GameController.gameActive += OnGameActive;
+        GameController.gameStarted += OnGameStarted;
+        GameController.gameEnded += OnGameEnded;
+        PauseManager.paused += OnPaused;
+    }
+
+    void OnDisable()
+    {
+        GameController.gameActive -= OnGameActive;
+        GameController.gameStarted -= OnGameStarted;
+        GameController.gameEnded -= OnGameEnded;
+        PauseManager.paused -= OnPaused;
     }
 
     void Start()
@@ -46,32 +79,65 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 
         _debugPanel.Register(this);
     }
-    
-    public void OnMouseSensChange(float a){
-      _mouseSensitivity = PauseUI.MouseSens;
+
+    void Update()
+    {
+        if (_view.IsMine && _activated)
+        {
+            UpdatePosition();
+            UpdateRotation();
+        }
     }
+
+
+    // ------------ ON EVENT FUNCTIONS ------------
+
+    private void OnGameActive(GameController game)
+    {
+        _lockMovement = true;
+        MoveToSpawnPoint();
+    }
+
+    private void OnGameStarted() { _lockMovement = false; }
+
+    private void OnGameEnded(Constants.Team winningTeam) { _activated = false; }
+
+    private void OnPaused(bool isPaused)
+    {
+        _lockMovement = isPaused;
+        _lockRotation = isPaused;
+    }
+    
+    // Called when mouse sensitivity is changed in the pause screen.
+    public void OnMouseSensChange(float sensitivity) { _mouseSensitivity = sensitivity; }
+
+
+    // ------------ PRIVATE METHODS ------------
 
     private void UpdatePosition()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && !_game.GameStarted) return;
-
         // Sprint speed.
         if (Input.GetKey("left shift") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))) _speed = 10f;
 		else _speed = 5f;
 
         // Get movement axis values.
-        float xMove = PauseUI.IsPaused() ? 0 : Input.GetAxis("Horizontal");
-        float zMove = PauseUI.IsPaused() ? 0 : Input.GetAxis("Vertical");
+        float xMove = _lockMovement ? 0 : Input.GetAxis("Horizontal");
+        float zMove = _lockMovement ? 0 : Input.GetAxis("Vertical");
 
         // Check if player's bottom intersects with any environment object.
         Vector3 groundCheck = PlayerTransform.position;
         groundCheck.y -= 1f;
         _isGrounded = Physics.CheckSphere(groundCheck, _groundCheckRadius, GroundMask);
 
+        // Check if the player is stood on a jump pad.
+        LayerMask jumpPadMask = LayerMask.GetMask("JumpPad");
+        _isJumpPad = Physics.CheckSphere(groundCheck, _groundCheckRadius, jumpPadMask);
+
         //Check if player's head intersects with any environment object.
         Vector3 ceilingCheck = PlayerTransform.position;
         ceilingCheck.y += 0.6f;
         _isCeiling = Physics.CheckSphere(ceilingCheck, _groundCheckRadius, GroundMask);
+        
 
         // Set and normalise movement vector.
         Vector3 movement = (transform.right * xMove) + (transform.forward * zMove);
@@ -84,18 +150,20 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         CharacterBody.Move(movement * _speed * Time.deltaTime);
 
 		// Jump control.
-		if (Input.GetButtonDown("Jump") && _isGrounded && !PauseUI.IsPaused())
+		if (Input.GetButtonDown("Jump") && (_isGrounded || _isJumpPad) && !_lockMovement)
         {
 			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
 		}
 
-
+        // Jump pad effect.
+        if(_isJumpPad) _jumpPower = 14f;
+        else _jumpPower = 3f;
         // Gravity effect.
         _velocity.y -= _gravity * Time.deltaTime;
 		if (_velocity.y <= -100f) _velocity.y = -100f;
 
 		// Reset vertical velocity value when grounded.
-		if (_isGrounded && _velocity.y < 0) _velocity.y = 0f;
+		if ((_isGrounded || _isJumpPad) && _velocity.y < 0) _velocity.y = 0f;
 
         // Reset vertical velocity when head it hitting ceiling.
         if (_isCeiling && _velocity.y > 0) _velocity.y = 0f;
@@ -109,8 +177,8 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         // Rotate player about y and playercam about x.
 		// Get axis values from input.
         // deltaTime used for fps correction.
-		float mouseX = PauseUI.IsPaused() ? 0 : Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
-		float mouseY = PauseUI.IsPaused() ? 0 : Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+		float mouseX = _lockRotation ? 0 : Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
+		float mouseY = _lockRotation ? 0 : Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
 
 		// Invert vertical rotation and restrict up/down.
 		_xRot -= mouseY;
@@ -123,32 +191,23 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 		transform.Rotate(Vector3.up * mouseX);
     }
 
-    void Update()
-    {
-        if (View.IsMine && _activated)
-        {
-            UpdatePosition();
-            UpdateRotation();
-        }
-    }
+    private void MoveToSpawnPoint()
+	{
+		if (_player.Team == Constants.Team.Miner)
+		{
+			int index = Random.Range(0, _minerSpawnPoints.Length);
+			Vector3 position = _minerSpawnPoints[index];
+			transform.position = position;
+		}
+		else transform.position = _guardianSpawnPoint;
+	}
 
-    public void MoveTo(Vector3 position)
-    {
-        PlayerTransform.position = position;
-    }
-
-    public Vector3 GetPosition() { return PlayerTransform.position; }
-
-    public Quaternion GetRotation() { return PlayerTransform.rotation; }
-
-    public void SetActive(bool value) { _activated = value; }
-
-    public void SetGame(GameController game) { _game = game; }
+    // ------------ PUBLIC METHODS ------------
 
     public Hashtable GetDebugValues()
     {
         Hashtable debugValues = new Hashtable();
-        debugValues.Add("IsGrounded", _isGrounded);
+        debugValues.Add($"{_view.ViewID}'s layer", gameObject.layer);
         return debugValues;
     }
 }

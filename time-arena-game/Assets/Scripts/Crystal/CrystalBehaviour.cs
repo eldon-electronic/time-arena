@@ -9,12 +9,12 @@ public class CrystalBehaviour : MonoBehaviour
     //attributes relating to anim/aesthetics
     public Material overlay;
     public float initial_wave = 0;
-    private float t = 0;
+    public float t = 0;
 
     //attributes for crystalmanager access
     private CrystalManager cm;
     public int ID;
-    private GameController game;
+    private SceneController sceneController;
 
     //attributes defining crystal state
     public Vector2 existanceRange = new Vector2(5f, 10f);
@@ -24,8 +24,8 @@ public class CrystalBehaviour : MonoBehaviour
     // Start is called before the first frame
     void Start(){
       initial_wave = Random.Range(5f, 10f);
-      game = GameObject.FindGameObjectsWithTag("TimeLord")[0].GetComponent<GameController>();
-      cm = GameObject.FindGameObjectsWithTag("TimeLord")[0].GetComponent<CrystalManager>();
+      sceneController = GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<SceneController>();
+      cm = sceneController.gameObject.GetComponent<CrystalManager>();
 
       //on instantiation, add self to crystal list in cm
       //give self id according to position in list (syncing doesnt matter, only uniqueness and size)
@@ -49,13 +49,15 @@ public class CrystalBehaviour : MonoBehaviour
       overlay.SetFloat("Wave_Incr", t);
 
       //zoom into and out of existance
-      float percievedTime = (game._timeLord.GetYourPosition()*game._timeLord._totalFrames) / Constants.FrameRate;
+      TimeLord timelord = sceneController.GetTimeLord();
+      float percievedTime = (float)(timelord.GetMyPercievedFrame()) / Constants.FrameRate;
       float closestBorderOFExistance = Min(Abs(percievedTime - existanceRange[0]), Abs(percievedTime - existanceRange[1]));
       float animLength = 2.0f;
-      if(closestBorderOFExistance > animLength){
+      float size = Min(closestBorderOFExistance, t);
+      if(size > animLength){
         setScale(1.0f);
       } else {
-        setScale(closestBorderOFExistance/animLength);
+        setScale(size/animLength);
       }
     }
 
@@ -71,10 +73,11 @@ public class CrystalBehaviour : MonoBehaviour
       existanceRange = new Vector2(-1f, -1f);
       isCollected = true;
       PhotonView viewOfCollector = PhotonView.Find(viewID);
-      if(viewOfCollector == null){Debug.Log("!");}
-      PlayerController pcOfCollector = viewOfCollector.gameObject.GetComponent<PlayerController>();
-      if(pcOfCollector == null){Debug.Log("@");}
-      pcOfCollector.IncrementMinerScore();
+      if(viewOfCollector.IsMine){
+        sceneController.IncrementPlayerScore();
+      } else {
+        sceneController.IncrementMinerScore();
+      }
       if(PhotonNetwork.IsMasterClient){
         cm.StartCoroutine(cm.Respawn(ID));
       }

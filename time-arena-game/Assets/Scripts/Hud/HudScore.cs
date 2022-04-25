@@ -6,28 +6,28 @@ using UnityEngine.UI;
 
 public class HudScore : MonoBehaviour
 {
-    [SerializeField] private GameObject _container;
-    [SerializeField] private Text _scoreText;
-    [SerializeField] private Text _teamScoreText;
-    private GameController _game;
+    [SerializeField] private Text _playerText;
+    [SerializeField] private Text _teamText;
 
-    void Start()
+    void Awake()
     {
-        _container.SetActive(false);
+        _playerText.text = "0";
+        _teamText.text = "0";
     }
 
-    public void setScores(int player, int team){
-      _scoreText.text = player + "";
-      _teamScoreText.text = team + "";
-    }
-
-    void LateUpdate()
+    void OnEnable()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene")
-        {
-            _container.SetActive(true);
-        }
+        SceneController.scoreChange += SetScore;
     }
 
-    public void SetGame(GameController game) { _game = game; }
+    void OnDisable()
+    {
+        SceneController.scoreChange -= SetScore;
+    }
+
+    private void SetScore(int pScore, int tScore)
+    {
+        _playerText.text = pScore + "";
+        _teamText.text = tScore + "";
+    }
 }

@@ -6,7 +6,7 @@ public class DynamicController : MonoBehaviour
 {
 
     private float speed = 1;
-    public GameObject crystal;
+    //public GameObject crystal;
     Vector3 temp;
     public Material sandMat;
     
@@ -25,11 +25,11 @@ public class DynamicController : MonoBehaviour
     { 
         if(Input.GetKey(KeyCode.E)){
 
-            temp = crystal.transform.localScale;
+           /* temp = crystal.transform.localScale;
             temp.x += 1f * speed * Time.deltaTime;
             temp.y += 1f * speed * Time.deltaTime;
             temp.z += 1f * speed * Time.deltaTime;
-            crystal.transform.localScale = temp;
+            crystal.transform.localScale = temp;*/
 
             sandMat.SetVector("Sand_Direction", new Vector2(0f,3f));
             sandMat.SetVector("Noise_Direction",new Vector2(0f,3f));
@@ -40,11 +40,11 @@ public class DynamicController : MonoBehaviour
        
         else if(Input.GetKey(KeyCode.Q)){
 
-            temp = crystal.transform.localScale;
+            /*temp = crystal.transform.localScale;
             temp.x -= 1f * speed * Time.deltaTime;
             temp.y -= 1f * speed * Time.deltaTime;
             temp.z -= 1f * speed * Time.deltaTime;
-            crystal.transform.localScale = temp;
+            crystal.transform.localScale = temp;*/
 
             sandMat.SetVector("Sand_Direction", new Vector2(0f, -3f));
             sandMat.SetVector("Noise_Direction",new Vector2(0f, -3f));

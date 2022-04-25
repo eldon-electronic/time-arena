@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using TMPro;
 
@@ -8,15 +9,18 @@ public class TailController : MonoBehaviour
 {
     [SerializeField] private ParticleController _particles;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private GameObject _ghostGuardian;
+    [SerializeField] private GameObject _ghostMiner;
     private int _playerID;
     private int _tailID;
     private TimeLord _timeLord;
+    private PlayerController _player;
     private TailManager _manager;
 
 
     void Update()
     {
-        PlayerState state = _timeLord.GetState(_tailID);
+        PlayerState state = _timeLord.GetTailState(_tailID);
         if (state == null) _manager.ReceiveResignation(_tailID);
         else
         {
@@ -25,7 +29,7 @@ public class TailController : MonoBehaviour
 
             if (state.JumpDirection != Constants.JumpDirection.Static && _manager.GetParticlesEnabled())
             {
-                _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
+                // _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
             }
         }
     }
@@ -44,11 +48,27 @@ public class TailController : MonoBehaviour
 
         if (ps.JumpDirection != Constants.JumpDirection.Static)
         {
-            _particles.StartDissolving(ps.JumpDirection, false);
+            // _particles.StartDissolving(ps.JumpDirection, false);
         }
 
         nameText.text = PhotonView.Find(_playerID).Owner.NickName;
         
+        Constants.Team team;
+        if (SceneManager.GetActiveScene().name == "PreGameScene")
+        {
+            team = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTeam(_playerID);
+        }
+        else team = FindObjectOfType<GameController>().GetComponent<GameController>().GetTeam(_playerID);
+        // TODO: use the team to set visibility of mesh.
+        if(team == Constants.Team.Guardian)
+        {
+            _ghostGuardian.SetActive(true);
+            _ghostMiner.SetActive(false);
+        }
+        else{
+            _ghostGuardian.SetActive(false);
+            _ghostMiner.SetActive(true);
+        }
     }
 
     // Tails must be ordered to commit suicide; they should not be able to take the initiative themselves.

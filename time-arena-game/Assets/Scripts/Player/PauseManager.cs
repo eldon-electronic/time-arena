@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,54 +7,56 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-public class PauseManager : MonoBehaviourPunCallbacks
+public class PauseManager : MonoBehaviour
 {
-    private bool _paused = false;
-	public GameObject PauseMenuUI;
-	public PhotonView View;
-	public Slider MouseSensSlider;
-  	public float MouseSens;
+	[SerializeField] private GameObject _pauseMenuUI;
+	[SerializeField] private PhotonView _view;
+	private bool _paused;
+	public static event Action<bool> paused;
+
+	void Awake()
+	{
+		if (!_view.IsMine) Destroy(this);
+	}
+
+	void OnEnable()
+	{
+		GameController.gameEnded += OnGameEnded;
+	}
+
+	void OnDisable()
+	{
+		GameController.gameEnded -= OnGameEnded;
+	}
+
+	void Start()
+	{
+		_paused = false;
+	}
 
 	void Update()
 	{	
-		if (!View.IsMine) return;
-
-		// TODO: remove this
-		if (MouseSensSlider == null) Debug.LogError("MouseSensSlider is null");
-		if (PauseMenuUI == null) Debug.LogError("PauseMenuUI is null");
-
-		MouseSens = MouseSensSlider.value;
-		if (Input.GetKeyDown(KeyCode.Escape)) _paused = !_paused;
-
-		PauseMenuUI.SetActive(_paused);
-		Cursor.lockState = _paused ? CursorLockMode.None : CursorLockMode.Locked;
+		if (Input.GetKeyDown(KeyCode.Escape)) SetPause(!_paused);
 	}
 
-	public void Pause() { _paused = true; }
+	private void OnGameEnded(Constants.Team team) { SetPause(true); }
 
-	public void Resume() { _paused = false; }
+	// This gets called on the Resume button press.
+	public void OnResume() { SetPause(false); }
 
-	public bool IsPaused() { return _paused; }
-
-	public void Leave() { disconnectPlayer(); }
-
-	// Work on this in the future. Pressing "Leave" should take the user back to main screen.
-	private void disconnectPlayer() {
-    PhotonNetwork.LeaveRoom();
-    SceneManager.LoadScene("MenuScene");
-    Destroy(gameObject);
-  }
-
-  /*	StartCoroutine(DisconnectAndLoad());
-	}
-
-	IEnumerator DisconnectAndLoad() {
+	// This gets called on the Leave button press.
+	public void OnLeave()
+	{
 		PhotonNetwork.LeaveRoom();
-		while (PhotonNetwork.InRoom) { // Busy waiting
-			Debug.Log("Busy waiting");
-			yield return null;
-		}
 		SceneManager.LoadScene("MenuScene");
 		Destroy(gameObject);
-	}*/
+	}
+
+	private void SetPause(bool pause)
+	{
+		_paused = pause;
+		_pauseMenuUI.SetActive(_paused);
+		Cursor.lockState = _paused ? CursorLockMode.None : CursorLockMode.Locked;
+		paused?.Invoke(_paused);
+	}
 }
