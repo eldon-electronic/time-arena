@@ -11,6 +11,7 @@ public class CharacterAnimationController : MonoBehaviour
     private bool _paused = false;
     private float grabTimer = 0;
     private bool mouseDown = false;
+    private bool mouseReset = true;
 
     void Awake() {
         PauseManager.paused += updatePause;
@@ -28,16 +29,14 @@ public class CharacterAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if(_grab._damageWindow){
-        grabTimer+=Time.deltaTime;
+      if(mouseDown && mouseReset){
+        mouseReset = false;
+        StartGrabbing();
+      } else if(_grab._damageWindow) {
+        grabTimer += Time.deltaTime;
         if(grabTimer >= 1){
-          grabTimer = 0;
-          stopGrabbing();
-          mouseDown = false;
-        }
-      } else {
-        if(mouseDown){
-          startGrabbing();
+          StopGrabbing();
+          mouseReset = true;
         }
       }
 
