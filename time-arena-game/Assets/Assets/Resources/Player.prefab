@@ -678,6 +678,8 @@ MonoBehaviour:
   - {fileID: 4832248071227807456}
   - {fileID: 8913764313028667428}
   - {fileID: 5066819386672374250}
+  _scorePlayer: {fileID: 0}
+  _scoreTeam: {fileID: 0}
 --- !u!114 &4220746111742162427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13502,6 +13504,59 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &7250907874711971761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7703892986854310090}
+  - component: {fileID: 2478866685735168079}
+  - component: {fileID: 1536551656596465250}
+  m_Layer: 3
+  m_Name: GrabArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7703892986854310090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250907874711971761}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4830789113225851750}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &2478866685735168079
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250907874711971761}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &1536551656596465250
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7250907874711971761}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.125
+  m_Center: {x: 0, y: 0.125, z: 0.125}
 --- !u!1 &7423894202419708094
 GameObject:
   m_ObjectHideFlags: 0
@@ -13900,7 +13955,6 @@ MonoBehaviour:
   _minerDevice: {fileID: 3220929074444348163}
   Team: 0
   ID: 0
-  score: 0
 --- !u!114 &6899518278554772034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14127,8 +14181,10 @@ MonoBehaviour:
   PlayerAnim: {fileID: 8873703800620214083}
   GrabMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _player: {fileID: 3961948662385648054}
+  collider: {fileID: 1536551656596465250}
+  damageWindow: 0
 --- !u!114 &3072241911820505086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15417,7 +15473,7 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: isGrabbing
   - Type: 4
     SynchronizeType: 1
@@ -15451,6 +15507,7 @@ MonoBehaviour:
   PlayerAnim: {fileID: 8873703800620214083}
   _grab: {fileID: 8349712615541080966}
   _view: {fileID: 2326309978463294386}
+  _playerController: {fileID: 0}
 --- !u!114 &3536738942673278734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15939,6 +15996,7 @@ MonoBehaviour:
   PlayerAnim: {fileID: 4870506616843724849}
   _grab: {fileID: 8349712615541080966}
   _view: {fileID: 2326309978463294386}
+  _playerController: {fileID: 0}
 --- !u!114 &3407164165598802188
 MonoBehaviour:
   m_ObjectHideFlags: 0
