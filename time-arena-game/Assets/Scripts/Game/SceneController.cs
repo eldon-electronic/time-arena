@@ -61,13 +61,13 @@ public abstract class SceneController: MonoBehaviour
     scoreChange?.Invoke(_clientScore, _minerScore);
   }
 
-    public void DecrementMinerScore()
+  public void DecrementMinerScore()
   {
     _minerScore = Mathf.Clamp(_minerScore-5, 0, 999);;
     scoreChange?.Invoke(_clientScore, _minerScore);
   }
 
-    public void DecrementPlayerScore()
+  public void DecrementPlayerScore()
   {
     _minerScore = Mathf.Clamp(_minerScore-5, 0, 999);;
     _clientScore = Mathf.Clamp(_clientScore-5, 0, 999);;

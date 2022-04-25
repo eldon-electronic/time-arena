@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
 	public Constants.Team Team;
 	public int ID;
+	public int score;
 
 
 	// ------------ UNITY METHODS ------------
@@ -73,7 +74,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (Team == Constants.Team.Guardian)
 		{
-			_guardianBody.SetActive(!_view.IsMine);
+			_guardianBody.SetActive(true);
 			_minerBody.SetActive(false);
 			_minerDevice.SetActive(false);
 

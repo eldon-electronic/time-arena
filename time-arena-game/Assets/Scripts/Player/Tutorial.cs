@@ -12,18 +12,16 @@ public class Tutorial : MonoBehaviour
         public KeyCode InputTrigger;
         public bool VisibilityOfArrow;
         public bool NeedKey;
-        public bool CrystalVisibility;
-        public bool TutorialScore;
+        //public bool CrystalVisibility;
 
-        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress,bool visibilityOfCrystal,bool tutorialScore)
+        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress/*,bool visibilityOfCrystal*/)
         {
             Message = message;
             ElementToPointTo = elementToPointTo;
             InputTrigger = inputTrigger;
             VisibilityOfArrow = visibilityOfArrow;
             NeedKey = needKeyPress;
-            CrystalVisibility = visibilityOfCrystal;
-            TutorialScore = tutorialScore;
+            //CrystalVisibility = visibilityOfCrystal;
         }
     }
     
@@ -89,55 +87,51 @@ public class Tutorial : MonoBehaviour
     private void CreateStatesGuardian()
     {
         _guardianStates = new List<State>();
-        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true,false,false));
-        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false,false,false));
-        _guardianStates.Add(new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true,false,false));
-        _guardianStates.Add(new State("Press <sprite=29> + <sprite=21> to sprint. ","backJump", KeyCode.W,false,false,false,false));
-        _guardianStates.Add(new State("Use <sprite=15> to jump.","backJump", KeyCode.Space,false,true,false,false));
-        _guardianStates.Add(new State("Use <sprite=31> to jump.","backJump", KeyCode.Space,false,false,false,false));
-        _guardianStates.Add(new State("Click right <sprite=13> to grab miners and drop their crystals!.","backJump", KeyCode.Mouse0,false,true,false,false));
-        _guardianStates.Add(new State("Click right <sprite=23> to grab miners and drop their crystals!.","backJump", KeyCode.Space,false,false,false,false));
-        _guardianStates.Add(new State("Now,let's have a look at game features!!","backJump", KeyCode.A,false,false,false,false));
-        _guardianStates.Add(new State("This is the timer which shows the game time.\nYou have 5 minutes!!","timer", KeyCode.Return,true,false,false,false));
-        _guardianStates.Add(new State("This shows the team you are in!!","team", KeyCode.Return,true,false,false,false));
-        _guardianStates.Add(new State("This is the timebar which helps you to see where you are at in time.","timebar", KeyCode.Return,true,false,false,false));
-        _guardianStates.Add(new State("IT'S TIME TO TIME TRAVEL!!","timebar", KeyCode.Return,false,false,false,false));
-        _guardianStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it spins you can travel back in time.", "backJump",KeyCode.Return,true,false,false,false));
-        _guardianStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=7>.", "backJump",KeyCode.Q,true,true,false,false));
-        _guardianStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=24>.", "backJump",KeyCode.Q,true,false,false,false));
-        _guardianStates.Add(new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false,false,false));
-        _guardianStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it spins you can travel forward in time.", "forwardJump",KeyCode.Return,true,false,false,false));
-        _guardianStates.Add(new State("Please press <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true,false,false));
-        _guardianStates.Add(new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false,false,false));
-        _guardianStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true,false,false));
+        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true/*,false*/));
+        _guardianStates.Add(new State("Welcome to tutorial Guardian!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false/*,false*/));
+        _guardianStates.Add(new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true));
+        _guardianStates.Add(new State("Press <sprite=29> + <sprite=21> to sprint. ","backJump", KeyCode.W,false,false));
+        _guardianStates.Add(new State("Use <sprite=15> to jump.","backJump", KeyCode.Space,false,true));
+        _guardianStates.Add(new State("Use <sprite=31> to jump.","backJump", KeyCode.Space,false,false));
+        _guardianStates.Add(new State("Click right <sprite=13> to grab miners.","backJump", KeyCode.Mouse0,false,true));
+        _guardianStates.Add(new State("Click right <sprite=23> to grab miners.","backJump", KeyCode.Space,false,false));
+        _guardianStates.Add(new State("Now,let's have a look at game features!!","backJump", KeyCode.A,false,false));
+        _guardianStates.Add(new State("This is the timer which shows the game time.\nYou have 5 minutes!!","timer", KeyCode.Return,true,false));
+        _guardianStates.Add(new State("This shows the team you are in!!","team", KeyCode.Return,true,false));
+        _guardianStates.Add(new State("This is the timebar which helps you to see where you are at in time.","timebar", KeyCode.Return,true,false));
+        _guardianStates.Add(new State("IT'S TIME TO TIME TRAVEL!!","timebar", KeyCode.Return,false,false));
+        _guardianStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it turns to green you can travel back in time.", "backJump",KeyCode.Return,true,false));
+        _guardianStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=7>.", "backJump",KeyCode.Q,true,true));
+        _guardianStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease press <sprite=24>.", "backJump",KeyCode.Q,true,false));
+        _guardianStates.Add(new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false));
+        _guardianStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it turns to green you can travel forward in time.", "forwardJump",KeyCode.Return,true,false));
+        _guardianStates.Add(new State("Please press <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true));
+        _guardianStates.Add(new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false));
+        _guardianStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true));
     }
 
     private void CreateStatesMiner()
     {
         _minerStates = new List<State>();
-        _minerStates.Add(new State("Welcome to tutorial Miner!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true,false,false));
-        _minerStates.Add(new State("Welcome to tutorial Miner!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false,false,false));
-        _minerStates.Add(new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true,false,false));
-        _minerStates.Add(new State("Press <sprite=29> + <sprite=21> to sprint. ","backJump", KeyCode.W,false,false,false,false));
-        _minerStates.Add(new State("Use <sprite=15> to jump.","backJump", KeyCode.Space,false,true,false,false));
-        _minerStates.Add(new State("Use <sprite=31> to jump.","backJump", KeyCode.Space,false,false,false,false));
-        _minerStates.Add(new State("Now,let's have a look at game features!!","backJump", KeyCode.A,false,false,false,false));
-        _minerStates.Add(new State("Time crystals only appear in certain times!\n Run through the crystal to collect it!","backJump", KeyCode.W,false,true,true,false));
-        _minerStates.Add(new State("Time crystals only appear in certain times!\n Run through the crystal to collect it!","backJump", KeyCode.W,false,false,true,false));
-        _minerStates.Add(new State("REMINDER: You can check your tracker device to find the nearest crystal.","backJump", KeyCode.A,false,false,false,true));
-        _minerStates.Add(new State("Don't get caught to guardians! Otherwise you will drop your crystals.","backJump", KeyCode.A,false,false,false,true));
-        _minerStates.Add(new State("This is the timer which shows the game time.\nYou have 5 minutes!!","timer", KeyCode.Return,true,false,false,true));
-        _minerStates.Add(new State("This shows the team you are in!!","team", KeyCode.Return,true,false,false,true));
-        _minerStates.Add(new State("This is the timebar which helps you to see where you are at in time.","timebar", KeyCode.Return,true,false,false,true));
-        _minerStates.Add(new State("IT'S TIME TO TIME TRAVEL!!","timebar", KeyCode.Return,false,false,false,true));
-        _minerStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it spins you can travel back in time.", "backJump",KeyCode.Return,true,false,false,true));
-        _minerStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=7>.", "backJump",KeyCode.Q,true,true,false,true));
-        _minerStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=24>.", "backJump",KeyCode.Q,true,false,false,true));
-        _minerStates.Add(new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false,false,true));
-        _minerStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it spins you can travel forward in time.", "forwardJump",KeyCode.Return,true,false,false,true));
-        _minerStates.Add(new State("Please hold <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true,false,true));
-        _minerStates.Add(new State("Please hold <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false,false,true));
-        _minerStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true,false,true));
+        _minerStates.Add(new State("Welcome to tutorial Miner!\n\nPlease use <sprite=9> keys to move around.","backJump", KeyCode.S,false,true));
+        _minerStates.Add(new State("Welcome to tutorial Miner!\n\nPlease use <sprite=26> keys to move around.","backJump", KeyCode.S,false,false));
+        _minerStates.Add(new State("Press <sprite=12> + <sprite=2> to sprint. ","backJump", KeyCode.W,false,true));
+        _minerStates.Add(new State("Press <sprite=29> + <sprite=21> to sprint. ","backJump", KeyCode.W,false,false));
+        _minerStates.Add(new State("Use <sprite=15> to jump.","backJump", KeyCode.Space,false,true));
+        _minerStates.Add(new State("Use <sprite=31> to jump.","backJump", KeyCode.Space,false,false));
+        _minerStates.Add(new State("Now,let's have a look at game features!!","backJump", KeyCode.A,false,false));
+        _minerStates.Add(new State("This is the timer which shows the game time.\nYou have 5 minutes!!","timer", KeyCode.Return,true,false));
+        _minerStates.Add(new State("This shows the team you are in!!","team", KeyCode.Return,true,false));
+        _minerStates.Add(new State("This is the timebar which helps you to see where you are at in time.","timebar", KeyCode.Return,true,false));
+        _minerStates.Add(new State("IT'S TIME TO TIME TRAVEL!!","timebar", KeyCode.Return,false,false));
+        _minerStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it turns to green you can travel back in time.", "backJump",KeyCode.Return,true,false));
+        _minerStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=7>.", "backJump",KeyCode.Q,true,true));
+        _minerStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=24>.", "backJump",KeyCode.Q,true,false));
+        _minerStates.Add(new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false));
+        _minerStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it turns to green you can travel forward in time.", "forwardJump",KeyCode.Return,true,false));
+        _minerStates.Add(new State("Please hold <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true));
+        _minerStates.Add(new State("Please hold <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false));
+        _minerStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true));
  
     }
 
@@ -145,8 +139,7 @@ public class Tutorial : MonoBehaviour
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
-        _tutorialHud.UpdateTutorialScore(_states[_currentState].TutorialScore);
+        //_tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         _tutorialHud.SetArrowVisibility(
             _states[_currentState].ElementToPointTo,
             _states[_currentState].VisibilityOfArrow
@@ -163,8 +156,7 @@ public class Tutorial : MonoBehaviour
         // Set the new state.
         _currentState = state;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
-        _tutorialHud.UpdateTutorialScore(_states[_currentState].TutorialScore);
+        //_tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         
         // Activate new arrow (if there is one for the current state).
         _tutorialHud.SetArrowVisibility(

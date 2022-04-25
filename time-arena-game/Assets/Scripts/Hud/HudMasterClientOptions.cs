@@ -23,14 +23,12 @@ public class HudMasterClientOptions : MonoBehaviour
 
     void OnEnable()
     {
-        PreGameController.countDownReset += Start;
         PreGameController.countDown += OnCountDown;
         GameController.gameActive += OnGameActive;
     }
 
     void OnDisable()
     {
-        PreGameController.countDownReset -= Start;
         PreGameController.countDown -= OnCountDown;
         GameController.gameActive -= OnGameActive;
     }
