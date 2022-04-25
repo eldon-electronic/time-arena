@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 
 public class TestRealityManager: Tester
-{   
+{
     public bool Authenticate() { return true; }
 
     [Test]
@@ -37,7 +37,7 @@ public class TestRealityManager: Tester
         manager.AddHead(1001);
         manager.AddHead(1002);
         List<(int, int)> percievedFrames = manager.GetPerceivedFrames();
-        
+
         Assert.AreEqual(2, percievedFrames.Count);
         Assert.IsTrue(percievedFrames.Contains((1001, 0)));
         Assert.IsTrue(percievedFrames.Contains((1002, 0)));
@@ -94,6 +94,7 @@ public class TestRealityManager: Tester
         catch (InvalidOperationException e)
         {
             Assert.IsTrue(true);
+            Debug.Log(e);
         }
     }
 

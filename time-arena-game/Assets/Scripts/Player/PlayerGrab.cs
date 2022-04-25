@@ -42,7 +42,7 @@ public class PlayerGrab : MonoBehaviour
     foreach (var playerGotGrab in playersGrab)
     {
       // Call grabplayer function on that player.
-      PlayerController targetPlayer = playerGotGrab.GetComponent<PlayerController>();
+      PlayerController targetPlayer = playerGotGrab.gameObject.GetComponent<PlayerController>();
       if(targetPlayer!=null){
         if (_player.Team == Constants.Team.Guardian && targetPlayer.Team == Constants.Team.Miner)
         {

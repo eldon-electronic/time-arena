@@ -14,7 +14,7 @@ public class SunAngle : MonoBehaviour
     private float _sunDif;
 
     void Start()
-    {   
+    {
         if (SceneManager.GetActiveScene().name == "PreGameScene")
         {
             _timeLord = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTimeLord();
@@ -38,10 +38,10 @@ public class SunAngle : MonoBehaviour
             float sunAngle = _sunMax - (_sunDif * angleFraction);
             Vector3 eulerRotation = gameObject.transform.rotation.eulerAngles;
             gameObject.transform.rotation = Quaternion.Euler(
-                sunAngle, 
-                eulerRotation.y, 
+                sunAngle,
+                eulerRotation.y,
                 eulerRotation.z);
-        } 
-        catch (Exception e) {}
+        }
+        catch (Exception e) {Debug.Log(e);}
     }
 }
