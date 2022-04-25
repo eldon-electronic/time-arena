@@ -6,32 +6,51 @@ using UnityEngine;
 
 
 public class Reality
+{
+    public int PerceivedFrame;
+    public List<int> WriteFrames;
+    public int LastTailID;
+    public int Countdown;
+
+    public Reality(int playerID)
     {
-        public int PerceivedFrame;
-        public List<int> WriteFrames;
-        public int LastTailID;
-        public int Countdown;
+        PerceivedFrame = 0;
+        WriteFrames = new List<int>();
 
-        public Reality(int playerID)
-        {
-            PerceivedFrame = 0;
-            WriteFrames = new List<int>();
-
-            // Multiply playerID by 100 to shift it to the left, allowing 100 possible tails.
-            LastTailID = playerID * 100;
-            Countdown = -1;
-        }
-
-        public void Increment()
-        {
-            PerceivedFrame++;
-            for (int i=0; i < WriteFrames.Count; i++)
-            {
-                WriteFrames[i]++;
-            }
-            if (Countdown > -1) Countdown--;
-        }
+        // Multiply playerID by 100 to shift it to the left, allowing 100 possible tails.
+        LastTailID = playerID * 100;
+        Countdown = -1;
     }
+
+    public Reality(int[] data)
+    {
+        PerceivedFrame = data[0];
+        if (data[1] == -1) WriteFrames = new List<int>();
+        else if (data[2] == -1) WriteFrames = new List<int>() {data[1]};
+        else WriteFrames = new List<int>() {data[1], data[2]};
+        LastTailID = data[3];
+        Countdown = data[4];
+    }
+
+    public void Increment()
+    {
+        PerceivedFrame++;
+        for (int i=0; i < WriteFrames.Count; i++)
+        {
+            WriteFrames[i]++;
+        }
+        if (Countdown > -1) Countdown--;
+    }
+
+    public int[] GetData()
+    {
+        int wf0 = -1;
+        int wf1 = -1;
+        if (WriteFrames.Count >= 1) wf0 = WriteFrames[0];
+        if (WriteFrames.Count == 2) wf1 = WriteFrames[1];
+        return new int[5] {PerceivedFrame, wf0, wf1, LastTailID, Countdown};
+    }
+}
 
 
 public class RealityManager
@@ -42,6 +61,10 @@ public class RealityManager
     {
         _realities = new Dictionary<int, Reality>();
     }
+
+    public Dictionary<int, Reality> GetRealities() { return _realities; }
+
+    public void SetRealities(Dictionary<int, Reality> realities) { _realities = realities; }
 
     // Add a new player to the dictionary.
     public void AddHead(int playerID)
