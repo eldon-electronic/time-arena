@@ -267,8 +267,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_jumpDirection = direction;
 		_setJumpState = true;
 		_timelord.LeaveReality(_view.ViewID);
-		if (direction == Constants.JumpDirection.Forward) _forwardsJumpCooldown = 15;
-		else _backJumpCooldown = 15;
+		_forwardsJumpCooldown = 15;
+		_backJumpCooldown = 15;
 
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
