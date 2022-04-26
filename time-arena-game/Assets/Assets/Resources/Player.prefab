@@ -13748,11 +13748,11 @@ GameObject:
   - component: {fileID: 1222814980987296156}
   - component: {fileID: 3964007648043297881}
   - component: {fileID: 33312193453003725}
-  - component: {fileID: 2856716817016712739}
   - component: {fileID: 8829473542284816613}
   - component: {fileID: 24963287221386049}
   - component: {fileID: 8349712615541080966}
   - component: {fileID: 3072241911820505086}
+  - component: {fileID: 1890443838748786233}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -14164,19 +14164,6 @@ MonoBehaviour:
   ButtonArrowForwardMat: {fileID: 2100000, guid: b3a7c48f5782a4315abb136edb7bc6ed, type: 2}
   ButtonArrowBackwardMat: {fileID: 2100000, guid: eedef1830a0504b0fa9b5f14c0d48b7e, type: 2}
   OffLineMat: {fileID: 2100000, guid: 66ed2c58b86514d57b132e6d67734b6e, type: 2}
---- !u!114 &2856716817016712739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7677461824550335493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74c080f0b9afe42aea90cac668195173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sandMat: {fileID: 2100000, guid: 9a55a84c7b3e24ba78dd0019f91a2059, type: 2}
 --- !u!114 &8829473542284816613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14259,6 +14246,7 @@ MonoBehaviour:
   _ppController: {fileID: 8829473542284816613}
   _disMinerController: {fileID: 3407164165598802188}
   _disGuardianController: {fileID: 3536738942673278734}
+  _sandController: {fileID: 1890443838748786233}
 --- !u!114 &8349712615541080966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14290,6 +14278,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FireCircle: {fileID: 1013463609311335253}
   Splash: {fileID: 8289060490737455865}
+--- !u!114 &1890443838748786233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7677461824550335493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0825a58b3bcd499ba990dc213e8ce22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sandMat: {fileID: 2100000, guid: 9a55a84c7b3e24ba78dd0019f91a2059, type: 2}
 --- !u!1 &7749068291635807211
 GameObject:
   m_ObjectHideFlags: 0

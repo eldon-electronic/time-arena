@@ -27,6 +27,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[SerializeField] private PPController _ppController;
 	[SerializeField] private DissolveController _disMinerController;
 	[SerializeField] private DissolveController _disGuardianController;
+	[SerializeField] private SandController _sandController;
 
 	private DissolveController _disController;
 	private SceneController _sceneController;
@@ -198,7 +199,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
 					_tailManager.EnableParticles(false);
 					_ppController?.TriggerPP(direction, jumpOut);
-					
+					_sandController.SetDirection(direction);
 				}
 			}
 			else if (_isJumping)
@@ -207,7 +208,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
 				_tailManager.EnableParticles(true);
 				_ppController?.TriggerPP(direction, jumpOut);
-				
+				_sandController.SetDirection(Constants.JumpDirection.Static);
 			}
 		}
 	}
