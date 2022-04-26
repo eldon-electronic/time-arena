@@ -11,7 +11,7 @@ public class TailManager : MonoBehaviour
     private Dictionary<int, TailController> _tails;
     private bool _activated;
     private bool _particlesEnabled;
-
+    private bool _animationsEnabled;
 
     // ------------ UNITY METHODS ------------
 
@@ -21,6 +21,7 @@ public class TailManager : MonoBehaviour
         _tails = new Dictionary<int, TailController>();
         _activated = false;
         _particlesEnabled = true;
+        _animationsEnabled = true;
     }
 
     void OnEnable()
@@ -81,6 +82,7 @@ public class TailManager : MonoBehaviour
     public void SetActive(bool value) { _activated = value; }
 
     public void EnableParticles(bool value) { _particlesEnabled = value; }
+    public void EnableAnimations(bool value) { _animationsEnabled = value; }
 
 
     // ------------ PUBLIC FUNCTIONS FOR TAIL CONTROLLER ------------
@@ -96,4 +98,5 @@ public class TailManager : MonoBehaviour
     }
 
     public bool GetParticlesEnabled() { return _particlesEnabled; }
+    public bool GetAnimationsEnabled() { return _animationsEnabled; }
 }
