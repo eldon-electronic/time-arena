@@ -13,10 +13,11 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _minerBody;
 	[SerializeField] private GameObject _guardianBody;
 	[SerializeField] private GameObject _minerDevice;
+	private SceneController _sceneController;
 
 	public Constants.Team Team;
 	public int ID;
-	public int score;
+	public int Score;
 
 
 	// ------------ UNITY METHODS ------------
@@ -42,9 +43,9 @@ public class PlayerController : MonoBehaviour
 
 		gameObject.layer = Constants.LayerPlayer;
 
-		SceneController sceneController = FindObjectOfType<PreGameController>();
-		if (sceneController == null) Debug.LogError("PreGameController not found");
-		else sceneController.Register(this);
+		_sceneController = FindObjectOfType<PreGameController>();
+		if (_sceneController == null) Debug.LogError("PreGameController not found");
+		else _sceneController.Register(this);
 
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
@@ -65,7 +66,8 @@ public class PlayerController : MonoBehaviour
 
 	private void OnGameActive(GameController game)
 	{
-		game.Register(this);
+		_sceneController = game;
+		_sceneController.Register(this);
 		gameObject.layer = Constants.LayerPlayer;
 		Show();
 	}
@@ -120,5 +122,24 @@ public class PlayerController : MonoBehaviour
 			_minerBody.SetActive(false);
 			_minerDevice.SetActive(false);
 		}
+	}
+
+
+	// ------------ RPC METHODS ------------
+
+	[PunRPC]
+	public void RPC_collectCrystal()
+	{
+		Score++;
+		_sceneController.OffsetScore(ID, 1);
+	}
+
+	[PunRPC]
+	public void RPC_getGrabbed()
+	{
+		int offset = Score / 2;
+		Score -= offset;
+		_sceneController.OffsetScore(ID, -offset);
+		//TODO: respawn?
 	}
 }

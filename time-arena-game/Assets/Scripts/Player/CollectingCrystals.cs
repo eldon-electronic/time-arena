@@ -5,41 +5,24 @@ using Photon.Pun;
 
 public class CollectingCrystals : MonoBehaviour
 {
-    [SerializeField] private PlayerController _player;
-    private SceneController _sceneController;
+  [SerializeField] private PlayerController _player;
+  [SerializeField] private PhotonView _view;
 
-    public void Awake()
+  public void Awake()
+  {
+    if (_player.Team == Constants.Team.Guardian) Destroy(this);
+  }
+
+  public void OnTriggerEnter(Collider col)
+  {
+    if (col.gameObject.tag == "Collectable")
     {
-        //if (_player.Team == Constants.Team.Guardian) Destroy(this);
+      PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
+      if (viewOfCrystal.IsMine)
+      {
+        viewOfCrystal.RPC("RPC_Collect", RpcTarget.All);
+        _view.RPC("RPC_incrementScore", RpcTarget.All);
+      }
     }
-
-    public void OnEnable()
-    {
-        GameController.gameActive += SetGame;
-    }
-
-    public void OnDisable()
-    {
-        GameController.gameActive -= SetGame;
-    }
-
-    public void Start()
-    {
-      _sceneController = FindObjectOfType<PreGameController>();
-    }
-
-    public void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.tag == "Collectable")
-        {
-          PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
-          PhotonView viewOfPlayer = gameObject.GetComponent<PhotonView>();
-            if(viewOfCrystal.IsMine && _sceneController != null) {
-              viewOfCrystal.RPC("RPC_Collect", RpcTarget.All, viewOfPlayer.ViewID);
-              //col.gameObject.GetComponent<CrystalBehaviour>().Collect();
-            }
-        }
-    }
-
-    private void SetGame(GameController game) { _sceneController = game; }
+  }
 }

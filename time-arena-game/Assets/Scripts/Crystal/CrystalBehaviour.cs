@@ -69,16 +69,12 @@ public class CrystalBehaviour : MonoBehaviour
     //called upon player collision
     // - crystal will be set to inactive in following frame so coroutine outsourced to cm
     [PunRPC]
-    void RPC_Collect(int viewID){
+    void RPC_Collect()
+    {
       existanceRange = new Vector2(-1f, -1f);
       isCollected = true;
-      PhotonView viewOfCollector = PhotonView.Find(viewID);
-      if(viewOfCollector.IsMine){
-        sceneController.IncrementPlayerScore();
-      } else {
-        sceneController.IncrementMinerScore();
-      }
-      if(PhotonNetwork.IsMasterClient){
+      if (PhotonNetwork.IsMasterClient)
+      {
         cm.StartCoroutine(cm.Respawn(ID));
       }
     }

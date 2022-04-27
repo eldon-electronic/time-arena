@@ -48,31 +48,11 @@ public abstract class SceneController: MonoBehaviour
 		}
 	}
 
-    public void IncrementMinerScore()
-  {
-    _minerScore++;
-    scoreChange?.Invoke(_clientScore, _minerScore);
-  }
-
-    public void IncrementPlayerScore()
-  {
-    _minerScore++;
-    _clientScore++;
-    scoreChange?.Invoke(_clientScore, _minerScore);
-  }
-
-  public void DecrementMinerScore()
-  {
-    _minerScore = Mathf.Clamp(_minerScore-5, 0, 999);;
-    scoreChange?.Invoke(_clientScore, _minerScore);
-  }
-
-  public void DecrementPlayerScore()
-  {
-    _minerScore = Mathf.Clamp(_minerScore-5, 0, 999);;
-    _clientScore = Mathf.Clamp(_clientScore-5, 0, 999);;
-    scoreChange?.Invoke(_clientScore, _minerScore);
-  }
+	public void OffsetScore(int id, int offset)
+	{
+		_minerScore += offset;
+		scoreChange?.Invoke(_miners[id].Score, _minerScore);
+	}
 
 	public TimeLord GetTimeLord() { return _timeLord;}
 }

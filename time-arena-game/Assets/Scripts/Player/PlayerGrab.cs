@@ -4,74 +4,32 @@ using Photon.Pun;
 
 public class PlayerGrab : MonoBehaviour
 {
-    [SerializeField] private Animator PlayerAnim;
-	[SerializeField] private LayerMask GrabMask;
+	[SerializeField] private LayerMask _grabMask;
+  [SerializeField] private SphereCollider _collider;
   [SerializeField] private PlayerController _player;
-  [SerializeField] private SphereCollider collider;
-  private PhotonView _view;
-	public bool damageWindow = false;
-  private SceneController _sceneController;
+  private bool _grabCooldown;
 
-    void Start(){
-      _sceneController = FindObjectOfType<PreGameController>();
-    }
-
-    public void OnEnable()
+  void Awake()
+  {
+    if (_player.Team == Constants.Team.Miner)
     {
-        GameController.gameActive += SetGame;
+      Destroy(this);
+      return;
     }
+    _grabCooldown = false;
+  }
 
-    public void OnDisable()
-    {
-        GameController.gameActive -= SetGame;
-    }
-
-    void Update()
-    {
-      // If grabbing, check for intersection with player.
-  		if (damageWindow)
-  		{
-        Grab();
-      }
-    }
-
-    [PunRPC]
-    public void RPC_getGrabbed(){ //TODO:nullreference exception for this function??
-      if(_view.IsMine){
-        _sceneController.DecrementPlayerScore();
-      } else {
-        _sceneController.DecrementMinerScore();
-      }
-      Debug.Log("A miner has been grabbed");
-      //TODO: respawn?
-    }
-
-    public void Grab()
+  public void Grab()
 	{
-    Debug.Log("checking for grab target");
-    Collider[] playersGrab = Physics.OverlapSphere(collider.gameObject.transform.position, collider.radius, GrabMask);
-    foreach (var playerGotGrab in playersGrab)
+    Collider[] grabbedPlayers = Physics.OverlapSphere(transform.position, _collider.radius, _grabMask);
+    foreach (var player in grabbedPlayers)
     {
-      Debug.Log("Checking target" + playerGotGrab);
-      // Call grabplayer function on that player.
-      PlayerController targetPlayer = playerGotGrab.gameObject.GetComponent<PlayerController>();
-      if(targetPlayer!=null){
-        Debug.Log("found PC");
-        if (_player.Team == Constants.Team.Guardian && targetPlayer.Team == Constants.Team.Miner)
-        {
-          Debug.Log("Grabbed a miner");
-          PhotonView viewOfMiner = targetPlayer.gameObject.GetComponent<PhotonView>();
-          if(viewOfMiner == null){
-            Debug.Log("error  null view");
-          } else {
-            viewOfMiner.RPC("RPC_getGrabbed", RpcTarget.All);
-          }
-          continue;
-        }
+      PlayerController playerController = player.gameObject.GetComponent<PlayerController>();
+      if (playerController.Team == Constants.Team.Miner)
+      {
+        PhotonView view = playerController.gameObject.GetComponent<PhotonView>();
+        view.RPC("RPC_getGrabbed", RpcTarget.All);
       }
     }
   }
-
-  private void SetGame(GameController game) { _sceneController = game; }
-
 }
