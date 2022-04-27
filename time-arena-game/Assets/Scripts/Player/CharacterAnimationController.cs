@@ -6,7 +6,7 @@ using UnityEngine;
 public class CharacterAnimationController : MonoBehaviour
 {
     [SerializeField] private Animator PlayerAnim;
-    [SerializeField] private PlayerGrab _grab;
+    //[SerializeField] private PlayerGrab _grab;
     [SerializeField] private  PhotonView _view;
     
     void Awake() {
@@ -36,7 +36,7 @@ public class CharacterAnimationController : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.S)) StopRunningBackwards();
         if(Input.GetKeyDown(KeyCode.Space))StartJumping();
         if(Input.GetKeyUp(KeyCode.Space))StopJumping();
-        if(Input.GetMouseButtonDown(0)) _grab.Grab();
+       // if(Input.GetMouseButtonDown(0)) _grab.Grab();
     }
     public void StartRunningForwards(){
         PlayerAnim.SetBool("isRunningForwards",true);
