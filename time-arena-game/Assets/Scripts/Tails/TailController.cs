@@ -7,16 +7,15 @@ using TMPro;
 
 public class TailController : MonoBehaviour
 {
-    [SerializeField] private ParticleController _particles;
+
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private GameObject _ghostGuardian;
     [SerializeField] private GameObject _ghostMiner;
     private int _playerID;
     private int _tailID;
     private TimeLord _timeLord;
-    private PlayerController _player;
     private TailManager _manager;
-    private Animator animator;
+   
 
 
     void Update()
