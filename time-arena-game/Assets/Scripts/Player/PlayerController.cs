@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
 	{
 		game.Register(this);
 		gameObject.layer = Constants.LayerPlayer;
+		Show();
 	}
 
 	private void SetCharacter()

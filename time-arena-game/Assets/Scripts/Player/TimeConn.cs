@@ -27,6 +27,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[SerializeField] private PPController _ppController;
 	[SerializeField] private DissolveController _disMinerController;
 	[SerializeField] private DissolveController _disGuardianController;
+	[SerializeField] private SandController _sandController;
 
 	private DissolveController _disController;
 	private SceneController _sceneController;
@@ -38,6 +39,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	private float _backJumpCooldown;
 	private bool _timeTravelEnabled;
 	private bool _isDissolving;
+	private int _syncTimer;
 
 
 	// ------------ UNITY METHODS ------------
@@ -51,6 +53,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_backJumpCooldown = 15f;
 		_timeTravelEnabled = true;
 		_isDissolving = false;
+		_syncTimer = 10;
 	}
 
 	void OnEnable()
@@ -91,7 +94,24 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			UpdateCooldowns();
 			KeyControl();
 		}
-		if (_timeTravelEnabled) UpdateTimeTravel();
+		if (_timeTravelEnabled)
+		{
+			UpdateTimeTravel();
+
+			// If master client, synchronise everyone else every ten frames.
+			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0)
+			{
+				Dictionary<int, int[]> data = new Dictionary<int, int[]>();
+				foreach (var reality in _timelord.GetRealities())
+				{
+					data.Add(reality.Key, reality.Value.GetData());
+				}
+				int frame = _timelord.GetCurrentFrame();
+				_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
+				_syncTimer = 10;
+			}
+			_syncTimer--;
+		}
 	}
 
 
@@ -179,7 +199,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
 					_tailManager.EnableParticles(false);
 					_ppController?.TriggerPP(direction, jumpOut);
-					
+					_sandController.SetDirection(direction);
 				}
 			}
 			else if (_isJumping)
@@ -188,7 +208,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
 				_tailManager.EnableParticles(true);
 				_ppController?.TriggerPP(direction, jumpOut);
-				
+				_sandController.SetDirection(Constants.JumpDirection.Static);
 			}
 		}
 	}
@@ -205,7 +225,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		if (Input.GetKeyDown(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, true);
 		if (Input.GetKeyUp(KeyCode.Q)) TimeJump(Constants.JumpDirection.Backward, false);
 		if (Input.GetKeyUp(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, false);
-		if (Input.GetKeyDown(KeyCode.L)) _timelord.SnapshotStates("GameSnapshot.txt");
 	}
 
 
@@ -249,8 +268,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_jumpDirection = direction;
 		_setJumpState = true;
 		_timelord.LeaveReality(_view.ViewID);
-		if (direction == Constants.JumpDirection.Forward) _forwardsJumpCooldown = 15;
-		else _backJumpCooldown = 15;
+		_forwardsJumpCooldown = 15;
+		_backJumpCooldown = 15;
 
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
@@ -278,6 +297,18 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			_disController?.TriggerDissolve(_jumpDirection, false);
 			_particles.StartParticles(_jumpDirection);
 		}
+	}
+
+	[PunRPC]
+	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
+	{
+		_timelord.SetCurrentFrame(currentFrame);
+		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
+		foreach (var item in data)
+		{
+			realities.Add(item.Key, new Reality(item.Value));
+		}
+		_timelord.SetRealities(realities);
 	}
 
 
