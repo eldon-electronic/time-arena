@@ -13,6 +13,24 @@ public abstract class SceneController: MonoBehaviour
   	protected int _clientScore;
     public static event Action<int, int> scoreChange;
 
+	protected void CreateTimeLord(bool logging=false, bool diagnostics=false)
+    {
+        if (logging && PhotonNetwork.CurrentRoom.PlayerCount != 1)
+        {
+            throw new InvalidOperationException("Logging is only allowed in single player tests.");
+        }
+        else if (diagnostics && PhotonNetwork.CurrentRoom.PlayerCount < 2)
+        {
+            throw new InvalidOperationException("Diagnostics is only allowed in multiplayer tests.");
+        }
+        else
+        {
+			// Beware that if running diagnostics, non-master clients must be run in the Unity Editor.
+            int totalFrames = Constants.PreGameLength * Constants.FrameRate;
+            _timeLord = new ProxyTimeLord(totalFrames, logging, diagnostics && !(PhotonNetwork.IsMasterClient));
+        }
+    }
+
 	public void Register(PlayerController pc)
     {
 		if (pc.Team == Constants.Team.Guardian) _guardians.Add(pc.ID, pc);

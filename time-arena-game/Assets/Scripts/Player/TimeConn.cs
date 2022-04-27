@@ -53,7 +53,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_backJumpCooldown = 15f;
 		_timeTravelEnabled = true;
 		_isDissolving = false;
-		_syncTimer = 10;
+		_syncTimer = Constants.SyncFrames;
 	}
 
 	void OnEnable()
@@ -87,7 +87,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_tailManager.SetActive(true);
 	}
 
-	void Update() {
+	void Update()
+	{
 		// Local keys only affect client's player.
 		if (_view.IsMine)
 		{
@@ -108,7 +109,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 				}
 				int frame = _timelord.GetCurrentFrame();
 				_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
-				_syncTimer = 10;
+				_syncTimer = Constants.SyncFrames;
 			}
 			_syncTimer--;
 		}
@@ -302,6 +303,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[PunRPC]
 	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
 	{
+		if (_timelord == null) return;
+		
 		_timelord.SetCurrentFrame(currentFrame);
 		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
 		foreach (var item in data)
