@@ -12,13 +12,16 @@ public class HudTutorial : MonoBehaviour
     [SerializeField] private GameObject _popUpText;
     [SerializeField] private GameObject _optionsPopUpText;
     [SerializeField] private GameObject[] _tutorialObjects;
-    // private GameObject _crystal;
+    [SerializeField] private Text _scorePlayer;
+    [SerializeField] private Text _scoreTeam;
+    private GameObject _crystal;
+    private SceneController _sceneController;
 
     private Dictionary<string, GameObject> _tutorialArrows;
 
     void Awake()
     {
-        //_crystal = GameObject.Find("TutorialTimeCrystal");
+        _crystal = GameObject.Find("TutorialCrystal");
         _tutorialArrows = new Dictionary<string, GameObject>();
         foreach (GameObject tutorialObject in _tutorialObjects) {
         _tutorialArrows.Add(tutorialObject.name, tutorialObject);
@@ -39,6 +42,8 @@ public class HudTutorial : MonoBehaviour
     {
         Destroy(_tutorial);
         Destroy(this);
+        ResetScore();
+
     }
 
     public void SetArrowVisibility(string uiElement, bool visibility)
@@ -59,13 +64,27 @@ public class HudTutorial : MonoBehaviour
     }
 
 
-    /*public void SetCrystalVisibility(bool crystalVis){
+    public void SetCrystalVisibility(bool crystalVis){
         
         if (SceneManager.GetActiveScene().name == "PreGameScene"){
 
             _crystal.SetActive(crystalVis);
         }
 
-    }*/
+    }
+    public void UpdateTutorialScore(bool tutScore){
+
+        if (SceneManager.GetActiveScene().name != "GameScene"){
+            if(tutScore == true){
+                _scorePlayer.text = "1";
+                _scoreTeam.text = "1";
+            }
+        }
+    }
+    public void ResetScore(){
+        _scorePlayer.text = "0";
+        _scoreTeam.text = "0";
+    }
+
  }
 

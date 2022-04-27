@@ -7,15 +7,15 @@ using TMPro;
 
 public class TailController : MonoBehaviour
 {
-    [SerializeField] private ParticleController _particles;
+
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private GameObject _ghostGuardian;
     [SerializeField] private GameObject _ghostMiner;
     private int _playerID;
     private int _tailID;
     private TimeLord _timeLord;
-    private PlayerController _player;
     private TailManager _manager;
+   
 
 
     void Update()
@@ -27,10 +27,12 @@ public class TailController : MonoBehaviour
             if (state.Pos != transform.position) transform.position = state.Pos;
             if (state.Rot != transform.rotation) transform.rotation = state.Rot;
 
-            if (state.JumpDirection != Constants.JumpDirection.Static && _manager.GetParticlesEnabled())
+           /* if (state.JumpDirection == Constants.JumpDirection.Static && _manager.GetAnimationsEnabled())
             {
                 // _particles.StartDissolving(state.JumpDirection, state.JumpingOut);
-            }
+                _guardianController.AnimationKeyControl();
+                _minerController.AnimationKeyControl();
+            }*/
         }
     }
 
@@ -60,14 +62,17 @@ public class TailController : MonoBehaviour
         }
         else team = FindObjectOfType<GameController>().GetComponent<GameController>().GetTeam(_playerID);
         // TODO: use the team to set visibility of mesh.
+       
         if(team == Constants.Team.Guardian)
         {
             _ghostGuardian.SetActive(true);
             _ghostMiner.SetActive(false);
+        
         }
         else{
             _ghostGuardian.SetActive(false);
             _ghostMiner.SetActive(true);
+
         }
     }
 
