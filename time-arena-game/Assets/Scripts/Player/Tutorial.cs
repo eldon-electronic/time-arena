@@ -102,13 +102,13 @@ public class Tutorial : MonoBehaviour
         _guardianStates.Add(new State("This shows the team you are in!!","team", KeyCode.Return,true,false,false,false));
         _guardianStates.Add(new State("This is the timebar which helps you to see where you are at in time.","timebar", KeyCode.Return,true,false,false,false));
         _guardianStates.Add(new State("IT'S TIME TO TIME TRAVEL!!","timebar", KeyCode.Return,false,false,false,false));
-        _guardianStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it spins you can travel back in time.", "backJump",KeyCode.Return,true,false,false,false));
+        _guardianStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it starts spinning you can travel back in time.", "backJump",KeyCode.Return,true,false,false,false));
         _guardianStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=7>.", "backJump",KeyCode.Q,true,true,false,false));
         _guardianStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=24>.", "backJump",KeyCode.Q,true,false,false,false));
         _guardianStates.Add(new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false,false,false));
-        _guardianStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it spins you can travel forward in time.", "forwardJump",KeyCode.Return,true,false,false,false));
-        _guardianStates.Add(new State("Please press <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true,false,false));
-        _guardianStates.Add(new State("Please press <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false,false,false));
+        _guardianStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it starts spinning you can travel forward in time.", "forwardJump",KeyCode.Return,true,false,false,false));
+        _guardianStates.Add(new State("Please hold <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true,false,false));
+        _guardianStates.Add(new State("Please hold <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false,false,false));
         _guardianStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true,false,false));
     }
 
@@ -130,11 +130,11 @@ public class Tutorial : MonoBehaviour
         _minerStates.Add(new State("This shows the team you are in!!","team", KeyCode.Return,true,false,false,true));
         _minerStates.Add(new State("This is the timebar which helps you to see where you are at in time.","timebar", KeyCode.Return,true,false,false,true));
         _minerStates.Add(new State("IT'S TIME TO TIME TRAVEL!!","timebar", KeyCode.Return,false,false,false,true));
-        _minerStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it spins you can travel back in time.", "backJump",KeyCode.Return,true,false,false,true));
+        _minerStates.Add(new State("This icon shows the ability of time travelling backwards.\nOnce it starts spinning you can travel back in time.", "backJump",KeyCode.Return,true,false,false,true));
         _minerStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=7>.", "backJump",KeyCode.Q,true,true,false,true));
         _minerStates.Add(new State("Now, you are ready to go to the past!!\n\nPlease hold <sprite=24>.", "backJump",KeyCode.Q,true,false,false,true));
         _minerStates.Add(new State("Well done! You just traveled back in time!", "timebar",KeyCode.Return,false,false,false,true));
-        _minerStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it spins you can travel forward in time.", "forwardJump",KeyCode.Return,true,false,false,true));
+        _minerStates.Add(new State("Let's travel forwards now!!\nThis icon shows the ability of time travelling forwards.\nOnce it starts spinning you can travel forward in time.", "forwardJump",KeyCode.Return,true,false,false,true));
         _minerStates.Add(new State("Please hold <sprite=14> to travel forwards!", "forwardJump",KeyCode.E,true,true,false,true));
         _minerStates.Add(new State("Please hold <sprite=30> to travel forwards!", "forwardJump",KeyCode.E,true,false,false,true));
         _minerStates.Add(new State("Awesome!!It's the end of the tutorial.You are ready to play!!", "forwardJump",KeyCode.E,false,true,false,true));
