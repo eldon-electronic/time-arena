@@ -66,11 +66,12 @@ public class CrystalBehaviour : MonoBehaviour
       transform.localScale = new Vector3(a, a, a);
     }
 
-    //called upon player collision
-    // - crystal will be set to inactive in following frame so coroutine outsourced to cm
+    // Called upon player collision.
+    // Crystal will be set to inactive in following frame so coroutine outsourced to cm.
     [PunRPC]
     void RPC_Collect()
     {
+      Debug.Log("RPC collect called");
       existanceRange = new Vector2(-1f, -1f);
       isCollected = true;
       if (PhotonNetwork.IsMasterClient)
