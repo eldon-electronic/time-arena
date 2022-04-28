@@ -6,7 +6,6 @@ using UnityEngine;
 public class CharacterAnimationController : MonoBehaviour
 {
   [SerializeField] private Animator PlayerAnim;
-  [SerializeField] private PlayerGrab _grabber;
   [SerializeField] private  PhotonView _view;
   [SerializeField] private  PlayerController _player;
   private bool _paused;
@@ -49,17 +48,13 @@ public class CharacterAnimationController : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.Space)) StartJumping();
     if (Input.GetKeyUp(KeyCode.Space)) StopJumping();
     if (Input.GetMouseButtonDown(0)) StartGrabbing();
-    if (Input.GetMouseButtonUp(0)) StopGrabbing();
   }
 
   public void StartGrabbing()
   {
-    if (!_grabCooldown && _player.Team == Constants.Team.Guardian && _grabber != null)
+    if (!_grabCooldown && _player.Team == Constants.Team.Guardian)
     {
       PlayerAnim.SetBool("isGrabbing", true);
-      _grabCooldown = true;
-      _grabber.Grab();
-      GrabReset(3);
     }
   }
 
@@ -68,11 +63,9 @@ public class CharacterAnimationController : MonoBehaviour
     PlayerAnim.SetBool("isGrabbing", false);
   }
 
-  //enumerator coroutine to be called when grabbing
-  private IEnumerator GrabReset(int grabDelay)
+  public void SetGrabCooldown(bool value)
   {
-    yield return new WaitForSeconds(grabDelay);
-    _grabCooldown = false;
+    _grabCooldown = value;
   }
 
   public void StartRunningForwards()

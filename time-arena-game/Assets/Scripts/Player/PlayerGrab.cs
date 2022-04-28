@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
@@ -7,6 +8,7 @@ public class PlayerGrab : MonoBehaviour
 	[SerializeField] private LayerMask _grabMask;
   [SerializeField] private SphereCollider _collider;
   [SerializeField] private PlayerController _player;
+  [SerializeField] private CharacterAnimationController _animation;
   private bool _grabCooldown;
 
   void Awake()
@@ -17,6 +19,25 @@ public class PlayerGrab : MonoBehaviour
       return;
     }
     _grabCooldown = false;
+  }
+
+  void Update()
+  {
+    if (!_grabCooldown && Input.GetMouseButtonDown(0))
+    {
+      Grab();
+      _grabCooldown = true;
+      _animation.SetGrabCooldown(_grabCooldown);
+      StartCoroutine(GrabReset(3));
+    }
+  }
+
+  //enumerator coroutine to be called when grabbing
+  private IEnumerator GrabReset(int grabDelay)
+  {
+    yield return new WaitForSeconds(grabDelay);
+    _grabCooldown = false;
+    _animation.SetGrabCooldown(_grabCooldown);
   }
 
   public void Grab()

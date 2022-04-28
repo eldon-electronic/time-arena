@@ -27,8 +27,8 @@ public class PlayerController : MonoBehaviour
 		ID = _view.ViewID;
 
 		// TODO: Set the team in the menu before loading the pregame scene.
-		if (ID == 1001) Team = Constants.Team.Miner;
-		else Team = Constants.Team.Guardian;
+		if (ID == 1001) Team = Constants.Team.Guardian;
+		else Team = Constants.Team.Miner;
 
 		SetCharacter();
 	}
