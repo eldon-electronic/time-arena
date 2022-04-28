@@ -15,6 +15,7 @@ public class CollectingCrystals : MonoBehaviour
 
   public void OnTriggerEnter(Collider col)
   {
+    Debug.Log("Collision detected");
     if (col.gameObject.tag == "Collectable")
     {
       PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
