@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
 	// ------------ RPC METHODS ------------
 
 	[PunRPC]
-	public void RPC_collectCrystal()
+	public void RPC_incrementScore()
 	{
 		Score++;
 		_sceneController.OffsetScore(ID, 1);
