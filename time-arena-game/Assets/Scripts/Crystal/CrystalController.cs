@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class CrystalController : MonoBehaviour
 {
@@ -41,7 +42,11 @@ public class CrystalController : MonoBehaviour
 
     void Start()
     {
-        _timeLord = GameObject.FindWithTag("GameController").GetComponent<GameController>().GetTimeLord();
+         if (SceneManager.GetActiveScene().name == "PreGameScene")
+        {
+            _timeLord = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTimeLord();
+        }
+        else _timeLord = FindObjectOfType<GameController>().GetComponent<GameController>().GetTimeLord();
     }
 
     private void OnNewTimeLord(TimeLord time)

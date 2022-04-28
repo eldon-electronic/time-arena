@@ -21,7 +21,7 @@ QualitySettings:
     skinWeights: 1
     textureQuality: 1
     anisotropicTextures: 0
-    antiAliasing: 0
+    antiAliasing: 2
     softParticles: 0
     softVegetation: 0
     realtimeReflectionProbes: 0
@@ -40,8 +40,10 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    customRenderPipeline: {fileID: 11400000, guid: 3bf1bf1c47bba44fb89d81c410e9d995, type: 2}
+    excludedTargetPlatforms:
+    - Standalone
+    - WebGL
   - serializedVersion: 2
     name: Low
     pixelLightCount: 0
@@ -76,8 +78,10 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    customRenderPipeline: {fileID: 11400000, guid: 3bf1bf1c47bba44fb89d81c410e9d995, type: 2}
+    excludedTargetPlatforms:
+    - Standalone
+    - WebGL
   - serializedVersion: 2
     name: Medium
     pixelLightCount: 1
@@ -112,8 +116,10 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    customRenderPipeline: {fileID: 11400000, guid: 3bf1bf1c47bba44fb89d81c410e9d995, type: 2}
+    excludedTargetPlatforms:
+    - Standalone
+    - WebGL
   - serializedVersion: 2
     name: High
     pixelLightCount: 2
@@ -148,8 +154,10 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    customRenderPipeline: {fileID: 11400000, guid: 3bf1bf1c47bba44fb89d81c410e9d995, type: 2}
+    excludedTargetPlatforms:
+    - Standalone
+    - WebGL
   - serializedVersion: 2
     name: Very High
     pixelLightCount: 3
@@ -184,8 +192,10 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    customRenderPipeline: {fileID: 11400000, guid: 3bf1bf1c47bba44fb89d81c410e9d995, type: 2}
+    excludedTargetPlatforms:
+    - Standalone
+    - WebGL
   - serializedVersion: 2
     name: Ultra
     pixelLightCount: 4
@@ -220,7 +230,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 0}
+    customRenderPipeline: {fileID: 11400000, guid: 3bf1bf1c47bba44fb89d81c410e9d995, type: 2}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 2

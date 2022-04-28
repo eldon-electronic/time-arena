@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Abdomen
-  m_Shader: {fileID: -6465566751694194690, guid: b74e03b62ebd8496dbea4b6607ed0596, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 334bfe0e97b27a74080c58554c5488de, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -67,6 +67,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -90,6 +94,7 @@ Material:
     - Vector1_7272f72daa534b729f1e22a145e322dc: 0.2
     - Vector1_888094d4742045c18947f4ba30722f04: 1
     - Vector1_9e30875a874f4887bd6231f779850aec: 0.7
+    - Vector1__EdgeWidth: 0.05
     - Vector1_c4924f0421464232b3e6d6904ee5f67c: 0
     - Vector1_c562a64dc8be412088214643925f2cde: 32
     - Vector1_c9d41fc06ba6440fbdd6a90147357613: 32
@@ -97,6 +102,10 @@ Material:
     - Vector1_e2755ca231cf4dfbbf3a68df5bc0efab: 32
     - Vector1_e7711aa792cf4c709e2f96306a2ace8d: 0
     - _AlphaClip: 0
+    - _BaseShadowAmount: 0
+    - _Base_Gloss: 32
+    - _BlackEdgeThickness: 1
+    - _BlackEdgeThreshold: 1
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -119,6 +128,13 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _RimThickness: 1
+    - _RimThreshold: 0.1
+    - _ShineA: 3
+    - _ShineB: 1
+    - _ShineOffset: 0.2
+    - _ShineScale: 0.7
+    - _ShineWidth: 0.5
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -137,12 +153,19 @@ Material:
     - Color_efac2536b37545ea96e7cbc13edd0f75: {r: 0, g: 0, b: 0, a: 0}
     - Vector2_151240b6c26743da8e2348dde09dc3c2: {r: 0, g: 0, b: 0, a: 0}
     - Vector2_806164d00fdd463cae31f9d3f6971eb8: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _AmbientColor: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 0}
+    - _BaseColor: {r: 0.012254902, g: 0.012254902, b: 0.012254902, a: 0}
     - _BaseColour: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 0}
+    - _Base_SpecularColor: {r: 0, g: 0, b: 0, a: 0}
+    - _BlackEdgeColor: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeColour: {r: 191, g: 4, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 0, g: 0, b: 0, a: 0}
+    - _ShineColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _Tiling: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1042318975700806886
 MonoBehaviour:
