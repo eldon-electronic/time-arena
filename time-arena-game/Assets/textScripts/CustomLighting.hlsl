@@ -1,6 +1,26 @@
 ﻿#ifndef CUSTOM_LIGHTING_INCLUDED
 #define CUSTOM_LIGHTING_INCLUDED
 
+#ifdef SHADERGRAPH_PREVIEW
+    #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
+    #if (SHADERPASS != SHADERPASS_FORWARD)
+        #undef REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR
+    #endif
+#else
+#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+#pragma multi_compile_fragment _ _SHADOWS_SOFT
+#pragma multi_compile _ SHADOWS_SHADOWMASK
+#pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+#pragma multi_compile _ LIGHTMAP_ON
+#pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
+#endif
+
+//half cascadeIndex = ComputeCascadeIndex(WorldPos);
+//float4 shadowCoord = mul(_MainLightWorldToShadow[cascadeIndex], float4(WorldPos, 1.0));
+
 void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, out float DistanceAtten, out float ShadowAtten)
 {
 #ifdef SHADERGRAPH_PREVIEW
