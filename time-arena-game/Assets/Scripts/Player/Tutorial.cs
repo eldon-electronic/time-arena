@@ -12,16 +12,18 @@ public class Tutorial : MonoBehaviour
         public KeyCode InputTrigger;
         public bool VisibilityOfArrow;
         public bool NeedKey;
-        //public bool CrystalVisibility;
+        public bool CrystalVisibility;
+        public bool TutorialScore;
 
-        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress/*,bool visibilityOfCrystal*/)
+        public State(string message, string elementToPointTo, KeyCode inputTrigger ,bool visibilityOfArrow,bool needKeyPress,bool visibilityOfCrystal,bool tutorialScore)
         {
             Message = message;
             ElementToPointTo = elementToPointTo;
             InputTrigger = inputTrigger;
             VisibilityOfArrow = visibilityOfArrow;
             NeedKey = needKeyPress;
-            //CrystalVisibility = visibilityOfCrystal;
+            CrystalVisibility = visibilityOfCrystal;
+            TutorialScore = tutorialScore;
         }
     }
     
