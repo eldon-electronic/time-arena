@@ -8,7 +8,7 @@ public class PlayerGrab : MonoBehaviour
 	[SerializeField] private LayerMask _grabMask;
   [SerializeField] private SphereCollider _collider;
   [SerializeField] private PlayerController _player;
-  [SerializeField] private CharacterAnimationController _animation;
+  [SerializeField] private PlayerAnimationController _animation;
   private bool _grabCooldown;
 
   void Awake()

@@ -7,7 +7,7 @@ public class CharacterAnimationController : MonoBehaviour
 {
   [SerializeField] private Animator PlayerAnim;
   [SerializeField] private  PhotonView _view;
-  [SerializeField] private  PlayerController _player;
+  [SerializeField] private  LegacyPlayerController _player;
   private bool _paused;
   private bool _grabCooldown;
 

@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour, Debuggable
+public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private HudDebugPanel _debugPanel;
     [SerializeField] private PlayerController _player;
     [SerializeField] private PhotonView _view;
-    public CharacterController CharacterBody;
-    public Transform PlayerTransform;
-    public LayerMask GroundMask;
-    public GameObject CameraHolder;
+    [SerializeField] private CharacterController _characterBody;
+
+    // These should be empty objects positioned at the top and bottom of your player.
+    [SerializeField] private Transform _ceilingCheck;
+    [SerializeField] private Transform _groundCheck;
+
+    [SerializeField] private LayerMask _groundMask;
+    [SerializeField] private GameObject _cameraHolder;
 
     private float _speed;
     private float _groundCheckRadius;
@@ -46,7 +49,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         _lockMovement = false;
         _lockRotation = false;
         _activated = true;
-        _guardianSpawnPoint = new Vector3(-24f, -5f, -18f);
+        _guardianSpawnPoint = new Vector3(-37f,-9f,22f);
         _minerSpawnPoints =  new Vector3[] {
 			new Vector3(-19f, -5f, -33f),
 			new Vector3(-25f, -5f, -31f),
@@ -76,8 +79,6 @@ public class PlayerMovement : MonoBehaviour, Debuggable
     {
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerPlayer);
         Physics.IgnoreLayerCollision(Constants.LayerOutsideReality, Constants.LayerOutsideReality);
-
-        _debugPanel.Register(this);
     }
 
     void Update()
@@ -125,18 +126,14 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         float zMove = _lockMovement ? 0 : Input.GetAxis("Vertical");
 
         // Check if player's bottom intersects with any environment object.
-        Vector3 groundCheck = PlayerTransform.position;
-        groundCheck.y -= 1f;
-        _isGrounded = Physics.CheckSphere(groundCheck, _groundCheckRadius, GroundMask);
+        _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask);
 
         // Check if the player is stood on a jump pad.
         LayerMask jumpPadMask = LayerMask.GetMask("JumpPad");
-        _isJumpPad = Physics.CheckSphere(groundCheck, _groundCheckRadius, jumpPadMask);
+        _isJumpPad = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, jumpPadMask);
 
         //Check if player's head intersects with any environment object.
-        Vector3 ceilingCheck = PlayerTransform.position;
-        ceilingCheck.y += 0.6f;
-        _isCeiling = Physics.CheckSphere(ceilingCheck, _groundCheckRadius, GroundMask);
+        _isCeiling = Physics.CheckSphere(_ceilingCheck.position, _groundCheckRadius, _groundMask);
 
 
         // Set and normalise movement vector.
@@ -147,7 +144,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         }
 
         // Transform according to movement vector.
-        CharacterBody.Move(movement * _speed * Time.deltaTime);
+        _characterBody.Move(movement * _speed * Time.deltaTime);
 
 		// Jump control.
 		if (Input.GetButtonDown("Jump") && (_isGrounded || _isJumpPad) && !_lockMovement)
@@ -169,7 +166,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
         if (_isCeiling && _velocity.y > 0) _velocity.y = 0f;
 
         // Move player according to gravity.
-        CharacterBody.Move(_velocity * Time.deltaTime);
+        _characterBody.Move(_velocity * Time.deltaTime);
     }
 
     private void UpdateRotation()
@@ -185,7 +182,7 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 		_xRot = Mathf.Clamp(_xRot, -90f, 90f);
 
 		// Apply rotation.
-		CameraHolder.transform.localRotation = Quaternion.Euler(_xRot, 0f, 0f);
+		_cameraHolder.transform.localRotation = Quaternion.Euler(_xRot, 0f, 0f);
 
         // Rotate player about y axis with mouseX movement.
 		transform.Rotate(Vector3.up * mouseX);
@@ -201,13 +198,4 @@ public class PlayerMovement : MonoBehaviour, Debuggable
 		}
 		else transform.position = _guardianSpawnPoint;
 	}
-
-    // ------------ PUBLIC METHODS ------------
-
-    public Hashtable GetDebugValues()
-    {
-        Hashtable debugValues = new Hashtable();
-        debugValues.Add($"{_view.ViewID}'s layer", gameObject.layer);
-        return debugValues;
-    }
 }

@@ -6,18 +6,27 @@ using Photon.Pun;
 
 public abstract class SceneController: MonoBehaviour
 {
-    protected Dictionary<int, PlayerController> _miners;
-	protected Dictionary<int, PlayerController> _guardians;
+    protected Dictionary<int, PlayerMinerController> _miners;
+	protected Dictionary<int, PlayerGuardianController> _guardians;
 	protected TimeLord _timeLord;
   	protected int _minerScore;
   	protected int _clientScore;
     public static event Action<int, int> scoreChange;
 
 	public void Register(PlayerController pc)
-    {
-		if (pc.Team == Constants.Team.Guardian) _guardians.Add(pc.ID, pc);
-		else _miners.Add(pc.ID, pc);
-    }
+	{
+		pc.SetSceneController(this);
+	}
+
+	public void Register(PlayerMinerController pmc)
+	{
+		_miners.Add(pmc.ID, pmc);
+	}
+
+	public void Register(PlayerGuardianController pgc)
+	{
+		_guardians.Add(pgc.ID, pgc);
+	}
 
     public Constants.Team GetTeam(int playerID)
 	{

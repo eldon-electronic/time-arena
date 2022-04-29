@@ -13,8 +13,8 @@ public class PreGameController : SceneController
     void Awake()
     {
         Debug.Log("Pregame awake");
-        _miners = new Dictionary<int, PlayerController>();
-		_guardians = new Dictionary<int, PlayerController>();
+        _miners = new Dictionary<int, PlayerMinerController>();
+		_guardians = new Dictionary<int, PlayerGuardianController>();
         _secondsTillGame = 5.0f;
         // _timeLord = new ProxyTimeLord(Constants.PreGameLength * Constants.FrameRate, true);
         _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);

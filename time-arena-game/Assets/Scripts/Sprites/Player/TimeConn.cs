@@ -25,11 +25,9 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
 	[SerializeField] private PPController _ppController;
-	[SerializeField] private DissolveController _disMinerController;
-	[SerializeField] private DissolveController _disGuardianController;
+	[SerializeField] private DissolveController _disController;
 	[SerializeField] private SandController _sandController;
 
-	private DissolveController _disController;
 	private SceneController _sceneController;
 	private TimeLord _timelord;
 	private bool _isJumping;
@@ -76,13 +74,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_sceneController = FindObjectOfType<PreGameController>();
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
 		else SetTimeLord();
-
-		// Make sure that this script is executed before ParticleController.
-		if (_player.Team == Constants.Team.Guardian)
-		{
-			_disController = _disGuardianController;
-		}
-		else _disController = _disMinerController;
 		_disController.SetSubscriber(this);
 		_tailManager.SetActive(true);
 	}

@@ -9,15 +9,11 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
+	[SerializeField] private GameObject _root;
 	[SerializeField] private GameObject _pauseMenuUI;
 	[SerializeField] private PhotonView _view;
 	private bool _paused;
 	public static event Action<bool> paused;
-
-	void Awake()
-	{
-		if (!_view.IsMine) Destroy(this);
-	}
 
 	void OnEnable()
 	{
@@ -49,7 +45,7 @@ public class PauseManager : MonoBehaviour
 	{
 		PhotonNetwork.LeaveRoom();
 		SceneManager.LoadScene("MenuScene");
-		Destroy(gameObject);
+		Destroy(_root);
 	}
 
 	private void SetPause(bool pause)

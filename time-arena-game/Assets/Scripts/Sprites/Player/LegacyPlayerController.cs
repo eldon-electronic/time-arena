@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class LegacyPlayerController : MonoBehaviour
 {
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
 		_sceneController = FindObjectOfType<PreGameController>();
 		if (_sceneController == null) Debug.LogError("PreGameController not found");
-		else _sceneController.Register(this);
+		// else _sceneController.Register(this);
 
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
 	private void OnGameActive(GameController game)
 	{
 		_sceneController = game;
-		_sceneController.Register(this);
+		// _sceneController.Register(this);
 		gameObject.layer = Constants.LayerPlayer;
 		Show();
 	}

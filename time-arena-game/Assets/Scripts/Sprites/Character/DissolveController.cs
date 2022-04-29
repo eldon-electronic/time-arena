@@ -8,7 +8,6 @@ public interface DissolveUser
 {
     public void NotifyStartedDissolving();
     public void NotifyStoppedDissolving(bool dissolvedOut);
-    public Constants.Team GetTeam();
 }
 
 
@@ -16,7 +15,6 @@ public class DissolveController : DisController
 {
     [SerializeField] private AnimationCurve _inCurve;
     [SerializeField] private AnimationCurve _outCurve;
-    [SerializeField] private PhotonView _view;
     
     private float _animationDuration = 3;
     private Color _backwardColour = new Color(191, 4, 0, 0);
@@ -24,11 +22,6 @@ public class DissolveController : DisController
     private Color _disColor;
     private bool _fadeIn;
     private DissolveUser _subscriber;
-
-    void Awake()
-    {
-        if (_view.IsMine) Destroy(this);
-    }
 
     public void SetSubscriber(DissolveUser subscriber) { _subscriber = subscriber; }
 
