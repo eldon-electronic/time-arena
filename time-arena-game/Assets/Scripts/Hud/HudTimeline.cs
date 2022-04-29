@@ -16,8 +16,7 @@ public class HudTimeline : MonoBehaviour
     private SceneController _sceneController;
     private TimeLord _timeLord;
     private Dictionary<int, Slider> _players;
-    private Dictionary<int, string> _viewIDtoUserID;
-    private Dictionary<string, string> _iconAssignment;
+    private Dictionary<int, string> _icons;
 
     void Awake()
     {
@@ -40,6 +39,7 @@ public class HudTimeline : MonoBehaviour
     {
         GameObject pregame = GameObject.FindWithTag("PreGameController");
         _sceneController = pregame.GetComponent<PreGameController>();
+        _icons =_sceneController.GetIcons();
         _timeLord = _sceneController.GetTimeLord();
     }
 
@@ -70,11 +70,11 @@ public class HudTimeline : MonoBehaviour
         _timelineFill.fillAmount = (float) frame / (float) totalFrames;
     }
 
-    private Slider InstantiateIcon(string iconName)
+    private Slider InstantiateIcon(int playerID)
     {
         Sprite teamIcon = null;
         foreach (var icon in _teamIcons) {
-            if (icon.name == iconName) teamIcon = icon;
+            if (icon.name == _icons[playerID]) teamIcon = icon;
         }
 
         // Instantiate, set its parent to be the timeline and specify which icon to use
@@ -88,7 +88,7 @@ public class HudTimeline : MonoBehaviour
     {
         try
         {
-            Slider icon = InstantiateIcon(_sceneController.GetIcon());
+            Slider icon = InstantiateIcon(playerID);
             _players.Add(playerID, icon);
             return true;
         }
