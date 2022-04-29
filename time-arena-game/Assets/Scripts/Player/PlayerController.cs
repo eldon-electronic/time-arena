@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private PhotonView _view;
 	private string _userID;
 	private Dictionary<int, string> _viewIDtoUserID;
-	private Dictionary<string, string> _iconAssignments;
+	private Dictionary<int, string> _iconAssignments;
 
 	public Constants.Team Team;
 	public int ID;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 	void Awake()
 	{
 		_viewIDtoUserID = new Dictionary<int, string>();
-		_iconAssignments = new Dictionary<string, string>();
+		_iconAssignments = new Dictionary<int, string>();
 		ID = _view.ViewID;
 		
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -35,11 +35,15 @@ public class PlayerController : MonoBehaviour
 		} _userID = _viewIDtoUserID[ID];
 
 		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
-			Debug.Log($"Added {pair.Value}: {PlayerPrefs.GetString(pair.Value)}");
-			_iconAssignments.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
+			Debug.Log($"Added {pair.Key}: {PlayerPrefs.GetString(pair.Value)}");
+			_iconAssignments.Add(pair.Key, PlayerPrefs.GetString(pair.Value));
 		}
 
 		SetTeam(GetIconName());
+
+		SceneController sceneController = FindObjectOfType<PreGameController>();
+		if (sceneController == null) Debug.LogError("PreGameController not found");
+		else sceneController.Register(this);
 	}
 
 	void OnEnable() { GameController.gameActive += OnGameActive; }
@@ -51,10 +55,6 @@ public class PlayerController : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 
 		gameObject.layer = Constants.LayerPlayer;
-
-		SceneController sceneController = FindObjectOfType<PreGameController>();
-		if (sceneController == null) Debug.LogError("PreGameController not found");
-		else sceneController.Register(this);
 		
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	private string GetIconName() {
-		return _iconAssignments[_viewIDtoUserID[ID]];
+		return _iconAssignments[ID];
 	}
 
 	// ------------ PUBLIC METHODS ------------
@@ -95,14 +95,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
 
-	// The keys will contain the view IDs instead of UserIDs.
-	public Dictionary<int, string> GetIconAssignments() { 
-		Dictionary<int, string> iconAssignments = new Dictionary<int, string>();
-		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
-			iconAssignments.Add(pair.Key, _iconAssignments[_viewIDtoUserID[pair.Key]]);
-		}
-		return iconAssignments;
-	}
+	public Dictionary<int, string> GetIconAssignments() { return _iconAssignments; }
 
 	// ------------ RPC ------------
 
@@ -119,7 +112,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	[PunRPC] void RPC_sendIcons(Dictionary<string, string> iconAssignments) {
-		_iconAssignments = iconAssignments;
+		/*_iconAssignments = iconAssignments;
 		string userID = _viewIDtoUserID[ID];
 		string iconAssignment = _iconAssignments[userID];
 		foreach (var icon in _iconAssignments) {
@@ -130,6 +123,6 @@ public class PlayerController : MonoBehaviour
 		string teamName = iconAssignment.Split('_')[0]; 
 		if (teamName == "miner") Team = Constants.Team.Miner;
 		else if (teamName == "guardian") Team = Constants.Team.Guardian;
+		*/
 	}
-
 }

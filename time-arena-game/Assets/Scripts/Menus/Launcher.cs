@@ -238,6 +238,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	[PunRPC] void RPC_saveIcons() {
 		foreach (Transform playerListTransform in _playerListContainer) {
 			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
+			Debug.Log($"Saving {playerListItem.GetUserID()} {playerListItem.GetTeamImage().sprite.name}");
 			PlayerPrefs.SetString(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
 		}
 	}

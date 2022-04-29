@@ -39,7 +39,7 @@ public class HudTimeline : MonoBehaviour
     {
         GameObject pregame = GameObject.FindWithTag("PreGameController");
         _sceneController = pregame.GetComponent<PreGameController>();
-        _icons =_sceneController.GetIcons();
+        _icons = _sceneController.GetIcons();
         _timeLord = _sceneController.GetTimeLord();
     }
 
@@ -72,6 +72,10 @@ public class HudTimeline : MonoBehaviour
 
     private Slider InstantiateIcon(int playerID)
     {
+        foreach (var test in _icons) {
+            Debug.Log($"{test.Key} {test.Value}");
+        }
+        
         Sprite teamIcon = null;
         foreach (var icon in _teamIcons) {
             if (icon.name == _icons[playerID]) teamIcon = icon;
