@@ -18,7 +18,7 @@ public class TestTimeLordSimulation: Tester
         Constants.JumpDirection dir = Constants.JumpDirection.Static;
 
         // Run the simulation.
-        TimeLord timeLord = new TimeLord(20);
+        ProxyTimeLord timeLord = new ProxyTimeLord(20, false);
         timeLord.Connect(playerID, true);
         timeLord.EnterReality(playerID);
         
@@ -38,8 +38,9 @@ public class TestTimeLordSimulation: Tester
         // Perform assertions on Player States.
         Assert.AreEqual(20, states.Length, "PlayerStates array does not have the correct length.");
 
-        for (int i=0; i < 20; i++)
+        for (int i=0; i < 19; i++)
         {
+            Assert.IsTrue(states[i] != null, $"State not stored at frame {i}.");
             Assert.AreEqual(1, states[i].Count, $"Incorrect number of states stored at frame {i}: {states[i].Count}.");
             Assert.IsTrue(states[i].ContainsKey(0), $"Tail 0 does not have a state stored at frame {i}.");
             
@@ -57,12 +58,12 @@ public class TestTimeLordSimulation: Tester
         Assert.IsTrue(heads.ContainsKey(0), "Reality Manager does not contain a reality for player 0.");
         
         Reality reality = heads[0];
-        Assert.AreEqual(20, reality.PerceivedFrame, "Incorrect perceived frame.");
+        Assert.AreEqual(19, reality.PerceivedFrame, "Incorrect perceived frame.");
         Assert.AreEqual(0, reality.LastTailID, "Incorrect last tail ID.");
 
         List<int> writeFrames = reality.WriteFrames;
         Assert.AreEqual(1, writeFrames.Count, "Incorrect number of tail writer pointers.");
-        Assert.AreEqual(20, writeFrames[0], "Incorrect tail writer pointer position.");
+        Assert.AreEqual(19, writeFrames[0], "Incorrect tail writer pointer position.");
 
         Debug.Log("All assertions pass.");
     }
@@ -81,8 +82,9 @@ public class TestTimeLordSimulation: Tester
         // Perform assertions on Player States.
         Assert.AreEqual(20, states.Length, "PlayerStates array does not have the correct length.");
 
-        for (int i=0; i < 20; i++)
+        for (int i=0; i < 19; i++)
         {
+            Assert.IsTrue(states[i] != null, $"State not stored at frame {i}.");
             Assert.AreEqual(1, states[i].Count, $"Incorrect number of states stored at frame {i}: {states[i].Count}.");
             Assert.IsTrue(states[i].ContainsKey(0), $"Tail 0 does not have a state stored at frame {i}.");
             
@@ -100,12 +102,12 @@ public class TestTimeLordSimulation: Tester
         Assert.IsTrue(heads.ContainsKey(0), "Reality Manager does not contain a reality for player 0.");
         
         Reality reality = heads[0];
-        Assert.AreEqual(20, reality.PerceivedFrame, "Incorrect perceived frame.");
+        Assert.AreEqual(19, reality.PerceivedFrame, "Incorrect perceived frame.");
         Assert.AreEqual(0, reality.LastTailID, "Incorrect last tail ID.");
 
         List<int> writeFrames = reality.WriteFrames;
         Assert.AreEqual(1, writeFrames.Count, "Incorrect number of tail writer pointers.");
-        Assert.AreEqual(20, writeFrames[0], "Incorrect tail writer pointer position.");
+        Assert.AreEqual(19, writeFrames[0], "Incorrect tail writer pointer position.");
 
         Debug.Log("All assertions pass.");
     }

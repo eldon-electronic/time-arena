@@ -11,10 +11,10 @@ public class PlayerGrab : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) Grab();
+       
     }
 
-    private void Grab()
+    public void Grab()
 	{
 		// If grabbing, check for intersection with player.
 		if (!_damageWindow)
@@ -31,7 +31,7 @@ public class PlayerGrab : MonoBehaviour
 					Debug.Log("Grabbed a miner");
 				}
 			}
-			PlayerAnim.SetBool("isGrabbing", true);
+			
 		}
 	}
 
@@ -39,6 +39,8 @@ public class PlayerGrab : MonoBehaviour
 	public void StartGrabbing()
 	{
 		_damageWindow = true;
+		PlayerAnim.SetBool("isGrabbing", true);
+		
 	}
 
 	// Function called by animation to disable player to grab others.

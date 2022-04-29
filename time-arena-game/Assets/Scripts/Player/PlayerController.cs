@@ -11,12 +11,16 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private GameObject _camera;
 	[SerializeField] private GameObject _UI;
 	[SerializeField] private PhotonView _view;
+	[SerializeField] private GameObject _minerBody;
+	[SerializeField] private GameObject _guardianBody;
+	[SerializeField] private GameObject _minerDevice;
 	private string _userID;
 	private Dictionary<int, string> _viewIDtoUserID;
 	private Dictionary<int, string> _iconAssignments;
 
 	public Constants.Team Team;
 	public int ID;
+	public int score;
 
 
 	// ------------ UNITY METHODS ------------
@@ -40,6 +44,7 @@ public class PlayerController : MonoBehaviour
 		}
 
 		SetTeam(GetIconName());
+		SetCharacter();
 
 		SceneController sceneController = FindObjectOfType<PreGameController>();
 		if (sceneController == null) Debug.LogError("PreGameController not found");
@@ -51,7 +56,7 @@ public class PlayerController : MonoBehaviour
 	void OnDisable() { GameController.gameActive -= OnGameActive; }
 
 	void Start()
-	{	
+	{
 		DontDestroyOnLoad(gameObject);
 
 		gameObject.layer = Constants.LayerPlayer;
@@ -77,6 +82,7 @@ public class PlayerController : MonoBehaviour
 	{
 		game.Register(this);
 		gameObject.layer = Constants.LayerPlayer;
+		Show();
 	}
 
 	private void SetTeam(string iconName) {
@@ -89,14 +95,60 @@ public class PlayerController : MonoBehaviour
 		return _iconAssignments[ID];
 	}
 
+	private void SetCharacter()
+	{
+        if (Team == Constants.Team.Guardian)
+		{
+			_guardianBody.SetActive(!_view.IsMine);
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
+           
+        }
+        else if (Team == Constants.Team.Miner)
+		{
+			_minerBody.SetActive(!_view.IsMine);
+			_minerDevice.SetActive(true);
+            _guardianBody.SetActive(false);
+        }
+    }
+
+
 	// ------------ PUBLIC METHODS ------------
 
-	public void Show() { gameObject.layer = Constants.LayerPlayer; }
+	public void Show()
+	{
+		if (_view.IsMine) return;
 
-	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
+		gameObject.layer = Constants.LayerPlayer;
+		if (Team == Constants.Team.Guardian)
+		{
+			_guardianBody.SetActive(true);
+		}
+		else
+		{
+			_minerBody.SetActive(true);
+			_minerDevice.SetActive(true);
+		}
+	}
 
+	public void Hide()
+	{
+		if (_view.IsMine) return;
+
+		gameObject.layer = Constants.LayerOutsideReality;
+		if (Team == Constants.Team.Guardian)
+		{
+			_guardianBody.SetActive(false);
+		}
+		else
+		{
+			_minerBody.SetActive(false);
+			_minerDevice.SetActive(false);
+		}
+	}
+	
 	public Dictionary<int, string> GetIconAssignments() { return _iconAssignments; }
-
+	
 	// ------------ RPC ------------
 
 	// This RPC call is only called on the Master Client, so it needs to send out RPCs to everyone
@@ -125,4 +177,5 @@ public class PlayerController : MonoBehaviour
 		else if (teamName == "guardian") Team = Constants.Team.Guardian;
 		*/
 	}
+
 }

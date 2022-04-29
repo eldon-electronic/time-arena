@@ -12,24 +12,26 @@ public class PreGameController : SceneController
 
     void Awake()
     {
+        Debug.Log("Pregame awake");
         _miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
         _secondsTillGame = 5.0f;
+        // _timeLord = new ProxyTimeLord(Constants.PreGameLength * Constants.FrameRate, true);
+        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
+        Debug.Log("Pregame created new TimeLord");
     }
 
     void Start()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Constants.FrameRate;
-
-        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
     }
 
     void Update()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (Input.GetKeyDown(KeyCode.F)) StartCountingDown();
+            if (Input.GetKeyDown(KeyCode.Return)) StartCountingDown();
             if (Input.GetKeyDown(KeyCode.Escape)) StopCountingDown();
         }
         if (_isCountingTillGameStart)
@@ -39,10 +41,21 @@ public class PreGameController : SceneController
             {
                 PhotonNetwork.LoadLevel("GameScene");
                 _isCountingTillGameStart = false;
+                
             }
             countDown?.Invoke(_secondsTillGame);
         }
-        if (_secondsTillGame > 0) _timeLord.Tick();
+        _timeLord.Tick();
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("PreGame disabled");
+    }
+
+    void OnDestroy()
+    {
+        Debug.Log("PreGame destroyed");
     }
 
     private void StartCountingDown()
