@@ -20,7 +20,6 @@ public class GameController : SceneController
 	{
 		_miners = new Dictionary<int, PlayerController>();
 		_guardians = new Dictionary<int, PlayerController>();
-		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
 
 		_timer = 5f;
 		_gameStarted = false;
@@ -33,10 +32,9 @@ public class GameController : SceneController
 		// Prevent anyone else from joining room.
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 
-		Debug.Log("New TimeLord");
+		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
 		newTimeLord?.Invoke(_timeLord);
 
-		Debug.Log("Game Active");
 		gameActive?.Invoke(this);
 	}
 
@@ -46,7 +44,6 @@ public class GameController : SceneController
 		{
 			_gameEnded = true;
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
-			Debug.Log("Game ended");
 			gameEnded?.Invoke(Constants.Team.Miner);
 		}
 	}
@@ -59,7 +56,6 @@ public class GameController : SceneController
 			if (_timer <= 0f)
 			{
 				_gameStarted = true;
-				Debug.Log("Game started");
 				gameStarted?.Invoke();
 			}
 			// Countdown timer is counting.

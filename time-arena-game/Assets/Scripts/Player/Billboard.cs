@@ -1,4 +1,3 @@
-using Photon.Pun;
 using UnityEngine;
 
 
@@ -17,7 +16,7 @@ public class Billboard : MonoBehaviour
         if (transform != null)
         {
             if (_mainCameraTransform == null) Debug.LogError("mainCameraTransform is null");
-            else transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
+            transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
         }
     }
 }

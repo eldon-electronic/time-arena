@@ -9,8 +9,6 @@ public class HudCooldowns : MonoBehaviour
     [SerializeField] private TimeConn _timeConn;
     [SerializeField] private Animator _backButtonAnimator;
     [SerializeField] private Animator _forwardButtonAnimator;
-    [SerializeField] private Image _backCooldown;
-    [SerializeField] private Image _forwardCooldown;
     private bool _isBackButtonSpinning;
     private bool _isForwardButtonSpinning;
 
@@ -23,13 +21,7 @@ public class HudCooldowns : MonoBehaviour
     void LateUpdate()
     {
         (bool forward, bool back) canJump = _timeConn.GetCanJump();
-        (float forward, float back) cooldown = _timeConn.GetCooldowns();
 
-        // Cooldowns
-        _backCooldown.fillAmount = cooldown.back / 15f;
-        _forwardCooldown.fillAmount = cooldown.forward / 15f;
-
-        // Rotation of buttons
         if (canJump.back && !_isBackButtonSpinning)
         {
             // Ready to jump after cooldown.

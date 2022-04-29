@@ -6,19 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public interface Tester
+{
+	public bool Authenticate();
+}
 
 public class TimeLord: Debuggable
 {
-    protected int _totalFrames;
-	protected int _currentFrame;
-    protected int _myID;
+    private int _totalFrames;
+	private int _currentFrame;
+    private int _myID;
 
     // A RealityManager object for keeping track of each individual's current frames.
-    protected RealityManager _realities;
+    private RealityManager _realities;
 
     // An array the lenth of the game, with an item for each frame.
     // Each item stores a dictionary that maps tailIDs to their state.
-    protected Dictionary<int, PlayerState>[] _playerStates;
+    private Dictionary<int, PlayerState>[] _playerStates;
 
 
     public TimeLord(int totalFrames)
@@ -45,7 +49,6 @@ public class TimeLord: Debuggable
 			}
 			else debugItems.Add($"{f.id}'s frame", f.frame);
 		}
-		debugItems.Add("Current frame", _currentFrame);
 		return debugItems;
 	}
 
@@ -53,7 +56,7 @@ public class TimeLord: Debuggable
     // ------------ PUBLIC METHODS FOR THE GAME CONTROLLER ------------
 
     // Increments game time as well as the individual time for all player realities.
-    public virtual void Tick()
+    public void Tick()
     {
 		if (!TimeEnded())
 		{
@@ -62,7 +65,7 @@ public class TimeLord: Debuggable
 		}
     }
 
-    public bool TimeEnded() { return _currentFrame >= _totalFrames - 1; }
+    public bool TimeEnded() { return _currentFrame >= _totalFrames; }
 
 
     // ------------ PUBLIC METHODS FOR TAIL MANAGER ------------
@@ -92,7 +95,7 @@ public class TimeLord: Debuggable
     }
 
 
-    // ------------ PUBLIC METHODS FOR TIME CONN ------------
+    // ------------ PUBLIC METHODS FOR THE PLAYER CONTROLLER ------------
 
     // Adds the given player to the Reality Manager, allowing them to time travel.
     public void Connect(int playerID, bool isMe)
@@ -102,7 +105,7 @@ public class TimeLord: Debuggable
 	}
 
     // Records the given state in all realities this player exists in.
-	public virtual void RecordState(PlayerState ps)
+	public void RecordState(PlayerState ps)
 	{
 		if (TimeEnded()) return;
 
@@ -113,8 +116,7 @@ public class TimeLord: Debuggable
 			ps.TailID = lastTailID + i;
 			int frame = frames[i];
             if (_playerStates[frame] == null) _playerStates[frame] = new Dictionary<int, PlayerState>();
-			if (_playerStates[frame].ContainsKey(ps.TailID)) _playerStates[frame][ps.TailID] = ps;
-			else _playerStates[frame].Add(ps.TailID, ps);
+            _playerStates[frame].Add(ps.TailID, ps);
 		}
 	}
 
@@ -167,7 +169,7 @@ public class TimeLord: Debuggable
 		int frame = GetNearestReality(playerID);
 
         // Set your perceived frame and start recording in the new reality.
-        SetPerceivedFrame(playerID, frame);
+        _realities.SetPerceivedFrame(playerID, frame);
 		try
 		{
 			_realities.AddWriter(playerID, frame);
@@ -181,8 +183,6 @@ public class TimeLord: Debuggable
 	// Set the perceived frame of the given player.
 	public void SetPerceivedFrame(int playerID, int frame)
 	{
-		if (frame < 0) frame = 0;
-		else if (frame >= _totalFrames) frame = _totalFrames - 1;
 		_realities.SetPerceivedFrame(playerID, frame);
 	}
 
@@ -194,8 +194,6 @@ public class TimeLord: Debuggable
     // Returns true if the given player can travel in the given direction.
 	public bool CanJump(int playerID, Constants.JumpDirection direction)
 	{
-		if (_currentFrame >= _totalFrames - 1) return false;
-		
 		int frame = _realities.GetPerceivedFrame(playerID);
 		if (direction == Constants.JumpDirection.Backward)
 		{
@@ -213,12 +211,30 @@ public class TimeLord: Debuggable
 		return _realities.GetHeadsInFrame(frame);
 	}
 
-	public Dictionary<int, Reality> GetRealities() { return _realities.GetRealities(); }
+	// Writes a representation of _playerStates to a text file.
+	// Might cause lag if trying to call this during the game.
+	public void SnapshotStates(string filename)
+	{
+		using StreamWriter file = new StreamWriter(filename);
 
-	public void SetRealities(Dictionary<int, Reality> realities) { _realities.SetRealities(realities); }
+		for (int i=0; i < _playerStates.Length; i++)
+		{
+			StringBuilder sb = new StringBuilder(55);
 
-	public void SetCurrentFrame(int currentFrame) { _currentFrame = currentFrame; }
+			sb.Append(i.ToString("D4"));
 
+			if (_playerStates[i] != null)
+			{
+				foreach (var item in _playerStates[i])
+				{
+					string tail = item.Key.ToString();
+					sb.Append($" - {tail}");
+				}
+			}
+
+			file.WriteLine(sb.ToString());
+		}
+	}
 
 	// ------------ PUBLIC METHODS ------------
 
@@ -226,9 +242,19 @@ public class TimeLord: Debuggable
 
 	public int GetTotalFrames() { return _totalFrames; }
 
-	public int GetMyPercievedFrame() { return _realities.GetPerceivedFrame(_myID); }
-
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
-	public int GetYourFrame() { return _realities.GetPerceivedFrame(_myID); }
+
+    // WARNING: The following functions are to be used by test framework and debugging only.
+    public Dictionary<int, PlayerState>[] RevealPlayerStates(Tester tester)
+	{
+		if (tester.Authenticate()) return _playerStates;
+		else throw new InvalidOperationException("Must be a Tester to call this method.");
+	}
+
+    public RealityManager RevealRealityManager(Tester tester)
+	{
+		if (tester.Authenticate()) return _realities;
+		else throw new InvalidOperationException("Must be a Tester to call this method.");
+	}
 }
