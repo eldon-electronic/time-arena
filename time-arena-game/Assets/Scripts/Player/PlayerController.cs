@@ -34,14 +34,12 @@ public class PlayerController : MonoBehaviour
 			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
 		} _userID = _viewIDtoUserID[ID];
 
-		if (PhotonNetwork.IsMasterClient) {
-			foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
-				Debug.Log($"Added {pair.Value}: {PlayerPrefs.GetString(pair.Value)}");
-				_iconAssignments.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
-			}
-		} //else {
-			//_view.RPC("RPC_getIcons", RpcTarget.MasterClient);
-		//}
+		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
+			Debug.Log($"Added {pair.Value}: {PlayerPrefs.GetString(pair.Value)}");
+			_iconAssignments.Add(pair.Value, PlayerPrefs.GetString(pair.Value));
+		}
+
+		SetTeam(GetIconName());
 	}
 
 	void OnEnable() { GameController.gameActive += OnGameActive; }
@@ -81,6 +79,11 @@ public class PlayerController : MonoBehaviour
 		gameObject.layer = Constants.LayerPlayer;
 	}
 
+	private void SetTeam(string iconName) {
+		string teamName = iconName.Split('_')[0]; 
+		if (teamName == "miner") Team = Constants.Team.Miner;
+		else if (teamName == "guardian") Team = Constants.Team.Guardian;
+	}
 
 	// ------------ PUBLIC METHODS ------------
 
@@ -108,7 +111,6 @@ public class PlayerController : MonoBehaviour
 		_iconAssignments = iconAssignments;
 		string userID = _viewIDtoUserID[ID];
 		string iconAssignment = _iconAssignments[userID];
-		Debug.Log("NUM OF ICONS: " + _iconAssignments.Count.ToString());
 		foreach (var icon in _iconAssignments) {
 			Debug.Log($"{icon.Key} {icon.Value}");
 		}

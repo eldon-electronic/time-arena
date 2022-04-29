@@ -125,12 +125,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	// --------------- Public functions ---------------
 
 	public void StartGame() {
-		if (PhotonNetwork.IsMasterClient) {
-			foreach (Transform playerListTransform in _playerListContainer) {
-				PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
-				PlayerPrefs.SetString(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
-			}
-		}
+		_view.RPC("RPC_saveIcons", RpcTarget.All);
 		
 		// Level index of PreGameScene is 1, check build settings
 		PhotonNetwork.LoadLevel(1);
@@ -237,6 +232,13 @@ public class Launcher : MonoBehaviourPunCallbacks {
 			Instantiate(_playerListItemPrefab, _playerListContainer)
 				.GetComponent<PlayerListItem>()
 				.SetUp(players[i], PhotonNetwork.IsMasterClient, _teamIcons, playerIcons[players[i].UserId]);
+		}
+	}
+
+	[PunRPC] void RPC_saveIcons() {
+		foreach (Transform playerListTransform in _playerListContainer) {
+			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
+			PlayerPrefs.SetString(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
 		}
 	}
 
