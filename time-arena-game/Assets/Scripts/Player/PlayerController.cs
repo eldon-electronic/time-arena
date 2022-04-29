@@ -85,13 +85,24 @@ public class PlayerController : MonoBehaviour
 		else if (teamName == "guardian") Team = Constants.Team.Guardian;
 	}
 
+	private string GetIconName() {
+		return _iconAssignments[_viewIDtoUserID[ID]];
+	}
+
 	// ------------ PUBLIC METHODS ------------
 
 	public void Show() { gameObject.layer = Constants.LayerPlayer; }
 
 	public void Hide() { gameObject.layer = Constants.LayerOutsideReality; }
 
-	public string GetIconName() { return _iconAssignments[_viewIDtoUserID[ID]]; }
+	// The keys will contain the view IDs instead of UserIDs.
+	public Dictionary<int, string> GetIconAssignments() { 
+		Dictionary<int, string> iconAssignments = new Dictionary<int, string>();
+		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
+			iconAssignments.Add(pair.Key, _iconAssignments[_viewIDtoUserID[pair.Key]]);
+		}
+		return iconAssignments;
+	}
 
 	// ------------ RPC ------------
 
