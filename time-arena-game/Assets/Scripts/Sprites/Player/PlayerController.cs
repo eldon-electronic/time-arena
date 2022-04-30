@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public abstract class PlayerController : MonoBehaviour
+public abstract class PlayerController : MonoBehaviour, Debuggable
 {
 	[SerializeField] protected GameObject _camera;
 	[SerializeField] protected GameObject _UI;
@@ -38,6 +38,8 @@ public abstract class PlayerController : MonoBehaviour
 
 		FindObjectOfType<PreGameController>().Register(this);
 
+		FindObjectOfType<HudDebugPanel>().Register(this);
+
 		if (_view.IsMine) gameObject.tag = "Client";
 		else
 		{
@@ -60,7 +62,6 @@ public abstract class PlayerController : MonoBehaviour
 	{
 		_sceneController = game;
 		_sceneController.Register(this);
-		gameObject.layer = Constants.LayerPlayer;
 		Show();
 	}
 
@@ -75,11 +76,26 @@ public abstract class PlayerController : MonoBehaviour
 
 	public void Show()
 	{
-		if (!_view.IsMine) _mesh.SetActive(true);
+		if (!_view.IsMine)
+		{
+			gameObject.layer = Constants.LayerPlayer;
+			_mesh.SetActive(true);
+		}
 	}
 
 	public void Hide()
 	{
-		if (!_view.IsMine) _mesh.SetActive(false);
+		if (!_view.IsMine)
+		{
+			gameObject.layer = Constants.LayerOutsideReality;
+			_mesh.SetActive(false);
+		}
+	}
+
+	public Hashtable GetDebugValues()
+	{
+		Hashtable debugValues = new Hashtable();
+		debugValues.Add($"{_view.ViewID} layer", gameObject.layer);
+		return debugValues;
 	}
 }

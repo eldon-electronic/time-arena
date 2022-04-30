@@ -293,6 +293,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[PunRPC]
 	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
 	{
+		if (_timelord == null) return;
 		_timelord.SetCurrentFrame(currentFrame);
 		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
 		foreach (var item in data)
