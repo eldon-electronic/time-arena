@@ -161,20 +161,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6664611707448390559, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
   m_PrefabInstance: {fileID: 5524133132988244247}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8323592407171989066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1212837026246955656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 375f92b8143b2024b8c7015f6bdf247f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _player: {fileID: 2997013567281862415}
-  _view: {fileID: 2196806138278595886}
 --- !u!114 &2997013567281862415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +182,19 @@ MonoBehaviour:
   ID: 0
   _minerDevice: {fileID: 5504838078970959486}
   Score: 0
+--- !u!114 &4314958266931367621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895772766768420293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375f92b8143b2024b8c7015f6bdf247f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _view: {fileID: 2196806138278595886}
 --- !u!114 &4429164574998448197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6019942765642728656, guid: b9718f05439d440bc83a26414218e309, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.76
       objectReference: {fileID: 0}
     - target: {fileID: 6019942765642728656, guid: b9718f05439d440bc83a26414218e309, type: 3}
       propertyPath: m_LocalRotation.w

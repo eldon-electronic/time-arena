@@ -5,13 +5,7 @@ using Photon.Pun;
 
 public class CollectingCrystals : MonoBehaviour
 {
-  [SerializeField] private PlayerController _player;
   [SerializeField] private PhotonView _view;
-
-  public void Start()
-  {
-    if (_player.Team != Constants.Team.Miner) Destroy(this);
-  }
 
   public void OnTriggerEnter(Collider col)
   {
