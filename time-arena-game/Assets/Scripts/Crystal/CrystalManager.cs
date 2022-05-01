@@ -42,10 +42,10 @@ public class CrystalManager : MonoBehaviour
       foreach(CrystalBehaviour crystal in crystals){
         TimeLord t = game.GetTimeLord();
         float percievedTime = (float)(t.GetMyPercievedFrame()) / Constants.FrameRate;
-        if(percievedTime >= crystal.existanceRange[0] && percievedTime <= crystal.existanceRange[1]){
+        if(percievedTime >= crystal.ExistanceRange[0] && percievedTime <= crystal.ExistanceRange[1]){
           if(!crystal.gameObject.activeSelf){
             crystal.UpdateAnim();
-            crystal.t = 0;
+            crystal.T = 0;
             crystal.gameObject.SetActive(true);
             crystal.gameObject.layer = 3;
           }

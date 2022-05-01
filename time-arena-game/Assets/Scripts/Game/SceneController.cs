@@ -10,8 +10,7 @@ public abstract class SceneController: MonoBehaviour
 	protected Dictionary<int, PlayerGuardianController> _guardians;
 	protected TimeLord _timeLord;
   	protected int _minerScore;
-  	protected int _clientScore;
-    public static event Action<int, int> scoreChange;
+    public static event Action<int> scoreChange;
 
 	public void Register(PlayerController pc)
 	{
@@ -57,11 +56,13 @@ public abstract class SceneController: MonoBehaviour
 		}
 	}
 
-	public void OffsetScore(int id, int offset)
+	public void OffsetScore(int offset)
 	{
 		_minerScore += offset;
-		scoreChange?.Invoke(_miners[id].Score, _minerScore);
+		scoreChange?.Invoke(_minerScore);
 	}
 
 	public TimeLord GetTimeLord() { return _timeLord;}
+
+	public int GetMinerScore() { return _minerScore; }
 }
