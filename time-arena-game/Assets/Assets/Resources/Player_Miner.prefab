@@ -122,7 +122,7 @@ PrefabInstance:
     - target: {fileID: 5968736649172266041, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: ObservedComponents.Array.data[2]
       value: 
-      objectReference: {fileID: 3951589693587807151}
+      objectReference: {fileID: 3108050986036000732}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
 --- !u!1 &7895772766768420293 stripped
@@ -360,7 +360,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2492634766885740433, guid: b9718f05439d440bc83a26414218e309, type: 3}
   m_PrefabInstance: {fileID: 7994596376234740207}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3951589693587807151
+--- !u!114 &3108050986036000732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -376,7 +376,7 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: isGrabbing
   - Type: 4
     SynchronizeType: 1
@@ -393,5 +393,3 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
-  - SynchronizeType: 1
-    LayerIndex: 1

@@ -5,12 +5,13 @@ using Photon.Pun;
 
 public class SpawnPlayers : MonoBehaviour
 {
-    public GameObject playerPrefab;
-	public Vector3[] spawningPoint;
+    public GameObject PlayerMinerPrefab;
+    public GameObject PlayerGuardianPrefab;
+	public Vector3[] SpawningPoint;
 
     void Awake()
     {
-        spawningPoint = new Vector3[]
+        SpawningPoint = new Vector3[]
         {
             new Vector3(-20f, 5f, 0f),
             new Vector3(-10f, 5f, 0f),
@@ -23,7 +24,11 @@ public class SpawnPlayers : MonoBehaviour
     void Start()
     {
         // Spawn a new player into the scene.
-        int n = (int) (spawningPoint.Length * Random.value);
-        PhotonNetwork.Instantiate(playerPrefab.name, spawningPoint[0], Quaternion.identity);
+        int n = (int) (SpawningPoint.Length * Random.value);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, SpawningPoint[n], Quaternion.identity);    
+        }
+        else PhotonNetwork.Instantiate(PlayerMinerPrefab.name, SpawningPoint[n], Quaternion.identity);
     }
 }
