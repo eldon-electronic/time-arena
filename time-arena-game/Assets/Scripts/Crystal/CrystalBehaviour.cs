@@ -28,7 +28,7 @@ public class CrystalBehaviour : MonoBehaviour
   void Start()
   {
     InitialWave = Random.Range(5f, 10f);
-    _sceneController = FindObjectOfType<GameController>();
+    _sceneController = FindObjectOfType<SceneController>();
     _crystalManager = _sceneController.gameObject.GetComponent<CrystalManager>();
 
     // On instantiation, add self to crystal list in cm.

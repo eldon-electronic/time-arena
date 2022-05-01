@@ -42,11 +42,7 @@ public class CrystalController : MonoBehaviour
 
     void Start()
     {
-         if (SceneManager.GetActiveScene().name == "PreGameScene")
-        {
-            _timeLord = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTimeLord();
-        }
-        else _timeLord = FindObjectOfType<GameController>().GetComponent<GameController>().GetTimeLord();
+        _timeLord = FindObjectOfType<SceneController>().GetTimeLord();
     }
 
     private void OnNewTimeLord(TimeLord time)
