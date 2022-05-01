@@ -45,7 +45,9 @@ public class PlayerGrab : MonoBehaviour
     Collider[] grabbedPlayers = Physics.OverlapSphere(transform.position, _collider.radius, _grabMask);
     foreach (var player in grabbedPlayers)
     {
-      PlayerController playerController = player.gameObject.GetComponent<PlayerController>();
+      PlayerController playerController = player.transform.root.GetComponent<PlayerController>();
+      Debug.Log($"controller: {playerController}");
+      Debug.Log($"team: {playerController.Team}");
       if (playerController.Team == Constants.Team.Miner)
       {
         PhotonView view = playerController.gameObject.GetComponent<PhotonView>();

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimationController : MonoBehaviour
+public class PlayerAnimationController : MonoBehaviour, Debuggable
 {
   [SerializeField] private CharacterAnimation _animation;
   [SerializeField] private  PhotonView _view;
@@ -32,6 +32,11 @@ public class PlayerAnimationController : MonoBehaviour
     PauseManager.paused -= updatePause;
   }
 
+  void Start()
+  {
+    FindObjectOfType<HudDebugPanel>().Register(this);
+  }
+
   void updatePause(bool newVal) { _paused = newVal; }
 
   void Update()
@@ -58,5 +63,14 @@ public class PlayerAnimationController : MonoBehaviour
   public void SetGrabCooldown(bool value)
   {
     _grabCooldown = value;
+  }
+
+  public Hashtable GetDebugValues()
+  {
+    Hashtable values = new Hashtable();
+    values.Add("grab cooldown", _grabCooldown);
+    values.Add("player team", _player.Team);
+    values.Add("mouse down", Input.GetMouseButtonDown(0));
+    return values;
   }
 }
