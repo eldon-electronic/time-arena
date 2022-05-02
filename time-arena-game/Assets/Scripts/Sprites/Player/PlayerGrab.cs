@@ -46,10 +46,9 @@ public class PlayerGrab : MonoBehaviour
     foreach (var player in grabbedPlayers)
     {
       PlayerController playerController = player.transform.root.GetComponent<PlayerController>();
-      Debug.Log($"controller: {playerController}");
-      Debug.Log($"team: {playerController.Team}");
       if (playerController.Team == Constants.Team.Miner)
       {
+        Debug.Log("Grabbed a miner");
         PhotonView view = playerController.gameObject.GetComponent<PhotonView>();
         view.RPC("RPC_getGrabbed", RpcTarget.All);
       }
