@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: DeviceArrow
-  m_Shader: {fileID: -6465566751694194690, guid: 334bfe0e97b27a74080c58554c5488de, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 13cc607e0bad5314390ef0f8a6397c68, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -81,7 +81,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1__EdgeWidth: 0.05
+    - Vector1_f839a29bdfbf4e9ca00fd5041ad1ad1b: 50
     - _AlphaClip: 0
+    - _BaseGloss: 32
     - _BaseShadowAmount: 0
     - _Base_Gloss: 32
     - _BlackEdgeThickness: 1
@@ -92,7 +94,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _CutoffHeight: 4
+    - _CutoffHeight: 8
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -126,6 +128,7 @@ Material:
     - _AmbientColor: {r: 0.4, g: 0.4, b: 0.4, a: 0}
     - _BaseColor: {r: 0.017933436, g: 0.2924528, b: 0.25650385, a: 1}
     - _BaseColour: {r: 0.06827848, g: 1.0241771, b: 0.8876202, a: 1}
+    - _BaseSpecularColor: {r: 1, g: 1, b: 1, a: 0}
     - _Base_SpecularColor: {r: 1, g: 1, b: 1, a: 0}
     - _BlackEdgeColor: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
