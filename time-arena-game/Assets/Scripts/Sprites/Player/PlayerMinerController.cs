@@ -5,6 +5,7 @@ public class PlayerMinerController : PlayerController
 {
 	[SerializeField] private GameObject _minerDevice;
 	[SerializeField] private HudScore _hudScore;
+	[SerializeField] private TimeConn _timeConn;
 	public int Score;
 
 	protected override void SetActive()
@@ -25,12 +26,15 @@ public class PlayerMinerController : PlayerController
         _sceneController.Register(this);
     }
 
-	public void IncrementedScore()
+	public void IncrementScore()
 	{
-		Score++;
+		_view.RPC("RPC_incrementScore", RpcTarget.All);
 		_view.RPC("RPC_offsetScore", RpcTarget.All, 1);
 		_hudScore.SetYourScore(Score);
 	}
+
+	[PunRPC]
+	public void RPC_incrementScore() { Score++; }
 
 	[PunRPC]
 	public void RPC_getGrabbed()
@@ -41,13 +45,10 @@ public class PlayerMinerController : PlayerController
 			Score -= offset;
 			_view.RPC("RPC_offsetScore", RpcTarget.All, -offset);
 			_hudScore.SetYourScore(Score);
-			//TODO: respawn?
+			_timeConn.ForceJump();
 		}
 	}
 
 	[PunRPC]
-	public void RPC_offsetScore(int offset)
-	{
-		_sceneController.OffsetScore(offset);
-	}
+	public void RPC_offsetScore(int offset) { _sceneController.OffsetScore(offset); }
 }

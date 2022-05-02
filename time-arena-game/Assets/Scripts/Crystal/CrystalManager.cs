@@ -41,7 +41,7 @@ public class CrystalManager : MonoBehaviour
       //check if player should be able to see crystals
       foreach(CrystalBehaviour crystal in crystals){
         TimeLord t = game.GetTimeLord();
-        float percievedTime = (float)(t.GetMyPercievedFrame()) / Constants.FrameRate;
+        float percievedTime = (float)(t.GetYourPerceivedFrame()) / Constants.FrameRate;
         if(percievedTime >= crystal.ExistanceRange[0] && percievedTime <= crystal.ExistanceRange[1]){
           if(!crystal.gameObject.activeSelf){
             crystal.UpdateAnim();

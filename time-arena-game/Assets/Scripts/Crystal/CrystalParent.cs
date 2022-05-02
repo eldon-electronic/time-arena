@@ -33,7 +33,7 @@ public class CrystalParent : MonoBehaviour
 
     void Update()
     {
-        int frame = _timeLord.GetYourFrame();
+        int frame = _timeLord.GetYourPerceivedFrame();
         if (frame >= startFrame && _ObjectCollider.isTrigger == false) _ObjectCollider.isTrigger = true;
         else if (frame < startFrame && _ObjectCollider.isTrigger == true) _ObjectCollider.isTrigger = false;
     }

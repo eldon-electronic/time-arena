@@ -22,7 +22,7 @@ public class CollectingCrystals : MonoBehaviour
     {
       PhotonView viewOfCrystal = col.gameObject.GetComponent<PhotonView>();
       viewOfCrystal.RPC("RPC_Collect", RpcTarget.All);
-      _player.IncrementedScore();
+      _player.IncrementScore();
     }
   }
 }

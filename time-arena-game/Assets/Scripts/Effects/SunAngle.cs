@@ -24,7 +24,7 @@ public class SunAngle : MonoBehaviour
     {
         try {
             //get the percieved frame and total frames
-            float percievedFrame = (float) _timeLord?.GetYourFrame();
+            float percievedFrame = (float) _timeLord?.GetYourPerceivedFrame();
             float totalFrames = (float) _timeLord?.GetTotalFrames();
             //calculate the percentage frame (P/T)
             float frameFraction = percievedFrame / totalFrames;
