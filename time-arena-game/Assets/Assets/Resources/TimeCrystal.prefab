@@ -61,12 +61,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c70a9c597e1d464dbd76855f9e6a37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlay: {fileID: 2100000, guid: 287555b83538d4c308c208afddb8e99c, type: 2}
-  initial_wave: 0
-  t: 0
+  _overlay: {fileID: 4989873240074187954}
+  InitialWave: 0
+  T: 0
   ID: 0
-  existanceRange: {x: 5, y: 10}
-  isCollected: 0
+  ExistanceRange: {x: 5, y: 10}
+  IsCollected: 0
 --- !u!114 &6279111853296695144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,5 +231,10 @@ PrefabInstance:
 --- !u!4 &6106096085419513908 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 106107b9967e74a7bb1a7a5cd6ebf440, type: 3}
+  m_PrefabInstance: {fileID: 5996419160356700127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4989873240074187954 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7635826562936255635, guid: 106107b9967e74a7bb1a7a5cd6ebf440, type: 3}
   m_PrefabInstance: {fileID: 5996419160356700127}
   m_PrefabAsset: {fileID: 0}

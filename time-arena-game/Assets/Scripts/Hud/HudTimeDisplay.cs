@@ -16,8 +16,7 @@ public class HudTimeDisplay : MonoBehaviour
 
     void Start()
     {
-        PreGameController pregame = GameObject.FindWithTag("PreGameController").GetComponent<PreGameController>();
-        _timeLord = pregame.GetTimeLord();
+        _timeLord = FindObjectOfType<SceneController>().GetTimeLord();
         _text.text = "0:00";
         _totalTime = Constants.PreGameLength;
     }

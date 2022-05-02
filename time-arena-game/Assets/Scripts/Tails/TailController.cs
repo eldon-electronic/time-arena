@@ -55,24 +55,16 @@ public class TailController : MonoBehaviour
 
         nameText.text = PhotonView.Find(_playerID).Owner.NickName;
         
-        Constants.Team team;
-        if (SceneManager.GetActiveScene().name == "PreGameScene")
-        {
-            team = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTeam(_playerID);
-        }
-        else team = FindObjectOfType<GameController>().GetComponent<GameController>().GetTeam(_playerID);
-        // TODO: use the team to set visibility of mesh.
-       
-        if(team == Constants.Team.Guardian)
+        Constants.Team team = FindObjectOfType<SceneController>().GetTeam(_playerID);
+        if (team == Constants.Team.Guardian)
         {
             _ghostGuardian.SetActive(true);
             _ghostMiner.SetActive(false);
-        
         }
-        else{
+        else
+        {
             _ghostGuardian.SetActive(false);
             _ghostMiner.SetActive(true);
-
         }
     }
 

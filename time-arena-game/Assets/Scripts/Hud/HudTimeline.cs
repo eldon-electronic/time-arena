@@ -38,8 +38,7 @@ public class HudTimeline : MonoBehaviour
 
     void Start()
     {
-        GameObject pregame = GameObject.FindWithTag("PreGameController");
-        _sceneController = pregame.GetComponent<PreGameController>();
+        _sceneController = FindObjectOfType<SceneController>();
         _timeLord = _sceneController.GetTimeLord();
     }
 

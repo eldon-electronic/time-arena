@@ -18,8 +18,8 @@ public class GameController : SceneController
 
 	void Awake()
 	{
-		_miners = new Dictionary<int, PlayerController>();
-		_guardians = new Dictionary<int, PlayerController>();
+		_miners = new Dictionary<int, PlayerMinerController>();
+		_guardians = new Dictionary<int, PlayerGuardianController>();
 		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
 
 		_timer = 5f;

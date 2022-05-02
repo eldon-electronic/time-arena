@@ -17,17 +17,15 @@ public class HudScore : MonoBehaviour
 
     void OnEnable()
     {
-        SceneController.scoreChange += SetScore;
+        SceneController.scoreChange += SetTeamScore;
     }
 
     void OnDisable()
     {
-        SceneController.scoreChange -= SetScore;
+        SceneController.scoreChange -= SetTeamScore;
     }
 
-    private void SetScore(int pScore, int tScore)
-    {
-        _playerText.text = pScore + "";
-        _teamText.text = tScore + "";
-    }
+    private void SetTeamScore(int score) { _teamText.text = score + ""; }
+
+    public void SetYourScore(int score) { _playerText.text = score + ""; }
 }
