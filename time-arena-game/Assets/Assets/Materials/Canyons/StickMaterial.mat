@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3259443362510932982
+--- !u!114 &-2304399536786640162
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,10 +20,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BackwardsArrow
-  m_Shader: {fileID: -6465566751694194690, guid: 13cc607e0bad5314390ef0f8a6397c68, type: 3}
-  m_ShaderKeywords: _EMISSION
-  m_LightmapFlags: 2
+  m_Name: StickMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: ad9ba3a6ae9a345109576f52130d2f37, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -93,10 +93,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_99b63a33396f4c1d9dabd70c699395ce: 0
     - Vector1__EdgeWidth: 0.05
-    - Vector1_f839a29bdfbf4e9ca00fd5041ad1ad1b: 50
+    - Vector1_aef3ab5e3fc344bdb0afff30225fde1b: 1
     - _AlphaClip: 0
-    - _BaseGloss: 32
     - _BaseShadowAmount: 0
     - _Base_Gloss: 32
     - _BlackEdgeThickness: 1
@@ -107,11 +107,10 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _CutoffHeight: 8
+    - _CutoffHeight: 4
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EdgeWidth: 0.05
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -138,15 +137,18 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_0a0718940d864acf8cc7d255bcf73dd8: {r: 0.09510379, g: 0.04160791, b: 0, a: 0}
+    - Color_54344f3e06fc470b92c1a18d4b15999d: {r: 0.2924528, g: 0.04306552, b: 0, a: 0}
+    - Noise_Direction: {r: 0, g: 1, b: 0, a: 0}
+    - Sand_Direction: {r: 0, g: 0.2, b: 0, a: 0}
+    - Voronoi_Direction: {r: 0, g: 0.2, b: 0, a: 0}
     - _AmbientColor: {r: 0.4, g: 0.4, b: 0.4, a: 0}
-    - _BaseColor: {r: 0.25, g: 0.15980393, b: 0, a: 1}
-    - _BaseColour: {r: 1, g: 0.63962203, b: 0, a: 1}
-    - _BaseSpecularColor: {r: 1, g: 1, b: 1, a: 0}
+    - _BaseColor: {r: 0.49607843, g: 0.12352941, b: 0, a: 1}
     - _Base_SpecularColor: {r: 1, g: 1, b: 1, a: 0}
     - _BlackEdgeColor: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EdgeColour: {r: 191, g: 4, b: 0, a: 0}
-    - _EmissionColor: {r: 4.237095, g: 0.24402116, b: 0, a: 1}
+    - _EdgeColour: {r: 0, g: 0.9366921, b: 47.77129, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _RimColor: {r: 0, g: 0, b: 0, a: 0}
     - _ShineColor: {r: 0, g: 0, b: 0, a: 0}

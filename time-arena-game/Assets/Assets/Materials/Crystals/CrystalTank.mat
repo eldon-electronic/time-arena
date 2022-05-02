@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1630331172056557279
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: sand test
-  m_Shader: {fileID: -6465566751694194690, guid: 5c63582020c3bfd498ccb568f85adff6, type: 3}
+  m_Name: CrystalTank
+  m_Shader: {fileID: -6465566751694194690, guid: b02ee9abc1377314bbcbed0247e372f1, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,6 +32,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_efe0529062b34c13b5cff2c5008cca96:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -76,7 +93,22 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_aef3ab5e3fc344bdb0afff30225fde1b: 1
+    - Vector1_08bf603902f34b22a8abcc627976afcd: 1
+    - Vector1_1bd392ab41c64f68acbf401709e3beff: 1
+    - Vector1_327530431d504462a7857d1fd3c76ea3: 0.81
+    - Vector1_3acba302ff9343b9b703e3acaac41dca: 1.39
+    - Vector1_3c316fb10d9448a68dcbc817fbe80256: 2.15
+    - Vector1_4ee89cc4d5f6486890c0c7b3012d98f1: 1
+    - Vector1_4fee83aef05b4250a866e77c1f2cb177: 1
+    - Vector1_7272f72daa534b729f1e22a145e322dc: 0.4
+    - Vector1_888094d4742045c18947f4ba30722f04: 0.39
+    - Vector1_9e30875a874f4887bd6231f779850aec: 1
+    - Vector1_c4924f0421464232b3e6d6904ee5f67c: 0
+    - Vector1_c562a64dc8be412088214643925f2cde: 6.16
+    - Vector1_c9d41fc06ba6440fbdd6a90147357613: 32
+    - Vector1_dfa850eeb51c4a83966dd438421cb170: 0.51
+    - Vector1_e2755ca231cf4dfbbf3a68df5bc0efab: 32
+    - Vector1_e7711aa792cf4c709e2f96306a2ace8d: 0
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -104,24 +136,18 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_0a0718940d864acf8cc7d255bcf73dd8: {r: 0.09510379, g: 0.04160791, b: 0, a: 0}
-    - NoiseDirection: {r: 0, g: 1, b: 0, a: 0}
-    - SandDirection: {r: 0, g: 0.2, b: 0, a: 0}
+    - Color_593db22f36a04364adf0d07688a0f255: {r: 0.0033735721, g: 0.028301895, b: 0, a: 0}
+    - Color_72003f5137864b19ae11ab78e993f0dc: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 0}
+    - Color_7e7865c523004da79b40e77634fad7c8: {r: 0, g: 0, b: 0, a: 0}
+    - Color_9a8c30cba90f4f6c9e6b3c305301ef54: {r: 0, g: 0, b: 0, a: 0}
+    - Color_a41c37ffc31c4deb840ded5cb0afdd86: {r: 1, g: 1, b: 1, a: 0}
+    - Color_c587cbc14fd24eb4aee5a53fda700ceb: {r: 0, g: 0, b: 0, a: 0}
+    - Color_ce95d08f47214f09bf353f099df70fd5: {r: 1, g: 1, b: 1, a: 0}
+    - Color_efac2536b37545ea96e7cbc13edd0f75: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0}
+    - Vector2_151240b6c26743da8e2348dde09dc3c2: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_806164d00fdd463cae31f9d3f6971eb8: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &266453697545360121
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 4
