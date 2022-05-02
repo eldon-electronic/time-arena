@@ -25,13 +25,11 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[SerializeField] private PhotonView _view;
 	[SerializeField] private TailManager _tailManager;
 	[SerializeField] private PPController _ppController;
-	[SerializeField] private DissolveController _disMinerController;
-	[SerializeField] private DissolveController _disGuardianController;
+	[SerializeField] private DissolveController _disController;
 	[SerializeField] private SandController _sandController;
 
-	private DissolveController _disController;
 	private SceneController _sceneController;
-	private TimeLord _timelord;
+	private TimeLord _timeLord;
 	private bool _isJumping;
 	private Constants.JumpDirection _jumpDirection;
 	private bool _setJumpState;
@@ -73,16 +71,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	void Start()
 	{
 		Debug.Log("TimeConn Start");
-		_sceneController = FindObjectOfType<PreGameController>();
-		if (_sceneController == null) Debug.LogError("PreGameController not found");
-		else SetTimeLord();
-
-		// Make sure that this script is executed before ParticleController.
-		if (_player.Team == Constants.Team.Guardian)
-		{
-			_disController = _disGuardianController;
-		}
-		else _disController = _disMinerController;
+		_sceneController = FindObjectOfType<SceneController>();
+		SetTimeLord();
 		_disController.SetSubscriber(this);
 		_tailManager.SetActive(true);
 	}
@@ -102,11 +92,11 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0)
 			{
 				Dictionary<int, int[]> data = new Dictionary<int, int[]>();
-				foreach (var reality in _timelord.GetRealities())
+				foreach (var reality in _timeLord.GetRealities())
 				{
 					data.Add(reality.Key, reality.Value.GetData());
 				}
-				int frame = _timelord.GetCurrentFrame();
+				int frame = _timeLord.GetCurrentFrame();
 				_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
 				_syncTimer = 10;
 			}
@@ -140,7 +130,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	public void NotifyStartedDissolving()
 	{
 		_isDissolving = true;
-		if (_timelord.InYourReality(_view.ViewID))
+		if (_timeLord.InYourReality(_view.ViewID))
 		{
 			_player.Show();
 		}
@@ -161,11 +151,11 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	private void SetTimeLord()
 	{
-		if (_view.IsMine && _timelord != null) _debugPanel.UnRegister(_timelord);
-		_timelord = _sceneController.GetTimeLord();
-		_timelord.Connect(_view.ViewID, _view.IsMine);
-		_timelord.EnterReality(_view.ViewID);
-		if (_view.IsMine) _debugPanel.Register(_timelord);
+		if (_view.IsMine && _timeLord != null) _debugPanel.UnRegister(_timeLord);
+		_timeLord = _sceneController.GetTimeLord();
+		_timeLord.Connect(_view.ViewID, _view.IsMine);
+		_timeLord.EnterReality(_view.ViewID);
+		if (_view.IsMine) _debugPanel.Register(_timeLord);
 	}
 
 	// Returns true if you can jump in the given direction.
@@ -173,11 +163,11 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	{
 		if (direction == Constants.JumpDirection.Backward)
 		{
-			return _backJumpCooldown <= 0f && _timelord.CanJump(_view.ViewID, Constants.JumpDirection.Backward);
+			return _backJumpCooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Backward);
 		}
 		else if (direction == Constants.JumpDirection.Forward)
 		{
-			return _forwardsJumpCooldown <= 0f && _timelord.CanJump(_view.ViewID, Constants.JumpDirection.Forward);
+			return _forwardsJumpCooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Forward);
 		}
 		else
 		{
@@ -204,7 +194,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			}
 			else if (_isJumping)
 			{
-				int frame = _timelord.GetNearestReality(_view.ViewID);
+				int frame = _timeLord.GetNearestReality(_view.ViewID);
 				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
 				_tailManager.EnableParticles(true);
 				_ppController?.TriggerPP(direction, jumpOut);
@@ -243,14 +233,14 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		}
 
 		PlayerState ps = new PlayerState(_view.ViewID, pos, rot, dir, _isJumping);
-		_timelord.RecordState(ps);
+		_timeLord.RecordState(ps);
 
 		if (_isJumping)
 		{
 			// Perform the time jump.
-			if (_timelord.CanJump(_view.ViewID, _jumpDirection))
+			if (_timeLord.CanJump(_view.ViewID, _jumpDirection))
 			{
-				_timelord.TimeTravel(_view.ViewID, _jumpDirection);
+				_timeLord.TimeTravel(_view.ViewID, _jumpDirection);
 			}
 			// Force stop jumping.
 			else if (_view.IsMine) TimeJump(_jumpDirection, false);
@@ -267,7 +257,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_isJumping = true;
 		_jumpDirection = direction;
 		_setJumpState = true;
-		_timelord.LeaveReality(_view.ViewID);
+		_timeLord.LeaveReality(_view.ViewID);
 		_forwardsJumpCooldown = 15;
 		_backJumpCooldown = 15;
 
@@ -283,8 +273,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	void RPC_jumpIn(int playerID, int frame)
 	{
 		_isJumping = false;
-		_timelord.SetPerceivedFrame(playerID, frame);
-		_timelord.EnterReality(_view.ViewID);
+		_timeLord.SetPerceivedFrame(playerID, frame);
+		_timeLord.EnterReality(_view.ViewID);
 		
 		if (_view.IsMine)
 		{
@@ -292,7 +282,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			gameObject.layer = Constants.LayerPlayer;
 			_sceneController.ShowPlayersInReality();
 		}
-		else if (_timelord.InYourReality(_view.ViewID))
+		else if (_timeLord.InYourReality(_view.ViewID))
 		{
 			_disController?.TriggerDissolve(_jumpDirection, false);
 			_particles.StartParticles(_jumpDirection);
@@ -302,13 +292,14 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[PunRPC]
 	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
 	{
-		_timelord.SetCurrentFrame(currentFrame);
+		if (_timeLord == null) return;
+		_timeLord.SetCurrentFrame(currentFrame);
 		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
 		foreach (var item in data)
 		{
 			realities.Add(item.Key, new Reality(item.Value));
 		}
-		_timelord.SetRealities(realities);
+		_timeLord.SetRealities(realities);
 	}
 
 

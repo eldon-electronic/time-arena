@@ -41,7 +41,7 @@ public class TailManager : MonoBehaviour, Debuggable
     void Start()
     {
         Debug.Log("TailManager Start");
-        _timeLord = GameObject.FindObjectOfType<PreGameController>().GetTimeLord();
+        _timeLord = FindObjectOfType<SceneController>().GetTimeLord();
         _debugPanel.Register(this);
     }
 

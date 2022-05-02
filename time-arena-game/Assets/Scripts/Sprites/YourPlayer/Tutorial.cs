@@ -145,8 +145,7 @@ public class Tutorial : MonoBehaviour
     {
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
-        _tutorialHud.UpdateTutorialScore(_states[_currentState].TutorialScore);
+        //_tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         _tutorialHud.SetArrowVisibility(
             _states[_currentState].ElementToPointTo,
             _states[_currentState].VisibilityOfArrow
@@ -163,8 +162,7 @@ public class Tutorial : MonoBehaviour
         // Set the new state.
         _currentState = state;
         _tutorialHud.SetMessage(_states[_currentState].Message);
-        _tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
-        _tutorialHud.UpdateTutorialScore(_states[_currentState].TutorialScore);
+        //_tutorialHud.SetCrystalVisibility(_states[_currentState].CrystalVisibility);
         
         // Activate new arrow (if there is one for the current state).
         _tutorialHud.SetArrowVisibility(

@@ -23,11 +23,7 @@ public class GrowCrystal : MonoBehaviour
 
     void Start()
     {   
-        if (SceneManager.GetActiveScene().name == "PreGameScene")
-        {
-            _timeLord = FindObjectOfType<PreGameController>().GetComponent<PreGameController>().GetTimeLord();
-        }
-        else _timeLord = FindObjectOfType<GameController>().GetComponent<GameController>().GetTimeLord();
+        _timeLord = FindObjectOfType<SceneController>().GetTimeLord();
        _endFrame = _startFrame + _growthTime;
        _startPos = gameObject.transform.position;
     }
