@@ -64,6 +64,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		_sceneController = game;
 		_sceneController.Register(this);
 		Show();
+		Score = 0;
 	}
 
 	protected abstract void SetActive();

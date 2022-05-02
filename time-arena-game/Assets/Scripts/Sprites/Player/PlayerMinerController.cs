@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerMinerController : PlayerController
 {
 	[SerializeField] private GameObject _minerDevice;
-	[SerializeField] private HudScore _hudScore;
+	[SerializeField] protected HudScore _hudScore;
 	[SerializeField] private TimeConn _timeConn;
 
 	protected override void SetActive()

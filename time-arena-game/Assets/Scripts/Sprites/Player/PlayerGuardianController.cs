@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerGuardianController : PlayerController
 {
-    [SerializeField] private HudScore _hudScore;
-
+    [SerializeField] protected HudScore _hudScore;
+    
     protected override void SetActive()
     {
         _mesh.SetActive(!_view.IsMine);

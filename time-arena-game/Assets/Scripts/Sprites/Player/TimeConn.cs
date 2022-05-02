@@ -370,4 +370,10 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		// Jump to that time.
 		TimeJump(direction, true);
 	}
+
+	public void ResetCooldowns()
+	{
+		_backJumpCooldown = 15f;
+		_forwardsJumpCooldown = 15f;
+	}
 }

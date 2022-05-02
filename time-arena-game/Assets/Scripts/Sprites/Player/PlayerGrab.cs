@@ -3,21 +3,17 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerGrab : MonoBehaviour
+public class PlayerGrab : MonoBehaviour, Debuggable
 {
 	[SerializeField] private LayerMask _grabMask;
   [SerializeField] private SphereCollider _collider;
   [SerializeField] private PlayerController _player;
   [SerializeField] private PlayerAnimationController _animation;
+  [SerializeField] private TimeConn _timeConn;
   private bool _grabCooldown;
 
   void Awake()
   {
-    if (_player.Team == Constants.Team.Miner)
-    {
-      Destroy(this);
-      return;
-    }
     _grabCooldown = false;
   }
 
@@ -30,6 +26,11 @@ public class PlayerGrab : MonoBehaviour
       _animation.SetGrabCooldown(_grabCooldown);
       StartCoroutine(GrabReset(3));
     }
+  }
+
+  void Start()
+  {
+    FindObjectOfType<HudDebugPanel>().Register(this);
   }
 
   //enumerator coroutine to be called when grabbing
@@ -51,7 +52,20 @@ public class PlayerGrab : MonoBehaviour
         PhotonView view = playerController.gameObject.GetComponent<PhotonView>();
         view.RPC("RPC_getGrabbed", RpcTarget.All);
         _player.IncrementScore();
+
+        // Reset your cooldowns to prevent you from constantly catching miners.
+        _timeConn.ResetCooldowns();
+        
+        // Break out of the loop so we only catch one player once per grab.
+        break;
       }
     }
+  }
+
+  public Hashtable GetDebugValues()
+  {
+    Hashtable values = new Hashtable();
+    values.Add("grab cooldown", _grabCooldown);
+    return values;
   }
 }
