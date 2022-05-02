@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655869972830843090}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4946646961858931514, guid: 75628866e61264253bfeb90d9dc171a7, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4946646961858931514, guid: 75628866e61264253bfeb90d9dc171a7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -228,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 2078876976235630324}
     - target: {fileID: 1683569129614112236, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1683569129614112236, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: m_LocalPosition.y
@@ -352,6 +352,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6664611707448390559, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
   m_PrefabInstance: {fileID: 8748011849900464332}
   m_PrefabAsset: {fileID: 0}
+--- !u!135 &9034718643203291599
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2673549814798969683}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.538792
+  m_Center: {x: 0, y: 0, z: 1.8517349}
 --- !u!114 &5594172288350394457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,7 +380,7 @@ MonoBehaviour:
   _grabMask:
     serializedVersion: 2
     m_Bits: 8
-  _collider: {fileID: 1598980885972282556}
+  _collider: {fileID: 9034718643203291599}
   _player: {fileID: 2078876976235630324}
   _animation: {fileID: 341182505100872113}
 --- !u!114 &341182505100872113

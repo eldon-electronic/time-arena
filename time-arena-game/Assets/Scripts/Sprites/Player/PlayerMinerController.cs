@@ -32,13 +32,17 @@ public class PlayerMinerController : PlayerController
 		_hudScore.SetYourScore(Score);
 	}
 
-	public void GetGrabbed()
+	[PunRPC]
+	public void RPC_getGrabbed()
 	{
-		int offset = Score / 2;
-		Score -= offset;
-		_view.RPC("RPC_offsetScore", RpcTarget.All, -offset);
-		_hudScore.SetYourScore(Score);
-		//TODO: respawn?
+		if (_view.IsMine)
+		{
+			int offset = Score / 2;
+			Score -= offset;
+			_view.RPC("RPC_offsetScore", RpcTarget.All, -offset);
+			_hudScore.SetYourScore(Score);
+			//TODO: respawn?
+		}
 	}
 
 	[PunRPC]

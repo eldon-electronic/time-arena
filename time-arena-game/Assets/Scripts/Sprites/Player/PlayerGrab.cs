@@ -48,7 +48,6 @@ public class PlayerGrab : MonoBehaviour
       PlayerController playerController = player.transform.root.GetComponent<PlayerController>();
       if (playerController.Team == Constants.Team.Miner)
       {
-        Debug.Log("Grabbed a miner");
         PhotonView view = playerController.gameObject.GetComponent<PhotonView>();
         view.RPC("RPC_getGrabbed", RpcTarget.All);
       }
