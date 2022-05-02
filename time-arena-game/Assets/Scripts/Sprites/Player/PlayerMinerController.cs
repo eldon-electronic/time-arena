@@ -6,7 +6,6 @@ public class PlayerMinerController : PlayerController
 	[SerializeField] private GameObject _minerDevice;
 	[SerializeField] private HudScore _hudScore;
 	[SerializeField] private TimeConn _timeConn;
-	public int Score;
 
 	protected override void SetActive()
 	{
@@ -26,15 +25,12 @@ public class PlayerMinerController : PlayerController
         _sceneController.Register(this);
     }
 
-	public void IncrementScore()
+	public override void IncrementScore()
 	{
 		_view.RPC("RPC_incrementScore", RpcTarget.All);
 		_view.RPC("RPC_offsetScore", RpcTarget.All, 1);
 		_hudScore.SetYourScore(Score);
 	}
-
-	[PunRPC]
-	public void RPC_incrementScore() { Score++; }
 
 	[PunRPC]
 	public void RPC_getGrabbed()

@@ -15,6 +15,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	protected SceneController _sceneController;
 	public Constants.Team Team;
 	public int ID;
+	public int Score;
 
 
 	// ------------ UNITY METHODS ------------
@@ -71,6 +72,8 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 
     public abstract void SetSceneController(SceneController sceneController);
 
+	public abstract void IncrementScore();
+
 
 	// ------------ PUBLIC METHODS ------------
 
@@ -98,4 +101,10 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		debugValues.Add($"{_view.ViewID} layer", gameObject.layer);
 		return debugValues;
 	}
+
+
+	// ------------ RPC METHODS ------------
+
+	[PunRPC]
+	public void RPC_incrementScore() { Score++; }
 }

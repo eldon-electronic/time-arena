@@ -1,7 +1,10 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerGuardianController : PlayerController
 {
+    [SerializeField] private HudScore _hudScore;
+
     protected override void SetActive()
     {
         _mesh.SetActive(!_view.IsMine);
@@ -18,4 +21,10 @@ public class PlayerGuardianController : PlayerController
         _sceneController = sceneController;
         _sceneController.Register(this);
     }
+
+    public override void IncrementScore()
+	{
+		_view.RPC("RPC_incrementScore", RpcTarget.All);
+		_hudScore.SetYourScore(Score);
+	}
 }

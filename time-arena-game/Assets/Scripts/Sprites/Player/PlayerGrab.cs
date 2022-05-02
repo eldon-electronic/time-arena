@@ -50,6 +50,7 @@ public class PlayerGrab : MonoBehaviour
       {
         PhotonView view = playerController.gameObject.GetComponent<PhotonView>();
         view.RPC("RPC_getGrabbed", RpcTarget.All);
+        _player.IncrementScore();
       }
     }
   }
