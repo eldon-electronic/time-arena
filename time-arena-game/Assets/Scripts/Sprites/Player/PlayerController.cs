@@ -87,7 +87,6 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 			PhotonView playerView = player.GetComponent<PhotonView>();
 			string playerRealtimeID = playerView.Owner.UserId;
 			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
-			Debug.Log($"{playerView.ViewID} {playerRealtimeID}");
 		} _userID = _viewIDtoUserID[ID];
 
 		// Getting icon assignment from saved PlayerPrefs

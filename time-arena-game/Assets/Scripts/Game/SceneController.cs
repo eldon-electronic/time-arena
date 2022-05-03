@@ -17,10 +17,6 @@ public abstract class SceneController: MonoBehaviour
 	{
 		pc.SetSceneController(this);
 		_iconAssignments = pc.GetIconAssignments();
-		Debug.Log("SCENE CONTROLLE REGISTERED");
-		foreach (var icon in _iconAssignments) {
-			Debug.Log($"Received {icon.Key} {icon.Value}");
-		}
 	}
 
 	public void Register(PlayerMinerController pmc)
