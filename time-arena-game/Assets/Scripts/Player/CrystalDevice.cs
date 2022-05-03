@@ -59,7 +59,7 @@ public class CrystalDevice : MonoBehaviour
 
         CrystalBehaviour crystal = GetClosestCrystal();
 
-        if (crystal == null || crystal.existanceRange.x >= _timeLord.GetCurrentFrame())
+        if (crystal == null)
         {
             ChangePointerPosition(0);
             SetButtonMaterial(Constants.RelTime.Same);
@@ -70,7 +70,12 @@ public class CrystalDevice : MonoBehaviour
             Vector2 flatCrystal = new Vector2(crystal.transform.position.x, crystal.transform.position.z);
 
             float look = transform.rotation.eulerAngles.y;
-            float angle = Vector2.Angle(Vector2.up, flatCrystal - flatPlayer);
+            Vector2 difference = flatCrystal - flatPlayer;
+            float angle = Mathf.Atan(difference.x / difference.y) * Mathf.Rad2Deg;
+            if (flatPlayer.y < flatCrystal.y)
+            {
+                angle = (angle + 180) % 360;
+            }
             ChangePointerPosition(angle - look);
 
             if (Vector2.Distance(flatPlayer, flatCrystal) < Constants.Proximity)
@@ -112,14 +117,14 @@ public class CrystalDevice : MonoBehaviour
                 closestCrystal = crystal;
             }
         }
-
+        Debug.Log(closestCrystal.ID);
         return closestCrystal;
     }
 
     private void ChangePointerPosition(float position)
     {
-         Vector3 eulerRotation = _compassPointer.transform.rotation.eulerAngles;
-         _compassPointer.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, position);
+        Vector3 eulerRotation = _compassPointer.transform.rotation.eulerAngles;
+        _compassPointer.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, position);
     }
 
 
