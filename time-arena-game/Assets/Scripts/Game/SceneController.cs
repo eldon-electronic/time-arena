@@ -10,11 +10,17 @@ public abstract class SceneController: MonoBehaviour
 	protected Dictionary<int, PlayerGuardianController> _guardians;
 	protected TimeLord _timeLord;
   	protected int _minerScore;
+	protected Dictionary<int, string> _iconAssignments;
     public static event Action<int> scoreChange;
 
 	public void Register(PlayerController pc)
 	{
 		pc.SetSceneController(this);
+		_iconAssignments = pc.GetIconAssignments();
+		Debug.Log("SCENE CONTROLLE REGISTERED");
+		foreach (var icon in _iconAssignments) {
+			Debug.Log($"Received {icon.Key} {icon.Value}");
+		}
 	}
 
 	public void Register(PlayerMinerController pmc)
@@ -32,6 +38,10 @@ public abstract class SceneController: MonoBehaviour
 		if (_miners.ContainsKey(playerID)) return Constants.Team.Miner;
 		else if (_guardians.ContainsKey(playerID)) return Constants.Team.Guardian;
 		else throw new KeyNotFoundException("No team associated with the given playerID.");
+	}
+
+	public string GetIconString(int playerID) {
+		return _iconAssignments[playerID];
 	}
 
     public void HideAllPlayers()

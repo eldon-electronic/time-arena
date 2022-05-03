@@ -138,13 +138,14 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		MenuManager.Instance.OpenMenu("loadingMenu");
 	}
 
+	// Gets run when master client presses start game
 	public void StartGame() {
-		_view.RPC("RPC_saveIcons", RpcTarget.All);
-		
 		if (PhotonNetwork.IsMasterClient) {
+			_currentPlayerIcons = RefreshIconAssignments();
 			Player[] players = PhotonNetwork.PlayerList;
 			foreach (Player player in players) {
-				if (player.UserId != _userID) _view.RPC("RPC_saveTeam", player, player);
+				_view.RPC("RPC_saveTeam", player, player);
+				_view.RPC("RPC_saveIcons", player, _currentPlayerIcons);
 			}
 		}
 
@@ -202,7 +203,6 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
 	// ---------- PRIVATE ----------
 
-
 	// Helper function to disable no username error text after some time has passed.
 	private void disableUsernameErrorText() {
 		_usernameErrorText.gameObject.SetActive(false);
@@ -226,9 +226,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	private void UpdatePlayerList() {
 		foreach (Transform playerListTransform in _playerListContainer) {
 			Destroy(playerListTransform.gameObject);
-		}
-
-		_view.RPC("RPC_getIcons", RpcTarget.MasterClient);
+		} _view.RPC("RPC_getIcons", RpcTarget.MasterClient);
 	}
 
 	private void UpdateMaster(bool isMasterClient) {
@@ -236,6 +234,14 @@ public class Launcher : MonoBehaviourPunCallbacks {
 			playerListTransform.gameObject.GetComponent<PlayerListItem>()
 				.UpdateMasterClientOptions(isMasterClient);
 		}
+	}
+
+	private Dictionary<string, string> RefreshIconAssignments() {
+		_currentPlayerIcons.Clear();
+		foreach (Transform playerListTransform in _playerListContainer) {
+			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
+			_currentPlayerIcons.Add(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
+		} return _currentPlayerIcons;
 	}
 
 	// ---------- RPC ----------
@@ -286,24 +292,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
 		}
 	}
 
-	[PunRPC] void RPC_saveIcons() {
-		foreach (Transform playerListTransform in _playerListContainer) {
-			PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
-			PlayerPrefs.SetString(playerListItem.GetUserID(), playerListItem.GetTeamImage().sprite.name);
+	[PunRPC] void RPC_saveIcons(Dictionary<string, string> iconAssignments) {
+		foreach (KeyValuePair<string, string> iconAssignment in iconAssignments) {
+			PlayerPrefs.SetString(iconAssignment.Key, iconAssignment.Value);
 		}
 	}
-
-	// [PunRPC] void RPC_saveTeam() {
-	// 	foreach (Transform playerListTransform in _playerListContainer) {
-	// 		PlayerListItem playerListItem = playerListTransform.gameObject.GetComponent<PlayerListItem>();
-	// 		Debug.Log($"{playerListItem.GetUserID()} {playerListItem.GetTeamImage().sprite.name}");
-	// 		if (_userID == playerListItem.GetUserID()) {
-	// 			string teamName = playerListItem.GetTeamImage().sprite.name.Split('_')[0];
-	// 			PlayerPrefs.SetString("team", teamName);
-	// 			Debug.Log($"{_userID}: {teamName}");
-	// 		}
-	// 	}
-	// }
 
 	[PunRPC] void RPC_saveTeam(Player player) {
 		foreach (Transform playerListTransform in _playerListContainer) {

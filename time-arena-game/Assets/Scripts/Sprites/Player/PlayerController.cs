@@ -68,7 +68,16 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		Show();
 	}
 
-	private void GetIconAssignment() {
+	protected abstract void SetActive();
+
+    protected abstract void SetTeam();
+
+    public abstract void SetSceneController(SceneController sceneController);
+
+
+	// ------------ PUBLIC METHODS ------------
+
+	public Dictionary<int, string> GetIconAssignments() {
 		_viewIDtoUserID = new Dictionary<int, string>();
 		_iconAssignments = new Dictionary<int, string>();
 
@@ -78,22 +87,16 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 			PhotonView playerView = player.GetComponent<PhotonView>();
 			string playerRealtimeID = playerView.Owner.UserId;
 			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
+			Debug.Log($"{playerView.ViewID} {playerRealtimeID}");
 		} _userID = _viewIDtoUserID[ID];
 
 		// Getting icon assignment from saved PlayerPrefs
 		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
 			_iconAssignments.Add(pair.Key, PlayerPrefs.GetString(pair.Value));
 		}
+
+		return _iconAssignments;
 	}
-
-	protected abstract void SetActive();
-
-    protected abstract void SetTeam();
-
-    public abstract void SetSceneController(SceneController sceneController);
-
-
-	// ------------ PUBLIC METHODS ------------
 
 	public void Show()
 	{
@@ -120,8 +123,4 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		return debugValues;
 	}
 
-	public string GetTeamName() {
-		string icon = _iconAssignments[ID];
-		return icon.Split('-')[0];
-	}
 }
