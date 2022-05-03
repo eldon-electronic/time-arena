@@ -18,11 +18,19 @@ public class HudScore : MonoBehaviour
     void OnEnable()
     {
         SceneController.scoreChange += SetTeamScore;
+        GameController.gameActive += OnGameActive;
     }
 
     void OnDisable()
     {
         SceneController.scoreChange -= SetTeamScore;
+        GameController.gameActive -= OnGameActive;
+    }
+
+    private void OnGameActive(GameController game)
+    {
+        _playerText.text = "0";
+        _teamText.text = "0";
     }
 
     private void SetTeamScore(int score) { _teamText.text = score + ""; }

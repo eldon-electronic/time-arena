@@ -57,7 +57,7 @@ public class CrystalBehaviour : MonoBehaviour
 
     // Zoom into and out of existance.
     TimeLord timelord = _sceneController.GetTimeLord();
-    float percievedTime = (float)(timelord.GetMyPercievedFrame()) / Constants.FrameRate;
+    float percievedTime = (float)(timelord.GetYourPerceivedFrame()) / Constants.FrameRate;
     float closestBorderOFExistance = Min(Abs(percievedTime - ExistanceRange[0]), Abs(percievedTime - ExistanceRange[1]));
     float animLength = 2.0f;
     float size = Min(closestBorderOFExistance, T);
