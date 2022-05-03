@@ -12,6 +12,9 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
+	private string _userID;
+	private Dictionary<int, string> _viewIDtoUserID;
+	private Dictionary<int, string> _iconAssignments;
 	protected SceneController _sceneController;
 	public Constants.Team Team;
 	public int ID;
@@ -65,6 +68,24 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		Show();
 	}
 
+	private void GetIconAssignment() {
+		_viewIDtoUserID = new Dictionary<int, string>();
+		_iconAssignments = new Dictionary<int, string>();
+
+		// Translation from Photon's View IDs to Photon's Realtime UserIds
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (var player in players) {
+			PhotonView playerView = player.GetComponent<PhotonView>();
+			string playerRealtimeID = playerView.Owner.UserId;
+			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
+		} _userID = _viewIDtoUserID[ID];
+
+		// Getting icon assignment from saved PlayerPrefs
+		foreach (KeyValuePair<int, string> pair in _viewIDtoUserID) {
+			_iconAssignments.Add(pair.Key, PlayerPrefs.GetString(pair.Value));
+		}
+	}
+
 	protected abstract void SetActive();
 
     protected abstract void SetTeam();
@@ -97,5 +118,10 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		Hashtable debugValues = new Hashtable();
 		debugValues.Add($"{_view.ViewID} layer", gameObject.layer);
 		return debugValues;
+	}
+
+	public string GetTeamName() {
+		string icon = _iconAssignments[ID];
+		return icon.Split('-')[0];
 	}
 }
