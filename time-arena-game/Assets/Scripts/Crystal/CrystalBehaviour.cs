@@ -18,7 +18,8 @@ public class CrystalBehaviour : MonoBehaviour
   private SceneController _sceneController;
 
   // Attributes defining crystal state.
-  public Vector2 ExistanceRange = new Vector2(5f, 10f);
+  public Vector2 ExistanceRange = new Vector2(-1f, -1f);
+  public float existanceLength = 60f;
   // If isCollected is true there is no instance of the crystal at any time.
   public bool IsCollected = false;
 
@@ -67,6 +68,10 @@ public class CrystalBehaviour : MonoBehaviour
 
   private void setScale(float a) { transform.localScale = new Vector3(a, a, a); }
 
+  private void halveExistanceLength() {
+    existanceLength /= 2;
+    existanceLength = Mathf.Max(existanceLength, 7.5f);
+  }
 
   // ------------ RPC FUNCTIONS ------------
 
@@ -90,5 +95,6 @@ public class CrystalBehaviour : MonoBehaviour
   {
     ExistanceRange = newRange;
     IsCollected = false;
+    halveExistanceLength();
   }
 }

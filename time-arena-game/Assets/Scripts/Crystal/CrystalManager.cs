@@ -16,6 +16,7 @@ public class CrystalManager : MonoBehaviour
   //spawnpoints necessary for crystal instantiation - add more by adding spawn points in editor
   private Transform[] spawnPoints;
   public List<CrystalBehaviour> crystals = new List<CrystalBehaviour>();
+  private bool spawned = false;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,12 @@ public class CrystalManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      if(PhotonNetwork.IsMasterClient && !spawned){
+        foreach(CrystalBehaviour crystal in crystals){
+          StartCoroutine(Respawn(crystal.ID));
+        }
+      }
+      spawned = true;
       //check if player should be able to see crystals
       foreach(CrystalBehaviour crystal in crystals){
         TimeLord t = game.GetTimeLord();
@@ -61,8 +68,9 @@ public class CrystalManager : MonoBehaviour
     public IEnumerator Respawn(int id){
       float spawnDelay = 5.0f;
       TimeLord t = game.GetTimeLord();
-      float newExistance = Random.Range(0.0f, (t.GetCurrentFrame())/Constants.FrameRate);
-      Vector2 newExistanceRange = new Vector2(newExistance, newExistance + 10f );
+      float newExistance = Random.Range(0.0f, Mathf.Max(t.GetCurrentFrame()/Constants.FrameRate, 10));
+      float existanceLength = crystals[id].gameObject.GetComponent<CrystalBehaviour>().existanceLength;
+      Vector2 newExistanceRange = new Vector2(newExistance, newExistance + existanceLength );
 
       yield return new WaitForSeconds(spawnDelay);
 
