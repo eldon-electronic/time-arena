@@ -11,12 +11,14 @@ public abstract class SceneController: MonoBehaviour
 	protected TimeLord _timeLord;
   	protected int _minerScore;
 	protected Dictionary<int, string> _iconAssignments;
+	protected Dictionary<int, string> _viewIDTranslations;
     public static event Action<int> scoreChange;
 
 	public void Register(PlayerController pc)
 	{
 		pc.SetSceneController(this);
-		_iconAssignments = pc.GetIconAssignments();
+		_viewIDTranslations = pc.GetViewIDTranslation();
+		_iconAssignments = GetIconAssignments();
 	}
 
 	public void Register(PlayerMinerController pmc)
@@ -71,4 +73,12 @@ public abstract class SceneController: MonoBehaviour
 	public TimeLord GetTimeLord() { return _timeLord;}
 
 	public int GetMinerScore() { return _minerScore; }
+
+	protected Dictionary<int, string> GetIconAssignments() {
+		Dictionary<int, string> icons = new Dictionary<int, string>();
+		foreach (var pair in _viewIDTranslations) {
+			icons.Add(pair.Key, PlayerPrefs.GetString(pair.Value));
+		} return icons;
+	}
+
 }
