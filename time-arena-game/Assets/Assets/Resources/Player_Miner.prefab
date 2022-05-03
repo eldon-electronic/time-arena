@@ -146,6 +146,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7405504286547953415 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3056830588228478480, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
+  m_PrefabInstance: {fileID: 5524133132988244247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895772766768420293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7397f2979c8f453c8e0fb589ac7dd2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7930326723526850347 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2497113998682494524, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
@@ -233,9 +244,10 @@ MonoBehaviour:
   _mesh: {fileID: 8781702766527842685}
   Team: 1
   ID: 0
+  Score: 0
   _minerDevice: {fileID: 5504838078970959486}
   _hudScore: {fileID: 3956597954060097329}
-  Score: 0
+  _timeConn: {fileID: 7405504286547953415}
 --- !u!114 &4429164574998448197
 MonoBehaviour:
   m_ObjectHideFlags: 0

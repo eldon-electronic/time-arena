@@ -33,7 +33,7 @@ public class GrowCrystal : MonoBehaviour
     {
         try {
             //get the percieved frame
-            float percievedFrame = (float) _timeLord?.GetYourFrame();
+            float percievedFrame = (float) _timeLord?.GetYourPerceivedFrame();
             Vector3 scaleChange = new Vector3(1f, 1f, 1f);
             Vector3 position = gameObject.transform.position;
             Vector3 positionChange = _startPos;

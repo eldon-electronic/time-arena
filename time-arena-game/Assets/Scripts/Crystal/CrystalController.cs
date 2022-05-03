@@ -52,7 +52,7 @@ public class CrystalController : MonoBehaviour
 
     void Update()
     {
-        int frame = _timeLord.GetYourFrame();
+        int frame = _timeLord.GetYourPerceivedFrame();
         // If the current frame being rendered is before the start of the 
         // - animation, then set the local position to default.
         if (frame <= _startFrame)

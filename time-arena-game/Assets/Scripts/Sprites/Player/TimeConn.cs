@@ -38,6 +38,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	private bool _timeTravelEnabled;
 	private bool _isDissolving;
 	private int _syncTimer;
+	private bool _keyLock;
+	private int _forcedDestination;
 
 
 	// ------------ UNITY METHODS ------------
@@ -52,6 +54,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_timeTravelEnabled = true;
 		_isDissolving = false;
 		_syncTimer = 10;
+		_keyLock = false;
 	}
 
 	void OnEnable()
@@ -82,25 +85,20 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		if (_view.IsMine)
 		{
 			UpdateCooldowns();
-			KeyControl();
+			if (!_keyLock) KeyControl();
+			else if (ForcedJumpOver())
+			{
+				_keyLock = false;
+				TimeJump(_jumpDirection, false);
+			}
 		}
+
 		if (_timeTravelEnabled)
 		{
 			UpdateTimeTravel();
 
 			// If master client, synchronise everyone else every ten frames.
-			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0)
-			{
-				Dictionary<int, int[]> data = new Dictionary<int, int[]>();
-				foreach (var reality in _timeLord.GetRealities())
-				{
-					data.Add(reality.Key, reality.Value.GetData());
-				}
-				int frame = _timeLord.GetCurrentFrame();
-				_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
-				_syncTimer = 10;
-			}
-			_syncTimer--;
+			if (PhotonNetwork.IsMasterClient) Synchronise();
 		}
 	}
 
@@ -156,6 +154,15 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_timeLord.Connect(_view.ViewID, _view.IsMine);
 		_timeLord.EnterReality(_view.ViewID);
 		if (_view.IsMine) _debugPanel.Register(_timeLord);
+	}
+
+	// Returns true if your forced jump is over.
+	private bool ForcedJumpOver()
+	{
+		return ((_jumpDirection == Constants.JumpDirection.Backward && 
+				_timeLord.GetYourPerceivedFrame() <= _forcedDestination) ||
+				(_jumpDirection == Constants.JumpDirection.Forward && 
+				_timeLord.GetYourPerceivedFrame() >= _forcedDestination));
 	}
 
 	// Returns true if you can jump in the given direction.
@@ -248,6 +255,22 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		else _jumpDirection = Constants.JumpDirection.Static;
 	}
 
+	private void Synchronise()
+	{
+		if (_syncTimer <= 0)
+		{
+			Dictionary<int, int[]> data = new Dictionary<int, int[]>();
+			foreach (var reality in _timeLord.GetRealities())
+			{
+				data.Add(reality.Key, reality.Value.GetData());
+			}
+			int frame = _timeLord.GetCurrentFrame();
+			_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
+			_syncTimer = 10;
+		}
+		_syncTimer--;
+	}
+
 
 	// ------------ RPC FUNCTIONS ------------
 
@@ -309,13 +332,48 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	public (bool forward, bool back) GetCanJump()
 	{
-		bool canJumpForward = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Forward);
-		bool canJumpBack = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Backward);
+		bool canJumpForward = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Forward) && !_keyLock;
+		bool canJumpBack = _timeTravelEnabled && CanTimeTravel(Constants.JumpDirection.Backward) && !_keyLock;
 		return (canJumpForward, canJumpBack);
 	}
 
 	public Constants.Team GetTeam()
 	{
 		return _player.Team;
+	}
+
+	public void ForceJump()
+	{
+		if (!_view.IsMine) throw new InvalidOperationException("This function may not be called on an RPC-controlled Player.");
+
+		// Choose the destination frame according to whether there's more time in the past or future.
+		int yourFrame = _timeLord.GetYourPerceivedFrame();
+		int currentFrame = _timeLord.GetCurrentFrame();
+		
+		Constants.JumpDirection direction;
+		if (yourFrame > currentFrame - yourFrame)
+		{
+			if (Constants.MinTimeSnapDistance > yourFrame) _forcedDestination = 0;
+			else _forcedDestination = UnityEngine.Random.Range(0, yourFrame - Constants.MinTimeSnapDistance);
+			direction = Constants.JumpDirection.Backward;
+		}
+		else
+		{
+			if (Constants.MinTimeSnapDistance > currentFrame - yourFrame) _forcedDestination = currentFrame;
+			else _forcedDestination = UnityEngine.Random.Range(yourFrame + Constants.MinTimeSnapDistance, currentFrame);
+			direction = Constants.JumpDirection.Forward;
+		}
+
+		// Lock key control to prevent you from aborting the jump.
+		_keyLock = true;
+
+		// Jump to that time.
+		TimeJump(direction, true);
+	}
+
+	public void ResetCooldowns()
+	{
+		_backJumpCooldown = 15f;
+		_forwardsJumpCooldown = 15f;
 	}
 }
