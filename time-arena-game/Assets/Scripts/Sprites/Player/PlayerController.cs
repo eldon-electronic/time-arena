@@ -16,7 +16,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	public Constants.Team Team;
 	public int ID;
 	public int Score;
-
+	
 
 	// ------------ UNITY METHODS ------------
 
