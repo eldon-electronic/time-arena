@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3570,6 +3570,7 @@ GameObject:
   - component: {fileID: 1620207761}
   - component: {fileID: 1620207762}
   - component: {fileID: 1620207763}
+  - component: {fileID: 1620207764}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3685,6 +3686,18 @@ MonoBehaviour:
   _creationFailedText: {fileID: 1905086341}
   _startButton: {fileID: 2142919300}
   _usernameErrorText: {fileID: 1756531152}
+  _teamIcons:
+  - {fileID: 21300000, guid: 4755f68475b613948b826e0c168d40a7, type: 3}
+  - {fileID: 21300000, guid: 79ba5d2dde3cbea49a81eae40eaa0902, type: 3}
+  - {fileID: 21300000, guid: a4853e6b0cf2deb4881817d5759e8dac, type: 3}
+  - {fileID: 21300000, guid: 9e62d41a8b4dd7f459da9f29c310a768, type: 3}
+  - {fileID: 21300000, guid: 655c525ed20ee994ab5c006cd0c4c920, type: 3}
+  - {fileID: 21300000, guid: 3d6c6856f63118c4cbc2e4c7424977ce, type: 3}
+  - {fileID: 21300000, guid: e567fd284cd106e45ab63e81cd6383f6, type: 3}
+  - {fileID: 21300000, guid: a2baebc10b8e08f4da6748eeb67478d5, type: 3}
+  - {fileID: 21300000, guid: 47cf904991c18fc40b18e07b13a9f5e4, type: 3}
+  - {fileID: 21300000, guid: 0d3ce50fa0373ea43b383a9466e696ef, type: 3}
+  - {fileID: 21300000, guid: 210b2e86fb0b8bb4aa1c006eb484d9c7, type: 3}
 --- !u!114 &1620207762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3723,6 +3736,28 @@ MonoBehaviour:
   _usernameInputContainer: {fileID: 247411624}
   _changeUsernameButton: {fileID: 2014194529}
   _errorText: {fileID: 1589440048}
+--- !u!114 &1620207764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620207756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1623983759
 GameObject:
   m_ObjectHideFlags: 0
