@@ -31,7 +31,7 @@ public class SpawnPlayers : MonoBehaviour
 
         if (PlayerPrefs.GetString("team") == "guardian") 
         {
-            PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, SpawningPoint[n], Quaternion.identity);    
+            PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, tempSpawnPoint, Quaternion.identity);    
         }
         else PhotonNetwork.Instantiate(PlayerMinerPrefab.name, tempSpawnPoint, Quaternion.identity);
     }

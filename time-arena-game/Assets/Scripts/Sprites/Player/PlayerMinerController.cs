@@ -7,9 +7,9 @@ public class PlayerMinerController : PlayerController
 	[SerializeField] protected HudScore _hudScore;
 	[SerializeField] private TimeConn _timeConn;
 
-	protected override void SetActive()
+	public override void SetActive(bool _isPreGame)
 	{
-        _mesh.SetActive(!_view.IsMine);
+        _mesh.SetActive(!_view.IsMine || _isPreGame);
         _minerDevice.SetActive(true);
     }
 

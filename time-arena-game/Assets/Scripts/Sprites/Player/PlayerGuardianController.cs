@@ -5,9 +5,9 @@ public class PlayerGuardianController : PlayerController
 {
     [SerializeField] protected HudScore _hudScore;
     
-    protected override void SetActive()
+    public override void SetActive(bool _isPreGame)
     {
-        _mesh.SetActive(!_view.IsMine);
+        _mesh.SetActive(!_view.IsMine || _isPreGame);
     }
 
 	protected override void SetTeam()

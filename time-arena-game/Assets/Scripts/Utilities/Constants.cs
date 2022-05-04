@@ -13,10 +13,9 @@ public static class Constants
     public static int AnimationFrames = 3 * FrameRate;
     public static int LayerPlayer = 3;
     public static int LayerOutsideReality = 9;
+    public static int LayerNPC = 11;
     public static string LogFolder = "StateDisplay/";
-
     public static KeyCode KeyToggleHints = KeyCode.O;
-
     public static int Proximity = 30;
 
     public enum Team

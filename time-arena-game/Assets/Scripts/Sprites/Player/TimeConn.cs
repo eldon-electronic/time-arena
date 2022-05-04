@@ -80,7 +80,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_tailManager.SetActive(true);
 	}
 
-	void Update() {
+	void Update()
+	{
 		// Local keys only affect client's player.
 		if (_view.IsMine)
 		{

@@ -198,4 +198,14 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else transform.position = _guardianSpawnPoint;
 	}
+    public void MoveTutorial(bool move){
+        if(move == true){
+            _lockMovement = false;
+            _lockRotation = false;
+        }
+        else{
+            _lockMovement = true;
+            _lockRotation = true;
+        }
+    }
 }

@@ -27,7 +27,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	void Awake()
 	{
 		ID = _view.ViewID;
-		SetActive();
+		//SetActive();
         SetTeam();
 	}
 
@@ -72,7 +72,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		if (_view.IsMine) clientEntered?.Invoke(this);
 	}
 
-	protected abstract void SetActive();
+	public abstract void SetActive(bool _isPreGame);
 
     protected abstract void SetTeam();
 

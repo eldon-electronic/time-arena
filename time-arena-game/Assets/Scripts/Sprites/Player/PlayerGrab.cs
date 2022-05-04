@@ -6,6 +6,7 @@ using Photon.Pun;
 public class PlayerGrab : MonoBehaviour, Debuggable
 {
 	[SerializeField] private LayerMask _grabMask;
+  [SerializeField] private LayerMask _grabMaskNPC;
   [SerializeField] private SphereCollider _collider;
   [SerializeField] private PlayerController _player;
   [SerializeField] private PlayerAnimationController _animation;
@@ -59,6 +60,16 @@ public class PlayerGrab : MonoBehaviour, Debuggable
         // Break out of the loop so we only catch one player once per grab.
         break;
       }
+    }
+
+    Collider[] grabbedNPCs = Physics.OverlapSphere(transform.position, _collider.radius, _grabMaskNPC);
+    foreach (var npc in grabbedNPCs)
+    {
+      NPCController nPCController = npc.GetComponent<NPCController>();
+      nPCController.GetGrabbed();
+      _player.IncrementScore();
+      _timeConn.ResetCooldowns();
+      break;
     }
   }
 

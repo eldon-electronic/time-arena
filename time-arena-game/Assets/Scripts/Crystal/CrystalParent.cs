@@ -13,10 +13,7 @@ public class CrystalParent : MonoBehaviour
     private bool _activeHints;
     BoxCollider _ObjectCollider;
 
-    void Awake()
-    {
-        _activeHints = true;
-    }
+    void Awake() { _activeHints = true; }
 
     void OnEnable()
     {
