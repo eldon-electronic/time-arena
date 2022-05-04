@@ -43,7 +43,7 @@ public class GameController : SceneController
 	private void CheckWon()
 	{	
 		// _timeLord.TimeEnded() && !_gameEnded
-		if (Input.GetKey(KeyCode.Backspace))
+		if (_timeLord.TimeEnded() && !_gameEnded)
 		{
 			_gameEnded = true;
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
