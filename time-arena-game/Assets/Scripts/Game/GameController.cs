@@ -42,7 +42,6 @@ public class GameController : SceneController
 
 	private void CheckWon()
 	{	
-		// _timeLord.TimeEnded() && !_gameEnded
 		if (_timeLord.TimeEnded() && !_gameEnded)
 		{
 			_gameEnded = true;

@@ -10,7 +10,8 @@ public class WinScreenController : MonoBehaviour
 
     public static WinScreenController Instance;
 
-    [SerializeField] private Transform _statsContainer;
+    [SerializeField] private Transform _guardianContainer;
+    [SerializeField] private Transform _minerContainer;
     [SerializeField] private GameObject _statListItem;
     [SerializeField] private TMP_Text _winText;
     [SerializeField] private GameObject _winUI;
@@ -42,32 +43,45 @@ public class WinScreenController : MonoBehaviour
 
     private void OnGameEnded(Constants.Team winningTeam) {
         _winUI.SetActive(true);
+        SetWinText(winningTeam);
         _sceneController = FindObjectOfType<SceneController>();
         _miners = _sceneController.GetMinerControllers();
         _guardians = _sceneController.GetGuardianControllers();
-        SetWinText(winningTeam);
-        List<Statistics> playerStats = GetPlayerStats();
-        foreach (var playerStat in playerStats) {
-            Instantiate(_statListItem, _statsContainer)
-                .GetComponent<StatListItem>().SetUp(playerStat.Nickname, playerStat.Team, playerStat.Score);
-        }
+
+        List<Statistics> minerStats = GetMinerStats();
+        List<Statistics> guardianStats = GetGuardianStats();
+
+        InstantiateItems(minerStats, _minerContainer);
+        InstantiateItems(guardianStats, _guardianContainer);
     }
 
-    private List<Statistics> GetPlayerStats() {
-        List<Statistics> playerStats = new List<Statistics>();
+    private List<Statistics> GetMinerStats() {
+        List<Statistics> minerStats = new List<Statistics>();
         foreach (var minerController in _miners.Values) {
-            playerStats.Add(new Statistics{Nickname = minerController.Nickname, Team = Constants.Team.Miner, Score = minerController.Score});
+            minerStats.Add(new Statistics{Nickname = minerController.Nickname, Team = Constants.Team.Miner, Score = minerController.Score});
         }
-        foreach (var guardianController in _guardians.Values) { 
-            playerStats.Add(new Statistics{Nickname = guardianController.Nickname, Team = Constants.Team.Guardian, Score = guardianController.Score});
+        return minerStats;
+    }
+
+    private List<Statistics> GetGuardianStats() {
+        List<Statistics> guardianStats = new List<Statistics>();
+        foreach (var guardianController in _guardians.Values) {
+            guardianStats.Add(new Statistics{Nickname = guardianController.Nickname, Team = Constants.Team.Guardian, Score = guardianController.Score});
         }
-        return playerStats;
+        return guardianStats;
     }
 
     private void SetWinText(Constants.Team winningTeam) {
-        switch (winningTeam) {
-            case Constants.Team.Guardian: _winText.text = "Guardians Win!"; break;
-            case Constants.Team.Miner: _winText.text = "Miners Win!"; break;
+        _winText.text = (winningTeam == Constants.Team.Miner) ? "MINERS WIN!" : "GUARDIANS WIN!";
+    }
+
+    private void InstantiateItems(List<Statistics> teamStatistics, Transform teamContainer) {
+        // Sort by score
+        teamStatistics.Sort(delegate(Statistics s1, Statistics s2) { return s2.Score.CompareTo(s1.Score); });
+        foreach (var teamStat in teamStatistics) {
+            Instantiate(_statListItem, teamContainer)
+                .GetComponent<StatListItem>()
+                .SetUp(teamStat.Nickname, teamStat.Team, teamStat.Score);
         }
     }
 }
