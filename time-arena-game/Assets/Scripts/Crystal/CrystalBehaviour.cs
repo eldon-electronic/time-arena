@@ -19,7 +19,7 @@ public class CrystalBehaviour : MonoBehaviour
 
   // Attributes defining crystal state.
   public Vector2 ExistanceRange = new Vector2(-1f, -1f);
-  public float existanceLength = 60f;
+  public float ExistanceLength = 60f;
   // If isCollected is true there is no instance of the crystal at any time.
   public bool IsCollected = false;
 
@@ -34,8 +34,8 @@ public class CrystalBehaviour : MonoBehaviour
 
     // On instantiation, add self to crystal list in cm.
     // Give self id according to position in list (syncing doesnt matter, only uniqueness and size).
-    ID = _crystalManager.crystals.Count;
-    _crystalManager.crystals.Add(this);
+    ID = _crystalManager.Crystals.Count;
+    _crystalManager.Crystals.Add(this);
     UpdateAnim();
   }
 
@@ -68,9 +68,9 @@ public class CrystalBehaviour : MonoBehaviour
 
   private void setScale(float a) { transform.localScale = new Vector3(a, a, a); }
 
-  private void halveExistanceLength() {
-    existanceLength /= 2;
-    existanceLength = Mathf.Max(existanceLength, 7.5f);
+  private void HalveExistanceLength() {
+    ExistanceLength /= 2;
+    ExistanceLength = Mathf.Max(ExistanceLength, 7.5f);
   }
 
   // ------------ RPC FUNCTIONS ------------
@@ -95,6 +95,6 @@ public class CrystalBehaviour : MonoBehaviour
   {
     ExistanceRange = newRange;
     IsCollected = false;
-    halveExistanceLength();
+    HalveExistanceLength();
   }
 }
