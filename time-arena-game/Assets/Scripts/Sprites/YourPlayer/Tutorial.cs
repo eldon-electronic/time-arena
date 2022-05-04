@@ -9,10 +9,14 @@ public class Tutorial : MonoBehaviour
     {
         public string Message;
         public float Delay;
-        public State(string message,float delay)
+        public bool TutorialMovement;
+        public bool CharVisible;
+        public State(string message,float delay,bool tutorialMovement,bool charVisible)
         {
             Message = message;
             Delay = delay;
+            TutorialMovement = tutorialMovement;
+            CharVisible = charVisible;
         }
     }
     
@@ -20,6 +24,8 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PhotonView _view;
     [SerializeField] private GameObject _masterClientOptions;
+    [SerializeField] private PlayerMovement _movement;
+
 
     private bool _hasMovedOn = true;
     private List<State> _guardianStates;
@@ -75,25 +81,25 @@ public class Tutorial : MonoBehaviour
     private void CreateStatesGuardian()
     {
         _guardianStates = new List<State>();
-        _guardianStates.Add(new State("Welcome to tutorial Guardian,\n\n Your aim is to catch the Miners and steal their crystals!",2));
-        _guardianStates.Add(new State("This is the growing crystal obstacle, it only appears at certain times in the game.",8));
-        _guardianStates.Add(new State("You should travel backwards in time to pass it.",12));
-        _guardianStates.Add(new State("This is the braking crystal obstacle, it only breaks at certain times in the game.",2 ));
-        _guardianStates.Add(new State("You should travel forwards in time to pass it.",4));
-        _guardianStates.Add(new State("And this is you!,Let's start playing!",5));
+        _guardianStates.Add(new State("Welcome to tutorial Guardian,\n\n Your aim is to catch the Miners and steal their crystals!",2,false,false));
+        _guardianStates.Add(new State("This is the growing crystal obstacle, it only appears at certain times in the game.",8,false,false));
+        _guardianStates.Add(new State("You should travel backwards in time to pass it.",12,false,false));
+        _guardianStates.Add(new State("This is the braking crystal obstacle, it only breaks at certain times in the game.",2,false,false));
+        _guardianStates.Add(new State("You should travel forwards in time to pass it.",4,false,false));
+        _guardianStates.Add(new State("And this is you!,Let's start playing!",5,false,true));
     }
 
     private void CreateStatesMiner()
     {
         _minerStates = new List<State>();
-        _minerStates.Add(new State("Welcome to tutorial Miner,\n\nYour aim is to collect crystals and run away from Guardians!",12));
-        _minerStates.Add(new State("This the collectable crystal, you should run through it to collect.",2));
-        _minerStates.Add(new State("WARNING:It only appears at certain times in the game\n\n You should time travel to find them.",4));
-        _minerStates.Add(new State("This is the growing crystal obstacle, it only appears at specific times in the game.",10));
-        _minerStates.Add(new State("You should travel backwards in time to pass it",3));
-        _minerStates.Add(new State("This is the breaking crystal obstacle, it only breaks at specific times in the game.",15));
-        _minerStates.Add(new State("You should travel forwards in time to pass it",2));
-        _minerStates.Add(new State("And this is you!,Let's start playing!",20));
+        _minerStates.Add(new State("Welcome to tutorial Miner,\n\nYour aim is to collect crystals and run away from Guardians!",12,false,false));
+        _minerStates.Add(new State("This the collectable crystal, you should run through it to collect.",2,false,false));
+        _minerStates.Add(new State("WARNING:It only appears at certain times in the game\n\n You should time travel to find them.",4,false,false));
+        _minerStates.Add(new State("This is the growing crystal obstacle, it only appears at specific times in the game.",10,false,false));
+        _minerStates.Add(new State("You should travel backwards in time to pass it",3,false,false));
+        _minerStates.Add(new State("This is the breaking crystal obstacle, it only breaks at specific times in the game.",15,false,false));
+        _minerStates.Add(new State("You should travel forwards in time to pass it",2,false,false));
+        _minerStates.Add(new State("And this is you!,Let's start playing!",20,false,true));
     }
 
     private void StartTutorial()
@@ -101,6 +107,8 @@ public class Tutorial : MonoBehaviour
         _currentState = 0;
         _tutorialHud.SetMessage(_states[_currentState].Message);
         SetDelayTime(_states[_currentState].Delay);
+        _movement.MoveTutorial(_states[_currentState].TutorialMovement);
+        _player.SetActive(_states[_currentState].CharVisible);
     }
 
     private void MoveToState(int state)
@@ -110,6 +118,8 @@ public class Tutorial : MonoBehaviour
         _currentState = state;
         _tutorialHud.SetMessage(_states[_currentState].Message);
         SetDelayTime(_states[_currentState].Delay);
+        _movement.MoveTutorial(_states[_currentState].TutorialMovement);
+        _player.SetActive(_states[_currentState].CharVisible);
       
         // If master client start the game.
         /*if (state == _states.Count - 1){
