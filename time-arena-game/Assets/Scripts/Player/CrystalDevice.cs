@@ -133,14 +133,11 @@ public class CrystalDevice : MonoBehaviour
     private Constants.RelTime GetRelativeTime(CrystalBehaviour crystal)
     {
         float yourFrame = _timeLord.GetYourFrame();
-        float curentFrame = _timeLord.GetCurrentFrame();
-        float crystalStart = crystal.existanceRange.x;
-        float crystalEnd = crystal.existanceRange.y;
-        if (crystalStart < curentFrame)
-        {
-            if (crystalEnd < yourFrame) return Constants.RelTime.Behind;
-            if (yourFrame < crystalStart) return Constants.RelTime.Ahead;
-        }
+        float crystalStart = crystal.existanceRange.x * Constants.FrameRate;
+        float crystalEnd = crystal.existanceRange.y * Constants.FrameRate;
+
+        if (crystalEnd < yourFrame) return Constants.RelTime.Behind;
+        if (yourFrame < crystalStart) return Constants.RelTime.Ahead;
         return Constants.RelTime.Same;
     }
 
