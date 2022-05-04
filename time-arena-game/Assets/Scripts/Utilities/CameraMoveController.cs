@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraMoveController : MonoBehaviour
 {
+    [SerializeField] GameObject cameraPrefab;
     GameObject movingCam;
     [SerializeField] GameObject player;
     [Tooltip("The camera to return to after the movement")]
@@ -22,8 +23,7 @@ public class CameraMoveController : MonoBehaviour
         starts = new List<int>();
         startFrame += Time.frameCount;
         if(afterCam == null) afterCam = Camera.main;
-        movingCam = new GameObject("Camera");
-        movingCam.AddComponent<Camera>();
+        movingCam = Instantiate(cameraPrefab);
         movingCam.GetComponent<Camera>().enabled = false;
         starts.Add(0);
         for(int i = 0; i < moves.Count - 1; i++){
@@ -46,6 +46,7 @@ public class CameraMoveController : MonoBehaviour
         if(t == endFrame){
             movingCam.GetComponent<Camera>().enabled = false;
             afterCam.enabled = true;
+            afterCam.transform.rotation = movingCam.transform.rotation;
             Destroy(movingCam);
         }
         int midFrame;
