@@ -74,6 +74,10 @@ public abstract class SceneController: MonoBehaviour
 
 	public int GetMinerScore() { return _minerScore; }
 
+	public Dictionary<int, PlayerMinerController> GetMinerControllers() { return _miners; }
+
+	public Dictionary<int, PlayerGuardianController> GetGuardianControllers() { return _guardians; }
+
 	protected Dictionary<int, string> GetIconAssignments() {
 		Dictionary<int, string> icons = new Dictionary<int, string>();
 		foreach (var pair in _viewIDTranslations) {

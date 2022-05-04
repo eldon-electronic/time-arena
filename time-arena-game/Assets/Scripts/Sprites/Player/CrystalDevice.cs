@@ -103,7 +103,7 @@ public class CrystalDevice : MonoBehaviour
 
     private CrystalBehaviour GetClosestCrystal()
     {
-        List<CrystalBehaviour> crystals = _manager.crystals;
+        List<CrystalBehaviour> crystals = _manager.Crystals;
         CrystalBehaviour closestCrystal = null;
         float shortestDistance = float.MaxValue;
         float distance;
