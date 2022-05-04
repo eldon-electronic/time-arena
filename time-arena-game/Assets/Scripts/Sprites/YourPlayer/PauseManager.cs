@@ -15,16 +15,6 @@ public class PauseManager : MonoBehaviour
 	private bool _paused;
 	public static event Action<bool> paused;
 
-	void OnEnable()
-	{
-		GameController.gameEnded += OnGameEnded;
-	}
-
-	void OnDisable()
-	{
-		GameController.gameEnded -= OnGameEnded;
-	}
-
 	void Start()
 	{
 		_paused = false;
@@ -34,8 +24,6 @@ public class PauseManager : MonoBehaviour
 	{	
 		if (Input.GetKeyDown(KeyCode.Escape)) SetPause(!_paused);
 	}
-
-	private void OnGameEnded(Constants.Team team) { SetPause(true); }
 
 	// This gets called on the Resume button press.
 	public void OnResume() { SetPause(false); }

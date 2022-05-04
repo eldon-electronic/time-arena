@@ -13,6 +13,7 @@ public class WinScreenController : MonoBehaviour
     [SerializeField] private Transform _statsContainer;
     [SerializeField] private GameObject _statListItem;
     [SerializeField] private TMP_Text _winText;
+    [SerializeField] private GameObject _winUI;
     private Dictionary<int, PlayerMinerController> _miners;
 	private Dictionary<int, PlayerGuardianController> _guardians;
     private SceneController _sceneController;
@@ -36,14 +37,11 @@ public class WinScreenController : MonoBehaviour
 
     void Awake() {
         Instance = this;
-        this.gameObject.SetActive(false);
-    }
-
-    void Start() {
-        
+        _winUI.SetActive(false);
     }
 
     private void OnGameEnded(Constants.Team winningTeam) {
+        _winUI.SetActive(true);
         _sceneController = FindObjectOfType<SceneController>();
         _miners = _sceneController.GetMinerControllers();
         _guardians = _sceneController.GetGuardianControllers();
@@ -53,7 +51,6 @@ public class WinScreenController : MonoBehaviour
             Instantiate(_statListItem, _statsContainer)
                 .GetComponent<StatListItem>().SetUp(playerStat.Nickname, playerStat.Team, playerStat.Score);
         }
-        this.gameObject.SetActive(true);
     }
 
     private List<Statistics> GetPlayerStats() {
@@ -69,8 +66,8 @@ public class WinScreenController : MonoBehaviour
 
     private void SetWinText(Constants.Team winningTeam) {
         switch (winningTeam) {
-            case Constants.Team.Guardian: _winText.text = "Miners Win!"; break;
-            case Constants.Team.Miner: _winText.text = "Guardians Win!"; break;
+            case Constants.Team.Guardian: _winText.text = "Guardians Win!"; break;
+            case Constants.Team.Miner: _winText.text = "Miners Win!"; break;
         }
     }
 }

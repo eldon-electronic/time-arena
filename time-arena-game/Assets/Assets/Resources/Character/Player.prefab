@@ -432,8 +432,8 @@ GameObject:
   - component: {fileID: 4986853837303981988}
   - component: {fileID: 6997212374394788983}
   - component: {fileID: 791192722480666218}
-  - component: {fileID: 7875560737448645241}
   - component: {fileID: 9189702697418641079}
+  - component: {fileID: 4592481501410702519}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -461,6 +461,7 @@ RectTransform:
   - {fileID: 1460313611335505505}
   - {fileID: 3013362963164129466}
   - {fileID: 236417212498031294}
+  - {fileID: 7394741230518272660}
   m_Father: {fileID: 5475260186338400866}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -666,20 +667,6 @@ MonoBehaviour:
   - {fileID: 8746038305252726541}
   - {fileID: 3874527577048519727}
   - {fileID: 4936093956314641181}
---- !u!114 &7875560737448645241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945185862937860460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32fd53b3189df4a6b8cdcc918647004e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _winningDisplay: {fileID: 8478194766622751467}
-  _text: {fileID: 7764803887471720082}
 --- !u!114 &9189702697418641079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,6 +684,22 @@ MonoBehaviour:
   _forwardButtonAnimator: {fileID: 4964048413847368818}
   _backCooldown: {fileID: 1236853382207370772}
   _forwardCooldown: {fileID: 1340812074484708831}
+--- !u!114 &4592481501410702519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945185862937860460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f869b3c58c6949bb9502e128ff2662b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _statsContainer: {fileID: 3735721399278228943}
+  _statListItem: {fileID: 9082936146588700814, guid: 8fd04b1a799384cb6869182f918231a3, type: 3}
+  _winText: {fileID: 3501637196965459802}
+  _winUI: {fileID: 2528454688522920843}
 --- !u!1 &981605019733746305
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,7 +1533,6 @@ Transform:
   - {fileID: 1683569129614112236}
   - {fileID: 1191225709918925723}
   - {fileID: 3425360756775622340}
-  - {fileID: 7394741230518272660}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1762,14 +1764,13 @@ GameObject:
   - component: {fileID: 5654795104767374416}
   - component: {fileID: 7236156665162088094}
   - component: {fileID: 7964490416838737954}
-  - component: {fileID: 3839350909059431423}
   m_Layer: 5
   m_Name: WinUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7394741230518272660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1777,19 +1778,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2528454688522920843}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6511989084766571755}
-  m_Father: {fileID: 5475260186338400866}
-  m_RootOrder: 6
+  m_Father: {fileID: 7864347302706760290}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5654795104767374416
 Canvas:
   m_ObjectHideFlags: 0
@@ -1851,21 +1852,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3839350909059431423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2528454688522920843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f869b3c58c6949bb9502e128ff2662b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _statsContainer: {fileID: 3735721399278228943}
-  _statListItem: {fileID: 9082936146588700814, guid: 8fd04b1a799384cb6869182f918231a3, type: 3}
-  _winText: {fileID: 3501637196965459802}
 --- !u!1 &2826646995127769698
 GameObject:
   m_ObjectHideFlags: 0
