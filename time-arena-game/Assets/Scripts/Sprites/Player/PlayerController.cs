@@ -12,6 +12,8 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
+	private string _userID;
+	private Dictionary<int, string> _viewIDtoUserID;
 	protected SceneController _sceneController;
 	public Constants.Team Team;
 	public int ID;
@@ -41,8 +43,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 
 		FindObjectOfType<HudDebugPanel>().Register(this);
 
-		if (_view.IsMine) gameObject.tag = "Client";
-		else
+		if (!_view.IsMine)
 		{
 			Destroy(_camera);
 			Destroy(_UI);
@@ -77,6 +78,17 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 
 
 	// ------------ PUBLIC METHODS ------------
+
+	public Dictionary<int, string> GetViewIDTranslation() {
+		_viewIDtoUserID = new Dictionary<int, string>();
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (var player in players) {
+			PhotonView playerView = player.GetComponent<PhotonView>();
+			string playerRealtimeID = playerView.Owner.UserId;
+			_viewIDtoUserID.Add(playerView.ViewID, playerRealtimeID);
+		} _userID = _viewIDtoUserID[ID];
+		return _viewIDtoUserID;
+	}
 
 	public void Show()
 	{
