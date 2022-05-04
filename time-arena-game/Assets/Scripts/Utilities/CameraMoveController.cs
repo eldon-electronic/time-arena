@@ -36,7 +36,6 @@ public class CameraMoveController : MonoBehaviour
         if(t > endFrame){return;}
         if(t < startFrame){return;}
         if(t == startFrame){
-            Debug.Log("Starting Movement 0");
             afterCam.enabled = false;
             movingCam.GetComponent<Camera>().enabled = true;
         }
