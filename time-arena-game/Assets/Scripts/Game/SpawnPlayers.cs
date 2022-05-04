@@ -13,11 +13,11 @@ public class SpawnPlayers : MonoBehaviour
     {
         SpawningPoint = new Vector3[]
         {
-            new Vector3(-20f, 5f, 0f),
-            new Vector3(-10f, 5f, 0f),
-            new Vector3(10f, 5f, 0f),
-            new Vector3(20f, 5f, 0f),
-            new Vector3(30f, 5f, 0f)
+            new Vector3(65f, 3f, -24f),
+            new Vector3(55f, 3f, 45f),
+            new Vector3(-20f, 3f, 64f),
+            new Vector3(-65f, 3f, -10f),
+            new Vector3(1f, 3f, -67f)
         };
     }
 
