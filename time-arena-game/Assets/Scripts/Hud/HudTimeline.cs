@@ -15,6 +15,8 @@ public class HudTimeline : MonoBehaviour
     [SerializeField] private Sprite _guardianIcon;
     [SerializeField] private PhotonView _view;
     [SerializeField] private Transform _iconContainer;
+    [SerializeField] private Sprite[] _teamIcons;
+    [SerializeField] private Sprite _backupIcon;
     private SceneController _sceneController;
     private TimeLord _timeLord;
     private Dictionary<int, Slider> _players;
@@ -69,30 +71,11 @@ public class HudTimeline : MonoBehaviour
         _timelineFill.fillAmount = (float) frame / (float) totalFrames;
     }
 
-    private Slider InstantiateIcon(Constants.Team team, bool isMe)
+    private Slider InstantiateIcon(Sprite icon, bool isMe)
     {
         // Instantiate and set its parent to be the timeline.
         GameObject newIcon = Instantiate(_iconPrefab, _iconContainer);
-
-        // Reset its position and scale.
-        newIcon.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-        newIcon.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-
-        // Set its icon image.
-        GameObject handle = newIcon.transform.GetChild(0).GetChild(0).gameObject;
-        GameObject handleSliderArea = newIcon.transform.GetChild(0).gameObject;
-        if (isMe) {
-            if (team == Constants.Team.Miner) handle.GetComponent<Image>().sprite = _yourMinerIcon;
-            else handle.GetComponent<Image>().sprite = _yourGuardianIcon;
-            handle.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 0);
-            handleSliderArea.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
-            handleSliderArea.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-        }
-        else if (team == Constants.Team.Guardian)
-        {
-            handle.GetComponent<Image>().sprite = _guardianIcon;
-        }
-        else handle.GetComponent<Image>().sprite = _minerIcon;
+        newIcon.gameObject.GetComponent<TimelineSliderItem>().SetUp(icon, isMe);
         
         return newIcon.GetComponent<Slider>();
     }
@@ -101,9 +84,9 @@ public class HudTimeline : MonoBehaviour
     {
         try
         {
-            Constants.Team team = _sceneController.GetTeam(playerID);
-            Slider icon = InstantiateIcon(team, playerID == _view.ViewID);
-            _players.Add(playerID, icon);
+            Sprite playerIcon = GetIcon(_sceneController.GetIconString(playerID));
+            Slider iconSlider = InstantiateIcon(playerIcon, playerID == _view.ViewID);
+            _players.Add(playerID, iconSlider);
             return true;
         }
         catch (KeyNotFoundException e)
@@ -129,5 +112,11 @@ public class HudTimeline : MonoBehaviour
             _players[player.id].value = position;
             _players[player.id].gameObject.SetActive(true);
         }
+    }
+
+    private Sprite GetIcon(string iconName) {
+        foreach (var icon in _teamIcons) {
+            if (icon.name == iconName) return icon;
+        } return _backupIcon;
     }
 }

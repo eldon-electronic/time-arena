@@ -25,7 +25,7 @@ public class SpawnPlayers : MonoBehaviour
     {
         // Spawn a new player into the scene.
         int n = (int) (SpawningPoint.Length * Random.value);
-        if (PhotonNetwork.IsMasterClient)
+        if (PlayerPrefs.GetString("team") == "guardian") 
         {
             PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, SpawningPoint[n], Quaternion.identity);    
         }
