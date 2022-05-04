@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraMoveController : MonoBehaviour
 {
     GameObject movingCam;
+    [SerializeField] GameObject player;
     [Tooltip("The camera to return to after the movement")]
     [SerializeField] Camera afterCam;
     [SerializeField] List<CameraMovement> moves;
@@ -62,12 +63,9 @@ public class CameraMoveController : MonoBehaviour
         return (frame - lastStart, moves[starts.IndexOf(lastStart)]);
     }
 
-    GameObject FindPlayer(){
-        return null;
-    }
     BezierMovment CreatePlayerTrack(){
-        GameObject p = FindPlayer();
-        Vector3 bp = new Vector3(p.transform.position.x, p.transform.position.y + 5, p.transform.position.z);
-        return new BezierMovment(Vector3.zero + p.transform.position / distance, p.transform.position, p.transform.rotation, p.transform.rotation, 300, bp);
+        Vector3 bp = new Vector3(player.transform.position.x, player.transform.position.y + 5, player.transform.position.z);
+        Vector3 r = player.transform.rotation.eulerAngles + new Vector3(40, 0, 0);
+        return new BezierMovment(new Vector3(0, player.transform.position.y + 8, 0) + player.transform.position / distance, afterCam.transform.position, Quaternion.Euler(r), player.transform.rotation, 300, bp);
     }
 }
