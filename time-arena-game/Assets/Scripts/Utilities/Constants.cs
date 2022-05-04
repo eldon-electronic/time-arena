@@ -14,6 +14,8 @@ public static class Constants
     public static int LayerOutsideReality = 9;
     public static string LogFolder = "StateDisplay/";
 
+    public static int Proximity = 30;
+
     public enum Team
     {
         Guardian,
