@@ -5,6 +5,12 @@ using UnityEngine;
 public class CameraMoveController : MonoBehaviour
 {
     [SerializeField] GameObject cameraPrefab;
+    [SerializeField] float d1;
+    [SerializeField] float d2;
+    [SerializeField] float d3;
+    [SerializeField] int w1;
+    [SerializeField] int w2;
+    [SerializeField] int w3;
     GameObject movingCam;
     [SerializeField] GameObject player;
     [Tooltip("The camera to return to after the movement")]
@@ -19,7 +25,7 @@ public class CameraMoveController : MonoBehaviour
     void Start()
     {
         if(moves == null) moves = new List<CameraMovement>();
-        if(fromPlayer) moves.Add(CreatePlayerTrack());
+        if(fromPlayer) moves = CreatePlayerTrack();
         starts = new List<int>();
         startFrame += Time.frameCount;
         if(afterCam == null) afterCam = Camera.main;
@@ -64,9 +70,25 @@ public class CameraMoveController : MonoBehaviour
         return (frame - lastStart, moves[starts.IndexOf(lastStart)]);
     }
 
-    BezierMovment CreatePlayerTrack(){
-        Vector3 bp = new Vector3(player.transform.position.x, player.transform.position.y + 5, player.transform.position.z);
+    List<CameraMovement> CreatePlayerTrack(){
+        List<CameraMovement> o = new List<CameraMovement>();
         Vector3 r = player.transform.rotation.eulerAngles + new Vector3(40, 0, 0);
-        return new BezierMovment(new Vector3(0, player.transform.position.y + 8, 0) + player.transform.position / distance, afterCam.transform.position, Quaternion.Euler(r), player.transform.rotation, 300, bp);
+        Vector3 istart = new Vector3(0, player.transform.position.y + 8, 0) + player.transform.position / distance;
+        Vector3 cstart = istart;
+        Vector3 stop = istart + ((afterCam.transform.position - istart) * d1);
+        Vector3 bp = (cstart + stop) / 2;
+        o.Add(new BezierMovment(istart, stop, Quaternion.Euler(r), Quaternion.Euler(r), 100, bp));
+        o.Add(new CameraMovement(stop, stop, Quaternion.Euler(r), Quaternion.Euler(r), w1));
+        cstart = stop;
+        stop = istart + ((afterCam.transform.position - istart) * d2);
+        bp = (cstart + stop) / 2;
+        o.Add(new BezierMovment(cstart, stop, Quaternion.Euler(r), Quaternion.Euler(r), 100, bp));
+        o.Add(new CameraMovement(stop, stop, Quaternion.Euler(r), Quaternion.Euler(r), w2));
+        cstart = stop;
+        stop = istart + ((afterCam.transform.position - istart) * d3);
+        bp = (cstart + stop) / 2;
+        o.Add(new BezierMovment(cstart, stop, Quaternion.Euler(r), afterCam.transform.rotation, 100, bp));
+        o.Add(new CameraMovement(stop, stop, afterCam.transform.rotation, afterCam.transform.rotation, w3));
+        return o;
     }
 }
