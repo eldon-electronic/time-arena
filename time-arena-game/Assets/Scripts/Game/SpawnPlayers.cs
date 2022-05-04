@@ -25,10 +25,14 @@ public class SpawnPlayers : MonoBehaviour
     {
         // Spawn a new player into the scene.
         int n = (int) (SpawningPoint.Length * Random.value);
+
+        // TODO: Remove this.
+        Vector3 tempSpawnPoint = new Vector3(1, 1, -60);
+
         if (PlayerPrefs.GetString("team") == "guardian") 
         {
             PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, SpawningPoint[n], Quaternion.identity);    
         }
-        else PhotonNetwork.Instantiate(PlayerMinerPrefab.name, SpawningPoint[n], Quaternion.identity);
+        else PhotonNetwork.Instantiate(PlayerMinerPrefab.name, tempSpawnPoint, Quaternion.identity);
     }
 }
