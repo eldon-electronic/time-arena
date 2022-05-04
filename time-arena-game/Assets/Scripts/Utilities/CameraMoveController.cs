@@ -11,10 +11,13 @@ public class CameraMoveController : MonoBehaviour
     private List<int> starts;
     [SerializeField] private int startFrame;
     private int endFrame;
-    private bool camIsTemporary;
+    [SerializeField] private bool fromPlayer = true;
+    [SerializeField] private float distance = 3;
     // Start is called before the first frame update
     void Start()
     {
+        if(moves == null) moves = new List<CameraMovement>();
+        if(fromPlayer) moves.Add(CreatePlayerTrack());
         starts = new List<int>();
         startFrame += Time.frameCount;
         if(afterCam == null) afterCam = Camera.main;
@@ -57,5 +60,14 @@ public class CameraMoveController : MonoBehaviour
             if(s > frame) break;
         }
         return (frame - lastStart, moves[starts.IndexOf(lastStart)]);
+    }
+
+    GameObject FindPlayer(){
+        return null;
+    }
+    BezierMovment CreatePlayerTrack(){
+        GameObject p = FindPlayer();
+        Vector3 bp = new Vector3(p.transform.position.x, p.transform.position.y + 5, p.transform.position.z);
+        return new BezierMovment(Vector3.zero + p.transform.position / distance, p.transform.position, p.transform.rotation, p.transform.rotation, 300, bp);
     }
 }

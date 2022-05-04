@@ -10,6 +10,14 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] protected Quaternion endRot; //camera's final rotation
     [SerializeField] protected int frameLength; //length of movement in frames
 
+    public CameraMovement(Vector3 sp, Vector3 ep, Quaternion sr, Quaternion er, int length){
+        startPos = sp;
+        endPos = ep;
+        startRot = sr;
+        endRot = er;
+        frameLength = length;
+    }
+
     public virtual (Vector3, Quaternion) GetCameraAtFrame(int frame){
         if(frame > frameLength) return (endPos, endRot);
         if(frame < 0) return (startPos, startRot);
