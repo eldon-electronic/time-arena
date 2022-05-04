@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	public Constants.Team Team;
 	public int ID;
 	public int Score;
+	public static event Action<PlayerController> newPlayer;
 
 
 	// ------------ UNITY METHODS ------------
@@ -43,7 +45,8 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 
 		FindObjectOfType<HudDebugPanel>().Register(this);
 
-		if (!_view.IsMine)
+		if (_view.IsMine) newPlayer?.Invoke(this);
+		else
 		{
 			Destroy(_camera);
 			Destroy(_UI);
