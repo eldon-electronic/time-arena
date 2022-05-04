@@ -45,7 +45,8 @@ public class SpawnPlayers : MonoBehaviour
             objectivePrefab = _collectablePrefab.name;
         }
 
-        PhotonNetwork.Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+        object[] data = new object[] { channelID };
+        PhotonNetwork.Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity, 0, data);
         PhotonNetwork.Instantiate(objectivePrefab, objectiveSpawnPoint, Quaternion.identity);
     }
 }

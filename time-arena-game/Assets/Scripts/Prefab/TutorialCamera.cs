@@ -6,6 +6,7 @@ public class CameraMoveController : MonoBehaviour
 {
     public void CollectableAppears()
     {
+        
 
     }
 
