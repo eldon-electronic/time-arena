@@ -14,8 +14,7 @@ public class BezierMovment : CameraMovement
         if(frame > frameLength) return (endPos, endRot);
         if(frame < 0) return (startPos, startRot);
         float p = (float)frame / (float)frameLength;
-        Vector3 a = (1 - p)*((1-p)*startPos + p*bPoint);
-        Vector3 b = p*((1-p)*bPoint + p*endPos);
-        return (a + b, Quaternion.Lerp(startRot, endRot, p));
+        Vector3 a = (1 - p) * ((1 - p) * startPos + p * bPoint) + p * ((1-p) * bPoint + p * endPos);
+        return (a, Quaternion.Lerp(startRot, endRot, p));
     }
 }
