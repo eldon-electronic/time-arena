@@ -6,6 +6,8 @@ public class PlayerMinerController : PlayerController
 	[SerializeField] private GameObject _minerDevice;
 	[SerializeField] protected HudScore _hudScore;
 	[SerializeField] private TimeConn _timeConn;
+	[SerializeField] private AudioSource _soundSource;
+	[SerializeField] private AudioClip _collectionClip;
 
 	protected override void SetActive()
 	{
@@ -29,7 +31,12 @@ public class PlayerMinerController : PlayerController
 	{
 		_view.RPC("RPC_incrementScore", RpcTarget.All);
 		_view.RPC("RPC_offsetScore", RpcTarget.All, 1);
+		_soundSource.PlayOneShot(_collectionClip);
 		_hudScore.SetYourScore(Score);
+	}
+
+	public void PlayCollectSFX() {
+
 	}
 
 	[PunRPC]
