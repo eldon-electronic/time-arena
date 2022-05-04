@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7970026240828236419}
   - component: {fileID: 6207773736462266144}
   - component: {fileID: 7408093396438634279}
+  - component: {fileID: 3978137928454583266}
   m_Layer: 11
   m_Name: NPC_Miner
   m_TagString: Untagged
@@ -63,6 +64,28 @@ CapsuleCollider:
   m_Height: 2.8442035
   m_Direction: 1
   m_Center: {x: 0, y: 0.04971218, z: 0}
+--- !u!114 &3978137928454583266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4785472055250864099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &854969861538812439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -221,6 +244,10 @@ PrefabInstance:
     - target: {fileID: 4476280719551022722, guid: b9718f05439d440bc83a26414218e309, type: 3}
       propertyPath: m_Layer
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4564225565430711104, guid: b9718f05439d440bc83a26414218e309, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.72
       objectReference: {fileID: 0}
     - target: {fileID: 4564225565430711977, guid: b9718f05439d440bc83a26414218e309, type: 3}
       propertyPath: m_Layer

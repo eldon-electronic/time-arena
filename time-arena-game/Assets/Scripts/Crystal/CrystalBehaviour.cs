@@ -15,7 +15,7 @@ public class CrystalBehaviour : MonoBehaviour
   // Attributes for crystalmanager access.
   private CrystalManager _crystalManager;
   public int ID;
-  private SceneController _sceneController;
+  protected SceneController _sceneController;
 
   // Attributes defining crystal state.
   public Vector2 ExistanceRange = new Vector2(-1f, -1f);
@@ -26,7 +26,7 @@ public class CrystalBehaviour : MonoBehaviour
 
   // ------------ UNITY METHODS ------------
 
-  void Start()
+  protected virtual void Start()
   {
     InitialWave = Random.Range(5f, 10f);
     _sceneController = FindObjectOfType<SceneController>();
@@ -78,7 +78,7 @@ public class CrystalBehaviour : MonoBehaviour
   // Called upon player collision.
   // Crystal will be set to inactive in following frame so coroutine outsourced to cm.
   [PunRPC]
-  void RPC_Collect()
+  protected virtual void RPC_Collect()
   {
     ExistanceRange = new Vector2(-1f, -1f);
     IsCollected = true;

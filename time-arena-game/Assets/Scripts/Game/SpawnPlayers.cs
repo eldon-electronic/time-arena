@@ -1,38 +1,51 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 public class SpawnPlayers : MonoBehaviour
 {
-    public GameObject PlayerMinerPrefab;
-    public GameObject PlayerGuardianPrefab;
-	public Vector3[] SpawningPoint;
-
-    void Awake()
-    {
-        SpawningPoint = new Vector3[]
-        {
-            new Vector3(65f, 3f, -24f),
-            new Vector3(55f, 3f, 45f),
-            new Vector3(-20f, 3f, 64f),
-            new Vector3(-65f, 3f, -10f),
-            new Vector3(1f, 3f, -67f)
-        };
-    }
+    [SerializeField] private PhotonView _view;
+    [SerializeField] private Transform _channels;
+    [SerializeField] private GameObject _playerMinerPrefab;
+    [SerializeField] private GameObject _playerGuardianPrefab;
+    [SerializeField] private GameObject _collectablePrefab;
+    [SerializeField] private GameObject _npcPrefab;
 
     void Start()
     {
-        // Spawn a new player into the scene.
-        int n = (int) (SpawningPoint.Length * Random.value);
-
-        // TODO: Remove this.
-        Vector3 tempSpawnPoint = new Vector3(1, 1, -60);
-
-        if (PlayerPrefs.GetString("team") == "guardian") 
+        if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, tempSpawnPoint, Quaternion.identity);    
+            int channelID = 0;
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                 _view.RPC("RPC_setChannel", player, channelID);
+                 channelID++;
+            }
         }
-        else PhotonNetwork.Instantiate(PlayerMinerPrefab.name, tempSpawnPoint, Quaternion.identity);
+    }
+
+    [PunRPC]
+    private void RPC_setChannel(int channelID)
+    {
+        Vector3 playerSpawnPoint = _channels.GetChild(channelID).Find("PlayerSpawnPoint").position;
+        Vector3 objectiveSpawnPoint = _channels.GetChild(channelID).Find("ObjectiveSpawnPoint").position;
+        string playerPrefab;
+        string objectivePrefab;
+
+        if (PlayerPrefs.GetString("team") == "guardian")
+        {
+            playerPrefab = _playerGuardianPrefab.name;
+            objectivePrefab = _npcPrefab.name;
+        }
+        else
+        {
+            playerPrefab = _playerMinerPrefab.name;
+            objectivePrefab = _collectablePrefab.name;
+        }
+
+        PhotonNetwork.Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+        PhotonNetwork.Instantiate(objectivePrefab, objectiveSpawnPoint, Quaternion.identity);
     }
 }
