@@ -10,7 +10,13 @@ public class CrystalParent : MonoBehaviour
     public bool boxRequired;
     private TimeLord _timeLord;
     private Transform _playerTransform;
+    private bool _activeHints;
     BoxCollider _ObjectCollider;
+
+    void Awake()
+    {
+        _activeHints = true;
+    }
 
     void OnEnable()
     {
@@ -37,13 +43,20 @@ public class CrystalParent : MonoBehaviour
         if (yourFrame >= startFrame && _ObjectCollider.isTrigger == false) _ObjectCollider.isTrigger = true;
         else if (yourFrame < startFrame && _ObjectCollider.isTrigger == true) _ObjectCollider.isTrigger = false;
 
+        // Enable/disable hints.
+        if (Input.GetKeyDown(Constants.KeyToggleHints)) { _activeHints = !_activeHints; }
+
         // Set name tag visibility.
-        int currentFrame = _timeLord.GetCurrentFrame();
-        float distance = Vector3.Distance(transform.position, _playerTransform.position);
-        _nameTag.SetActive(yourFrame < startFrame && 
-                           startFrame < currentFrame && 
-                           2 < distance &&
-                           distance < 10);
+        if (_activeHints && _playerTransform != null)
+        {
+            int currentFrame = _timeLord.GetCurrentFrame();
+            float distance = Vector3.Distance(transform.position, _playerTransform.position);
+            _nameTag.SetActive(yourFrame < startFrame && 
+                            startFrame < currentFrame && 
+                            2 < distance &&
+                            distance < 10);
+        }
+        else _nameTag.SetActive(false);
     }
 
     private void OnNewTimeLord(TimeLord time) { _timeLord = time; }
