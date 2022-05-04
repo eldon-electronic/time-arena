@@ -60,6 +60,12 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
         Cursor.lockState = CursorLockMode.Locked;
 	}
 
+	void OnPhotonInstantiate(PhotonMessageInfo info)
+	{
+		int channelID = (int) info.photonView.InstantiationData[0];
+		Debug.Log($"channel ID: {channelID}");
+	}
+
 
 	// ------------ PRIVATE METHODS ------------
 
