@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class Constants
 {
@@ -13,6 +14,8 @@ public static class Constants
     public static int LayerPlayer = 3;
     public static int LayerOutsideReality = 9;
     public static string LogFolder = "StateDisplay/";
+
+    public static KeyCode KeyToggleHints = KeyCode.O;
 
     public static int Proximity = 30;
 

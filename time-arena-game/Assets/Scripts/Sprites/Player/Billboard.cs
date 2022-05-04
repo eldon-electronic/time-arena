@@ -1,4 +1,6 @@
 using Photon.Pun;
+using System;
+using System.Collections;
 using UnityEngine;
 
 
@@ -7,32 +9,32 @@ public class Billboard : MonoBehaviour
 {
     private Transform _mainCameraTransform;
 
-    void OnEnable()
-    {
-        PlayerController.newPlayer += OnNewPlayer;
-    }
+    void OnEnable() { PlayerController.clientEntered += OnClientEntered; }
 
-    void OnDisable()
-    {
-        PlayerController.newPlayer -= OnNewPlayer;
-    }
-
-    void Start()
-    {
-        _mainCameraTransform = Camera.main.transform;
-    }
+    void OnDisable() { PlayerController.clientEntered -= OnClientEntered; }
 
     void LateUpdate()
     {
         if (transform != null)
         {
-            if (_mainCameraTransform == null) Debug.LogError("mainCameraTransform is null");
-            else transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
+            if (_mainCameraTransform != null)
+            {
+                transform.LookAt(transform.position + _mainCameraTransform.rotation * Vector3.forward, _mainCameraTransform.rotation * Vector3.up);
+            }
+            else try
+            {
+                _mainCameraTransform = Camera.main.transform;
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.Log("Waiting for main camera...");
+                return;
+            }
         }
     }
 
-    private void OnNewPlayer(PlayerController pc)
-    {
+    private void OnClientEntered(PlayerController _)
+    { 
         _mainCameraTransform = Camera.main.transform;
     }
 }
