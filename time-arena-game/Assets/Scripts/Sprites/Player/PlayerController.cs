@@ -6,15 +6,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public abstract class PlayerController : MonoBehaviour, Debuggable
+public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstantiateMagicCallback
 {
 	[SerializeField] protected GameObject _camera;
 	[SerializeField] protected GameObject _UI;
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
-	private string _userID;
-	private Dictionary<int, string> _viewIDtoUserID;
+	[SerializeField] protected Transform _channels;
+	protected string _userID;
+	protected Dictionary<int, string> _viewIDtoUserID;
 	protected SceneController _sceneController;
 	public Constants.Team Team;
 	public int ID;
@@ -60,10 +61,10 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
         Cursor.lockState = CursorLockMode.Locked;
 	}
 
-	void OnPhotonInstantiate(PhotonMessageInfo info)
+	public void OnPhotonInstantiate(PhotonMessageInfo info)
 	{
 		int channelID = (int) info.photonView.InstantiationData[0];
-		Debug.Log($"channel ID: {channelID}");
+		if (!_view.IsMine) Destroy(_channels.GetChild(channelID).Find("TutorialCamera").gameObject);
 	}
 
 
