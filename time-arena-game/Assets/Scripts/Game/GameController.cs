@@ -46,8 +46,11 @@ public class GameController : SceneController
 		{
 			_gameEnded = true;
 			// TODO: Add a check to see who actually won based on whether the miners reached their target.
+			Constants.Team _winner;
+			if(GetMinerScore() > 10) _winner = Constants.Team.Miner;
+			else _winner = Constants.Team.Guardian;
 			Debug.Log("Game ended");
-			gameEnded?.Invoke(Constants.Team.Miner);
+			gameEnded?.Invoke(_winner);
 		}
 	}
 
