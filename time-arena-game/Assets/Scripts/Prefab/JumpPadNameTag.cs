@@ -14,11 +14,7 @@ public class JumpPadNameTag : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(Constants.KeyToggleHints))
-        {
-            Debug.Log("Key toggle hints");
-            _active = !_active;
-        }
+        if (Input.GetKeyDown(Constants.KeyToggleHints)) { _active = !_active; }
 
         if (_active && _playerTransform != null)
         {
