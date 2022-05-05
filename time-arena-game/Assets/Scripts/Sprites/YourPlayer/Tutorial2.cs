@@ -37,10 +37,10 @@ public class Tutorial2: MonoBehaviour
     private void OnCollectableAppears()
     {
         if(_player.Team == Constants.Team.Miner){
-            _tutorialHud.SetMessage("This the collectable crystal, you should run through it to collect.");
+            _tutorialHud.SetMessage("This the collectable crystal,you should run through it to collect.");
         }
         else{
-            _tutorialHud.SetMessage("This the Miner, catch them and steal their crystals!");
+            _tutorialHud.SetMessage("This is a Miner!");
         }
         
         
@@ -48,6 +48,12 @@ public class Tutorial2: MonoBehaviour
 
     private void OnCollectableDisappears()
     {
+        if(_player.Team == Constants.Team.Miner){
+            _tutorialHud.SetMessage("It only appears at certain times,you should time travel to find them");
+        }
+        else{
+            _tutorialHud.SetMessage("Click to catch them and steal their crystals!");
+        }
 
     }
 
