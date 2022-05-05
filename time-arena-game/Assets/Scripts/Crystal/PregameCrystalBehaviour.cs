@@ -9,8 +9,8 @@ public class PregameCrystalBehaviour: CrystalBehaviour
 
   protected override void Start()
   {
-    ExistanceRange = new Vector2(1f, 60f);
-    ExistanceLength = 60f;
+    ExistanceRange = new Vector2(-1f, -1f);
+    ExistanceLength = 180f;
     _sceneController = FindObjectOfType<SceneController>();
     UpdateAnim();
   }
