@@ -16,6 +16,7 @@ public class CrystalBehaviour : MonoBehaviour
   private CrystalManager _crystalManager;
   public int ID;
   protected SceneController _sceneController;
+  protected TimeLord _timeLord;
 
   // Attributes defining crystal state.
   public Vector2 ExistanceRange = new Vector2(-1f, -1f);
@@ -30,6 +31,7 @@ public class CrystalBehaviour : MonoBehaviour
   {
     InitialWave = Random.Range(5f, 10f);
     _sceneController = FindObjectOfType<SceneController>();
+    _timeLord = _sceneController.GetTimeLord();
     _crystalManager = _sceneController.gameObject.GetComponent<CrystalManager>();
 
     // On instantiation, add self to crystal list in cm.
@@ -57,8 +59,7 @@ public class CrystalBehaviour : MonoBehaviour
     _overlay.material.SetFloat("Wave_Incr", T);
 
     // Zoom into and out of existance.
-    TimeLord timelord = _sceneController.GetTimeLord();
-    float percievedTime = (float)(timelord.GetYourPerceivedFrame()) / Constants.FrameRate;
+    float percievedTime = (float)(_timeLord.GetYourPerceivedFrame()) / Constants.FrameRate;
     float closestBorderOFExistance = Min(Abs(percievedTime - ExistanceRange[0]), Abs(percievedTime - ExistanceRange[1]));
     float animLength = 2.0f;
     float size = Min(closestBorderOFExistance, T);
