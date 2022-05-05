@@ -6,7 +6,6 @@ public class Tutorial2: MonoBehaviour
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PlayerController _player;
     [SerializeField] private Camera _playerCamera;
-    private PregameCrystalBehaviour _collectable;
 
     void OnEnable()
     {
@@ -33,12 +32,10 @@ public class Tutorial2: MonoBehaviour
     void Start()
     {
         _playerCamera.enabled = false;
-        _collectable = GameObject.FindWithTag("Collectable").GetComponent<PregameCrystalBehaviour>();
     }
 
     private void OnCollectableAppears()
     {
-        _collectable.ExistanceRange[0] = 5f;
         if(_player.Team == Constants.Team.Miner){
             _tutorialHud.SetMessage("This the collectable crystal,you should run through it to collect.");
         }
@@ -57,8 +54,6 @@ public class Tutorial2: MonoBehaviour
         else{
             _tutorialHud.SetMessage("Click to catch them and steal their crystals!");
         }
-
-        _collectable.ExistanceRange[1] = 10f;
     }
 
     private void OnObstacleGrows()
