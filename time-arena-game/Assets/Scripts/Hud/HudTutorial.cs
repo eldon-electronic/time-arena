@@ -27,11 +27,15 @@ public class HudTutorial : MonoBehaviour
         Destroy(Tutorial);
         Destroy(this);
     }
+    
     public void SetMessage(string message)
     {
         _popUpText.GetComponent<TextMeshProUGUI>().text = message;
     }
     
-
+    public void SetActive(bool value)
+    {
+        Tutorial.SetActive(value);
+    }
  }
 

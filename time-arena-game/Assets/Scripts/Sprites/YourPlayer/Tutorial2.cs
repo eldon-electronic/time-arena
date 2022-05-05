@@ -92,6 +92,8 @@ public class Tutorial2: MonoBehaviour
     private void OnEndTutorial()
     {
         _playerCamera.enabled = true;
+        _tutorialHud.SetActive(false);
+        _player.SetActive(false);
         Destroy(gameObject);
     }
 }
