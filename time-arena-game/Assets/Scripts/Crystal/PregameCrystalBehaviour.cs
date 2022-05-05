@@ -12,6 +12,7 @@ public class PregameCrystalBehaviour: CrystalBehaviour
     ExistanceRange = new Vector2(-1f, -1f);
     ExistanceLength = 180f;
     _sceneController = FindObjectOfType<SceneController>();
+    _timeLord = _sceneController.GetTimeLord();
     UpdateAnim();
   }
 
