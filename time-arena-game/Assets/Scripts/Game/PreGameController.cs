@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PreGameController : SceneController
 {
+    [SerializeField] private Transform _channels;
     private bool _isCountingTillGameStart;
     private float _secondsTillGame;
     public static event Action<float> countDown;
@@ -70,4 +71,6 @@ public class PreGameController : SceneController
         _isCountingTillGameStart = false;
         _secondsTillGame = 5.0f;
     }
+
+    public Transform GetChannels() { return _channels; }
 }

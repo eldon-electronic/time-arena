@@ -13,10 +13,10 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
-	[SerializeField] protected Transform _channels;
+	protected SceneController _sceneController;
 	protected string _userID;
 	protected Dictionary<int, string> _viewIDtoUserID;
-	protected SceneController _sceneController;
+	protected int _channelID;
 	public Constants.Team Team;
 	public int ID;
 	public int Score;
@@ -24,6 +24,11 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 
 
 	// ------------ UNITY METHODS ------------
+
+	public void OnPhotonInstantiate(PhotonMessageInfo info)
+	{
+		_channelID = (int) info.photonView.InstantiationData[0];
+	}
 
 	void Awake()
 	{
@@ -42,11 +47,20 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 
 		gameObject.layer = Constants.LayerPlayer;
 
-		FindObjectOfType<PreGameController>().Register(this);
+		PreGameController pregame = FindObjectOfType<PreGameController>();
+		pregame.Register(this);
+		Transform channels = pregame.GetChannels();
 
 		FindObjectOfType<HudDebugPanel>().Register(this);
 
-		if (_view.IsMine) clientEntered?.Invoke(this);
+		if (_view.IsMine)
+		{
+			clientEntered?.Invoke(this);
+			for (int i=0; i < channels.childCount; i++)
+			{
+				if (i != _channelID) Destroy(channels.GetChild(i).Find("TutorialCamera").gameObject);
+			}
+		}
 		else
 		{
 			Destroy(_camera);
@@ -61,19 +75,12 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
         Cursor.lockState = CursorLockMode.Locked;
 	}
 
-	public void OnPhotonInstantiate(PhotonMessageInfo info)
-	{
-		int channelID = (int) info.photonView.InstantiationData[0];
-		if (!_view.IsMine) Destroy(_channels.GetChild(channelID).Find("TutorialCamera").gameObject);
-	}
-
 
 	// ------------ PRIVATE METHODS ------------
 
 	private void OnGameActive(GameController game)
 	{
-		_sceneController = game;
-		_sceneController.Register(this);
+		game.Register(this);
 		Show();
 		Score = 0;
 		if (_view.IsMine) clientEntered?.Invoke(this);

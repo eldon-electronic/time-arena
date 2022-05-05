@@ -20,8 +20,8 @@ public class SpawnPlayers : MonoBehaviour
             int channelID = 0;
             foreach (Player player in PhotonNetwork.PlayerList)
             {
-                 _view.RPC("RPC_setChannel", player, channelID);
-                 channelID++;
+                _view.RPC("RPC_setChannel", player, channelID);
+                channelID++;
             }
         }
     }
