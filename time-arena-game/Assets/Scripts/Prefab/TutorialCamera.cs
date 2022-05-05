@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TutorialCamera : MonoBehaviour
 {
-    [SerializeField] private GameObject _camera;
     public static event Action collectableAppears;
     public static event Action collectableDisappears;
     public static event Action obstacleGrows;
@@ -29,5 +28,7 @@ public class TutorialCamera : MonoBehaviour
     public void EndTutorial()
     {
         endTutorial?.Invoke();
+        Destroy(gameObject);
+        Destroy(this);
     }
 }

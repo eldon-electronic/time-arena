@@ -4480,6 +4480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tutorialHud: {fileID: 791192722480666218}
   _player: {fileID: 0}
+  _playerCamera: {fileID: 7988226353232976794}
 --- !u!1 &6762886047581470401
 GameObject:
   m_ObjectHideFlags: 0
@@ -5826,6 +5827,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfcb0477dab5e45f8952722fd391269e, type: 3}
+--- !u!20 &7988226353232976794 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 566262337696033295, guid: bfcb0477dab5e45f8952722fd391269e, type: 3}
+  m_PrefabInstance: {fileID: 7566088141439791509}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3297883733819746428 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4955167797040454121, guid: bfcb0477dab5e45f8952722fd391269e, type: 3}
