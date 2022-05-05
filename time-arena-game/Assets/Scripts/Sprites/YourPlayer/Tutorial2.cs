@@ -92,5 +92,6 @@ public class Tutorial2: MonoBehaviour
     private void OnEndTutorial()
     {
         _playerCamera.enabled = true;
+        Destroy(gameObject);
     }
 }
