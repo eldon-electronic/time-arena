@@ -4319,9 +4319,9 @@ GameObject:
   - component: {fileID: 8857084587317561159}
   - component: {fileID: 6492684915472585945}
   - component: {fileID: 4083161051974740614}
-  - component: {fileID: 5418871545930292718}
   - component: {fileID: 821645026353342789}
   - component: {fileID: 1445213418036249400}
+  - component: {fileID: 8649233620989107492}
   m_Layer: 0
   m_Name: You
   m_TagString: Untagged
@@ -4433,23 +4433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sandMat: {fileID: 2100000, guid: 9a55a84c7b3e24ba78dd0019f91a2059, type: 2}
---- !u!114 &5418871545930292718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6664611707448390559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27d9a717a84d94ca1a1a06a077cd84fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _player: {fileID: 0}
-  _tutorialHud: {fileID: 791192722480666218}
-  _view: {fileID: 5968736649172266041}
-  _masterClientOptions: {fileID: 6863079853560001531}
-  _movement: {fileID: 1272696364061986993}
 --- !u!114 &821645026353342789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4483,6 +4466,20 @@ MonoBehaviour:
   _showText: {fileID: 4300193838474646308}
   _player: {fileID: 0}
   _view: {fileID: 5968736649172266041}
+--- !u!114 &8649233620989107492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6664611707448390559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08a86f5637a74b79a40acace5af1131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tutorialHud: {fileID: 791192722480666218}
+  _player: {fileID: 0}
 --- !u!1 &6762886047581470401
 GameObject:
   m_ObjectHideFlags: 0
