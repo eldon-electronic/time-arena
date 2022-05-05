@@ -5,6 +5,7 @@ public class Tutorial2: MonoBehaviour
 {
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PlayerController _player;
+    [SerializeField] private Camera _playerCamera;
 
     void OnEnable()
     {
@@ -26,6 +27,11 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.checkTracker -= OnCheckTracker;
         TutorialCamera.goodLuck -= OnGoodLuck;
         TutorialCamera.endTutorial -= OnEndTutorial;
+    }
+
+    void Start()
+    {
+        _playerCamera.enabled = false;
     }
 
     private void OnCollectableAppears()
@@ -80,6 +86,6 @@ public class Tutorial2: MonoBehaviour
 
     private void OnEndTutorial()
     {
-
+        _playerCamera.enabled = true;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TutorialCamera : MonoBehaviour
 {
+    [SerializeField] private GameObject _camera;
     public static event Action collectableAppears;
     public static event Action collectableDisappears;
     public static event Action obstacleGrows;
@@ -25,5 +26,8 @@ public class TutorialCamera : MonoBehaviour
 
     public void GoodLuck() { goodLuck?.Invoke(); }
 
-    public void EndTutorial() { endTutorial?.Invoke(); }
+    public void EndTutorial()
+    {
+        endTutorial?.Invoke();
+    }
 }
