@@ -17,7 +17,7 @@ public abstract class DisController: MonoBehaviour
 }
 
 
-public class TimeConn : MonoBehaviour, DissolveUser
+public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 {
 	[SerializeField] private HudDebugPanel _debugPanel;
 	[SerializeField] private PlayerController _player;
@@ -76,6 +76,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		SetTimeLord();
 		_disController.SetSubscriber(this);
 		_tailManager.SetActive(true);
+
+		FindObjectOfType<HudDebugPanel>().Register(this);
 	}
 
 	void Update()
@@ -93,11 +95,11 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			}
 
 			// If master client, synchronise everyone else every ten frames.
-			if (PhotonNetwork.IsMasterClient) Synchronise();
-			_syncTimer--;
+			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0) Synchronise();
 		}
 
-		UpdateTimeTravel();
+		_syncTimer--;
+		if (_syncTimer > 0) UpdateTimeTravel();
 	}
 
 
@@ -223,9 +225,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	private void UpdateTimeTravel()
 	{
-		// If waiting for synchronisation, don't record (this avoids the flashing ghosts bug).
-		if (_syncTimer == 0) return;
-
 		// Record your state in all realities you exist in.
 		Vector3 pos = transform.position;
 		Quaternion rot = transform.rotation;
@@ -256,16 +255,13 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	private void Synchronise()
 	{
-		if (_syncTimer <= 0)
+		Dictionary<int, int[]> data = new Dictionary<int, int[]>();
+		foreach (var reality in _timeLord.GetRealities())
 		{
-			Dictionary<int, int[]> data = new Dictionary<int, int[]>();
-			foreach (var reality in _timeLord.GetRealities())
-			{
-				data.Add(reality.Key, reality.Value.GetData());
-			}
-			int frame = _timeLord.GetCurrentFrame();
-			_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
+			data.Add(reality.Key, reality.Value.GetData());
 		}
+		int frame = _timeLord.GetCurrentFrame();
+		_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
 	}
 
 
@@ -373,5 +369,12 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	{
 		_backJumpCooldown = 15f;
 		_forwardsJumpCooldown = 15f;
+	}
+
+	public Hashtable GetDebugValues()
+	{
+		Hashtable values = new Hashtable();
+		values.Add("Sync timer", _syncTimer);
+		return values;
 	}
 }
