@@ -133,7 +133,7 @@ public class Tutorial2: MonoBehaviour
         Debug.Log("OnEndTutorial called");
         _playerCamera.enabled = true;
         _tutorialHud.SetActive(false);
-        _hudKeyPanel.SetActive();
+        _hudKeyPanel.SetActive(true);
         Destroy(this);
     }
 }

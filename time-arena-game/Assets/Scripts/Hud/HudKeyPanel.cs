@@ -20,18 +20,17 @@ public class HudKeyPanel : MonoBehaviour
     void Awake()
     {
         if (!_view.IsMine) Destroy(this);
-        _keyPanel.SetActive(false);
-        _hideText.SetActive(false);
-        _showText.SetActive(false);
-        _active = false;
+        SetActive(false);
     }
 
     void Start()
     {
-        if(_player.Team == Constants.Team.Guardian){
+        if (_player.Team == Constants.Team.Guardian)
+        {
             SetKeyPanelText("<sprite=9> TO MOVE\n\n\n<sprite=15> TO JUMP\n\n\n<sprite=2> + <sprite=12> TO SPRINT\n\n\nHOLD <sprite=7> TO TRAVEL BACK\n\n\nHOLD <sprite=14> TO TRAVEL FORWARD\n\n\n<sprite=23> CLICK TO GRAB");
         }
-        else if(_player.Team == Constants.Team.Miner){
+        else if (_player.Team == Constants.Team.Miner)
+        {
             SetKeyPanelText("<sprite=9> TO MOVE\n\n\n<sprite=15> TO JUMP\n\n\n<sprite=2> + <sprite=12> TO SPRINT\n\n\nHOLD <sprite=7> TO TRAVEL BACK\n\n\nHOLD <sprite=14> TO TRAVEL FORWARD");
         }
     }
@@ -39,31 +38,19 @@ public class HudKeyPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_active) return;
-
-        if(Input.GetKeyDown(KeyCode.H)){
-            _keyPanel.SetActive(false);
-            _hideText.SetActive(false);
-            _showText.SetActive(true);
-        }
-        else if(Input.GetKeyDown(KeyCode.F)){
-            _keyPanel.SetActive(true);
-            _hideText.SetActive(true);
-            _showText.SetActive(false);
-        }
-          
+        if (Input.GetKeyDown(KeyCode.H)) SetActive(!_active);          
     }
+
     public void SetKeyPanelText(string keyText)
     {
         _keyPanelText.GetComponent<TextMeshProUGUI>().text = keyText;
     }
 
-    public void SetActive()
+    public void SetActive(bool active)
     {
-        Debug.Log("SetActive called");
-        _active = true;
-        _keyPanel.SetActive(true);
-        _hideText.SetActive(true);
-        _showText.SetActive(false);
+        _keyPanel.SetActive(active);
+        _hideText.SetActive(active);
+        _showText.SetActive(!active);
+        _active = active;
     }
 }
