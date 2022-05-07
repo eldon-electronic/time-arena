@@ -10,6 +10,20 @@ public class HudTutorial : MonoBehaviour
 {
     public GameObject Tutorial;
     [SerializeField] private GameObject _popUpText;
+    [SerializeField] private GameObject _ui;
+    [SerializeField] private GameObject[] _tutorialObjects;
+    // private GameObject _crystal;
+
+    private Dictionary<string, GameObject> _tutorialArrows;
+
+    void Awake()
+    {
+        //_crystal = GameObject.Find("TutorialTimeCrystal");
+        _tutorialArrows = new Dictionary<string, GameObject>();
+        foreach (GameObject tutorialObject in _tutorialObjects) {
+        _tutorialArrows.Add(tutorialObject.name, tutorialObject);
+        }
+    }
    
    
     void OnEnable()
@@ -24,7 +38,7 @@ public class HudTutorial : MonoBehaviour
 
     private void OnGameActive(GameController game)
     {
-        Destroy(gameObject);
+        Destroy(Tutorial);
         Destroy(this);
     }
     
@@ -35,7 +49,17 @@ public class HudTutorial : MonoBehaviour
     
     public void SetActive(bool value)
     {
-        gameObject.SetActive(value);
+        Tutorial.SetActive(value);
+    }
+     public void SetVisibilityUI(bool visibility)
+    {
+        _ui.SetActive(visibility);
+    }
+    public void SetVisibilityArrow(string uiElement,bool arrowVis)
+    {
+        if(_tutorialArrows.ContainsKey(uiElement)){
+            _tutorialArrows[uiElement].SetActive(arrowVis);
+        }
     }
  
  }

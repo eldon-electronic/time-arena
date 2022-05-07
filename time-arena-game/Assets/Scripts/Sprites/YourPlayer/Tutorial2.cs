@@ -16,6 +16,10 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.faceYourself += OnFaceYourself;
         TutorialCamera.checkTracker += OnCheckTracker;
         TutorialCamera.hidePlayer += OnHidePlayer;
+        TutorialCamera.showUI += OnShowUI;
+        TutorialCamera.showBackArrow += OnShowBackArrow;
+        TutorialCamera.showForwardArrow += OnShowForwardArrow;
+        TutorialCamera.showTimeline += OnShowTimeline;
         TutorialCamera.goodLuck += OnGoodLuck;
         TutorialCamera.endTutorial += OnEndTutorial;
     }
@@ -28,6 +32,10 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.faceYourself -= OnFaceYourself;
         TutorialCamera.checkTracker -= OnCheckTracker;
         TutorialCamera.hidePlayer -= OnHidePlayer;
+        TutorialCamera.showUI -= OnShowUI;
+        TutorialCamera.showBackArrow -= OnShowBackArrow;
+        TutorialCamera.showForwardArrow -= OnShowForwardArrow;
+        TutorialCamera.showTimeline -= OnShowTimeline;
         TutorialCamera.goodLuck -= OnGoodLuck;
         TutorialCamera.endTutorial -= OnEndTutorial;
     }
@@ -35,6 +43,7 @@ public class Tutorial2: MonoBehaviour
     void Start()
     {
         _playerCamera.enabled = false;
+        _tutorialHud.SetVisibilityUI(false);
     }
 
     private void OnCollectableAppears()
@@ -93,6 +102,25 @@ public class Tutorial2: MonoBehaviour
     private void OnHidePlayer()
     {
         _player.SetActive(false);
+    }
+    private void OnShowUI()
+    {
+        _tutorialHud.SetVisibilityUI(true);
+    }
+    private void OnShowBackArrow()
+    {
+        _tutorialHud.SetVisibilityArrow("backJump",true);
+        _tutorialHud.SetMessage("You can only travel backwards when orange icon starts spinning.");
+    }  
+    private void OnShowForwardArrow()
+    {
+        _tutorialHud.SetVisibilityArrow("forwardJump",true);
+        _tutorialHud.SetMessage("You can only travel forwards when blue icon starts spinning.");
+    }
+    private void OnShowTimeline()
+    {
+        _tutorialHud.SetVisibilityArrow("timeline",true);
+        _tutorialHud.SetMessage("This is the time line which shows where you are at in time\nYou're icon is the biggest one.");
     }
 
     private void OnGoodLuck()
