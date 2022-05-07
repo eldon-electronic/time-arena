@@ -43,7 +43,7 @@ public class Tutorial2: MonoBehaviour
     void Start()
     {
         _playerCamera.enabled = false;
-        _tutorialHud.SetVisibilityUI(false);
+        // _tutorialHud.SetVisibilityUI(false);
     }
 
     private void OnCollectableAppears()
