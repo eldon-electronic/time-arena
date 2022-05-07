@@ -167,7 +167,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	}
 
 	// Returns true if you can jump in the given direction.
-	private bool CanTimeTravel(Constants.JumpDirection direction)
+	public bool CanTimeTravel(Constants.JumpDirection direction)
 	{
 		if (direction == Constants.JumpDirection.Backward)
 		{

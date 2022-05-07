@@ -10,6 +10,7 @@ public class CrystalParent : MonoBehaviour
     public bool boxRequired;
     private TimeLord _timeLord;
     private Transform _playerTransform;
+    private TimeConn _playerTime;
     private bool _activeHints;
     BoxCollider _ObjectCollider;
 
@@ -48,15 +49,18 @@ public class CrystalParent : MonoBehaviour
         {
             int currentFrame = _timeLord.GetCurrentFrame();
             float distance = Vector3.Distance(transform.position, _playerTransform.position);
-            _nameTag.SetActive(yourFrame < startFrame && 
-                            startFrame < currentFrame && 
-                            2 < distance &&
-                            distance < 10);
+            _nameTag.SetActive(_playerTime.CanTimeTravel(Constants.JumpDirection.Forward) &&
+                            yourFrame < startFrame && startFrame < currentFrame && 
+                            2 < distance && distance < 10);
         }
         else _nameTag.SetActive(false);
     }
 
     private void OnNewTimeLord(TimeLord time) { _timeLord = time; }
 
-    private void OnClientEntered(PlayerController pc) { _playerTransform = pc.gameObject.transform; }
+    private void OnClientEntered(PlayerController pc)
+    {
+        _playerTransform = pc.gameObject.transform;
+        _playerTime = pc.gameObject.GetComponent<TimeConn>();
+    }
 }

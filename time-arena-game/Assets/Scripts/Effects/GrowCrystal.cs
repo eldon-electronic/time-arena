@@ -20,6 +20,7 @@ public class GrowCrystal : MonoBehaviour
     private float _yPosStart;
     private float _yPosChange = 2.15f;
     private Transform _playerTransform;
+    private TimeConn _playerTime;
     private Vector3 _startPos;
     private bool _activeHints;
 
@@ -86,10 +87,15 @@ public class GrowCrystal : MonoBehaviour
         if (_activeHints && _playerTransform != null)
         {
             float distance = Vector3.Distance(transform.position, _playerTransform.position);
-            _nameTag.SetActive(_startFrame < percievedFrame &&  2 < distance && distance < 10);
+            _nameTag.SetActive(_playerTime.CanTimeTravel(Constants.JumpDirection.Backward) && 
+                                _startFrame < percievedFrame &&  2 < distance && distance < 10);
         }
         else _nameTag.SetActive(false);
     }
 
-    private void OnClientEntered(PlayerController pc) { _playerTransform = pc.gameObject.transform; }
+    private void OnClientEntered(PlayerController pc)
+    {
+        _playerTransform = pc.gameObject.transform;
+        _playerTime = pc.gameObject.GetComponent<TimeConn>();
+    }
 }
