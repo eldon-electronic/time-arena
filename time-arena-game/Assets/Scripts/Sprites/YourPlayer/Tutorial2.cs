@@ -14,6 +14,7 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.obstacleGrows += OnObstacleGrows;
         TutorialCamera.faceYourself += OnFaceYourself;
         TutorialCamera.checkTracker += OnCheckTracker;
+        TutorialCamera.hidePlayer += OnHidePlayer;
         TutorialCamera.goodLuck += OnGoodLuck;
         TutorialCamera.endTutorial += OnEndTutorial;
     }
@@ -25,6 +26,7 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.obstacleGrows -= OnObstacleGrows;
         TutorialCamera.faceYourself -= OnFaceYourself;
         TutorialCamera.checkTracker -= OnCheckTracker;
+        TutorialCamera.hidePlayer -= OnHidePlayer;
         TutorialCamera.goodLuck -= OnGoodLuck;
         TutorialCamera.endTutorial -= OnEndTutorial;
     }
@@ -36,22 +38,24 @@ public class Tutorial2: MonoBehaviour
 
     private void OnCollectableAppears()
     {
-        if(_player.Team == Constants.Team.Miner){
+        if (_player.Team == Constants.Team.Miner)
+        {
             _tutorialHud.SetMessage("This the collectable crystal,you should run through it to collect.");
         }
-        else{
+        else
+        {
             _tutorialHud.SetMessage("This is a Miner!");
         }
-        
-        
     }
 
     private void OnCollectableDisappears()
     {
-        if(_player.Team == Constants.Team.Miner){
+        if (_player.Team == Constants.Team.Miner)
+        {
             _tutorialHud.SetMessage("It only appears at certain times,you should time travel to find them");
         }
-        else{
+        else
+        {
             _tutorialHud.SetMessage("Click to catch them and steal their crystals!");
         }
     }
@@ -59,41 +63,46 @@ public class Tutorial2: MonoBehaviour
     private void OnObstacleGrows()
     {
         _tutorialHud.SetMessage("These crystals are obstacles you should time travel to pass them.");
-
     }
 
     private void OnFaceYourself()
     {
-        if(_player.Team == Constants.Team.Miner){
+        if (_player.Team == Constants.Team.Miner)
+        {
             _tutorialHud.SetMessage("This is you Miner.");
         }
-        else{
+        else
+        {
             _tutorialHud.SetMessage("This is you Guardian.");
         }
     }
 
     private void OnCheckTracker()
     {
-         if(_player.Team == Constants.Team.Miner){
+        if (_player.Team == Constants.Team.Miner)
+        {
             _tutorialHud.SetMessage("And this is your tracker which helps you to find the nearest crystal.");
         }
-        else{
+        else
+        {
             _tutorialHud.SetMessage("Let's start playing.");
         }
+    }
 
+    private void OnHidePlayer()
+    {
+        _player.SetActive(false);
     }
 
     private void OnGoodLuck()
     {
         _tutorialHud.SetMessage("Good luck!");
-
     }
 
     private void OnEndTutorial()
     {
         _playerCamera.enabled = true;
         _tutorialHud.SetActive(false);
-        _player.SetActive(false);
         Destroy(gameObject);
     }
 }

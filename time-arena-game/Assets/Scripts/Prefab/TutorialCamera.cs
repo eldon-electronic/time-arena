@@ -10,6 +10,7 @@ public class TutorialCamera : MonoBehaviour
     public static event Action obstacleGrows;
     public static event Action faceYourself;
     public static event Action checkTracker;
+    public static event Action hidePlayer;
     public static event Action goodLuck;
     public static event Action endTutorial;
 
@@ -22,6 +23,8 @@ public class TutorialCamera : MonoBehaviour
     public void FaceYourself() { faceYourself?.Invoke(); }
 
     public void CheckTracker() { checkTracker?.Invoke(); }
+
+    public void HidePlayer() { hidePlayer?.Invoke(); }
 
     public void GoodLuck() { goodLuck?.Invoke(); }
 

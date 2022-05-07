@@ -9,6 +9,9 @@ public class PlayerMinerController : PlayerController
 
 	public override void SetActive(bool _isPreGame)
 	{
+		Debug.Log($"_isPreGame = {_isPreGame}");
+		Debug.Log($"_view.IsMine ={_view.IsMine}");
+		Debug.Log($"!_view.IsMine || _isPreGame = {!_view.IsMine || _isPreGame}");
         _mesh.SetActive(!_view.IsMine || _isPreGame);
         _minerDevice.SetActive(true);
     }
