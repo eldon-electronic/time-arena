@@ -24,7 +24,7 @@ public class HudTutorial : MonoBehaviour
 
     private void OnGameActive(GameController game)
     {
-        Destroy(Tutorial);
+        Destroy(gameObject);
         Destroy(this);
     }
     
@@ -35,7 +35,8 @@ public class HudTutorial : MonoBehaviour
     
     public void SetActive(bool value)
     {
-        Tutorial.SetActive(value);
+        gameObject.SetActive(value);
     }
+ 
  }
 
