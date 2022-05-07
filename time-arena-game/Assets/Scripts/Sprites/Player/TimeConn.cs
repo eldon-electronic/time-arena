@@ -51,8 +51,8 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_forwardsJumpCooldown = 15f;
 		_backJumpCooldown = 15f;
 		_timeTravelEnabled = true;
-		_syncTimer = 10;
 		_keyLock = false;
+		_syncTimer = Constants.SyncFrames;
 	}
 
 	void OnEnable()
@@ -316,7 +316,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 			realities.Add(item.Key, new Reality(item.Value));
 		}
 		_timeLord.SetRealities(realities);
-		_syncTimer = 10;
+		_syncTimer = Constants.SyncFrames;
 	}
 
 
