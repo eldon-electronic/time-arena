@@ -30,6 +30,7 @@ public class TutorialCamera : MonoBehaviour
 
     public void EndTutorial()
     {
+        Debug.Log("EndTutorial called");
         endTutorial?.Invoke();
         Destroy(gameObject);
         Destroy(this);

@@ -6,6 +6,7 @@ public class Tutorial2: MonoBehaviour
     [SerializeField] private HudTutorial _tutorialHud;
     [SerializeField] private PlayerController _player;
     [SerializeField] private Camera _playerCamera;
+    [SerializeField] private HudKeyPanel _hudKeyPanel;
 
     void OnEnable()
     {
@@ -101,8 +102,10 @@ public class Tutorial2: MonoBehaviour
 
     private void OnEndTutorial()
     {
+        Debug.Log("OnEndTutorial called");
         _playerCamera.enabled = true;
         _tutorialHud.SetActive(false);
+        _hudKeyPanel.SetActive();
         Destroy(this);
     }
 }
