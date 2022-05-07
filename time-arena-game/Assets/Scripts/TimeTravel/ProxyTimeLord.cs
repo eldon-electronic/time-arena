@@ -40,7 +40,7 @@ public class ProxyTimeLord: TimeLord
 
         if (_activated)
         {
-            if (_myID != null) _logLineItems.Add($"p-{_myID}-{_realities.GetPerceivedFrame(_myID)}");
+            if (_myID != 0) _logLineItems.Add($"p-{_myID}-{_realities.GetPerceivedFrame(_myID)}");
 
             string line = String.Join(",", _logLineItems.ToArray());
             _file.WriteLine(line);

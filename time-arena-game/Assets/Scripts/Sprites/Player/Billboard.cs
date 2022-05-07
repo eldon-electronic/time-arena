@@ -8,6 +8,7 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
     private Transform _mainCameraTransform;
+    private int _waitCount;
 
     void OnEnable() { PlayerController.clientEntered += OnClientEntered; }
 
@@ -27,8 +28,8 @@ public class Billboard : MonoBehaviour
             }
             catch (NullReferenceException e)
             {
-                Debug.Log("Waiting for main camera...");
-                return;
+                _waitCount++;
+                if (_waitCount % 100 == 0) Debug.LogError($"Waiting for main camera exceeded {_waitCount} frames.");
             }
         }
     }

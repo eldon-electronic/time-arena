@@ -36,7 +36,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	private float _forwardsJumpCooldown;
 	private float _backJumpCooldown;
 	private bool _timeTravelEnabled;
-	private bool _isDissolving;
 	private int _syncTimer;
 	private bool _keyLock;
 	private int _forcedDestination;
@@ -52,7 +51,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 		_forwardsJumpCooldown = 15f;
 		_backJumpCooldown = 15f;
 		_timeTravelEnabled = true;
-		_isDissolving = false;
 		_syncTimer = 10;
 		_keyLock = false;
 	}
@@ -82,7 +80,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	void Update()
 	{
-		// Local keys only affect client's player.
+		if (!_timeTravelEnabled) return;
+
 		if (_view.IsMine)
 		{
 			UpdateCooldowns();
@@ -92,15 +91,13 @@ public class TimeConn : MonoBehaviour, DissolveUser
 				_keyLock = false;
 				TimeJump(_jumpDirection, false);
 			}
-		}
-
-		if (_timeTravelEnabled)
-		{
-			UpdateTimeTravel();
 
 			// If master client, synchronise everyone else every ten frames.
 			if (PhotonNetwork.IsMasterClient) Synchronise();
+			_syncTimer--;
 		}
+
+		UpdateTimeTravel();
 	}
 
 
@@ -128,7 +125,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	public void NotifyStartedDissolving()
 	{
-		_isDissolving = true;
 		if (_timeLord.InYourReality(_view.ViewID))
 		{
 			_player.Show();
@@ -137,7 +133,6 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	public void NotifyStoppedDissolving(bool dissolvedOut)
 	{
-		_isDissolving = false;
 		if (dissolvedOut)
 		{
 			_jumpDirection = Constants.JumpDirection.Static;
@@ -228,6 +223,9 @@ public class TimeConn : MonoBehaviour, DissolveUser
 
 	private void UpdateTimeTravel()
 	{
+		// If waiting for synchronisation, don't record (this avoids the flashing ghosts bug).
+		if (_syncTimer == 0) return;
+
 		// Record your state in all realities you exist in.
 		Vector3 pos = transform.position;
 		Quaternion rot = transform.rotation;
@@ -267,9 +265,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			}
 			int frame = _timeLord.GetCurrentFrame();
 			_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
-			_syncTimer = 10;
 		}
-		_syncTimer--;
 	}
 
 
@@ -324,6 +320,7 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			realities.Add(item.Key, new Reality(item.Value));
 		}
 		_timeLord.SetRealities(realities);
+		_syncTimer = 10;
 	}
 
 

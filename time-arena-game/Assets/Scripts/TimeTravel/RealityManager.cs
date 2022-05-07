@@ -87,9 +87,10 @@ public class RealityManager
         }
     }
 
-    // Return the perceived frame of the given player.
+    // Return the perceived frame of the given player or -1 if the player is not being tracked.
     public int GetPerceivedFrame(int playerID)
     {
+        if (!_realities.ContainsKey(playerID)) return -1;
         return _realities[playerID].PerceivedFrame;
     }
 
