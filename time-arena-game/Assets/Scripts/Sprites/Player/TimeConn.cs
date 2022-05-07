@@ -98,8 +98,8 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0) Synchronise();
 		}
 
-		_syncTimer--;
 		if (_syncTimer > 0) UpdateTimeTravel();
+		_syncTimer--;
 	}
 
 

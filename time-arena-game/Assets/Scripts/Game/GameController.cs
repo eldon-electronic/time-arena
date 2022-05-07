@@ -20,7 +20,7 @@ public class GameController : SceneController
 	{
 		_miners = new Dictionary<int, PlayerMinerController>();
 		_guardians = new Dictionary<int, PlayerGuardianController>();
-		_timeLord = new TimeLord(Constants.GameLength * Constants.FrameRate);
+		CreateTimeLord(Constants.GameLength);
 
 		_timer = 5f;
 		_gameStarted = false;

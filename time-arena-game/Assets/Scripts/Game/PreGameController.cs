@@ -17,7 +17,7 @@ public class PreGameController : SceneController
         _miners = new Dictionary<int, PlayerMinerController>();
 		_guardians = new Dictionary<int, PlayerGuardianController>();
         _secondsTillGame = 5.0f;
-        CreateTimeLord(diagnostics:true);
+        CreateTimeLord(Constants.PreGameLength, logging:true);
         Debug.Log("Pregame created new TimeLord");
     }
 

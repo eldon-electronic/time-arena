@@ -64,13 +64,13 @@ public class ProxyTimeLord: TimeLord
 
             string line = String.Join(",", _logLineItems.ToArray());
             _logFile.WriteLine(line);
-            _logFile.Close();
 
             _logLineItems = new List<string>();
 
             if (_currentFrame == _totalFrames - 1)
             {
                 _logging = false;
+                _logFile.Close();
                 WriteFinalStates(Constants.LogFolder + "stateLog.txt");
             }
         }

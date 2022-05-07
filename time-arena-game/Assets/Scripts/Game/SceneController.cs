@@ -14,7 +14,7 @@ public abstract class SceneController: MonoBehaviour
 	protected Dictionary<int, string> _viewIDTranslations;
     public static event Action<int> scoreChange;
 
-	protected void CreateTimeLord(bool logging=false, bool diagnostics=false)
+	protected void CreateTimeLord(int sceneLength, bool logging=false, bool diagnostics=false)
     {
         if (logging && PhotonNetwork.CurrentRoom.PlayerCount != 1)
         {
@@ -27,7 +27,7 @@ public abstract class SceneController: MonoBehaviour
         else
         {
 			// Beware that if running diagnostics, non-master clients must be run in the Unity Editor.
-            int totalFrames = Constants.PreGameLength * Constants.FrameRate;
+            int totalFrames = sceneLength * Constants.FrameRate;
             _timeLord = new ProxyTimeLord(totalFrames, logging, diagnostics && !(PhotonNetwork.IsMasterClient));
         }
     }
