@@ -103,6 +103,6 @@ public class Tutorial2: MonoBehaviour
     {
         _playerCamera.enabled = true;
         _tutorialHud.SetActive(false);
-        Destroy(gameObject);
+        Destroy(this);
     }
 }
