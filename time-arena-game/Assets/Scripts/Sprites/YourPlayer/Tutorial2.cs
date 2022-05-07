@@ -115,16 +115,20 @@ public class Tutorial2: MonoBehaviour
     private void OnShowForwardArrow()
     {
         _tutorialHud.SetVisibilityArrow("forwardJump",true);
+        _tutorialHud.SetVisibilityArrow("backJump",false);
+
         _tutorialHud.SetMessage("You can only travel forwards when blue icon starts spinning.");
     }
     private void OnShowTimeline()
     {
-        _tutorialHud.SetVisibilityArrow("timeline",true);
+        _tutorialHud.SetVisibilityArrow("timebar",true);
+        _tutorialHud.SetVisibilityArrow("forwardJump",false);
         _tutorialHud.SetMessage("This is the time line which shows where you are at in time\nYou're icon is the biggest one.");
     }
 
     private void OnGoodLuck()
     {
+        _tutorialHud.SetVisibilityArrow("timebar",false);
         _tutorialHud.SetMessage("Good luck!");
     }
 
