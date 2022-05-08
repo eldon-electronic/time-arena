@@ -108,7 +108,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 		return _viewIDtoUserID;
 	}
 
-	public void Show()
+	public virtual void Show()
 	{
 		if (!_view.IsMine)
 		{
@@ -117,7 +117,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 		}
 	}
 
-	public void Hide()
+	public virtual void Hide()
 	{
 		if (!_view.IsMine)
 		{

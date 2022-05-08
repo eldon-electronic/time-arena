@@ -13,6 +13,18 @@ public class PlayerMinerController : PlayerController
         _minerDevice.SetActive(true);
     }
 
+    public override void Hide()
+    {
+        base.Hide();
+		_minerDevice.SetActive(false);
+    }
+
+    public override void Show()
+    {
+        base.Show();
+		_minerDevice.SetActive(true);
+    }
+
     protected override void SetTeam()
 	{
 		// TODO: Set the team in the menu before loading the pregame scene.
