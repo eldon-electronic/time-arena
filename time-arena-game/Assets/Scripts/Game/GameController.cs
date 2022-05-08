@@ -6,6 +6,8 @@ using Photon.Pun;
 
 public class GameController : SceneController
 {
+	[SerializeField] private Transform[] _minerSpawnpoints;
+	[SerializeField] private Transform[] _guardianSpawnpoints;
 	private float _timer;
 	private bool _gameStarted;
 	private bool _gameEnded;
@@ -39,6 +41,14 @@ public class GameController : SceneController
 		gameActive?.Invoke(this);
 	}
 
+	public override void Register(PlayerMinerController pmc) {
+		pmc.SetSpawnpoint(GetSpawnpoint(_minerSpawnpoints));
+	}
+
+	public override void Register(PlayerGuardianController pgc) {
+		pgc.SetSpawnpoint(GetSpawnpoint(_guardianSpawnpoints));
+	}
+
 	private void CheckWon()
 	{	
 		if (_timeLord.TimeEnded() && !_gameEnded)
@@ -50,6 +60,13 @@ public class GameController : SceneController
 			Debug.Log("Game ended");
 			gameEnded?.Invoke(_winner);
 		}
+	}
+
+	private Vector3 GetSpawnpoint(Transform[] spawnpoints) 
+	{
+		int index = UnityEngine.Random.Range(0, spawnpoints.Length);
+		Debug.Log($"Setting spawnpoint: {spawnpoints[index].position}");
+		return spawnpoints[index].position;
 	}
 
 	void Update()

@@ -99,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnGameActive(GameController game)
     {
         _lockMovement = true;
-        MoveToSpawnPoint();
+        // MoveToSpawnPoint();
     }
 
     private void OnGameStarted() { _lockMovement = false; }
@@ -193,14 +193,16 @@ public class PlayerMovement : MonoBehaviour
 		transform.Rotate(Vector3.up * mouseX);
     }
 
-    private void MoveToSpawnPoint()
+    public void MoveToSpawnPoint()
 	{
-		if (_player.Team == Constants.Team.Miner)
-		{
-			int index = Random.Range(0, _minerSpawnPoints.Length);
-			Vector3 position = _minerSpawnPoints[index];
-			transform.position = position;
-		}
-		else transform.position = _guardianSpawnPoint;
+        Debug.Log($"Spawning player: {_player.GetSpawnpoint()}");
+        transform.position = _player.GetSpawnpoint();
+		// if (_player.Team == Constants.Team.Miner)
+		// {
+		// 	int index = Random.Range(0, _minerSpawnPoints.Length);
+		// 	Vector3 position = _minerSpawnPoints[index];
+		// 	transform.position = position;
+		// }
+		// else transform.position = _guardianSpawnPoint;
 	}
 }

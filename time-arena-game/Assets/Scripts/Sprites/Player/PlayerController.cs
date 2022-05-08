@@ -12,7 +12,9 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
+	[SerializeField] protected PlayerMovement _playerMovement;
 	private string _userID;
+	private Vector3 _spawnpoint;
 	private Dictionary<int, string> _viewIDtoUserID;
 	protected SceneController _sceneController;
 	public Constants.Team Team;
@@ -115,6 +117,18 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		Hashtable debugValues = new Hashtable();
 		debugValues.Add($"{_view.ViewID} layer", gameObject.layer);
 		return debugValues;
+	}
+
+	public void SetSpawnpoint(Vector3 spawnpoint)
+	{
+		_spawnpoint = spawnpoint;
+		_playerMovement.MoveToSpawnPoint();
+
+	}
+
+	public Vector3 GetSpawnpoint()
+	{
+		return _spawnpoint;
 	}
 
 
