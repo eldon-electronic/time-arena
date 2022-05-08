@@ -303,7 +303,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 			realities.Add(item.Key, new Reality(item.Value));
 		}
 		_timeLord.SetRealities(realities);
-		// TODO: Set tails.
+		_tailManager.UpdateTails();
 		StoreState();
 	}
 
