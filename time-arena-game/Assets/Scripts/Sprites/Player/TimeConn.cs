@@ -89,10 +89,12 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 				_keyLock = false;
 				TimeJump(_jumpDirection, false);
 			}
+			if (_isJumping && !_timeLord.CanJump(_view.ViewID, _jumpDirection))
+			{
+				TimeJump(_jumpDirection, false);
+			}
 			if (PhotonNetwork.IsMasterClient) Synchronise2();
 		}
-
-		// UpdateTimeTravel();
 	}
 
 
@@ -178,6 +180,8 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		if (!_view.IsMine) throw new InvalidOperationException("This function may not be called on an RPC-controlled Player.");
 		if (!_timeTravelEnabled) throw new InvalidOperationException("This function requires time travel to be enabled");
 
+		Debug.Log("TimeJump called");
+
 		if (jumpOut)
 		{
 			if (CanTimeTravel(direction))
@@ -211,8 +215,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		if (Input.GetKeyUp(KeyCode.E)) TimeJump(Constants.JumpDirection.Forward, false);
 	}
 
-
-	private void UpdateTimeTravel()
+	private void StoreState()
 	{
 		// Record your state in all realities you exist in.
 		Vector3 pos = transform.position;
@@ -228,35 +231,18 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 
 		PlayerState ps = new PlayerState(_view.ViewID, pos, rot, dir, _isJumping);
 		_timeLord.RecordState(ps);
-
-		if (_isJumping)
-		{
-			// Perform the time jump.
-			if (_timeLord.CanJump(_view.ViewID, _jumpDirection))
-			{
-				_timeLord.TimeTravel(_view.ViewID, _jumpDirection);
-			}
-			// Force stop jumping.
-			else if (_view.IsMine) TimeJump(_jumpDirection, false);
-		}
-		else _jumpDirection = Constants.JumpDirection.Static;
 	}
 
-	private void Synchronise()
+	private void Synchronise2()
 	{
+		_timeLord.Tick();
 		Dictionary<int, int[]> data = new Dictionary<int, int[]>();
 		foreach (var reality in _timeLord.GetRealities())
 		{
 			data.Add(reality.Key, reality.Value.GetData());
 		}
 		int frame = _timeLord.GetCurrentFrame();
-		_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
-	}
-
-	private void Synchronise2()
-	{
-		_timeLord.Tick();
-		_view.RPC("RPC_synchronise2", RpcTarget.All);
+		_view.RPC("RPC_synchronise2", RpcTarget.All, data, frame);
 	}
 
 
@@ -265,10 +251,13 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	[PunRPC]
 	void RPC_jumpOut(Constants.JumpDirection direction)
 	{
+		Debug.Log("RPC Jump Out called");
+
 		_isJumping = true;
 		_jumpDirection = direction;
 		_setJumpState = true;
 		_timeLord.LeaveReality(_view.ViewID);
+		_timeLord.TimeTravel(_view.ViewID, direction);
 		ResetCooldowns();
 
 		if (_view.IsMine) _sceneController.HideAllPlayers();
@@ -276,16 +265,19 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		{
 			_disController?.TriggerDissolve(_jumpDirection, true);
 			_particles.StartParticles(_jumpDirection);
-			_particles.DropCrystal();
+			if (_keyLock) _particles.DropCrystal();
 		}
 	}
 
 	[PunRPC]
 	void RPC_jumpIn(int playerID, int frame)
 	{
+		Debug.Log("RPC Jump In called");
+
 		_isJumping = false;
 		_timeLord.SetPerceivedFrame(playerID, frame);
 		_timeLord.EnterReality(_view.ViewID);
+		_timeLord.TimeTravel(_view.ViewID, Constants.JumpDirection.Static);
 		
 		if (_view.IsMine)
 		{
@@ -301,7 +293,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	}
 
 	[PunRPC]
-	void RPC_synchronise(Dictionary<int, int[]> data, int currentFrame)
+	void RPC_synchronise2(Dictionary<int, int[]> data, int currentFrame)
 	{
 		if (_timeLord == null) return;
 		_timeLord.SetCurrentFrame(currentFrame);
@@ -311,14 +303,8 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 			realities.Add(item.Key, new Reality(item.Value));
 		}
 		_timeLord.SetRealities(realities);
-	}
-
-	[PunRPC]
-	void RPC_synchronise2()
-	{
-		if (_timeLord == null) return;
-		_timeLord.Tick();
-		UpdateTimeTravel();
+		// TODO: Set tails.
+		StoreState();
 	}
 
 
@@ -373,6 +359,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	public Hashtable GetDebugValues()
 	{
 		Hashtable values = new Hashtable();
+		values.Add($"{_view.ViewID}'s Key Lock", _keyLock);
 		return values;
 	}
 }
