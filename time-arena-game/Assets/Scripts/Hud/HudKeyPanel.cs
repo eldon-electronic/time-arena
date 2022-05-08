@@ -14,6 +14,7 @@ public class HudKeyPanel : MonoBehaviour
     [SerializeField] private GameObject _showText;
     [SerializeField] private PlayerController _player;
     [SerializeField] private PhotonView _view;
+    [SerializeField] private Sprite _oButtonSprite;
     private bool _active;
    
 
@@ -27,11 +28,11 @@ public class HudKeyPanel : MonoBehaviour
     {
         if (_player.Team == Constants.Team.Guardian)
         {
-            SetKeyPanelText("<sprite=9> TO MOVE\n\n\n<sprite=15> TO JUMP\n\n\n<sprite=2> + <sprite=12> TO SPRINT\n\n\nHOLD <sprite=7> TO TRAVEL BACK\n\n\nHOLD <sprite=14> TO TRAVEL FORWARD\n\n\n<sprite=23> CLICK TO GRAB");
+            SetKeyPanelText("<sprite=9> TO MOVE\n\n\n<sprite=15> TO JUMP\n\n\n<sprite=2> + <sprite=12> TO SPRINT\n\n\nHOLD <sprite=7> TO TRAVEL BACK\n\n\nHOLD <sprite=14> TO TRAVEL FORWARD\n\n\n<sprite=23> CLICK TO GRAB\n\n\nPRESS <sprite name=O> TO TOGGLE HINTS");
         }
         else if (_player.Team == Constants.Team.Miner)
         {
-            SetKeyPanelText("<sprite=9> TO MOVE\n\n\n<sprite=15> TO JUMP\n\n\n<sprite=2> + <sprite=12> TO SPRINT\n\n\nHOLD <sprite=7> TO TRAVEL BACK\n\n\nHOLD <sprite=14> TO TRAVEL FORWARD");
+            SetKeyPanelText("<sprite=9> TO MOVE\n\n\n<sprite=15> TO JUMP\n\n\n<sprite=2> + <sprite=12> TO SPRINT\n\n\nHOLD <sprite=7> TO TRAVEL BACK\n\n\nHOLD <sprite=14> TO TRAVEL FORWARD\n\n\nPRESS <sprite name=O> TO TOGGLE HINTS");
         }
     }
 
