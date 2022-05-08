@@ -94,7 +94,7 @@ public class ProxyTimeLord: TimeLord
 
     public override void RecordState(PlayerState ps)
     {
-        if (_logging)
+        if (_logging && ps.PlayerID == _myID)
         {
             int lastTailID = _realities.GetLastTailID(ps.PlayerID);
             List<int> frames = _realities.GetWriteFrames(ps.PlayerID);
