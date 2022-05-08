@@ -13,6 +13,7 @@ public class PregameCrystalBehaviour: CrystalBehaviour
     ExistanceLength = 180f;
     _sceneController = FindObjectOfType<SceneController>();
     _timeLord = _sceneController.GetTimeLord();
+    _initialPos = gameObject.transform.position;
     UpdateAnim();
   }
 

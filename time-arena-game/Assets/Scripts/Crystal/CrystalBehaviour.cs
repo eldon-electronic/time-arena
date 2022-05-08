@@ -23,7 +23,7 @@ public class CrystalBehaviour : MonoBehaviour
   public float ExistanceLength = 60f;
   // If isCollected is true there is no instance of the crystal at any time.
   public bool IsCollected = false;
-  private Vector3 _initialPos;
+  protected Vector3 _initialPos;
 
 
   // ------------ UNITY METHODS ------------
