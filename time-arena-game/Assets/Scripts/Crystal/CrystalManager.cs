@@ -68,7 +68,7 @@ public class CrystalManager : MonoBehaviour
     public IEnumerator Respawn(int id){
       float spawnDelay = 5.0f;
       TimeLord t = _game.GetTimeLord();
-      float newExistance = Random.Range(0.0f, Mathf.Max(t.GetCurrentFrame()/Constants.FrameRate, 10));
+      float newExistance = Random.Range( (t.GetCurrentFrame()/Constants.FrameRate) -5f, Mathf.Max(t.GetCurrentFrame()/Constants.FrameRate, 10)+5f);
       float existanceLength = Crystals[id].gameObject.GetComponent<CrystalBehaviour>().ExistanceLength;
       Vector2 newExistanceRange = new Vector2(newExistance, newExistance + existanceLength );
 

@@ -322,20 +322,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6664611707448390559, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
   m_PrefabInstance: {fileID: 5524133132988244247}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &4876298353249998031
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1212837026246955656}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.13, z: 0}
 --- !u!136 &1162363254103583967
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -380,7 +366,7 @@ MonoBehaviour:
   _UI: {fileID: 4734497447908948091}
   _me: {fileID: 1212837026246955656}
   _view: {fileID: 2196806138278595886}
-  _mesh: {fileID: 8781702766527842685}
+  _mesh: {fileID: 7603856029307272712}
   Team: 1
   ID: 0
   Score: 0
@@ -405,6 +391,20 @@ MonoBehaviour:
   _animation: {fileID: 4883342683541739030}
   _view: {fileID: 2196806138278595886}
   _player: {fileID: 2997013567281862415}
+--- !u!136 &4876298353249998031
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212837026246955656}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.13, z: 0}
 --- !u!1001 &7994596376234740207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -518,9 +518,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4564225565430711977, guid: b9718f05439d440bc83a26414218e309, type: 3}
   m_PrefabInstance: {fileID: 7994596376234740207}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8781702766527842685 stripped
+--- !u!1 &7603856029307272712 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1669818617676284050, guid: b9718f05439d440bc83a26414218e309, type: 3}
+  m_CorrespondingSourceObject: {fileID: 537284919031412711, guid: b9718f05439d440bc83a26414218e309, type: 3}
   m_PrefabInstance: {fileID: 7994596376234740207}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &5504838078970959486 stripped

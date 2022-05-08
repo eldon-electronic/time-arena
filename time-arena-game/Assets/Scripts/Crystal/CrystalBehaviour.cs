@@ -22,6 +22,7 @@ public class CrystalBehaviour : MonoBehaviour
   public float ExistanceLength = 60f;
   // If isCollected is true there is no instance of the crystal at any time.
   public bool IsCollected = false;
+  private Vector3 _startPos;
 
 
   // ------------ UNITY METHODS ------------
@@ -31,7 +32,7 @@ public class CrystalBehaviour : MonoBehaviour
     InitialWave = Random.Range(5f, 10f);
     _sceneController = FindObjectOfType<SceneController>();
     _crystalManager = _sceneController.gameObject.GetComponent<CrystalManager>();
-
+    _startPos = gameObject.transform.position;
     // On instantiation, add self to crystal list in cm.
     // Give self id according to position in list (syncing doesnt matter, only uniqueness and size).
     ID = _crystalManager.Crystals.Count;
@@ -64,6 +65,7 @@ public class CrystalBehaviour : MonoBehaviour
     float size = Min(closestBorderOFExistance, T);
     if (size > animLength) setScale(1.0f);
     else setScale(size/animLength);
+    gameObject.transform.position = _startPos;
   }
 
   private void setScale(float a) { transform.localScale = new Vector3(a, a, a); }
