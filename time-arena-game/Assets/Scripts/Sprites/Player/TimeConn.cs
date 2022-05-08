@@ -282,6 +282,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		{
 			_disController?.TriggerDissolve(_jumpDirection, true);
 			_particles.StartParticles(_jumpDirection);
+			_particles.DropCrystal();
 		}
 	}
 
