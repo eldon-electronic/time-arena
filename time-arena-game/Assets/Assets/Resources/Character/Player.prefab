@@ -682,6 +682,8 @@ MonoBehaviour:
   _statListItem: {fileID: 9082936146588700814, guid: 8fd04b1a799384cb6869182f918231a3, type: 3}
   _winText: {fileID: 3501637196965459802}
   _winUI: {fileID: 2528454688522920843}
+  _soundSource: {fileID: 7159444100501031217}
+  _winClip: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
 --- !u!114 &4763105275205045714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1747,6 +1749,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _cameraHolder: {fileID: 9143124176289285404}
+  _audioSource: {fileID: 7159444100501031217}
+  _jumpPadSFX: {fileID: 8300000, guid: 35fbad8cdde724f11ba6481f1e64af71, type: 3}
 --- !u!114 &3056830588228478480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5085,7 +5089,7 @@ GameObject:
   - component: {fileID: 8381845334130641741}
   - component: {fileID: 7159444100501031217}
   m_Layer: 0
-  m_Name: ButtonSFX
+  m_Name: SFXSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

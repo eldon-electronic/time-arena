@@ -136,7 +136,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 236417212498031294, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1025156566087962704, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: _player
@@ -162,6 +162,10 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 2997013567281862415}
+    - target: {fileID: 1460313611335505505, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1683569129614112236, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -184,7 +188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3013362963164129466, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3056830588228478480, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
       propertyPath: _player
@@ -322,20 +326,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6664611707448390559, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
   m_PrefabInstance: {fileID: 5524133132988244247}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &4876298353249998031
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1212837026246955656}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.13, z: 0}
 --- !u!136 &1162363254103583967
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -389,7 +379,7 @@ MonoBehaviour:
   _hudScore: {fileID: 3956597954060097329}
   _timeConn: {fileID: 7405504286547953415}
   _soundSource: {fileID: 8390359683527428989}
-  _collectionClip: {fileID: 8300000, guid: 22957b498bd8a42f1a9350602d6d2be4, type: 3}
+  _collectionClip: {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f, type: 3}
 --- !u!114 &4429164574998448197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +395,20 @@ MonoBehaviour:
   _animation: {fileID: 4883342683541739030}
   _view: {fileID: 2196806138278595886}
   _player: {fileID: 2997013567281862415}
+--- !u!136 &4876298353249998031
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212837026246955656}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.13, z: 0}
 --- !u!1001 &7994596376234740207
 PrefabInstance:
   m_ObjectHideFlags: 0
