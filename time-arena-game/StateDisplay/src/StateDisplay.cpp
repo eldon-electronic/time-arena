@@ -81,6 +81,7 @@ void drawStateLog(DrawingWindow &window, ifstream &stateLog, int totalFrames, un
         parse(line, "-", tailIDs);
 
         if (tailIDs.size() > 1) {
+            cout << tailIDs[0] << endl;
             x = stoi(tailIDs[0]);
             for (int i=1; i < tailIDs.size(); i++) {
                 tailID = tailIDs[i];
@@ -110,6 +111,7 @@ void drawTimeLog(DrawingWindow &window, ifstream &timeLog, int totalFrames, unor
         parse(line, ",", objects);
         for (auto object: objects) {
             parse(object, "-", objectData);
+            cout << objectData[2] << endl;
             x = stoi(objectData[2]);
             if (objectData[0] == "p") {
                 window.setPixelColour(x, y, white);
@@ -129,6 +131,7 @@ void drawTimeLog(DrawingWindow &window, ifstream &timeLog, int totalFrames, unor
 int createWindow(DrawingWindow &window, ifstream &timeLog) {
     string firstLine;
     getline(timeLog, firstLine);
+    cout << firstLine << endl;
     int totalFrames = stoi(firstLine);
     window = DrawingWindow(totalFrames, totalFrames + 50, false);
     return totalFrames;

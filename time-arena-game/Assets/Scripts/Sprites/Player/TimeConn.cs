@@ -33,10 +33,8 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	private bool _isJumping;
 	private Constants.JumpDirection _jumpDirection;
 	private bool _setJumpState;
-	private float _forwardsJumpCooldown;
-	private float _backJumpCooldown;
+	private float _cooldown;
 	private bool _timeTravelEnabled;
-	private int _syncTimer;
 	private bool _keyLock;
 	private int _forcedDestination;
 
@@ -48,11 +46,9 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_isJumping = false;
 		_jumpDirection = Constants.JumpDirection.Static;
 		_setJumpState = false;
-		_forwardsJumpCooldown = 15f;
-		_backJumpCooldown = 15f;
+		ResetCooldowns();
 		_timeTravelEnabled = true;
 		_keyLock = false;
-		_syncTimer = Constants.SyncFrames;
 	}
 
 	void OnEnable()
@@ -93,13 +89,10 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 				_keyLock = false;
 				TimeJump(_jumpDirection, false);
 			}
-
-			// If master client, synchronise everyone else every ten frames.
-			if (PhotonNetwork.IsMasterClient && _syncTimer <= 0) Synchronise();
+			if (PhotonNetwork.IsMasterClient) Synchronise();
 		}
 
-		if (_syncTimer > 0) UpdateTimeTravel();
-		_syncTimer--;
+		UpdateTimeTravel();
 	}
 
 
@@ -110,8 +103,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_sceneController = game;
 		SetTimeLord();
 		_timeTravelEnabled = false;
-		_forwardsJumpCooldown = 15;
-		_backJumpCooldown = 15;
+		ResetCooldowns();
 	}
 
 	private void OnGameStarted()
@@ -168,11 +160,11 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	{
 		if (direction == Constants.JumpDirection.Backward)
 		{
-			return _backJumpCooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Backward);
+			return _cooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Backward);
 		}
 		else if (direction == Constants.JumpDirection.Forward)
 		{
-			return _forwardsJumpCooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Forward);
+			return _cooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Forward);
 		}
 		else
 		{
@@ -184,34 +176,31 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	private void TimeJump(Constants.JumpDirection direction, bool jumpOut)
 	{
 		if (!_view.IsMine) throw new InvalidOperationException("This function may not be called on an RPC-controlled Player.");
+		if (!_timeTravelEnabled) throw new InvalidOperationException("This function requires time travel to be enabled");
 
-		if (_timeTravelEnabled)
+		if (jumpOut)
 		{
-			if (jumpOut)
+			if (CanTimeTravel(direction))
 			{
-				if (CanTimeTravel(direction))
-				{
-					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
-					_tailManager.EnableParticles(false);
-					_ppController?.TriggerPP(direction, jumpOut);
-					_sandController.SetDirection(direction);
-				}
-			}
-			else if (_isJumping)
-			{
-				int frame = _timeLord.GetNearestReality(_view.ViewID);
-				_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
-				_tailManager.EnableParticles(true);
+				_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
+				_tailManager.EnableParticles(false);
 				_ppController?.TriggerPP(direction, jumpOut);
-				_sandController.SetDirection(Constants.JumpDirection.Static);
+				_sandController.SetDirection(direction);
 			}
+		}
+		else if (_isJumping)
+		{
+			int frame = _timeLord.GetNearestReality(_view.ViewID);
+			_view.RPC("RPC_jumpIn", RpcTarget.All, _view.ViewID, frame);
+			_tailManager.EnableParticles(true);
+			_ppController?.TriggerPP(direction, jumpOut);
+			_sandController.SetDirection(Constants.JumpDirection.Static);
 		}
 	}
 
 	private void UpdateCooldowns()
 	{
-		_forwardsJumpCooldown = (_forwardsJumpCooldown > 0) ? (_forwardsJumpCooldown - Time.deltaTime) : 0;
-		_backJumpCooldown = (_backJumpCooldown > 0) ? (_backJumpCooldown - Time.deltaTime) : 0;
+		_cooldown = (_cooldown > 0) ? (_cooldown - Time.deltaTime) : 0;
 	}
 
 	private void KeyControl()
@@ -274,8 +263,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_jumpDirection = direction;
 		_setJumpState = true;
 		_timeLord.LeaveReality(_view.ViewID);
-		_forwardsJumpCooldown = 15;
-		_backJumpCooldown = 15;
+		ResetCooldowns();
 
 		if (_view.IsMine) _sceneController.HideAllPlayers();
 		else if (!_view.IsMine && gameObject.layer == Constants.LayerPlayer)
@@ -316,13 +304,12 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 			realities.Add(item.Key, new Reality(item.Value));
 		}
 		_timeLord.SetRealities(realities);
-		_syncTimer = Constants.SyncFrames;
 	}
 
 
 	// ------------ PUBLIC METHODS ------------
 
-	public (float forward, float back) GetCooldowns() { return (_forwardsJumpCooldown, _backJumpCooldown); }
+	public (float forward, float back) GetCooldowns() { return (_cooldown, _cooldown); }
 
 	public (bool forward, bool back) GetCanJump()
 	{
@@ -365,16 +352,11 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		TimeJump(direction, true);
 	}
 
-	public void ResetCooldowns()
-	{
-		_backJumpCooldown = 15f;
-		_forwardsJumpCooldown = 15f;
-	}
+	public void ResetCooldowns() { _cooldown = 15f; }
 
 	public Hashtable GetDebugValues()
 	{
 		Hashtable values = new Hashtable();
-		values.Add("Sync timer", _syncTimer);
 		return values;
 	}
 }
