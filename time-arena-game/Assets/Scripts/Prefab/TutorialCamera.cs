@@ -15,7 +15,7 @@ public class TutorialCamera : MonoBehaviour
     public static event Action showBackArrow;
     public static event Action showForwardArrow;
     public static event Action showTimeline;
-
+    public static event Action showScore;    
     public static event Action goodLuck;
     public static event Action endTutorial;
 
@@ -29,6 +29,7 @@ public class TutorialCamera : MonoBehaviour
     public void ShowBackArrow() { showBackArrow?.Invoke(); }
     public void ShowForwardArrow() { showForwardArrow?.Invoke(); }
     public void ShowTimeline() { showTimeline?.Invoke(); }
+    public void ShowScore() { showScore?.Invoke(); }
     public void GoodLuck() { goodLuck?.Invoke(); }
     public void EndTutorial()
     {

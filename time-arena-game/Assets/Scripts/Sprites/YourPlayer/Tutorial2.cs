@@ -21,6 +21,7 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.showBackArrow += OnShowBackArrow;
         TutorialCamera.showForwardArrow += OnShowForwardArrow;
         TutorialCamera.showTimeline += OnShowTimeline;
+        TutorialCamera.showScore+= OnShowScore;
         TutorialCamera.goodLuck += OnGoodLuck;
         TutorialCamera.endTutorial += OnEndTutorial;
     }
@@ -37,6 +38,7 @@ public class Tutorial2: MonoBehaviour
         TutorialCamera.showBackArrow -= OnShowBackArrow;
         TutorialCamera.showForwardArrow -= OnShowForwardArrow;
         TutorialCamera.showTimeline -= OnShowTimeline;
+        TutorialCamera.showScore -= OnShowScore;
         TutorialCamera.goodLuck -= OnGoodLuck;
         TutorialCamera.endTutorial -= OnEndTutorial;
     }
@@ -125,6 +127,20 @@ public class Tutorial2: MonoBehaviour
         _tutorialHud.SetVisibilityArrow("timebar",true);
         _tutorialHud.SetVisibilityArrow("forwardJump",false);
         _tutorialHud.SetMessage("This is the time line which shows where you are at in time\nYou're icon is the biggest one.");
+    }
+    private void OnShowScore()
+    {
+        _tutorialHud.SetVisibilityArrow("score",true);
+        _tutorialHud.SetVisibilityArrow("timebar",false);
+        if(_player.Team == Constants.Team.Guardian)
+        {
+            _tutorialHud.SetMessage("This score shows the amount of the crystals Miner's collected.");
+        }
+        if(_player.Team == Constants.Team.Miner)
+        {
+            _tutorialHud.SetMessage("This score shows the amount of crystals you have collected.");
+        }
+        
     }
 
     private void OnGoodLuck()
