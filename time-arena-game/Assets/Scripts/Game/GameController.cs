@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -65,7 +64,6 @@ public class GameController : SceneController
 	private Vector3 GetSpawnpoint(Transform[] spawnpoints) 
 	{
 		int index = UnityEngine.Random.Range(0, spawnpoints.Length);
-		Debug.Log($"Setting spawnpoint: {spawnpoints[index].position}");
 		return spawnpoints[index].position;
 	}
 
