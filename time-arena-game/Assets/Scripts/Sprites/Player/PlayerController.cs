@@ -18,13 +18,15 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	public Constants.Team Team;
 	public int ID;
 	public int Score;
-
+	public string Nickname;
+	
 
 	// ------------ UNITY METHODS ------------
 
 	void Awake()
 	{
 		ID = _view.ViewID;
+		Nickname = _view.Controller.NickName;
 		SetActive();
         SetTeam();
 	}
