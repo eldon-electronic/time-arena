@@ -133,6 +133,11 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 		return debugValues;
 	}
 
+	public void Synchronise(Dictionary<int, int[]> data, int frame)
+	{
+		_view.RPC("RPC_synchronise2", RpcTarget.All, data, frame);
+	}
+
 
 	// ------------ RPC METHODS ------------
 

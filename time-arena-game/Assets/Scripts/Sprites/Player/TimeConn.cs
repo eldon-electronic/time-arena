@@ -242,7 +242,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 			data.Add(reality.Key, reality.Value.GetData());
 		}
 		int frame = _timeLord.GetCurrentFrame();
-		_view.RPC("RPC_synchronise2", RpcTarget.All, data, frame);
+		_sceneController.Synchronise(data, frame);
 	}
 
 
@@ -295,15 +295,18 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	[PunRPC]
 	void RPC_synchronise2(Dictionary<int, int[]> data, int currentFrame)
 	{
-		if (_timeLord == null) return;
-		_timeLord.SetCurrentFrame(currentFrame);
-		Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
-		foreach (var item in data)
+		if (_view.IsMine)
 		{
-			realities.Add(item.Key, new Reality(item.Value));
+			if (_timeLord == null) return;
+			_timeLord.SetCurrentFrame(currentFrame);
+			Dictionary<int, Reality> realities = new Dictionary<int, Reality>();
+			foreach (var item in data)
+			{
+				realities.Add(item.Key, new Reality(item.Value));
+			}
+			_timeLord.SetRealities(realities);
+			_tailManager.UpdateTails();
 		}
-		_timeLord.SetRealities(realities);
-		_tailManager.UpdateTails();
 		StoreState();
 	}
 

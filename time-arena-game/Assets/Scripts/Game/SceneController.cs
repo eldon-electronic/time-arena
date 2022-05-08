@@ -98,4 +98,16 @@ public abstract class SceneController: MonoBehaviour
 		} return icons;
 	}
 
+	public void Synchronise(Dictionary<int, int[]> data, int frame)
+	{
+		foreach (var guardian in _guardians)
+		{
+			guardian.Value.Synchronise(data, frame);
+		}
+
+		foreach (var miner in _miners)
+		{
+			miner.Value.Synchronise(data, frame);
+		}
+	}
 }

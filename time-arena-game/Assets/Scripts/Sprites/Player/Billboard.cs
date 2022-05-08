@@ -29,7 +29,7 @@ public class Billboard : MonoBehaviour
             catch (NullReferenceException e)
             {
                 _waitCount++;
-                if (_waitCount % 100 == 0) Debug.LogError($"Waiting for main camera exceeded {_waitCount} frames.");
+                if (_waitCount % 100 == 0) Debug.Log($"Waiting for main camera exceeded {_waitCount} frames.");
             }
         }
     }
