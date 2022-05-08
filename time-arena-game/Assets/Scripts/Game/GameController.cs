@@ -41,10 +41,12 @@ public class GameController : SceneController
 	}
 
 	public override void Register(PlayerMinerController pmc) {
+		base.Register(pmc);
 		pmc.SetSpawnpoint(GetSpawnpoint(_minerSpawnpoints));
 	}
 
 	public override void Register(PlayerGuardianController pgc) {
+		base.Register(pgc);
 		pgc.SetSpawnpoint(GetSpawnpoint(_guardianSpawnpoints));
 	}
 
