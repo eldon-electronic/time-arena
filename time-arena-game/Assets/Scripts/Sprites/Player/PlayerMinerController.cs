@@ -37,10 +37,6 @@ public class PlayerMinerController : PlayerController
 		_hudScore.SetYourScore(Score);
 	}
 
-	public void PlayCollectSFX() {
-
-	}
-
 	[PunRPC]
 	public void RPC_getGrabbed()
 	{
