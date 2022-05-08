@@ -7,6 +7,7 @@ public class Tutorial2: MonoBehaviour
     [SerializeField] private PlayerController _player;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private HudKeyPanel _hudKeyPanel;
+    [SerializeField] private GameObject _device;
 
     void OnEnable()
     {
