@@ -89,10 +89,10 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 				_keyLock = false;
 				TimeJump(_jumpDirection, false);
 			}
-			if (PhotonNetwork.IsMasterClient) Synchronise();
+			if (PhotonNetwork.IsMasterClient) Synchronise2();
 		}
 
-		UpdateTimeTravel();
+		// UpdateTimeTravel();
 	}
 
 
@@ -253,6 +253,12 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_view.RPC("RPC_synchronise", RpcTarget.All, data, frame);
 	}
 
+	private void Synchronise2()
+	{
+		_timeLord.Tick();
+		_view.RPC("RPC_synchronise2", RpcTarget.All);
+	}
+
 
 	// ------------ RPC FUNCTIONS ------------
 
@@ -307,6 +313,14 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_timeLord.SetRealities(realities);
 	}
 
+	[PunRPC]
+	void RPC_synchronise2()
+	{
+		if (_timeLord == null) return;
+		_timeLord.Tick();
+		UpdateTimeTravel();
+	}
+
 
 	// ------------ PUBLIC METHODS ------------
 
@@ -327,6 +341,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	public void ForceJump()
 	{
 		if (!_view.IsMine) throw new InvalidOperationException("This function may not be called on an RPC-controlled Player.");
+		if (!_timeTravelEnabled) throw new InvalidOperationException("This function requires time travel to be enabled.");
 
 		// Choose the destination frame according to whether there's more time in the past or future.
 		int yourFrame = _timeLord.GetYourPerceivedFrame();

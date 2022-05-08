@@ -72,7 +72,7 @@ public class GameController : SceneController
 		else
 		{
 			// Increment global frame and individual player frames.
-			if (!_gameEnded) _timeLord.Tick();
+			// if (!_gameEnded) _timeLord.Tick();
 			CheckWon();
 		}
 	}

@@ -44,7 +44,7 @@ public class PreGameController : SceneController
             }
             countDown?.Invoke(_secondsTillGame);
         }
-        _timeLord.Tick();
+        // _timeLord.Tick();
     }
 
     void OnDisable()
