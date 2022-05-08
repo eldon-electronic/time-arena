@@ -30,6 +30,7 @@ public class SpawnPlayers : MonoBehaviour
     private void RPC_setChannel(int channelID)
     {
         Vector3 playerSpawnPoint = _channels.GetChild(channelID).Find("PlayerSpawnPoint").position;
+        Quaternion playerRotation = _channels.GetChild(channelID).Find("PlayerSpawnPoint").rotation;
         Vector3 objectiveSpawnPoint = _channels.GetChild(channelID).Find("ObjectiveSpawnPoint").position;
         string playerPrefab;
         string objectivePrefab;
@@ -46,7 +47,7 @@ public class SpawnPlayers : MonoBehaviour
         }
 
         object[] data = new object[] { channelID };
-        PhotonNetwork.Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity, 0, data);
+        PhotonNetwork.Instantiate(playerPrefab, playerSpawnPoint, playerRotation, 0, data);
         PhotonNetwork.Instantiate(objectivePrefab, objectiveSpawnPoint, Quaternion.identity);
     }
 }
