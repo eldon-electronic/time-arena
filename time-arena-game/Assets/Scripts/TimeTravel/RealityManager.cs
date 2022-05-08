@@ -11,6 +11,7 @@ public class Reality
     public List<int> WriteFrames;
     public int LastTailID;
     public int Countdown;
+    public Constants.JumpDirection JumpDirection;
 
     public Reality(int playerID)
     {
@@ -20,6 +21,7 @@ public class Reality
         // Multiply playerID by 100 to shift it to the left, allowing 100 possible tails.
         LastTailID = playerID * 100;
         Countdown = -1;
+        JumpDirection = Constants.JumpDirection.Static;
     }
 
     public Reality(int[] data)
@@ -30,11 +32,28 @@ public class Reality
         else WriteFrames = new List<int>() {data[1], data[2]};
         LastTailID = data[3];
         Countdown = data[4];
+        switch (data[5])
+        {
+            case 0: JumpDirection = Constants.JumpDirection.Static; break;
+            case 1: JumpDirection = Constants.JumpDirection.Forward; break;
+            case 2: JumpDirection = Constants.JumpDirection.Backward; break;
+        }
     }
 
-    public void Increment()
+    public void Tick(int currentFrame)
     {
-        PerceivedFrame++;
+        switch (JumpDirection)
+        {
+            case Constants.JumpDirection.Static: PerceivedFrame++; break;
+            case Constants.JumpDirection.Forward:
+                PerceivedFrame += Constants.TimeTravelVelocity;
+                if (PerceivedFrame > currentFrame) PerceivedFrame = currentFrame;
+                break;
+            case Constants.JumpDirection.Backward:
+                PerceivedFrame -= Constants.TimeTravelVelocity;
+                if (PerceivedFrame < 0) PerceivedFrame = 0;
+                break;
+        }
         for (int i=0; i < WriteFrames.Count; i++)
         {
             WriteFrames[i]++;
@@ -48,7 +67,14 @@ public class Reality
         int wf1 = -1;
         if (WriteFrames.Count >= 1) wf0 = WriteFrames[0];
         if (WriteFrames.Count == 2) wf1 = WriteFrames[1];
-        return new int[5] {PerceivedFrame, wf0, wf1, LastTailID, Countdown};
+        int jd = 0;
+        switch (JumpDirection)
+        {
+            case Constants.JumpDirection.Static: jd = 0; break;
+            case Constants.JumpDirection.Forward: jd = 1; break;
+            case Constants.JumpDirection.Backward: jd = 2; break;
+        }
+        return new int[6] {PerceivedFrame, wf0, wf1, LastTailID, Countdown, jd};
     }
 }
 
@@ -74,11 +100,11 @@ public class RealityManager
 
     // Increment the frame values of every player.
     // Remove a reality's writer if its countdown reaches 0.
-    public void Tick()
+    public void Tick(int currentFrame)
     {
         foreach (var reality in _realities)
         {
-            reality.Value.Increment();
+            reality.Value.Tick(currentFrame);
             if (reality.Value.Countdown == 0)
             {
                 reality.Value.WriteFrames.RemoveAt(0);
@@ -103,6 +129,11 @@ public class RealityManager
             frameData.Add((reality.Key, reality.Value.PerceivedFrame));
         }
         return frameData;
+    }
+
+    public void SetJumpDirection(int playerID, Constants.JumpDirection direction)
+    {
+        _realities[playerID].JumpDirection = direction;
     }
 
     // Add the given offset to the given player's perceived frame.

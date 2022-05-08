@@ -58,7 +58,7 @@ public class TimeLord: Debuggable
 		if (!TimeEnded())
 		{
 			_currentFrame++;
-			_realities.Tick();
+			_realities.Tick(_currentFrame);
 		}
     }
 
@@ -121,8 +121,9 @@ public class TimeLord: Debuggable
     // Makes the given player's perceived time jump in the given direction.
 	public void TimeTravel(int playerID, Constants.JumpDirection jd)
 	{
-		int offset = (jd == Constants.JumpDirection.Forward) ? Constants.TimeTravelVelocity : - Constants.TimeTravelVelocity;
-		_realities.OffsetPerceivedFrame(playerID, offset);
+		// int offset = (jd == Constants.JumpDirection.Forward) ? Constants.TimeTravelVelocity : - Constants.TimeTravelVelocity;
+		// _realities.OffsetPerceivedFrame(playerID, offset);
+		_realities.SetJumpDirection(playerID, jd);
 	}
 
     // Stops recording in your previous reality.

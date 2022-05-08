@@ -271,34 +271,34 @@ public class TestRealityManager: Tester
         Assert.AreEqual(100101, tailID);
     }
 
-    [Test]
-    public void TestTick()
-    {
-        RealityManager manager = new RealityManager();
-        manager.AddHead(1001);
-        manager.AddHead(1002);
-        manager.Tick();
+    // [Test]
+    // public void TestTick()
+    // {
+    //     RealityManager manager = new RealityManager();
+    //     manager.AddHead(1001);
+    //     manager.AddHead(1002);
+    //     manager.Tick();
 
-        // Perceived frames are incremented.
-        Dictionary<int, Reality> heads = manager.RevealHeads(this);
-        Assert.AreEqual(1, heads[1001].PerceivedFrame);
-        Assert.AreEqual(1, heads[1002].PerceivedFrame);
+    //     // Perceived frames are incremented.
+    //     Dictionary<int, Reality> heads = manager.RevealHeads(this);
+    //     Assert.AreEqual(1, heads[1001].PerceivedFrame);
+    //     Assert.AreEqual(1, heads[1002].PerceivedFrame);
 
-        // Countdown reaches 0 => first writer should be removed and the last tail ID should be incremented.
-        manager.AddWriter(1001, 50);
-        manager.AddWriter(1001, 100);
-        manager.RemoveWriter(1001);
+    //     // Countdown reaches 0 => first writer should be removed and the last tail ID should be incremented.
+    //     manager.AddWriter(1001, 50);
+    //     manager.AddWriter(1001, 100);
+    //     manager.RemoveWriter(1001);
 
-        for (int i=0; i < Constants.AnimationFrames; i++)
-        {
-            manager.Tick();
-        }
+    //     for (int i=0; i < Constants.AnimationFrames; i++)
+    //     {
+    //         manager.Tick();
+    //     }
 
-        heads = manager.RevealHeads(this);
-        Assert.AreEqual(1 + Constants.AnimationFrames, heads[1001].PerceivedFrame);
-        Assert.AreEqual(1 + Constants.AnimationFrames, heads[1002].PerceivedFrame);
-        Assert.AreEqual(1, heads[1001].WriteFrames.Count);
-        Assert.AreEqual(100 + Constants.AnimationFrames, heads[1001].WriteFrames[0]);
-        Assert.AreEqual(100101, heads[1001].LastTailID);
-    }
+    //     heads = manager.RevealHeads(this);
+    //     Assert.AreEqual(1 + Constants.AnimationFrames, heads[1001].PerceivedFrame);
+    //     Assert.AreEqual(1 + Constants.AnimationFrames, heads[1002].PerceivedFrame);
+    //     Assert.AreEqual(1, heads[1001].WriteFrames.Count);
+    //     Assert.AreEqual(100 + Constants.AnimationFrames, heads[1001].WriteFrames[0]);
+    //     Assert.AreEqual(100101, heads[1001].LastTailID);
+    // }
 }
