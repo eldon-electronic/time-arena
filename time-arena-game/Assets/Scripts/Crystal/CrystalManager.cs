@@ -6,14 +6,14 @@ using Photon.Pun;
 public class CrystalManager : MonoBehaviour
 {
 
-  //references to gameobjects
+  // References to GameObject.
   [SerializeField] private GameObject _spawnHolder;
   [SerializeField] private GameObject _crystalPrefab;
   [SerializeField] private GameController _game;
 
-  //spawnPoints will have a location of every single crystal
-  //order is shared with crystals list so can be iterated over simultaneously
-  //spawnpoints necessary for crystal instantiation - add more by adding spawn points in editor
+  // spawnPoints will have a location of every single crystal.
+  // Order is shared with crystals list so can be iterated over simultaneously.
+  // Spawnpoints necessary for crystal instantiation - add more by adding spawn points in editor.
   private Transform[] _spawnPoints;
   public List<CrystalBehaviour> Crystals = new List<CrystalBehaviour>();
   private bool _spawned = false;
@@ -21,7 +21,7 @@ public class CrystalManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      //find all spawnpoints in gamescene
+      // Find all spawnpoints in GameScene.
       _spawnPoints = new Transform[_spawnHolder.transform.childCount];
       int i = 0;
       foreach(Transform child in _spawnHolder.transform){
@@ -29,7 +29,7 @@ public class CrystalManager : MonoBehaviour
       }
 
       if(PhotonNetwork.IsMasterClient){
-        //instantiate crystals (they will populate the crystals list themselves)
+        // Instantiate crystals (they will populate the crystals list themselves)
         foreach(Transform spawnPoint in _spawnPoints){
           PhotonNetwork.Instantiate(_crystalPrefab.name, spawnPoint.position, Quaternion.identity);
         }
@@ -39,8 +39,10 @@ public class CrystalManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      if(PhotonNetwork.IsMasterClient && !_spawned){
-        foreach(CrystalBehaviour crystal in Crystals){
+      if (PhotonNetwork.IsMasterClient && !_spawned) 
+      {
+        foreach(CrystalBehaviour crystal in Crystals)
+        {
           StartCoroutine(Respawn(crystal.ID));
         }
       }
