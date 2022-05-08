@@ -14,7 +14,6 @@ public class HudKeyPanel : MonoBehaviour
     [SerializeField] private GameObject _showText;
     [SerializeField] private PlayerController _player;
     [SerializeField] private PhotonView _view;
-    [SerializeField] private Sprite _oButtonSprite;
     private bool _active;
    
 
