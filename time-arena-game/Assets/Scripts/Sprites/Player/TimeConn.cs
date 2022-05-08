@@ -186,7 +186,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		{
 			if (CanTimeTravel(direction))
 			{
-				_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
+				_view.RPC("RPC_jumpOut", RpcTarget.All, direction, _keyLock);
 				_tailManager.EnableParticles(false);
 				_ppController?.TriggerPP(direction, jumpOut);
 				_sandController.SetDirection(direction);
@@ -249,7 +249,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	// ------------ RPC FUNCTIONS ------------
 
 	[PunRPC]
-	void RPC_jumpOut(Constants.JumpDirection direction)
+	void RPC_jumpOut(Constants.JumpDirection direction, bool grabbed)
 	{
 		Debug.Log("RPC Jump Out called");
 
@@ -265,7 +265,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		{
 			_disController?.TriggerDissolve(_jumpDirection, true);
 			_particles.StartParticles(_jumpDirection);
-			if (_keyLock) _particles.DropCrystal();
+			if (grabbed) _particles.DropCrystal();
 		}
 	}
 
@@ -349,6 +349,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 
 		// Lock key control to prevent you from aborting the jump.
 		_keyLock = true;
+		Debug.Log($"Key lock: {_keyLock}");
 
 		// Jump to that time.
 		TimeJump(direction, true);
