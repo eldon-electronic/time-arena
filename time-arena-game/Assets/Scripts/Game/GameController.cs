@@ -15,7 +15,6 @@ public class GameController : SceneController
 	public static event Action<float> countDown;
 	public static event Action<TimeLord> newTimeLord;
 
-
 	void Awake()
 	{
 		_miners = new Dictionary<int, PlayerMinerController>();
@@ -45,7 +44,6 @@ public class GameController : SceneController
 		if (_timeLord.TimeEnded() && !_gameEnded)
 		{
 			_gameEnded = true;
-			// TODO: Add a check to see who actually won based on whether the miners reached their target.
 			Constants.Team _winner;
 			if(GetMinerScore() > 10) _winner = Constants.Team.Miner;
 			else _winner = Constants.Team.Guardian;
