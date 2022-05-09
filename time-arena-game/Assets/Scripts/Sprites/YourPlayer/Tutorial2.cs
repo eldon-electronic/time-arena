@@ -125,7 +125,7 @@ public class Tutorial2: MonoBehaviour
     {
         _tutorialHud.SetVisibilityArrow("timebar",true);
         _tutorialHud.SetVisibilityArrow("forwardJump",false);
-        _tutorialHud.SetMessage("This is the time line which shows where you are at in time\nYou're icon is the biggest one.");
+        _tutorialHud.SetMessage("This is the time line which shows where you are at in time\nYour icon is the biggest one.");
     }
     private void OnShowScore()
     {
