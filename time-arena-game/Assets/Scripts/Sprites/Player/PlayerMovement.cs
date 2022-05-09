@@ -49,8 +49,8 @@ public class PlayerMovement : MonoBehaviour
         _isCeiling = false;
         _xRot = 0f;
         _mouseSensitivity = 100f;
-        _lockMovement = false;
-        _lockRotation = false;
+        _lockMovement = true;
+        _lockRotation = true;
         _activated = true;
         _guardianSpawnPoint = new Vector3(-37f,-9f,22f);
         _minerSpawnPoints =  new Vector3[] {
@@ -207,5 +207,11 @@ public class PlayerMovement : MonoBehaviour
             _lockMovement = true;
             _lockRotation = true;
         }
+    }
+
+    public void UnlockMovementControl()
+    {
+        _lockMovement = false;
+        _lockRotation = false;
     }
 }
