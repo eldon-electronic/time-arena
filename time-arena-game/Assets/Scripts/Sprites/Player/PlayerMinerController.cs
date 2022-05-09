@@ -7,7 +7,9 @@ public class PlayerMinerController : PlayerController
 	[SerializeField] protected HudScore _hudScore;
 	[SerializeField] private TimeConn _timeConn;
 	[SerializeField] private AudioSource _soundSource;
+	[SerializeField] private AudioSource _spatialSource;
 	[SerializeField] private AudioClip _collectionClip;
+	[SerializeField] private AudioClip _wilhelmScream;
 
 	protected override void SetActive()
 	{
@@ -29,14 +31,9 @@ public class PlayerMinerController : PlayerController
 
 	public override void IncrementScore()
 	{
-		_view.RPC("RPC_incrementScore", RpcTarget.All);
 		_view.RPC("RPC_offsetScore", RpcTarget.All, 1);
 		_soundSource.PlayOneShot(_collectionClip);
 		_hudScore.SetYourScore(Score);
-	}
-
-	public void PlayCollectSFX() {
-
 	}
 
 	[PunRPC]
@@ -44,8 +41,8 @@ public class PlayerMinerController : PlayerController
 	{
 		if (_view.IsMine)
 		{
+			_spatialSource.PlayOneShot(_wilhelmScream);
 			int offset = Score / 2;
-			Score -= offset;
 			_view.RPC("RPC_offsetScore", RpcTarget.All, -offset);
 			_hudScore.SetYourScore(Score);
 			_timeConn.ForceJump();
@@ -53,5 +50,9 @@ public class PlayerMinerController : PlayerController
 	}
 
 	[PunRPC]
-	public void RPC_offsetScore(int offset) { _sceneController.OffsetScore(offset); }
+	public void RPC_offsetScore(int offset)
+	{
+		Score += offset;
+		_sceneController.OffsetScore(offset);
+	}
 }

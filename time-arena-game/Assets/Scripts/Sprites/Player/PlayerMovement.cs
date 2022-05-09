@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private GameObject _cameraHolder;
 
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _jumpPadSFX;
+
     private float _speed;
     private float _groundCheckRadius;
     private Vector3 _velocity;
@@ -96,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnGameActive(GameController game)
     {
         _lockMovement = true;
-        MoveToSpawnPoint();
+        // MoveToSpawnPoint();
     }
 
     private void OnGameStarted() { _lockMovement = false; }
@@ -146,15 +149,17 @@ public class PlayerMovement : MonoBehaviour
         // Transform according to movement vector.
         _characterBody.Move(movement * _speed * Time.deltaTime);
 
-		// Jump control.
-		if (Input.GetButtonDown("Jump") && (_isGrounded || _isJumpPad) && !_lockMovement)
-        {
-			_velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
-		}
+        if (Input.GetButtonDown("Jump") && _isJumpPad && !_lockMovement) {
+            _velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
+            _audioSource.PlayOneShot(_jumpPadSFX);
+        } else if (Input.GetButtonDown("Jump") && _isGrounded && !_lockMovement) {
+            _velocity.y += Mathf.Sqrt(_jumpPower * 2f * _gravity);
+        }
 
         // Jump pad effect.
         if(_isJumpPad) _jumpPower = 14f;
         else _jumpPower = 3f;
+        
         // Gravity effect.
         _velocity.y -= _gravity * Time.deltaTime;
 		if (_velocity.y <= -100f) _velocity.y = -100f;
@@ -188,14 +193,16 @@ public class PlayerMovement : MonoBehaviour
 		transform.Rotate(Vector3.up * mouseX);
     }
 
-    private void MoveToSpawnPoint()
+    public void MoveToSpawnPoint()
 	{
-		if (_player.Team == Constants.Team.Miner)
-		{
-			int index = Random.Range(0, _minerSpawnPoints.Length);
-			Vector3 position = _minerSpawnPoints[index];
-			transform.position = position;
-		}
-		else transform.position = _guardianSpawnPoint;
+        Debug.Log($"Spawning player: {_player.GetSpawnpoint()}");
+        transform.position = _player.GetSpawnpoint();
+		// if (_player.Team == Constants.Team.Miner)
+		// {
+		// 	int index = Random.Range(0, _minerSpawnPoints.Length);
+		// 	Vector3 position = _minerSpawnPoints[index];
+		// 	transform.position = position;
+		// }
+		// else transform.position = _guardianSpawnPoint;
 	}
 }

@@ -21,12 +21,12 @@ public abstract class SceneController: MonoBehaviour
 		_iconAssignments = GetIconAssignments();
 	}
 
-	public void Register(PlayerMinerController pmc)
+	public virtual void Register(PlayerMinerController pmc)
 	{
 		_miners.Add(pmc.ID, pmc);
 	}
 
-	public void Register(PlayerGuardianController pgc)
+	public virtual void Register(PlayerGuardianController pgc)
 	{
 		_guardians.Add(pgc.ID, pgc);
 	}

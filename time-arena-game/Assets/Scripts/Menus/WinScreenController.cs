@@ -15,6 +15,8 @@ public class WinScreenController : MonoBehaviour
     [SerializeField] private GameObject _statListItem;
     [SerializeField] private TMP_Text _winText;
     [SerializeField] private GameObject _winUI;
+    [SerializeField] private AudioSource _soundSource;
+    [SerializeField] private AudioClip _winClip;
     private Dictionary<int, PlayerMinerController> _miners;
 	private Dictionary<int, PlayerGuardianController> _guardians;
     private SceneController _sceneController;
@@ -44,6 +46,7 @@ public class WinScreenController : MonoBehaviour
     private void OnGameEnded(Constants.Team winningTeam) {
         _winUI.SetActive(true);
         SetWinText(winningTeam);
+        _soundSource.PlayOneShot(_winClip);
         _sceneController = FindObjectOfType<SceneController>();
         _miners = _sceneController.GetMinerControllers();
         _guardians = _sceneController.GetGuardianControllers();
