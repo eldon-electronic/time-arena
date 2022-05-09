@@ -115,7 +115,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 	public Hashtable GetDebugValues()
 	{
 		Hashtable debugValues = new Hashtable();
-		debugValues.Add($"{_view.ViewID} layer", gameObject.layer);
+		debugValues.Add($"{_view.ViewID} score", Score);
 		return debugValues;
 	}
 

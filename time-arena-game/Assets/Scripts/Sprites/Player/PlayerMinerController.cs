@@ -31,7 +31,6 @@ public class PlayerMinerController : PlayerController
 
 	public override void IncrementScore()
 	{
-		_view.RPC("RPC_incrementScore", RpcTarget.All);
 		_view.RPC("RPC_offsetScore", RpcTarget.All, 1);
 		_soundSource.PlayOneShot(_collectionClip);
 		_hudScore.SetYourScore(Score);
@@ -44,7 +43,6 @@ public class PlayerMinerController : PlayerController
 		{
 			_spatialSource.PlayOneShot(_wilhelmScream);
 			int offset = Score / 2;
-			Score -= offset;
 			_view.RPC("RPC_offsetScore", RpcTarget.All, -offset);
 			_hudScore.SetYourScore(Score);
 			_timeConn.ForceJump();
@@ -52,5 +50,9 @@ public class PlayerMinerController : PlayerController
 	}
 
 	[PunRPC]
-	public void RPC_offsetScore(int offset) { _sceneController.OffsetScore(offset); }
+	public void RPC_offsetScore(int offset)
+	{
+		Score += offset;
+		_sceneController.OffsetScore(offset);
+	}
 }
