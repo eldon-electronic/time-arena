@@ -431,6 +431,41 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2394440211289715922, guid: 6e3a62fe2d9af421d89018aa8adb8404, type: 3}
   m_PrefabInstance: {fileID: 8748011849900464332}
   m_PrefabAsset: {fileID: 0}
+--- !u!135 &9034718643203291599
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2673549814798969683}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.538792
+  m_Center: {x: 0, y: 0, z: 1.8517349}
+--- !u!114 &5594172288350394457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2673549814798969683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 044820f574a1343d8a067835f6c31619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grabMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _grabMaskNPC:
+    serializedVersion: 2
+    m_Bits: 2048
+  _collider: {fileID: 9034718643203291599}
+  _player: {fileID: 2078876976235630324}
+  _animation: {fileID: 341182505100872113}
+  _timeConn: {fileID: 5983917576119500508}
 --- !u!136 &4410536820670675578
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -485,38 +520,3 @@ MonoBehaviour:
   _upperArm: {fileID: 656476792998806974}
   _lowerArm: {fileID: 6602241863666422360}
   _hand: {fileID: 2106897821502768989}
---- !u!135 &9034718643203291599
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2673549814798969683}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2.538792
-  m_Center: {x: 0, y: 0, z: 1.8517349}
---- !u!114 &5594172288350394457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2673549814798969683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044820f574a1343d8a067835f6c31619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _grabMask:
-    serializedVersion: 2
-    m_Bits: 8
-  _grabMaskNPC:
-    serializedVersion: 2
-    m_Bits: 2048
-  _collider: {fileID: 9034718643203291599}
-  _player: {fileID: 2078876976235630324}
-  _animation: {fileID: 341182505100872113}
-  _timeConn: {fileID: 5983917576119500508}
