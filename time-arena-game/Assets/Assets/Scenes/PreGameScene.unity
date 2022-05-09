@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &308374238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308374240}
+  - component: {fileID: 308374239}
+  m_Layer: 0
+  m_Name: ArrivedTrigger
+  m_TagString: CentralTutorialGround
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &308374239
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308374238}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 39.822845, y: 5.277645, z: 37.94747}
+  m_Center: {x: 0.5926933, y: 2.138823, z: -0.08774185}
+--- !u!4 &308374240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308374238}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.6000004, y: 0, z: -0.20000076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &624083440
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,6 +602,14 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1013954568278389993, guid: ba933d5991ae2574c928ac306f52c36c, type: 3}
+      propertyPath: m_Size.y
+      value: 0.99717784
+      objectReference: {fileID: 0}
+    - target: {fileID: 1013954568278389993, guid: ba933d5991ae2574c928ac306f52c36c, type: 3}
+      propertyPath: m_Center.y
+      value: -0.0014106631
+      objectReference: {fileID: 0}
     - target: {fileID: 1137709269359587004, guid: ba933d5991ae2574c928ac306f52c36c, type: 3}
       propertyPath: sceneViewId
       value: 9
@@ -601,6 +653,10 @@ PrefabInstance:
     - target: {fileID: 5881454318181209862, guid: ba933d5991ae2574c928ac306f52c36c, type: 3}
       propertyPath: sceneViewId
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247336923231118871, guid: ba933d5991ae2574c928ac306f52c36c, type: 3}
+      propertyPath: m_TagString
+      value: CentralTutorialGround
       objectReference: {fileID: 0}
     - target: {fileID: 7308685411493275268, guid: ba933d5991ae2574c928ac306f52c36c, type: 3}
       propertyPath: startFrame

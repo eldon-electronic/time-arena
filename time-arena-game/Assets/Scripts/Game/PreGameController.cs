@@ -9,6 +9,7 @@ public class PreGameController : SceneController
     [SerializeField] private Transform _channels;
     private bool _isCountingTillGameStart;
     private float _secondsTillGame;
+    private bool _canStart;
     public static event Action<float> countDown;
 
     void Awake()
@@ -31,7 +32,7 @@ public class PreGameController : SceneController
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (Input.GetKeyDown(KeyCode.Return)) StartCountingDown();
+            if (Input.GetKeyDown(KeyCode.Return) && _canStart) StartCountingDown();
             if (Input.GetKeyDown(KeyCode.Escape)) StopCountingDown();
         }
         if (_isCountingTillGameStart)
@@ -72,4 +73,6 @@ public class PreGameController : SceneController
     }
 
     public Transform GetChannels() { return _channels; }
+
+    public void SetCanStart(bool value) { _canStart = value; }
 }

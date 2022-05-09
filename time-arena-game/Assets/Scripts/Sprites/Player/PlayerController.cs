@@ -13,6 +13,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
+	[SerializeField] private HudMasterClientOptions _hudMasterClientOptions;
 	protected SceneController _sceneController;
 	protected string _userID;
 	protected Dictionary<int, string> _viewIDtoUserID;
@@ -73,6 +74,15 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 
 		// Lock players cursor to center screen.
         Cursor.lockState = CursorLockMode.Locked;
+	}
+
+	void OnTriggerEnter(Collider collider)
+	{
+		if (collider.gameObject.tag == "CentralTutorialGround")
+		{
+			((PreGameController) _sceneController).SetCanStart(true);
+			_hudMasterClientOptions.Show();
+		}
 	}
 
 
