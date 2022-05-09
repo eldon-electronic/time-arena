@@ -7,6 +7,7 @@ public class Tutorial2: MonoBehaviour
     [SerializeField] private PlayerController _player;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private HudKeyPanel _hudKeyPanel;
+    [SerializeField] private TimeConn _timeConn;
 
     void OnEnable()
     {
@@ -154,6 +155,7 @@ public class Tutorial2: MonoBehaviour
         _playerCamera.enabled = true;
         _tutorialHud.SetActive(false);
         _hudKeyPanel.SetActive(true);
+        _timeConn.UnlockTimeTravelKeys();
         Destroy(this);
     }
 }
