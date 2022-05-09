@@ -27,6 +27,9 @@ public class TimeConn : MonoBehaviour, DissolveUser
 	[SerializeField] private PPController _ppController;
 	[SerializeField] private DissolveController _disController;
 	[SerializeField] private SandController _sandController;
+	[SerializeField] private AudioSource _soundSource;
+	[SerializeField] private AudioClip _forwardSound;
+	[SerializeField] private AudioClip _backSound;
 
 	private SceneController _sceneController;
 	private TimeLord _timeLord;
@@ -193,6 +196,8 @@ public class TimeConn : MonoBehaviour, DissolveUser
 			{
 				if (CanTimeTravel(direction))
 				{
+					if (direction == Constants.JumpDirection.Forward) { _soundSource.PlayOneShot(_forwardSound); }
+					else if (direction == Constants.JumpDirection.Backward) { _soundSource.PlayOneShot(_backSound); }
 					_view.RPC("RPC_jumpOut", RpcTarget.All, direction);
 					_tailManager.EnableParticles(false);
 					_ppController?.TriggerPP(direction, jumpOut);
