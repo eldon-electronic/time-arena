@@ -184,7 +184,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 
 		if (jumpOut)
 		{
-			if (CanTimeTravel(direction))
+			if (CanTimeTravel(direction) || _keyLock)
 			{
 				_view.RPC("RPC_jumpOut", RpcTarget.All, direction, _keyLock);
 				_tailManager.EnableParticles(false);
