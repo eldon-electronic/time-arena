@@ -162,11 +162,11 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 	{
 		if (direction == Constants.JumpDirection.Backward)
 		{
-			return _cooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Backward);
+			return (_cooldown <= 0f || _keyLock) && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Backward);
 		}
 		else if (direction == Constants.JumpDirection.Forward)
 		{
-			return _cooldown <= 0f && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Forward);
+			return (_cooldown <= 0f || _keyLock) && _timeLord.CanJump(_view.ViewID, Constants.JumpDirection.Forward);
 		}
 		else
 		{
@@ -184,7 +184,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 
 		if (jumpOut)
 		{
-			if (CanTimeTravel(direction) || _keyLock)
+			if (CanTimeTravel(direction))
 			{
 				_view.RPC("RPC_jumpOut", RpcTarget.All, direction, _keyLock);
 				_tailManager.EnableParticles(false);
