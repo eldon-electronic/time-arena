@@ -78,7 +78,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 
 	void OnTriggerEnter(Collider collider)
 	{
-		if (collider.gameObject.tag == "CentralTutorialGround")
+		if (_view.IsMine && PhotonNetwork.IsMasterClient && collider.gameObject.tag == "CentralTutorialGround")
 		{
 			((PreGameController) _sceneController).SetCanStart(true);
 			_hudMasterClientOptions.Show();
