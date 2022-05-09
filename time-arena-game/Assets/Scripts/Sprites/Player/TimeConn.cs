@@ -48,7 +48,7 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		_setJumpState = false;
 		ResetCooldowns();
 		_timeTravelEnabled = true;
-		_keyLock = false;
+		_keyLock = true;
 	}
 
 	void OnEnable()
@@ -366,4 +366,6 @@ public class TimeConn : MonoBehaviour, DissolveUser, Debuggable
 		values.Add($"{_view.ViewID}'s Key Lock", _keyLock);
 		return values;
 	}
+
+	public void UnlockTimeTravelKeys() { _keyLock = false; }
 }
