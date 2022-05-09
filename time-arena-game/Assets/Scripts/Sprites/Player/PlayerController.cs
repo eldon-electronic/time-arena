@@ -14,6 +14,8 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
 	[SerializeField] private HudMasterClientOptions _hudMasterClientOptions;
+	[SerializeField] protected PlayerMovement _playerMovement;
+	private Vector3 _spawnpoint;
 	protected SceneController _sceneController;
 	protected string _userID;
 	protected Dictionary<int, string> _viewIDtoUserID;
@@ -22,7 +24,8 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 	public int ID;
 	public int Score;
 	public static event Action<PlayerController> clientEntered;
-
+	public string Nickname;
+	
 
 	// ------------ UNITY METHODS ------------
 
@@ -34,7 +37,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 	void Awake()
 	{
 		ID = _view.ViewID;
-		//SetActive();
+		Nickname = _view.Controller.NickName;
         SetTeam();
 	}
 
@@ -139,13 +142,25 @@ public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstanti
 	public Hashtable GetDebugValues()
 	{
 		Hashtable debugValues = new Hashtable();
-		debugValues.Add($"{_view.ViewID} layer", gameObject.layer);
+		debugValues.Add($"{_view.ViewID} score", Score);
 		return debugValues;
 	}
 
 	public void Synchronise(Dictionary<int, int[]> data, int frame)
 	{
 		_view.RPC("RPC_synchronise2", RpcTarget.All, data, frame);
+	}
+
+	public void SetSpawnpoint(Vector3 spawnpoint)
+	{
+		_spawnpoint = spawnpoint;
+		_playerMovement.MoveToSpawnPoint();
+
+	}
+
+	public Vector3 GetSpawnpoint()
+	{
+		return _spawnpoint;
 	}
 
 

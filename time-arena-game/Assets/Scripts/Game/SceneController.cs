@@ -38,12 +38,12 @@ public abstract class SceneController: MonoBehaviour
 		_iconAssignments = GetIconAssignments();
 	}
 
-	public void Register(PlayerMinerController pmc)
+	public virtual void Register(PlayerMinerController pmc)
 	{
 		_miners.Add(pmc.ID, pmc);
 	}
 
-	public void Register(PlayerGuardianController pgc)
+	public virtual void Register(PlayerGuardianController pgc)
 	{
 		_guardians.Add(pgc.ID, pgc);
 	}
@@ -90,6 +90,10 @@ public abstract class SceneController: MonoBehaviour
 	public TimeLord GetTimeLord() { return _timeLord;}
 
 	public int GetMinerScore() { return _minerScore; }
+
+	public Dictionary<int, PlayerMinerController> GetMinerControllers() { return _miners; }
+
+	public Dictionary<int, PlayerGuardianController> GetGuardianControllers() { return _guardians; }
 
 	protected Dictionary<int, string> GetIconAssignments() {
 		Dictionary<int, string> icons = new Dictionary<int, string>();

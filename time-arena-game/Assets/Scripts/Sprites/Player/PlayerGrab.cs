@@ -11,6 +11,8 @@ public class PlayerGrab : MonoBehaviour, Debuggable
   [SerializeField] private PlayerController _player;
   [SerializeField] private PlayerAnimationController _animation;
   [SerializeField] private TimeConn _timeConn;
+  [SerializeField] private AudioSource _soundSource;
+  [SerializeField] private AudioClip _wilhelmScream;
   private bool _grabCooldown;
 
   void Awake()
@@ -51,6 +53,7 @@ public class PlayerGrab : MonoBehaviour, Debuggable
       if (playerController != null && playerController.Team == Constants.Team.Miner)
       {
         PhotonView view = playerController.gameObject.GetComponent<PhotonView>();
+        _soundSource.PlayOneShot(_wilhelmScream);
         view.RPC("RPC_getGrabbed", RpcTarget.All);
         _player.IncrementScore();
 

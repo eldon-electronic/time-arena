@@ -1,11 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
 public class GameController : SceneController
 {
+	[SerializeField] private Transform[] _minerSpawnpoints;
+	[SerializeField] private Transform[] _guardianSpawnpoints;
 	private float _timer;
 	private bool _gameStarted;
 	private bool _gameEnded;
@@ -14,7 +15,6 @@ public class GameController : SceneController
 	public static event Action<Constants.Team> gameEnded;
 	public static event Action<float> countDown;
 	public static event Action<TimeLord> newTimeLord;
-
 
 	void Awake()
 	{
@@ -40,15 +40,33 @@ public class GameController : SceneController
 		gameActive?.Invoke(this);
 	}
 
+	public override void Register(PlayerMinerController pmc) {
+		base.Register(pmc);
+		pmc.SetSpawnpoint(GetSpawnpoint(_minerSpawnpoints));
+	}
+
+	public override void Register(PlayerGuardianController pgc) {
+		base.Register(pgc);
+		pgc.SetSpawnpoint(GetSpawnpoint(_guardianSpawnpoints));
+	}
+
 	private void CheckWon()
 	{	
 		if (_timeLord.TimeEnded() && !_gameEnded)
 		{
 			_gameEnded = true;
-			// TODO: Add a check to see who actually won based on whether the miners reached their target.
+			Constants.Team _winner;
+			if(GetMinerScore() > 10) _winner = Constants.Team.Miner;
+			else _winner = Constants.Team.Guardian;
 			Debug.Log("Game ended");
-			gameEnded?.Invoke(Constants.Team.Miner);
+			gameEnded?.Invoke(_winner);
 		}
+	}
+
+	private Vector3 GetSpawnpoint(Transform[] spawnpoints) 
+	{
+		int index = UnityEngine.Random.Range(0, spawnpoints.Length);
+		return spawnpoints[index].position;
 	}
 
 	void Update()
