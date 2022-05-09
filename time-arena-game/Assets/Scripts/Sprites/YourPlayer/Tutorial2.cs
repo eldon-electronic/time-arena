@@ -64,17 +64,17 @@ public class Tutorial2: MonoBehaviour
     {
         if (_player.Team == Constants.Team.Miner)
         {
-            _tutorialHud.SetMessage("It only appears at certain times,you should time travel to find them");
+            _tutorialHud.SetMessage("It only appears at certain times.");
         }
         else
         {
-            _tutorialHud.SetMessage("Click to catch them and steal their crystals!");
+            _tutorialHud.SetMessage("Click to catch them!");
         }
     }
 
     private void OnObstacleGrows()
     {
-        _tutorialHud.SetMessage("These crystals are obstacles you should time travel to pass them.");
+        _tutorialHud.SetMessage("These crystals are obstacles.");
     }
 
     private void OnFaceYourself()
@@ -133,11 +133,11 @@ public class Tutorial2: MonoBehaviour
         _tutorialHud.SetVisibilityArrow("timebar",false);
         if(_player.Team == Constants.Team.Guardian)
         {
-            _tutorialHud.SetMessage("This score shows the amount of the crystals Miner's collected.");
+            _tutorialHud.SetMessage("This score shows the total amount of Miners that you have grabbed.");
         }
         if(_player.Team == Constants.Team.Miner)
         {
-            _tutorialHud.SetMessage("This score shows the amount of crystals you have collected.");
+            _tutorialHud.SetMessage("This score shows the amount of crystals you are holding.");
         }
         
     }
