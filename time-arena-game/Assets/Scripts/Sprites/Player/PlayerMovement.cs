@@ -197,13 +197,6 @@ public class PlayerMovement : MonoBehaviour
 	{
         Debug.Log($"Spawning player: {_player.GetSpawnpoint()}");
         transform.position = _player.GetSpawnpoint();
-		// if (_player.Team == Constants.Team.Miner)
-		// {
-		// 	int index = Random.Range(0, _minerSpawnPoints.Length);
-		// 	Vector3 position = _minerSpawnPoints[index];
-		// 	transform.position = position;
-		// }
-		// else transform.position = _guardianSpawnPoint;
 	}
     public void MoveTutorial(bool move){
         if(move == true){
