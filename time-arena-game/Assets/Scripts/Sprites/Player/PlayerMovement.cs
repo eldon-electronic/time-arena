@@ -93,6 +93,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.tag == "FallCheck")
+        {
+            MoveToSpawnPoint();
+        }
+    }
+
 
     // ------------ ON EVENT FUNCTIONS ------------
 
