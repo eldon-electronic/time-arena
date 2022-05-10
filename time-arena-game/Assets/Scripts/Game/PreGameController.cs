@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class PreGameController : SceneController
 {
+    [SerializeField] private Transform _channels;
     private bool _isCountingTillGameStart;
     private float _secondsTillGame;
+    private bool _canStart;
     public static event Action<float> countDown;
 
     void Awake()
@@ -16,8 +18,7 @@ public class PreGameController : SceneController
         _miners = new Dictionary<int, PlayerMinerController>();
 		_guardians = new Dictionary<int, PlayerGuardianController>();
         _secondsTillGame = 5.0f;
-        // _timeLord = new ProxyTimeLord(Constants.PreGameLength * Constants.FrameRate, true);
-        _timeLord = new TimeLord(Constants.PreGameLength * Constants.FrameRate);
+        CreateTimeLord(Constants.PreGameLength);
         Debug.Log("Pregame created new TimeLord");
     }
 
@@ -31,7 +32,7 @@ public class PreGameController : SceneController
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (Input.GetKeyDown(KeyCode.Return)) StartCountingDown();
+            if (Input.GetKeyDown(KeyCode.Return) && _canStart) StartCountingDown();
             if (Input.GetKeyDown(KeyCode.Escape)) StopCountingDown();
         }
         if (_isCountingTillGameStart)
@@ -44,7 +45,7 @@ public class PreGameController : SceneController
             }
             countDown?.Invoke(_secondsTillGame);
         }
-        _timeLord.Tick();
+        // _timeLord.Tick();
     }
 
     void OnDisable()
@@ -70,4 +71,8 @@ public class PreGameController : SceneController
         _isCountingTillGameStart = false;
         _secondsTillGame = 5.0f;
     }
+
+    public Transform GetChannels() { return _channels; }
+
+    public void SetCanStart(bool value) { _canStart = value; }
 }

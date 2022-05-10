@@ -11,10 +11,22 @@ public class PlayerMinerController : PlayerController
 	[SerializeField] private AudioClip _collectionClip;
 	[SerializeField] private AudioClip _wilhelmScream;
 
-	protected override void SetActive()
+	public override void SetActive(bool _isPreGame)
 	{
-        _mesh.SetActive(!_view.IsMine);
+        _mesh.SetActive(!_view.IsMine || _isPreGame);
         _minerDevice.SetActive(true);
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+		_minerDevice.SetActive(false);
+    }
+
+    public override void Show()
+    {
+        base.Show();
+		_minerDevice.SetActive(true);
     }
 
     protected override void SetTeam()

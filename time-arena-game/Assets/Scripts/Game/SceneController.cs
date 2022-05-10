@@ -14,6 +14,23 @@ public abstract class SceneController: MonoBehaviour
 	protected Dictionary<int, string> _viewIDTranslations;
     public static event Action<int> scoreChange;
 
+	protected void CreateTimeLord(int sceneLength, bool logging=false, bool diagnostics=false)
+    {
+        if (diagnostics && PhotonNetwork.CurrentRoom.PlayerCount < 2)
+        {
+            throw new InvalidOperationException("Diagnostics is only allowed in multiplayer tests.");
+        }
+        else
+        {
+			// Beware that if running diagnostics, non-master clients must be run in the Unity Editor.
+			// If logging, it must either be single player, or a non-master client in the Unity Editor.
+            int totalFrames = sceneLength * Constants.FrameRate;
+			logging = logging && (PhotonNetwork.CurrentRoom.PlayerCount == 1 || !(PhotonNetwork.IsMasterClient));
+			diagnostics = diagnostics && !(PhotonNetwork.IsMasterClient);
+            _timeLord = new ProxyTimeLord(totalFrames, logging, diagnostics);
+        }
+    }
+
 	public void Register(PlayerController pc)
 	{
 		pc.SetSceneController(this);
@@ -85,4 +102,16 @@ public abstract class SceneController: MonoBehaviour
 		} return icons;
 	}
 
+	public void Synchronise(Dictionary<int, int[]> data, int frame)
+	{
+		foreach (var guardian in _guardians)
+		{
+			guardian.Value.Synchronise(data, frame);
+		}
+
+		foreach (var miner in _miners)
+		{
+			miner.Value.Synchronise(data, frame);
+		}
+	}
 }

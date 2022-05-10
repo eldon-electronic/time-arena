@@ -8,9 +8,9 @@ using TMPro;
 
 public class HudTutorial : MonoBehaviour
 {
-    [SerializeField] private GameObject _tutorial;
+    public GameObject Tutorial;
     [SerializeField] private GameObject _popUpText;
-    [SerializeField] private GameObject _optionsPopUpText;
+    [SerializeField] private GameObject _ui;
     [SerializeField] private GameObject[] _tutorialObjects;
     // private GameObject _crystal;
 
@@ -24,7 +24,8 @@ public class HudTutorial : MonoBehaviour
         _tutorialArrows.Add(tutorialObject.name, tutorialObject);
         }
     }
-
+   
+   
     void OnEnable()
     {
         GameController.gameActive += OnGameActive;
@@ -37,35 +38,29 @@ public class HudTutorial : MonoBehaviour
 
     private void OnGameActive(GameController game)
     {
-        Destroy(_tutorial);
+        Destroy(Tutorial);
         Destroy(this);
     }
-
-    public void SetArrowVisibility(string uiElement, bool visibility)
-    {
-        if (_tutorialArrows.ContainsKey(uiElement)) {
-            _tutorialArrows[uiElement].SetActive(visibility);
-        }
-    }
-
+    
     public void SetMessage(string message)
     {
         _popUpText.GetComponent<TextMeshProUGUI>().text = message;
     }
-
-    public void SetOptionsText(string message)
+    
+    public void SetActive(bool value)
     {
-        _optionsPopUpText.GetComponent<TextMeshProUGUI>().text = message;
+        Tutorial.SetActive(value);
     }
-
-
-    /*public void SetCrystalVisibility(bool crystalVis){
-        
-        if (SceneManager.GetActiveScene().name == "PreGameScene"){
-
-            _crystal.SetActive(crystalVis);
+     public void SetVisibilityUI(bool visibility)
+    {
+        _ui.SetActive(visibility);
+    }
+    public void SetVisibilityArrow(string uiElement,bool arrowVis)
+    {
+        if(_tutorialArrows.ContainsKey(uiElement)){
+            _tutorialArrows[uiElement].SetActive(arrowVis);
         }
-
-    }*/
+    }
+ 
  }
 

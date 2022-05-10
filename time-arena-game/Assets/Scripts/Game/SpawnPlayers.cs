@@ -1,34 +1,54 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 public class SpawnPlayers : MonoBehaviour
 {
-    public GameObject PlayerMinerPrefab;
-    public GameObject PlayerGuardianPrefab;
-	public Vector3[] SpawningPoint;
-
-    void Awake()
-    {
-        SpawningPoint = new Vector3[]
-        {
-            new Vector3(-20f, 5f, 0f),
-            new Vector3(-10f, 5f, 0f),
-            new Vector3(10f, 5f, 0f),
-            new Vector3(20f, 5f, 0f),
-            new Vector3(30f, 5f, 0f)
-        };
-    }
+    [SerializeField] private PhotonView _view;
+    [SerializeField] private Transform _channels;
+    [SerializeField] private GameObject _playerMinerPrefab;
+    [SerializeField] private GameObject _playerGuardianPrefab;
+    [SerializeField] private GameObject _collectablePrefab;
+    [SerializeField] private GameObject _npcPrefab;
 
     void Start()
     {
-        // Spawn a new player into the scene.
-        int n = (int) (SpawningPoint.Length * Random.value);
-        if (PlayerPrefs.GetString("team") == "guardian") 
+        if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.Instantiate(PlayerGuardianPrefab.name, SpawningPoint[n], Quaternion.identity);    
+            int channelID = 0;
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                _view.RPC("RPC_setChannel", player, channelID);
+                channelID++;
+            }
         }
-        else PhotonNetwork.Instantiate(PlayerMinerPrefab.name, SpawningPoint[n], Quaternion.identity);
+    }
+
+    [PunRPC]
+    private void RPC_setChannel(int channelID)
+    {
+        Vector3 playerSpawnPoint = _channels.GetChild(channelID).Find("PlayerSpawnPoint").position;
+        Quaternion playerRotation = _channels.GetChild(channelID).Find("PlayerSpawnPoint").rotation;
+        Vector3 objectiveSpawnPoint = _channels.GetChild(channelID).Find("ObjectiveSpawnPoint").position;
+        Quaternion objectiveRotation = _channels.GetChild(channelID).Find("ObjectiveSpawnPoint").rotation;
+        string playerPrefab;
+        string objectivePrefab;
+
+        if (PlayerPrefs.GetString("team") == "guardian")
+        {
+            playerPrefab = _playerGuardianPrefab.name;
+            objectivePrefab = _npcPrefab.name;
+        }
+        else
+        {
+            playerPrefab = _playerMinerPrefab.name;
+            objectivePrefab = _collectablePrefab.name;
+        }
+
+        object[] data = new object[] { channelID };
+        PhotonNetwork.Instantiate(playerPrefab, playerSpawnPoint, playerRotation, 0, data);
+        PhotonNetwork.Instantiate(objectivePrefab, objectiveSpawnPoint, objectiveRotation);
     }
 }

@@ -49,8 +49,8 @@ public class PlayerMovement : MonoBehaviour
         _isCeiling = false;
         _xRot = 0f;
         _mouseSensitivity = 100f;
-        _lockMovement = false;
-        _lockRotation = false;
+        _lockMovement = true;
+        _lockRotation = true;
         _activated = true;
         _guardianSpawnPoint = new Vector3(-37f,-9f,22f);
         _minerSpawnPoints =  new Vector3[] {
@@ -90,6 +90,14 @@ public class PlayerMovement : MonoBehaviour
         {
             UpdatePosition();
             UpdateRotation();
+        }
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.tag == "FallCheck")
+        {
+            MoveToSpawnPoint();
         }
     }
 
@@ -197,12 +205,21 @@ public class PlayerMovement : MonoBehaviour
 	{
         Debug.Log($"Spawning player: {_player.GetSpawnpoint()}");
         transform.position = _player.GetSpawnpoint();
-		// if (_player.Team == Constants.Team.Miner)
-		// {
-		// 	int index = Random.Range(0, _minerSpawnPoints.Length);
-		// 	Vector3 position = _minerSpawnPoints[index];
-		// 	transform.position = position;
-		// }
-		// else transform.position = _guardianSpawnPoint;
 	}
+    public void MoveTutorial(bool move){
+        if(move == true){
+            _lockMovement = false;
+            _lockRotation = false;
+        }
+        else{
+            _lockMovement = true;
+            _lockRotation = true;
+        }
+    }
+
+    public void UnlockMovementControl()
+    {
+        _lockMovement = false;
+        _lockRotation = false;
+    }
 }

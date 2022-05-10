@@ -14,11 +14,9 @@ public class HudMasterClientOptions : MonoBehaviour
 
     void Awake()
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            _masterClientOptions.SetActive(false);
-            Destroy(this);
-        }
+        _text.text = "Press <sprite=8> to Start";
+        _masterClientOptions.SetActive(false);
+        if (!PhotonNetwork.IsMasterClient) Destroy(this);
     }
 
     void OnEnable()
@@ -31,11 +29,6 @@ public class HudMasterClientOptions : MonoBehaviour
     {
         PreGameController.countDown -= OnCountDown;
         GameController.gameActive -= OnGameActive;
-    }
-
-    void Start()
-    {
-        _text.text = "Press <sprite=8> to Start";
     }
 
     private void OnCountDown(float secondsTillGame)
@@ -51,5 +44,10 @@ public class HudMasterClientOptions : MonoBehaviour
     private void OnGameActive(GameController game)
     {
         _masterClientOptions.SetActive(false);
+    }
+
+    public void Show()
+    {
+        _masterClientOptions.SetActive(true);
     }
 }

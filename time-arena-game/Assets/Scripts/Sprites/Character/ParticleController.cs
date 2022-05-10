@@ -8,6 +8,8 @@ public class ParticleController : MonoBehaviour
 {
     public ParticleSystem FireCircle;
 	public ParticleSystem Splash;
+    public ParticleSystem DroppingCrystals;
+
 
   	private Color _orange = new Color(1.0f, 0.46f, 0.19f, 1.0f);
   	private Color _blue = new Color(0.19f, 0.38f, 1.0f, 1.0f);
@@ -61,5 +63,8 @@ public class ParticleController : MonoBehaviour
             BlueBeam();
         }
         else OrangeBeam();
+    }
+    public void DropCrystal(){
+        DroppingCrystals.Play();
     }
 }

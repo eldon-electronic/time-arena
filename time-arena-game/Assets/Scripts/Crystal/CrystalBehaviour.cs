@@ -15,22 +15,26 @@ public class CrystalBehaviour : MonoBehaviour
   // Attributes for crystalmanager access.
   private CrystalManager _crystalManager;
   public int ID;
-  private SceneController _sceneController;
+  protected SceneController _sceneController;
+  protected TimeLord _timeLord;
 
   // Attributes defining crystal state.
   public Vector2 ExistanceRange = new Vector2(-1f, -1f);
   public float ExistanceLength = 60f;
   // If isCollected is true there is no instance of the crystal at any time.
   public bool IsCollected = false;
+  protected Vector3 _initialPos;
 
 
   // ------------ UNITY METHODS ------------
 
-  void Start()
+  protected virtual void Start()
   {
     InitialWave = Random.Range(5f, 10f);
     _sceneController = FindObjectOfType<SceneController>();
+    _timeLord = _sceneController.GetTimeLord();
     _crystalManager = _sceneController.gameObject.GetComponent<CrystalManager>();
+    _initialPos = gameObject.transform.position;
 
     // On instantiation, add self to crystal list in cm.
     // Give self id according to position in list (syncing doesnt matter, only uniqueness and size).
@@ -57,20 +61,20 @@ public class CrystalBehaviour : MonoBehaviour
     _overlay.material.SetFloat("Wave_Incr", T);
 
     // Zoom into and out of existance.
-    TimeLord timelord = _sceneController.GetTimeLord();
-    float percievedTime = (float)(timelord.GetYourPerceivedFrame()) / Constants.FrameRate;
+    float percievedTime = (float)(_timeLord.GetYourPerceivedFrame()) / Constants.FrameRate;
     float closestBorderOFExistance = Min(Abs(percievedTime - ExistanceRange[0]), Abs(percievedTime - ExistanceRange[1]));
     float animLength = 2.0f;
     float size = Min(closestBorderOFExistance, T);
     if (size > animLength) setScale(1.0f);
     else setScale(size/animLength);
+    gameObject.transform.position = _initialPos;
   }
 
   private void setScale(float a) { transform.localScale = new Vector3(a, a, a); }
 
   private void HalveExistanceLength() {
     ExistanceLength /= 2;
-    ExistanceLength = Mathf.Max(ExistanceLength, 7.5f);
+    ExistanceLength = Mathf.Max(ExistanceLength, 15f);
   }
 
   // ------------ RPC FUNCTIONS ------------
@@ -78,7 +82,7 @@ public class CrystalBehaviour : MonoBehaviour
   // Called upon player collision.
   // Crystal will be set to inactive in following frame so coroutine outsourced to cm.
   [PunRPC]
-  void RPC_Collect()
+  protected virtual void RPC_Collect()
   {
     ExistanceRange = new Vector2(-1f, -1f);
     IsCollected = true;

@@ -1086,6 +1086,50 @@ Transform:
   m_Father: {fileID: 1290200987}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &318825998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 318826000}
+  - component: {fileID: 318825999}
+  m_Layer: 0
+  m_Name: FallCheck
+  m_TagString: FallCheck
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &318825999
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318825998}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1654.0684, y: 1016.4181, z: 1295.4631}
+  m_Center: {x: -42.4209, y: -507.70905, z: 3.8686523}
+--- !u!4 &318826000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318825998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -63.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &357047308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3880,7 +3924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnHolder: {fileID: 1290200986}
-  _crystalPrefab: {fileID: 2449337122968480037, guid: 17201bb6ab6214f6b93d396a95f0168d, type: 3}
+  _crystalPrefab: {fileID: 1593016600280030461, guid: 82ba50410ddfb409b93bcd725daac8c4, type: 3}
   _game: {fileID: 1944367505}
   Crystals: []
 --- !u!1 &1948495089

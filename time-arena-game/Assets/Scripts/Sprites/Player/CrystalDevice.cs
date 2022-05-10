@@ -117,7 +117,6 @@ public class CrystalDevice : MonoBehaviour
                 closestCrystal = crystal;
             }
         }
-        Debug.Log(closestCrystal.ID);
         return closestCrystal;
     }
 

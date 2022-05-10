@@ -45,25 +45,6 @@ public class TailManager : MonoBehaviour, Debuggable
         _debugPanel.Register(this);
     }
 
-    void Update()
-    {
-        // Create a new tail for any state on this frame that doesn't currently have one.
-        if (_activated && _timeLord != null)
-        {
-            Dictionary<int, PlayerState> tails = _timeLord.GetTailStates();
-            foreach (var tail in tails)
-            {
-                if (!_tails.ContainsKey(tail.Key))
-                {
-                    GameObject tailObject = Object.Instantiate(_tailPrefab);
-                    TailController tailController = tailObject.GetComponent<TailController>();
-                    tailController.Initialise(tail.Value, _timeLord, this);
-                    _tails.Add(tail.Key, tailController);
-                }
-            }
-        }
-    }
-
 
     // ------------ ON EVENT FUNCTIONS ------------
 
@@ -83,6 +64,25 @@ public class TailManager : MonoBehaviour, Debuggable
     public void SetActive(bool value) { _activated = value; }
 
     public void EnableParticles(bool value) { _particlesEnabled = value; }
+
+    public void UpdateTails()
+    {
+        // Create a new tail for any state on this frame that doesn't currently have one.
+        if (_activated && _timeLord != null)
+        {
+            Dictionary<int, PlayerState> tails = _timeLord.GetTailStates();
+            foreach (var tail in tails)
+            {
+                if (!_tails.ContainsKey(tail.Key))
+                {
+                    GameObject tailObject = Object.Instantiate(_tailPrefab);
+                    TailController tailController = tailObject.GetComponent<TailController>();
+                    tailController.Initialise(tail.Value, _timeLord, this);
+                    _tails.Add(tail.Key, tailController);
+                }
+            }
+        }
+    }
 
 
     // ------------ PUBLIC FUNCTIONS FOR TAIL CONTROLLER ------------

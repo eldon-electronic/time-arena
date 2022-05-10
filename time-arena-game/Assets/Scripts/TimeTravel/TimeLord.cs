@@ -58,7 +58,7 @@ public class TimeLord: Debuggable
 		if (!TimeEnded())
 		{
 			_currentFrame++;
-			_realities.Tick();
+			_realities.Tick(_currentFrame);
 		}
     }
 
@@ -70,7 +70,7 @@ public class TimeLord: Debuggable
 	public Dictionary<int, PlayerState> GetTailStates()
 	{
 		int frame = _realities.GetPerceivedFrame(_myID);
-		if (_playerStates[frame] != null)
+		if (frame != -1 && _playerStates[frame] != null)
 		{
 			return _playerStates[frame];
 		}
@@ -84,7 +84,7 @@ public class TimeLord: Debuggable
     public PlayerState GetTailState(int tailID)
     {
         int frame = _realities.GetPerceivedFrame(_myID);
-        if (_playerStates[frame] != null)
+        if (frame != -1 && _playerStates[frame] != null)
         {
             if (_playerStates[frame].ContainsKey(tailID)) return _playerStates[frame][tailID];
         }
@@ -121,8 +121,9 @@ public class TimeLord: Debuggable
     // Makes the given player's perceived time jump in the given direction.
 	public void TimeTravel(int playerID, Constants.JumpDirection jd)
 	{
-		int offset = (jd == Constants.JumpDirection.Forward) ? Constants.TimeTravelVelocity : - Constants.TimeTravelVelocity;
-		_realities.OffsetPerceivedFrame(playerID, offset);
+		// int offset = (jd == Constants.JumpDirection.Forward) ? Constants.TimeTravelVelocity : - Constants.TimeTravelVelocity;
+		// _realities.OffsetPerceivedFrame(playerID, offset);
+		_realities.SetJumpDirection(playerID, jd);
 	}
 
     // Stops recording in your previous reality.
@@ -217,7 +218,7 @@ public class TimeLord: Debuggable
 
 	public void SetRealities(Dictionary<int, Reality> realities) { _realities.SetRealities(realities); }
 
-	public void SetCurrentFrame(int currentFrame) { _currentFrame = currentFrame; }
+	public virtual void SetCurrentFrame(int currentFrame) { _currentFrame = currentFrame; }
 
 
 	// ------------ PUBLIC METHODS ------------
@@ -226,7 +227,9 @@ public class TimeLord: Debuggable
 
 	public int GetTotalFrames() { return _totalFrames; }
 
+	// Returns the player ID and perceived frames of all players or an empty list if no players are being tracked.
 	public List<(int id, int frame)> GetPerceivedFrames() { return _realities.GetPerceivedFrames(); }
 
+	// Returns your perceived frame or -1 if you're not being tracked.
 	public int GetYourPerceivedFrame() { return _realities.GetPerceivedFrame(_myID); }
 }

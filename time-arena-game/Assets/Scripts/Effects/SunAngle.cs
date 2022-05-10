@@ -38,6 +38,9 @@ public class SunAngle : MonoBehaviour
                 eulerRotation.y, 
                 eulerRotation.z);
         } 
-        catch (Exception e) {}
+        catch (Exception e)
+        {
+            Debug.LogError($"Caught exception: {e}");
+        }
     }
 }

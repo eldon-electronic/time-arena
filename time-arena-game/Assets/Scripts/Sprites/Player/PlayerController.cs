@@ -1,35 +1,43 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public abstract class PlayerController : MonoBehaviour, Debuggable
+public abstract class PlayerController : MonoBehaviour, Debuggable, IPunInstantiateMagicCallback
 {
 	[SerializeField] protected GameObject _camera;
 	[SerializeField] protected GameObject _UI;
 	[SerializeField] protected GameObject _me;
 	[SerializeField] protected PhotonView _view;
 	[SerializeField] protected GameObject _mesh;
+	[SerializeField] private HudMasterClientOptions _hudMasterClientOptions;
 	[SerializeField] protected PlayerMovement _playerMovement;
-	private string _userID;
 	private Vector3 _spawnpoint;
-	private Dictionary<int, string> _viewIDtoUserID;
 	protected SceneController _sceneController;
+	protected string _userID;
+	protected Dictionary<int, string> _viewIDtoUserID;
+	protected int _channelID;
 	public Constants.Team Team;
 	public int ID;
 	public int Score;
+	public static event Action<PlayerController> clientEntered;
 	public string Nickname;
 	
 
 	// ------------ UNITY METHODS ------------
 
+	public void OnPhotonInstantiate(PhotonMessageInfo info)
+	{
+		_channelID = (int) info.photonView.InstantiationData[0];
+	}
+
 	void Awake()
 	{
 		ID = _view.ViewID;
 		Nickname = _view.Controller.NickName;
-		SetActive();
         SetTeam();
 	}
 
@@ -43,11 +51,21 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 
 		gameObject.layer = Constants.LayerPlayer;
 
-		FindObjectOfType<PreGameController>().Register(this);
+		PreGameController pregame = FindObjectOfType<PreGameController>();
+		pregame.Register(this);
+		Transform channels = pregame.GetChannels();
 
 		FindObjectOfType<HudDebugPanel>().Register(this);
 
-		if (!_view.IsMine)
+		if (_view.IsMine)
+		{
+			clientEntered?.Invoke(this);
+			for (int i=0; i < channels.childCount; i++)
+			{
+				if (i != _channelID) Destroy(channels.GetChild(i).Find("TutorialCamera").gameObject);
+			}
+		}
+		else
 		{
 			Destroy(_camera);
 			Destroy(_UI);
@@ -61,18 +79,27 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
         Cursor.lockState = CursorLockMode.Locked;
 	}
 
+	void OnTriggerEnter(Collider collider)
+	{
+		if (_view.IsMine && PhotonNetwork.IsMasterClient && collider.gameObject.tag == "CentralTutorialGround")
+		{
+			((PreGameController) _sceneController).SetCanStart(true);
+			_hudMasterClientOptions.Show();
+		}
+	}
+
 
 	// ------------ PRIVATE METHODS ------------
 
 	private void OnGameActive(GameController game)
 	{
-		_sceneController = game;
-		_sceneController.Register(this);
+		game.Register(this);
 		Show();
 		Score = 0;
+		if (_view.IsMine) clientEntered?.Invoke(this);
 	}
 
-	protected abstract void SetActive();
+	public abstract void SetActive(bool _isPreGame);
 
     protected abstract void SetTeam();
 
@@ -94,7 +121,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		return _viewIDtoUserID;
 	}
 
-	public void Show()
+	public virtual void Show()
 	{
 		if (!_view.IsMine)
 		{
@@ -103,7 +130,7 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		}
 	}
 
-	public void Hide()
+	public virtual void Hide()
 	{
 		if (!_view.IsMine)
 		{
@@ -117,6 +144,11 @@ public abstract class PlayerController : MonoBehaviour, Debuggable
 		Hashtable debugValues = new Hashtable();
 		debugValues.Add($"{_view.ViewID} score", Score);
 		return debugValues;
+	}
+
+	public void Synchronise(Dictionary<int, int[]> data, int frame)
+	{
+		_view.RPC("RPC_synchronise2", RpcTarget.All, data, frame);
 	}
 
 	public void SetSpawnpoint(Vector3 spawnpoint)
