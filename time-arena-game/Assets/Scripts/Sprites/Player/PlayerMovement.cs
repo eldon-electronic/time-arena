@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnEnable()
     {
-        GameController.gameActive += OnGameActive;
+        SceneManager.activeSceneChanged += OnSceneChange;
         GameController.gameStarted += OnGameStarted;
         GameController.gameEnded += OnGameEnded;
         PauseManager.paused += OnPaused;
@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDisable()
     {
-        GameController.gameActive -= OnGameActive;
+        SceneManager.activeSceneChanged -= OnSceneChange;
         GameController.gameStarted -= OnGameStarted;
         GameController.gameEnded -= OnGameEnded;
         PauseManager.paused -= OnPaused;
@@ -104,13 +104,17 @@ public class PlayerMovement : MonoBehaviour
 
     // ------------ ON EVENT FUNCTIONS ------------
 
-    private void OnGameActive(GameController game)
+    private void OnSceneChange(Scene last, Scene next)
     {
+        _activated = false;
         _lockMovement = true;
-        // MoveToSpawnPoint();
     }
 
-    private void OnGameStarted() { _lockMovement = false; }
+    private void OnGameStarted()
+    {
+        _lockMovement = false;
+        _activated = true;
+    }
 
     private void OnGameEnded(Constants.Team winningTeam) { _activated = false; }
 
