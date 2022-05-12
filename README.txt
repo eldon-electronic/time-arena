@@ -1,6 +1,6 @@
 Time Arena Description:
 
-This game is (to the best of our knowledge) the first fluid, mostly unrestricted, time-travel game. There are two teams: miners must collect crystals whilst guardians try to catch the miners, forcing them to drop their crystals. If the miners collect more than ten crystals by the end of the game, they win; otherwise the guardians win. Collectable crystals generated at random times and places throughout the arena and they only exist for a short window of time. Large blocker crystals grow and break throughout the game, preventing access to some regions of the map. All players should time travel to get around the blockers and miners should time travel to collect crystals in the time windows where they exist.
+This game is (to the best of our knowledge) the first fluid, mostly unrestricted, time-travel game. There are two teams: miners must collect crystals whilst guardians try to catch the miners, forcing them to drop their crystals. If the miners collect more than ten crystals by the end of the game, they win; otherwise the guardians win. Collectable crystals are generated at random times and places throughout the arena and they only exist for a short window of time. Large blocker crystals grow and break throughout the game, preventing access to some regions of the map. All players should time travel to get around the blockers and miners should time travel to collect crystals in the time windows where they exist.
 
 
 Deployment Instructions:
